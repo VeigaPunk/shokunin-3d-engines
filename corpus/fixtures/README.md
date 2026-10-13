@@ -471,6 +471,18 @@ policy setup guard bypassed preserves target origin(2,1,-3) but returns
 identity basis and fails the same target basis check. These are one binding
 and two private controls, not network replication or rendered motion.
 
+## Live NavigationAgent3D next-path query (round 49)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_next,navagent3d_next_alternate`
+builds a live planar NavigationServer3D map/region with one polygon, then
+attaches `NavigationAgent3D` to an actor at (1,0,1), assigns map and target.
+After map sync, calling `get_next_path_position()` **first** initializes
+its current path on this build; reading path first returned empty in an
+author feasibility run. The regular arm reports two points ending
+(3,0,3), next=(3,0,3); same-map alternate target(3,0,1) changes both.
+The actor remains at (1,0,1). This proves a bounded agent query, not
+agent-driven movement, avoidance, baked navigation mesh or pixels.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("navagent3d_next", "navagent3d_next.gd", [], 0,
+     "PASS navagent3d_next path_end=3.000,0.000,3.000 next=3.000,0.000,3.000"),
+    ("navagent3d_next_alternate", "navagent3d_next.gd", ["--alternate"], 2,
+     "NEGATIVE REJECTED: navagent3d_next alternate path_end=3.000,0.000,1.000 next=3.000,0.000,1.000"),
     ("remote3d_transform", "remote3d_transform.gd", [], 0,
      "PASS remote3d_transform bound target=2.000,1.000,-3.000 basis_x=0.000,1.000,0.000"),
     ("remote3d_transform_unbound", "remote3d_transform.gd", ["--unbound"], 2,
