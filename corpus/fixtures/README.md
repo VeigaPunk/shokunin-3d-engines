@@ -2,7 +2,7 @@
 
 Bounded Godot 4.7.2 `--headless` fixtures for 3D mechanics. The original
 six classes each have a positive and a discriminating negative control; later
-rounds extend the battery to 79 registered cases (38 ordinary and 41 negative
+rounds extend the battery to 81 registered cases (39 ordinary and 42 negative
 controls). A negative control must demonstrate a live setup before attributing
 an absent or changed effect to its arrangement. These finite headless checks
 do not establish rendered output or behavior in other engines.
@@ -529,6 +529,16 @@ it is out-of-frustum while depth4/8 remain accepted and depth0.5 remains
 rejected. Both samples project to (550,225) despite different frustum
 classifications. This samples either side of near=1 at a 0.01 offset; it
 does not establish the exact threshold at 1.0, rasterization or GPU culling.
+
+## Orthographic adjacent far-plane samples (round 55)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_far_boundary_inside,camera3d_ortho_far_boundary_outside`
+uses the same near=1, far=10 orthographic camera and world lateral (2,1).
+At forward depth 9.99, the point is in-frustum; at 10.01 it is
+out-of-frustum while depth4/8 remain accepted and depth12 remains rejected.
+Both samples project to (550,225). This samples either side of far=10 at
+0.01 offset; it does not establish the exact boundary, rasterization or GPU
+culling.
 
 ## Determinism rules for new cases
 
