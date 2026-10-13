@@ -18,6 +18,19 @@
 # Negative --assert-pathsum: same detour geometry, authors the wrong
 # hypothesis distance==routed path length 4.130649; the engine measurement
 # refutes it (3.605551) and the fixture reports the refutation.
+# Post arms (round 71, invariance claim under measurement):
+# --post-edgecentered / --post-none set path_postprocessing to
+# EDGECENTERED(1)/NONE(2) before target submission on the same detour
+# geometry. The claim under test: distance_to_target stays Euclidean to the
+# raw target (3.605551) while postprocessing measurably changes the queried
+# path. Measured on this build: edgecentered routes via edge midpoints
+# (2,0,0.5),(2.5,0,1) — next=(2,0,0.5), pathlen=4.707107; none keeps the raw
+# corridor (2,0,0.5),(2,0,1) — next=(2,0,0.5), pathlen=4.549510; corridorfunnel
+# control next=(2,0,1), pathlen=4.130649. Each arm pins its own measured path
+# (4 points, next=(2,0,0.5)) so a flag that did not take effect cannot pass,
+# and classifies distance_to_target: semantic!=euclidean fails the arm with a
+# diagnostic carrying the measured distance — the falsification path of the
+# invariance claim. get_final_position stays (2.5,0,3.5) under all values.
 # No agent motion, avoidance, baking, or rendering claim.
 extends SceneTree
 var owned: Array[RID] = []
@@ -34,6 +47,8 @@ func _initialize() -> void:
 func _run() -> void:
 	var straight := "--straight" in OS.get_cmdline_user_args()
 	var assert_pathsum := "--assert-pathsum" in OS.get_cmdline_user_args()
+	var post_edge := "--post-edgecentered" in OS.get_cmdline_user_args()
+	var post_none := "--post-none" in OS.get_cmdline_user_args()
 	var map := NavigationServer3D.map_create()
 	owned.append(map)
 	NavigationServer3D.map_set_active(map, true)
@@ -63,6 +78,10 @@ func _run() -> void:
 	var agent := NavigationAgent3D.new()
 	actor.add_child(agent)
 	agent.set_navigation_map(map)
+	if post_edge:
+		agent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_EDGECENTERED
+	elif post_none:
+		agent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_NONE
 	agent.target_position = target
 	for i in range(30):
 		await physics_frame
@@ -98,6 +117,32 @@ func _run() -> void:
 		_cleanup(actor)
 		print("NEGATIVE REJECTED: navagent3d_detour straight distance=%.6f euclid=%.6f pathlen=%.6f discriminates=false" % [distance, euclid, pathlen])
 		quit(2)
+		return
+	# Round-71 postprocessing arms: the invariance claim — distance_to_target
+	# stays Euclidean to the raw target_position while postprocessing changes
+	# the queried path outputs. A changed distance under either value
+	# falsifies invariance and is reported with the measured semantic.
+	if post_edge or post_none:
+		var post_name := "post_edgecentered" if post_edge else "post_none"
+		# Engine-measured path lengths: edgecentered 1.5+sqrt(0.5)+2.5,
+		# none 1.5+0.5+sqrt(6.5); both differ from corridorfunnel 4.130649.
+		var post_pathlen := 4.707107 if post_edge else 4.549510
+		if semantic == "unknown":
+			return _fail(actor, "bounded UNKNOWN under %s: distance=%.6f matches neither euclid=%.6f nor pathlen=%.6f" % [post_name, distance, euclid, pathlen])
+		if semantic != "euclidean":
+			return _fail(actor, "invariance falsified under %s semantic=%s distance=%.6f euclid=%.6f pathlen=%.6f" % [post_name, semantic, distance, euclid, pathlen])
+		# The flag must have measurably changed the queried path vs the
+		# corridorfunnel control (3 points, next=(2,0,1), pathlen=4.130649),
+		# else the arm cannot discriminate whether postprocessing applied.
+		if path.size() != 4 or next.distance_to(Vector3(2, 0, 0.5)) > POS_TOL \
+				or absf(pathlen - post_pathlen) > DIST_TOL \
+				or final.distance_to(Vector3(2.5, 0, 3.5)) > POS_TOL or not reachable:
+			return _fail(actor, "%s path outputs unexpected path=%s next=%s pathlen=%.6f final=%s reachable=%s" % [post_name, path, next, pathlen, final, reachable])
+		if reached or finished:
+			return _fail(actor, "%s default reach threshold wrongly satisfied reached=%s finished=%s" % [post_name, reached, finished])
+		_cleanup(actor)
+		print("PASS navagent3d_detour %s distance=%.6f semantic=%s final=%.3f,%.3f,%.3f next=%.3f,%.3f,%.3f pathlen=%.6f reachable=true reached=false finished=false" % [post_name, distance, semantic, final.x, final.y, final.z, next.x, next.y, next.z, pathlen])
+		quit(0)
 		return
 	# Both detour arms require the bend to be real at query time.
 	if path.size() != 3 or next.distance_to(Vector3(2, 0, 1)) > POS_TOL \
