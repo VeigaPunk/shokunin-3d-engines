@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("jump3d_land", "jump3d_gravity.gd", [], 0,
+     "PASS jump3d_gravity apex_tick=29 apex_y=2.451 landing_tick=60 final_y=1.001 grounded=true"),
+    ("jump3d_no_floor", "jump3d_gravity.gd", ["--lower-floor"], 2,
+     "NEGATIVE REJECTED: jump3d_gravity no_floor_landing apex_tick=29 apex_y=2.450 final_y=0.900 grounded=false floor_intact=true"),
     ("camera3d_ortho", "camera3d_ortho.gd", [], 0,
      "PASS camera3d_ortho viewport=800,600 front_screen=550.000,225.000 deep_screen=550.000,225.000 near=1.000 far=10.000"),
     ("camera3d_ortho_outside", "camera3d_ortho.gd", ["--outside"], 2,

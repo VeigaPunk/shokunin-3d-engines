@@ -213,6 +213,21 @@ in-frustum depth4/8. Godot 4.7.2 returns `is_position_in_frustum=false` and
 forward pre-near API-behind=true. These are sampled API classifications, not
 exact near/far boundary precision, rendered pixels or GPU culling.
 
+## Gravity-driven vertical jump versus displaced floor (round 26)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor`
+starts a one-unit CharacterBody3D at y=1 above a one-unit floor centered y=0,
+sets one +6 vertical impulse, subtracts 12/60 from vertical velocity and calls
+`move_and_slide` once after each physics-frame signal for 60 explicit calls.
+Ideal free-motion displacement is sum(6−0.2n)/60 for n=1..60; apex at
+call29, about y=2.45, and floor contact on this Godot build observed at call60
+with resting center about y=1.001 (safe margin), not guessed ideal landing59.
+The intact floor moved to y=-20 remains unreachable: apex matches early regime,
+final free y≈0.9, no grounded/landing state. Initial y=1 is geometric contact,
+not an independently sampled initial `is_on_floor()` state. This tests one
+explicit integration loop, not a generalized gravity/jump controller or
+rendered motion.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
