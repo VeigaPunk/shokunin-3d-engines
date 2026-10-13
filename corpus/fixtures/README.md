@@ -285,6 +285,17 @@ asserts times, `is_playing`, binding and positions before fixed markers. This
 is headless frame-advanced playback, not rendered animation or a portable
 frame-order guarantee.
 
+## Two-animation 3D position cross-fade (round 32)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only animation3d_blend,animation3d_blend_cut`
+uses two live constant-key `AnimationPlayer` tracks (X0 and X4) on the same
+`Node3D`. After four warmup physics frames of `from`, `play("to", 0.5)`
+transitions to `to`; 15 awaited frames later X≈1.931 is strictly between
+0 and 4, and another 30 frames yield X=4. The same tracks with zero-second
+transition (`--cut`) yield X4 at both checks. Assertions sample live
+positions and track binding before fixed markers. This observes one
+engine-specific cross-fade schedule, not a universal blend curve or pixels.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

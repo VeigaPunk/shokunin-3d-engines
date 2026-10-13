@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("animation3d_blend", "animation3d_blend.gd", [], 0,
+     "PASS animation3d_blend fade_seconds=0.5 mid_x=1.931 end_x=4.000 physics_frames=15+30"),
+    ("animation3d_blend_cut", "animation3d_blend.gd", ["--cut"], 2,
+     "NEGATIVE REJECTED: animation3d_blend instant_cut mid_x=4.000 end_x=4.000"),
     ("animation3d_playback", "animation3d_playback.gd", [], 0,
      "PASS animation3d_playback mid_x=0.967 later_x=1.967 physics_frames=60 playing=true"),
     ("animation3d_playback_still", "animation3d_playback.gd", ["--still"], 2,
