@@ -71,6 +71,22 @@ Supporting scripts are not cases and carry no exit signature: `runner3d.gd`
 (deterministic-drive `CharacterBody3D` actor), `input_mover3d.gd` (key-intent
 actor), `pickup_orb3d.gd` (`Area3D` trigger with the `collected` chain).
 
+## Optional identified-descendant timeout (round 5)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout`
+adds one uncounted real Godot Node3D pair using `timeout_tree3d.gd`. Clean
+exit 0 passes. The hold-open arm spawns `timeout_descendant.py` and writes
+a PID/PGID witness file only in scratch, then prints the same marker. At 3s
+its logical result is `actual_exit=null`, independent of cleanup exit -9.
+The runner confirms the `/proc` identity and start time of the one detached
+witness, kills/reaps Godot and sends SIGTERM to that verified witness *before*
+waiting for pipe EOF. It checks the witness is no longer live within 3s.
+Godot 4.7.2's `OS.create_process` detached the witness into its own process
+group, so this is **not** arbitrary process-tree cleanup, nor portable beyond
+Linux `/proc`. A wrong identity, missing marker, cleanup timeout or live
+witness fails the probe. Raw paired state is in ignored
+`corpus/live/runs/<timestamp>/tree-timeout-verdicts.json`; rerun for evidence.
+
 ## Optional stdout/stderr attribution (round 4)
 
 `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-stream-attribution`

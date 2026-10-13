@@ -262,6 +262,129 @@ def probe_stream_attribution(godot, scratch, run_dir):
     return verdict
 
 
+def probe_tree_timeout(godot, scratch, run_dir):
+    marker = "TREE_TIMEOUT_3D: spatial node ready"
+    script = "res://timeout_tree3d.gd"
+    normal_command = [godot, "--headless", "--path", str(scratch), "--script", script, "--"]
+    normal_out, normal_err, normal_code, normal_error = run_process(normal_command, 8)
+    normal_ok, normal_reasons = classify(normal_out, normal_err, normal_code, normal_error, 0, marker)
+    normal = {"command": normal_command, "actual_exit": normal_code, "stdout": normal_out,
+              "stderr": normal_err, "error": normal_error, "classified": normal_ok,
+              "reasons": normal_reasons}
+
+    command = normal_command + ["--hold-open"]
+    record = {"command": command, "actual_exit": None, "cleanup_exit": None,
+              "stdout": "", "stderr": "", "error": None, "timed_out": False,
+              "marker_observed": False, "witness": None, "witness_verified": False,
+              "witness_gone": False, "witness_cleanup": None, "classified": None, "reasons": []}
+    process = None
+    witness_pid = None
+    witness_start = None
+    witness_path = scratch / "timeout-descendant.json"
+
+    def proc_identity(pid):
+        proc = Path(f"/proc/{pid}")
+        try:
+            cmdline = (proc / "cmdline").read_bytes().split(b"\0")
+            stat = (proc / "stat").read_text()
+            fields = stat[stat.rfind(")") + 2:].split()
+            return {"cmdline": [c.decode(errors="replace") for c in cmdline if c],
+                    "state": fields[0], "ppid": int(fields[1]), "pgid": int(fields[2]),
+                    "starttime": int(fields[19])}
+        except (FileNotFoundError, ProcessLookupError):
+            return None
+
+    def same_live_witness():
+        found = proc_identity(witness_pid) if witness_pid is not None else None
+        return (found is not None and found["state"] not in ("Z", "X")
+                and found["starttime"] == witness_start
+                and str(scratch / "timeout_descendant.py") in found["cmdline"]
+                and str(witness_path) in found["cmdline"])
+
+    try:
+        if os.name != "posix" or not Path("/proc/self/stat").exists():
+            record["error"] = "Linux /proc and POSIX signals required"
+        else:
+            process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                       start_new_session=True)
+            try:
+                raw_out, raw_err = process.communicate(timeout=3)
+                record["actual_exit"] = process.returncode
+            except subprocess.TimeoutExpired as exc:
+                record["timed_out"] = True
+                record["error"] = "TIMEOUT after 3 seconds"
+                record["actual_exit"] = None
+                raw_out = exc.stdout or b""
+                raw_err = exc.stderr or b""
+                record["marker_observed"] = marker.encode() in raw_out.splitlines()
+                if witness_path.is_file():
+                    witness = json.loads(witness_path.read_text())
+                    record["witness"] = witness
+                    witness_pid = int(witness["pid"])
+                    found = proc_identity(witness_pid)
+                    witness_start = found["starttime"] if found else None
+                    record["witness_verified"] = bool(
+                        found and found["state"] not in ("Z", "X")
+                        and found["ppid"] == process.pid and found["pgid"] == witness_pid
+                        and str(scratch / "timeout_descendant.py") in found["cmdline"]
+                        and str(witness_path) in found["cmdline"])
+                if process.poll() is None:
+                    os.killpg(process.pid, signal.SIGKILL)
+                if record["witness_verified"] and same_live_witness():
+                    os.kill(witness_pid, signal.SIGTERM)
+                    record["witness_cleanup"] = "SIGTERM to verified detached witness"
+                    deadline = time.monotonic() + 3
+                    while time.monotonic() < deadline and same_live_witness():
+                        time.sleep(0.02)
+                    if same_live_witness():
+                        os.kill(witness_pid, signal.SIGKILL)
+                        record["witness_cleanup"] = "SIGKILL after 3s grace"
+                        deadline = time.monotonic() + 3
+                        while time.monotonic() < deadline and same_live_witness():
+                            time.sleep(0.02)
+                record["witness_gone"] = record["witness_verified"] and not same_live_witness()
+                try:
+                    raw_out, raw_err = process.communicate(timeout=3)
+                    record["cleanup_exit"] = process.returncode
+                except subprocess.TimeoutExpired:
+                    record["error"] += "; Godot cleanup exceeded 3 seconds"
+                record["stdout"] = raw_out.decode(errors="replace")
+                record["stderr"] = raw_err.decode(errors="replace")
+            else:
+                record["stdout"] = raw_out.decode(errors="replace")
+                record["stderr"] = raw_err.decode(errors="replace")
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        record["error"] = f"timeout probe failed: {exc}"
+    finally:
+        if process is not None and process.poll() is None:
+            os.killpg(process.pid, signal.SIGKILL)
+            try:
+                process.communicate(timeout=3)
+            except subprocess.TimeoutExpired:
+                record["error"] = (record["error"] or "") + "; final Godot cleanup timed out"
+        if record["witness_verified"] and same_live_witness():
+            os.kill(witness_pid, signal.SIGKILL)
+            record["witness_cleanup"] = "forced final SIGKILL to verified identity"
+            record["witness_gone"] = not same_live_witness()
+
+    record["marker_observed"] = record["stdout"].splitlines().count(marker) == 1
+    classified, reasons = classify(record["stdout"], record["stderr"],
+                                   record["actual_exit"], record["error"], 0, marker)
+    record["classified"] = classified
+    record["reasons"] = reasons
+    verdict = (normal_ok and normal_err == "" and record["timed_out"]
+               and record["actual_exit"] is None and record["cleanup_exit"] is not None
+               and record["marker_observed"] and record["classified"] is False
+               and record["witness_verified"] and record["witness_gone"]
+               and record["witness_cleanup"] == "SIGTERM to verified detached witness")
+    payload = {"verdict": "PASS" if verdict else "FAIL", "normal": normal,
+               "timeout": record, "bounded_claim": "One identified detached Godot-spawned "
+               "witness terminated after direct-child timeout; not arbitrary process-tree cleanup."}
+    (run_dir / "tree-timeout-verdicts.json").write_text(json.dumps(payload, indent=2) + "\n")
+    print(f"{payload['verdict']} tree-timeout probe: {run_dir / 'tree-timeout-verdicts.json'}", flush=True)
+    return verdict
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -274,6 +397,8 @@ def main():
                         help="compare a normal Godot exit to a SIGTERM-terminated live Godot child")
     parser.add_argument("--probe-stream-attribution", action="store_true",
                         help="compare identical stdout/exit with and without unexpected stderr")
+    parser.add_argument("--probe-tree-timeout", action="store_true",
+                        help="time out Godot and explicitly clean one identified detached witness")
     args = parser.parse_args()
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
@@ -330,6 +455,9 @@ def main():
     stream_probe_ok = True
     if args.probe_stream_attribution:
         stream_probe_ok = probe_stream_attribution(args.godot, scratch, run_dir)
+    tree_probe_ok = True
+    if args.probe_tree_timeout:
+        tree_probe_ok = probe_tree_timeout(args.godot, scratch, run_dir)
 
     probe = None
     if args.probe_failing:
@@ -397,17 +525,19 @@ def main():
               f"{'(scratch mutation)':18} {'-/1':9} probe")
     print(f"totals: cases={len(results)} pass={passed} fail={failed} "
           f"ordinary={ordinary} negative_controls={negative} "
-          f"probes={(1 if probe is not None else 0) + (1 if args.probe_crash_exit else 0) + (1 if args.probe_stream_attribution else 0)}")
+          f"probes={(1 if probe is not None else 0) + (1 if args.probe_crash_exit else 0) + (1 if args.probe_stream_attribution else 0) + (1 if args.probe_tree_timeout else 0)}")
 
     verdict = ("PASS" if failed == 0 and seeds_unchanged and crash_probe_ok
-               and stream_probe_ok and (probe is None or probe["verdict"] == "PASS") else "FAIL")
+               and stream_probe_ok and tree_probe_ok
+               and (probe is None or probe["verdict"] == "PASS") else "FAIL")
     payload = {"godot": args.godot, "godot_version": godot_version,
                "godot_version_exit": version_code, "godot_version_error": version_error,
                "started_utc": stamp, "seed": str(HERE), "scratch": str(scratch),
                "case_timeout_seconds": CASE_TIMEOUT_SECONDS, "only": args.only or None,
                "probe_failing": args.probe_failing, "probe_crash_exit": args.probe_crash_exit,
                "crash_probe_ok": crash_probe_ok, "probe_stream_attribution": args.probe_stream_attribution,
-               "stream_probe_ok": stream_probe_ok, "seeds_unchanged": seeds_unchanged,
+               "stream_probe_ok": stream_probe_ok, "probe_tree_timeout": args.probe_tree_timeout,
+               "tree_probe_ok": tree_probe_ok, "seeds_unchanged": seeds_unchanged,
                "seed_digests": digests_before, "results": results, "probe": probe,
                "totals": {"cases": len(results), "pass": passed, "fail": failed,
                           "ordinary": ordinary, "negative_controls": negative},
