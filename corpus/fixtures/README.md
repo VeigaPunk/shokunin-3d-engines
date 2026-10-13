@@ -272,6 +272,19 @@ track yields X=0/X=0. Checks examine track binding/library and live actor
 positions before fixed markers. Explicit seeks evaluate samples; this does
 not prove timed playback, animation blending, rendering or sprites.
 
+## Physics-frame 3D animation playback (round 31)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only animation3d_playback,animation3d_playback_still`
+starts a two-second `AnimationPlayer` position track in physics callback mode
+and calls `play` once. After 30 and 60 awaited physics frames, without `seek`
+or direct target position assignment, the live actor is at X≈0.967 and
+X≈1.967, while the intact constant-key track stays at X=0. The player's
+observed times are 29/60 and 59/60 seconds because the first awaited frame
+does not advance the newly started animation on this build. The fixture
+asserts times, `is_playing`, binding and positions before fixed markers. This
+is headless frame-advanced playback, not rendered animation or a portable
+frame-order guarantee.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
