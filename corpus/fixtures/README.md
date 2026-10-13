@@ -128,6 +128,10 @@ normal is checked against the hand-derived rotated +Y vector: (-0.5, 0.866, 0)
 versus (-0.866, 0.5, 0). A shallow contact must be classified floor, while a
 steep contact must be classified wall, never an absent-geometry surrogate.
 This checks angle classification, not gravity, downhill travel or friction.
+The marker fields are formatted from observed contact normal, floor-angle
+readback and floor/wall flags after exact-setting checks; a 45°→35° source
+change must fail rather than printing an unobserved 45° label. Contact normal
+is stored on first contact, not re-read in the same frame as the flags.
 
 ## Determinism rules for new cases
 

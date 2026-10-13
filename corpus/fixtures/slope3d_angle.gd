@@ -56,15 +56,22 @@ func _run() -> void:
 	var expected_normal := Vector3(-0.8660254, 0.5, 0) if steep else Vector3(-0.5, 0.8660254, 0)
 	if normal.distance_to(expected_normal) > 0.001:
 		return _fail("normal mismatch normal=%s expected=%s" % [normal, expected_normal])
+	var observed_limit := rad_to_deg(actor.floor_max_angle)
+	var observed_tilt := rad_to_deg(slab.rotation.z)
+	var expected_tilt := 60.0 if steep else 30.0
+	if absf(observed_limit - 45.0) > 0.001 or absf(observed_tilt - expected_tilt) > 0.001:
+		return _fail("setting mismatch floor_limit=%.3f tilt=%.3f expected_limit=45.000 expected_tilt=%.3f" % [observed_limit, observed_tilt, expected_tilt])
+	var on_floor := actor.is_on_floor()
+	var on_wall := actor.is_on_wall()
 	if steep:
-		if actor.is_on_floor() or not actor.is_on_wall():
-			return _fail("steep classification floor=%s wall=%s normal=%s" % [actor.is_on_floor(), actor.is_on_wall(), normal])
-		print("NEGATIVE REJECTED: slope3d_angle steep_contact_not_floor normal_y=0.500 floor_limit=45.000 on_floor=false on_wall=true live_contact=true")
+		if on_floor or not on_wall:
+			return _fail("steep classification floor=%s wall=%s normal=%s" % [on_floor, on_wall, normal])
+		print("NEGATIVE REJECTED: slope3d_angle steep_contact_not_floor normal_y=%.3f floor_limit=%.3f on_floor=%s on_wall=%s live_contact=%s" % [normal.y, observed_limit, str(on_floor), str(on_wall), str(actor.contacts >= 1)])
 		quit(2)
 		return
-	if not actor.is_on_floor() or actor.is_on_wall():
-		return _fail("shallow classification floor=%s wall=%s normal=%s" % [actor.is_on_floor(), actor.is_on_wall(), normal])
-	print("PASS slope3d_floor normal_y=0.866 floor_limit=45.000 on_floor=true on_wall=false live_contact=true")
+	if not on_floor or on_wall:
+		return _fail("shallow classification floor=%s wall=%s normal=%s" % [on_floor, on_wall, normal])
+	print("PASS slope3d_floor normal_y=%.3f floor_limit=%.3f on_floor=%s on_wall=%s live_contact=%s" % [normal.y, observed_limit, str(on_floor), str(on_wall), str(actor.contacts >= 1)])
 	quit(0)
 
 func _fail(message: String) -> bool:
