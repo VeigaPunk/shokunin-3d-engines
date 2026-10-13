@@ -203,6 +203,16 @@ Godot 4.7.2 reports `is_position_in_frustum=false` **and**
 that its geometric forward depth is negative. Existing depth4/depth8 controls
 remain in-frustum; no near-boundary precision or rendered pixels proven.
 
+## Orthographic far-plane gate (round 25)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near,camera3d_ortho_far`
+adds a far-negative world (2,1,-12) to the same r23/r24 orthographic setup:
+forward depth12 exceeds far10 but projected screen stays (550,225), matching
+in-frustum depth4/8. Godot 4.7.2 returns `is_position_in_frustum=false` and
+`is_position_behind=false` at this far point, different from r24's positive-
+forward pre-near API-behind=true. These are sampled API classifications, not
+exact near/far boundary precision, rendered pixels or GPU culling.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

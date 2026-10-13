@@ -38,6 +38,8 @@ CASES = [
      "NEGATIVE REJECTED: camera3d_ortho lateral_outside screen=850.000,225.000 in_frustum=false controls_same_pixel=true"),
     ("camera3d_ortho_near", "camera3d_ortho.gd", ["--near-point"], 2,
      "NEGATIVE REJECTED: camera3d_ortho near_plane_depth=0.500 screen=550.000,225.000 in_frustum=false api_behind=true geometric_front=true controls_same_pixel=true"),
+    ("camera3d_ortho_far", "camera3d_ortho.gd", ["--far-point"], 2,
+     "NEGATIVE REJECTED: camera3d_ortho far_plane_depth=12.000 screen=550.000,225.000 in_frustum=false api_behind=false geometric_front=true controls_same_pixel=true"),
     ("scene3d_resource_disk_local", "scene3d_resource_disk.gd", [], 0,
      "PASS scene3d_resource_disk local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true"),
     ("scene3d_resource_disk_shared", "scene3d_resource_disk.gd", ["--shared"], 2,

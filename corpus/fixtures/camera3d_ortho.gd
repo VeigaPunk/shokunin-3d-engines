@@ -7,6 +7,7 @@ const FRONT := Vector3(2, 1, -4)
 const DEEP := Vector3(2, 1, -8)
 const OUTSIDE := Vector3(6, 1, -4)
 const NEAR_POINT := Vector3(2, 1, -0.5)
+const FAR_POINT := Vector3(2, 1, -12)
 var frames := 0
 var active_viewport: SubViewport
 
@@ -22,6 +23,7 @@ func _process(_delta: float) -> bool:
 func _run() -> void:
 	var outside := "--outside" in OS.get_cmdline_user_args()
 	var near_point := "--near-point" in OS.get_cmdline_user_args()
+	var far_point := "--far-point" in OS.get_cmdline_user_args()
 	var viewport := SubViewport.new()
 	viewport.size = VIEWPORT
 	root.add_child(viewport)
@@ -44,6 +46,17 @@ func _run() -> void:
 		return _fail("depth-invariant projection mismatch near=%s deep=%s" % [near_screen, deep_screen])
 	if camera.is_position_behind(FRONT) or camera.is_position_behind(DEEP) or not camera.is_position_in_frustum(FRONT) or not camera.is_position_in_frustum(DEEP):
 		return _fail("two valid depth controls rejected")
+	if far_point:
+		var far_screen := camera.unproject_position(FAR_POINT)
+		var forward_depth := -FAR_POINT.z
+		var api_behind := camera.is_position_behind(FAR_POINT)
+		var in_frustum := camera.is_position_in_frustum(FAR_POINT)
+		if FAR_POINT.distance_to(Vector3(2, 1, -12)) > 0.000001 or absf(forward_depth - 12.0) > 0.000001 or far_screen.distance_to(Vector2(550, 225)) > 0.0001 or in_frustum or api_behind:
+			return _fail("far gate failed depth=%.3f screen=%s frustum=%s api_behind=%s" % [forward_depth, far_screen, in_frustum, api_behind])
+		_cleanup()
+		print("NEGATIVE REJECTED: camera3d_ortho far_plane_depth=12.000 screen=550.000,225.000 in_frustum=false api_behind=%s geometric_front=true controls_same_pixel=true" % str(api_behind))
+		quit(2)
+		return
 	if near_point:
 		var near_point_screen := camera.unproject_position(NEAR_POINT)
 		var forward_depth := -NEAR_POINT.z
