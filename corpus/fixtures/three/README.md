@@ -61,3 +61,13 @@ empty line only after `PASS`; the old `.trim()` runners accept it, while
 the revised runners fail the positive arm with the child exit still 0.
 This rule covers these scripts' UTF-8 newline output, not arbitrary engine
 logging or portable terminal formatting.
+
+## Orthographic near-plane exclusion (round 62)
+
+`node .shokunin/game-dev-3d/corpus/fixtures/three/run_ortho_cases.mjs`
+now includes (2,1,-0.5) at positive forward depth 0.5, before near=1.
+It shares asserted NDC x=0.5/y=1/3 with depths 4,8,12 but has live
+`Frustum.containsPoint=false`; the negative retains both in-frustum
+controls and the far-outside control. Near=0.1 must fail on the measured
+near-point inclusion before fixed setting/depth checks. This is a bounded
+Node math result, not a rendered pixel or general precision threshold.
