@@ -368,6 +368,18 @@ stays (0,3,0) with identity basis. Both retain the same child global
 Godot float readback; composed origin/basis tolerances remain 0.0001.
 This pose hierarchy data is not a skinned vertex or rendered movement.
 
+## Live BoneAttachment3D follower (round 40)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only skeleton3d_attachment,skeleton3d_attachment_unrotated`
+attaches a `BoneAttachment3D` bound to Tip on a two-bone `Skeleton3D`,
+with a marker `Node3D` at attachment-local (1,0,0). After setting Tip pose
+(0,3,0) and Root pose +90° about Z, the attached marker's live global
+position is (-3,1,0); with Root identity it is (1,3,0). The Tip global
+**rest** remains (1,2,0) in both arms. Binding, attachment basis/origin,
+and actual marker global transform are asserted before fixed markers.
+This is a live Node3D follower in headless scene-tree coordinates, not
+skinned mesh deformation, pixels or GPU evidence.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

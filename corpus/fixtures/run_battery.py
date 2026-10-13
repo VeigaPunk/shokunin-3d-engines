@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("skeleton3d_attachment", "skeleton3d_attachment.gd", [], 0,
+     "PASS skeleton3d_attachment parent_z=90 attached_marker=-3.000,1.000,0.000"),
+    ("skeleton3d_attachment_unrotated", "skeleton3d_attachment.gd", ["--unrotated"], 2,
+     "NEGATIVE REJECTED: skeleton3d_attachment unrotated attached_marker=1.000,3.000,0.000"),
     ("skeleton3d_rotation", "skeleton3d_rotation.gd", [], 0,
      "PASS skeleton3d_rotation parent_z=90 child_global=-3.000,0.000,0.000 basis_x=0.000,1.000,0.000"),
     ("skeleton3d_unrotated", "skeleton3d_rotation.gd", ["--unrotated"], 2,
