@@ -86,3 +86,14 @@ parallel ray from x=5 misses while the first hit remains live. A runtime
 mesh x-offset 2→3 must make the original interior ray lose its hit and
 exit 1 on observed hit count. The exact-stream runner hashes its four
 seeds. No renderer, GL, pixels, browser or arbitrary-mesh guarantee.
+
+## Raycast front/back material side (round 64)
+
+`node .shokunin/game-dev-3d/corpus/fixtures/three/run_ray_cases.mjs`
+adds a `FrontSide` negative using the same translated triangle. Its winding
+normal is +Z; the ray from (2,0,0) down -Z hits at z=-5, while the
+reverse ray from (2,0,-10) up +Z reaches the same interior point but
+has zero intersections under `FrontSide`. `--backface --double-side`
+changes only material side and must fail on measured reverse hit count=1,
+with the forward hit still live. This is CPU-side Raycaster material-side
+behavior, not rendered backface culling or all mesh winding regimes.
