@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("floor3d_ground", "floor3d_ground.gd", [], 0,
+     "PASS floor3d_ground final_y=1.000 first_contact_tick=30 normal=0.000,1.000,0.000 on_floor=true ticks=60"),
+    ("floor3d_airborne", "floor3d_ground.gd", ["--lower-floor"], 2,
+     "NEGATIVE REJECTED: floor3d_ground airborne_with_lower_floor final_y=-2.000 contacts=0 on_floor=false floor_intact=true ticks=60"),
     ("body3d_contact", "body3d_slide.gd", [], 0,
      "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 "
      "first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000"),

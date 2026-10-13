@@ -15,7 +15,7 @@ and Godot's `.godot/` import cache is created inside the scratch copy only.
 ## Running
 
 ```
-python3 corpus/fixtures/run_battery.py                     # all 17 cases (round 13)
+python3 corpus/fixtures/run_battery.py                     # all 19 cases (round 14)
 python3 corpus/fixtures/run_battery.py --probe-failing     # + one adversarial mutation
 python3 corpus/fixtures/run_battery.py --only raycast3d_hit,raycast3d_miss
 python3 run_battery.py --godot /path/to/godot --runs /path/to/receipts
@@ -54,6 +54,8 @@ and classifies stdout and stderr separately.
 
 | case | fixture | flag | exit | mechanic |
 |---|---|---|---|---|
+| `floor3d_ground` | `floor3d_ground.gd` | — | 0 | Downward CharacterBody3D stops on live floor at hand-derived center y=1, first contact tick 30, normal +Y and `is_on_floor=true` |
+| `floor3d_airborne` | `floor3d_ground.gd` | `--lower-floor` | 2 | Same live box lowered to y=-20; actor travels 60 ticks to y=-2 with no contact or floor state |
 | `body3d_contact` | `body3d_slide.gd` | — | 0 | `CharacterBody3D.move_and_slide()` stops at the hand-derived contact plane `z=2.5` (box half-depth 2.0 + body half-depth 0.5) on tick 21 with normal `+Z` |
 | `body3d_contact_far` | `body3d_slide.gd` | `--far-body` | 2 | same assertions, body starts at `z=40`; zero contacts, travels the authored 10.0, wall proven intact |
 | `area3d_chain` | `area3d_chain.gd` | — | 0 | `Area3D.body_entered` → domain `collected` chain fires exactly once with payload `Runner3D`/layer 2 at or past the derived entry threshold `x=4.0` |

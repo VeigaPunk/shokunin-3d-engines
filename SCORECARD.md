@@ -5,7 +5,7 @@ quality rubric; a row count is a measurement, not a score or verdict.
 
 | axis | score | evidence / counting command | last change |
 |---|---|---|---|
-| depth | unscored | `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_depth,camera3d_depth_far,camera3d_depth_near` → 3/3, full 15/15 + four prior probes, near +0.5 forward depth rejected despite same pixel, private local-Z mutant exit1; non-author `corpus/lessons/r8-near-review.md` (r8 work commit in report) | r8 |
+| depth | unscored | `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing` → 19/19 + four probes; grounded center y=1, tick 30, +Y versus lower-floor airborne y=-2; copied floor-height mutant exit1; named non-author `corpus/lessons/r14-floor-review.md` (r14 work commit cited in report) | r14 |
 | coverage | unscored | `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing` → 17/17 + four opt-ins; headless NavigationServer3D two-point route and live separate-map remote endpoint clamped at source edge, private polygon mutant exit1 without RID leak; named non-author `corpus/lessons/r13-nav-review.md` (r13 work commit cited in report) | r13 |
 | calibration | unscored | `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing` → default 12/12, clean exit0 accepted, timeout logical null / cleanup -9 rejected, one verified detached witness gone; non-author `corpus/lessons/r5-timeout-review.md` and `r5-cleanup-review.md` (r5 work commit cited in report) | r5 |
 
