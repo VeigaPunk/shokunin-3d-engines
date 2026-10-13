@@ -135,3 +135,19 @@ filtered result. `--mutate-near-boundary` changes near5→5.25; actual
 zero hits must exit1 with a measured diagnostic while baseline stays two.
 These integer-coordinate samples are exactly representable here; no
 claim extends to arbitrary floating-point boundary precision or rendering.
+
+## Raycaster layer masks (round 68)
+
+```sh
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_layer_cases.mjs
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_layer_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r68.json
+```
+
+Separate identical triangle meshes at depths 3 and 5 use object layers 0
+and 1. Default ray mask 0 selects only the near mesh; setting ray mask 1
+selects only the far mesh; enabling both reports both nearest first. Each
+checks actual identity, point and distance; the separate `both` battery arm
+keeps both objects live. Mutation moves only far mesh layer 1→0 while ray
+mask remains 1, so actual zero hits must fail. Layer masks select CPU
+raycast intersections here; they do not establish rendered visibility,
+culling, or arbitrary scene behavior.
