@@ -345,6 +345,18 @@ hit points and +Z normals remain the same. A third x3 ray misses. The
 fixture checks actual physics-space dictionaries; it does not imply stable
 face ordering across engine builds, GPU winding, or rendered pixels.
 
+## Headless Skeleton3D rest and pose data (round 38)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only skeleton3d_pose,skeleton3d_rest_only`
+builds a live two-bone `Skeleton3D`: Root local rest(1,0,0), child Tip local
+rest(0,2,0), with measured child global **rest** origin(1,2,0). Setting
+Tip local pose position(0,3,0) reports pose/global-pose origin(0,3,0);
+the intact rest-only arm reports zero pose while retaining the same rest.
+The `get_bone_global_pose` readback here is pose hierarchy data, **not** a
+world/rest-combined child position. Assertions check hierarchy, separate
+rest and pose readbacks before fixed markers. This headless API evidence
+does not establish skinning, deformed vertices, pixels or GPU behavior.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

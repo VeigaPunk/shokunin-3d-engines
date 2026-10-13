@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("skeleton3d_pose", "skeleton3d_pose.gd", [], 0,
+     "PASS skeleton3d_pose parent=0 child_rest=1.000,2.000,0.000 child_pose_y=3.000"),
+    ("skeleton3d_rest_only", "skeleton3d_pose.gd", ["--rest-only"], 2,
+     "NEGATIVE REJECTED: skeleton3d_pose rest_only child_rest=1.000,2.000,0.000 child_pose_y=0.000"),
     ("mesh3d_faces_hit", "mesh3d_faces_hit.gd", [], 0,
      "PASS mesh3d_faces_hit two_faces face_a=0 face_b=1 outside_hits=0"),
     ("mesh3d_faces_reordered", "mesh3d_faces_hit.gd", ["--reversed"], 2,
