@@ -1,10 +1,11 @@
 # game-dev-3d — headless 3D fixture battery
 
-Bounded, deterministic Godot 4.7.2 `--headless` fixtures for six 3D mechanic
-classes. Each class is one positive causal case plus one discriminating
-negative control that runs the *same* assertion machinery against a different
-arrangement, so an absent effect is attributable to the arrangement and never to
-a broken setup.
+Bounded Godot 4.7.2 `--headless` fixtures for 3D mechanics. The original
+six classes each have a positive and a discriminating negative control; later
+rounds extend the battery to 77 registered cases (37 ordinary and 40 negative
+controls). A negative control must demonstrate a live setup before attributing
+an absent or changed effect to its arrangement. These finite headless checks
+do not establish rendered output or behavior in other engines.
 
 Everything in this directory is a **seed** and is treated read-only at run time.
 `run_battery.py` copies the directory into `corpus/live/runs/<ts>/scratch` and
@@ -15,10 +16,11 @@ and Godot's `.godot/` import cache is created inside the scratch copy only.
 ## Running
 
 ```
-python3 corpus/fixtures/run_battery.py                     # all 19 cases (round 14)
-python3 corpus/fixtures/run_battery.py --probe-failing     # + one adversarial mutation
-python3 corpus/fixtures/run_battery.py --only raycast3d_hit,raycast3d_miss
-python3 run_battery.py --godot /path/to/godot --runs /path/to/receipts
+# From the repository root (Godot 4.7.2 at /usr/bin/godot):
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only raycast3d_hit,raycast3d_miss
+# Optional overrides: append --godot /path/to/godot --runs /path/to/receipts
 ```
 
 The battery prints a per-case PASS/FAIL table plus totals and exits 0 only when
