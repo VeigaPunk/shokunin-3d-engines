@@ -19,10 +19,10 @@ const results = cases.map(([name, flags, expectedExit, expectedLine]) => {
   const proc = spawnSync(command[0], command.slice(1), { encoding: 'utf8', timeout: 5000 });
   const stdout = proc.stdout ?? '';
   const stderr = proc.stderr ?? '';
-  const actualLines = (name === 'mutation' ? stderr : stdout).trim().split('\n');
+  const selectedStream = name === 'mutation' ? stderr : stdout;
   const otherStream = name === 'mutation' ? stdout : stderr;
   const pass = !proc.error && proc.status === expectedExit && proc.signal === null
-    && actualLines.length === 1 && actualLines[0] === expectedLine && otherStream === '';
+    && selectedStream === expectedLine + '\n' && otherStream === '';
   return { name, command, expectedExit, actualExit: proc.status, signal: proc.signal,
     error: proc.error?.message ?? null, expectedLine, stdout, stderr, verdict: pass ? 'PASS' : 'FAIL' };
 });

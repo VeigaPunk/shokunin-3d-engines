@@ -21,10 +21,10 @@ const results = cases.map(([name, flags, expectedExit, expectedLine]) => {
   const stdout = proc.stdout ?? '';
   const stderr = proc.stderr ?? '';
   const diagnostic = name === 'mutate_far';
-  const line = (diagnostic ? stderr : stdout).trim();
+  const selectedStream = diagnostic ? stderr : stdout;
   const other = diagnostic ? stdout : stderr;
   const pass = !proc.error && proc.status === expectedExit && proc.signal === null
-    && line === expectedLine && other === '';
+    && selectedStream === expectedLine + '\n' && other === '';
   return { name, command, expectedExit, actualExit: proc.status, signal: proc.signal,
     error: proc.error?.message ?? null, expectedLine, stdout, stderr, verdict: pass ? 'PASS' : 'FAIL' };
 });

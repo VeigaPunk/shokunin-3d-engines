@@ -50,3 +50,14 @@ frustum, the last is beyond far. The negative keeps both inside controls
 live; far=20 must fail on the measured last-point frustum status before
 literal depth checks. This is math-only evidence, not rendered pixels,
 GL, GPU culling, browser or cross-engine equivalence.
+
+## Exact Node output bytes (round 61)
+
+The three Node runners compare the selected stdout or stderr byte string to
+`expectedLine + "\n"`, require the other stream empty, and reject an extra
+blank line even after an otherwise correct PASS marker. A private copied
+fixture source can prepend a `console.log` wrapper that prints one extra
+empty line only after `PASS`; the old `.trim()` runners accept it, while
+the revised runners fail the positive arm with the child exit still 0.
+This rule covers these scripts' UTF-8 newline output, not arbitrary engine
+logging or portable terminal formatting.
