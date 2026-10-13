@@ -437,6 +437,18 @@ The same 60-frame stationary speed0 control remains at origin. This is
 scripted frame-paced progress, not `PathFollow3D` moving autonomously or
 an AnimationPlayer/NavigationAgent controller; no pixels or GPU output.
 
+## Physics-callback PathFollow3D driver (round 46)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only pathfollow3d_callback,pathfollow3d_callback_stationary`
+attaches `pathfollow3d_driver.gd` to a live Node3D. Its actual
+`_physics_process(delta)` advances follower progress by `SPEED*delta` for
+60 callbacks, records positions at callback 30/60 and sums delta≈1.000
+at pinned 60Hz. The moving arm ends progress≈3 with follower Y≈1.105767
+then 1.997535; the speed-zero control executes the same 60 callbacks but
+stays at origin. The SceneTree script only awaits physics frames and reads
+the driver; it never assigns moving progress. This is a callback-driven
+headless scene-tree transform, not autonomous navigation or rendered motion.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
