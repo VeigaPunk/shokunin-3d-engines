@@ -8,6 +8,7 @@ const DEEP := Vector3(2, 1, -8)
 const OUTSIDE := Vector3(6, 1, -4)
 const NEAR_POINT := Vector3(2, 1, -0.5)
 const NEAR_INSIDE := Vector3(2, 1, -1.01)
+const NEAR_EXACT := Vector3(2, 1, -1.0)
 const NEAR_OUTSIDE := Vector3(2, 1, -0.99)
 const FAR_INSIDE := Vector3(2, 1, -9.99)
 const FAR_OUTSIDE := Vector3(2, 1, -10.01)
@@ -29,6 +30,7 @@ func _run() -> void:
 	var near_point := "--near-point" in OS.get_cmdline_user_args()
 	var far_point := "--far-point" in OS.get_cmdline_user_args()
 	var near_inside := "--near-boundary-inside" in OS.get_cmdline_user_args()
+	var near_exact := "--near-boundary-exact" in OS.get_cmdline_user_args()
 	var near_outside := "--near-boundary-outside" in OS.get_cmdline_user_args()
 	var far_inside := "--far-boundary-inside" in OS.get_cmdline_user_args()
 	var far_outside := "--far-boundary-outside" in OS.get_cmdline_user_args()
@@ -54,6 +56,20 @@ func _run() -> void:
 		return _fail("depth-invariant projection mismatch near=%s deep=%s" % [near_screen, deep_screen])
 	if camera.is_position_behind(FRONT) or camera.is_position_behind(DEEP) or not camera.is_position_in_frustum(FRONT) or not camera.is_position_in_frustum(DEEP):
 		return _fail("two valid depth controls rejected")
+	if near_exact:
+		var exact_screen := camera.unproject_position(NEAR_EXACT)
+		var exact_frustum := camera.is_position_in_frustum(NEAR_EXACT)
+		var exact_behind := camera.is_position_behind(NEAR_EXACT)
+		var inside_frustum := camera.is_position_in_frustum(NEAR_INSIDE)
+		var outside_frustum := camera.is_position_in_frustum(NEAR_OUTSIDE)
+		if exact_screen.distance_to(Vector2(550, 225)) > 0.0001 or camera.unproject_position(NEAR_INSIDE).distance_to(exact_screen) > 0.0001 or camera.unproject_position(NEAR_OUTSIDE).distance_to(exact_screen) > 0.0001 or not inside_frustum or outside_frustum:
+			return _fail("near exact setup failed screen=%s inside=%s outside=%s" % [exact_screen, inside_frustum, outside_frustum])
+		if not exact_frustum or exact_behind:
+			return _fail("near exact measured contradiction depth=%.3f in_frustum=%s api_behind=%s" % [-NEAR_EXACT.z, exact_frustum, exact_behind])
+		_cleanup()
+		print("PASS camera3d_ortho near_boundary_exact depth=%.3f screen=550.000,225.000 in_frustum=%s api_behind=%s inside_control=true outside_control=false" % [-NEAR_EXACT.z, str(exact_frustum), str(exact_behind)])
+		quit(0)
+		return
 	if near_inside or near_outside:
 		var inside_screen := camera.unproject_position(NEAR_INSIDE)
 		var outside_screen := camera.unproject_position(NEAR_OUTSIDE)

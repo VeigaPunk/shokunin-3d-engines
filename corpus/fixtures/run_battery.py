@@ -124,6 +124,8 @@ CASES = [
      "PASS camera3d_ortho far_boundary_inside depth=9.990 screen=550.000,225.000 in_frustum=true outside_control=false"),
     ("camera3d_ortho_far_boundary_outside", "camera3d_ortho.gd", ["--far-boundary-outside"], 2,
      "NEGATIVE REJECTED: camera3d_ortho far_boundary_outside depth=10.010 screen=550.000,225.000 in_frustum=false api_behind=false inside_control=true"),
+    ("camera3d_ortho_near_boundary_exact", "camera3d_ortho.gd", ["--near-boundary-exact"], 0,
+     "PASS camera3d_ortho near_boundary_exact depth=1.000 screen=550.000,225.000 in_frustum=true api_behind=false inside_control=true outside_control=false"),
     ("camera3d_ortho_near_boundary_inside", "camera3d_ortho.gd", ["--near-boundary-inside"], 0,
      "PASS camera3d_ortho near_boundary_inside depth=1.010 screen=550.000,225.000 in_frustum=true outside_control=false"),
     ("camera3d_ortho_near_boundary_outside", "camera3d_ortho.gd", ["--near-boundary-outside"], 2,

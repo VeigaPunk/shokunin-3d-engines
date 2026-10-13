@@ -540,6 +540,15 @@ Both samples project to (550,225). This samples either side of far=10 at
 0.01 offset; it does not establish the exact boundary, rasterization or GPU
 culling.
 
+## Orthographic exact near-plane sample (round 56)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_exact,camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside`
+measures `is_position_in_frustum` and `is_position_behind` at forward depth
+exactly 1.0 against camera near=1.0. The 1.01 and 0.99 controls stay on
+opposite sides; all three project to (550,225). This is one Godot 4.7.2
+headless point, not a precision guarantee across transforms or engines,
+rendered pixels, or GPU culling.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
