@@ -228,6 +228,16 @@ not an independently sampled initial `is_on_floor()` state. This tests one
 explicit integration loop, not a generalized gravity/jump controller or
 rendered motion.
 
+## Sampled pre-impulse floor state (round 27)
+
+The r26 `jump3d_land,jump3d_no_floor` pair now calls `move_and_slide()` once
+with a tiny downward velocity -0.01 after geometry setup and **before** the
++6 impulse. It checks `is_on_floor=true` for the y0 floor and false for the
+same floor relocated y-20, and checks center y remains ≈1. The same 60
+subsequent impulse/gravity calls still produce apex tick29 and landing tick60
+or free final y≈0.9. Exact markers include `initially_grounded=`. This is a
+sampled precondition, not proof of grounded state before the probing move.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

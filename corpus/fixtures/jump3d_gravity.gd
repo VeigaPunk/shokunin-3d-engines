@@ -42,6 +42,11 @@ func _run() -> void:
 	await physics_frame
 	if floor_box.size != Vector3(8, 1, 8) or actor_box.size != Vector3.ONE or (actor.collision_mask & floor_body.collision_layer) == 0:
 		return _fail("collision setup absent")
+	actor.velocity = Vector3(0, -0.01, 0)
+	actor.move_and_slide()
+	var initially_grounded := actor.is_on_floor()
+	if initially_grounded == lower or absf(actor.position.y - 1.0) > 0.002:
+		return _fail("initial floor probe failed grounded=%s y=%.4f lower=%s" % [initially_grounded, actor.position.y, lower])
 	var velocity_y := IMPULSE
 	var apex_y := actor.position.y
 	var apex_tick := 0
@@ -66,14 +71,14 @@ func _run() -> void:
 			return _fail("lower-floor control landed=%s final_y=%.4f floor_y=%.1f" % [landed, actor.position.y, floor_body.position.y])
 		var final_y := actor.position.y
 		_cleanup()
-		print("NEGATIVE REJECTED: jump3d_gravity no_floor_landing apex_tick=%d apex_y=%.3f final_y=%.3f grounded=false floor_intact=true" % [apex_tick, apex_y, final_y])
+		print("NEGATIVE REJECTED: jump3d_gravity no_floor_landing apex_tick=%d apex_y=%.3f final_y=%.3f initially_grounded=false grounded=false floor_intact=true" % [apex_tick, apex_y, final_y])
 		quit(2)
 		return
 	if floor_body.position.y != 0 or not landed or landing_tick != 60 or not actor.is_on_floor() or absf(actor.position.y - 1.0) > 0.003:
 		return _fail("landing failed tick=%d y=%.4f floor=%s" % [landing_tick, actor.position.y, actor.is_on_floor()])
 	var final_y := actor.position.y
 	_cleanup()
-	print("PASS jump3d_gravity apex_tick=%d apex_y=%.3f landing_tick=%d final_y=%.3f grounded=true" % [apex_tick, apex_y, landing_tick, final_y])
+	print("PASS jump3d_gravity apex_tick=%d apex_y=%.3f landing_tick=%d final_y=%.3f initially_grounded=true grounded=true" % [apex_tick, apex_y, landing_tick, final_y])
 	quit(0)
 
 func _cleanup() -> void:
