@@ -157,6 +157,18 @@ persisted artifact outside ignored run scratch is modified; this proves a
 headless Godot serialization/load path, not visual output or arbitrary scene
 file validation.
 
+## PackedScene mesh resource locality (round 20)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_resource_local,scene3d_resource_shared`
+packs one Node3D/MeshInstance3D/BoxMesh scene and instantiates two clones.
+With `resource_local_to_scene=true`, actual mesh object identities differ and
+changing first mesh size X from 1 to 2 leaves second/source X=1. With the
+same flag false, both clones and source share the same mesh and the size
+mutation reaches both second and source (X=2). Both arms assert literal initial
+and post-mutation dimensions and
+free the nodes before exit. This is mutable scene-resource behavior, not GPU
+rendering, material identity, disk scene persistence or other engines.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
