@@ -133,6 +133,17 @@ readback and floor/wall flags after exact-setting checks; a 45°→35° source
 change must fail rather than printing an unobserved 45° label. Contact normal
 is stored on first contact, not re-read in the same frame as the flags.
 
+## PackedScene instance-local transforms (round 17)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_instances,scene3d_instances_wrong_local`
+packs a reusable Node3D with an owned MeshInstance3D/BoxMesh child at local
+(1,2,-3), instantiates twice, and checks world (11,2,-3) versus (-9,2,2)
+after parents at (10,0,0) and (-10,0,5). The negative changes only the second
+child's local X to 2, checking its world (-8,2,2) while the first and source
+stay intact; both instances and source are freed before exit. This is live
+headless scene instancing and transform isolation, not persisted scene-file
+serialization or rendered pixels.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

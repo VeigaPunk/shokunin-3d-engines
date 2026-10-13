@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("scene3d_instances", "scene3d_instance.gd", [], 0,
+     "PASS scene3d_instances source_intact=true first_world=11.000,2.000,-3.000 second_world=-9.000,2.000,2.000 distinct_nodes=true"),
+    ("scene3d_instances_wrong_local", "scene3d_instance.gd", ["--wrong-local"], 2,
+     "NEGATIVE REJECTED: scene3d_instances wrong_second_local source_intact=true first_world=11.000,2.000,-3.000 second_world=-8.000,2.000,2.000 expected_second=-9.000,2.000,2.000"),
     ("slope3d_floor", "slope3d_angle.gd", [], 0,
      "PASS slope3d_floor normal_y=0.866 floor_limit=45.000 on_floor=true on_wall=false live_contact=true"),
     ("slope3d_steep", "slope3d_angle.gd", ["--steep"], 2,
