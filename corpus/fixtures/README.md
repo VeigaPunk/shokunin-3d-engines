@@ -216,7 +216,7 @@ exact near/far boundary precision, rendered pixels or GPU culling.
 ## Gravity-driven vertical jump versus displaced floor (round 26)
 
 `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor`
-starts a one-unit CharacterBody3D at y=1 above a one-unit floor centered y=0,
+starts a one-unit CharacterBody3D at y=1 touching a one-unit floor centered y=0 (top y=0.5),
 sets one +6 vertical impulse, subtracts 12/60 from vertical velocity and calls
 `move_and_slide` once after each physics-frame signal for 60 explicit calls.
 Ideal free-motion displacement is sum(6−0.2n)/60 for n=1..60; apex at
