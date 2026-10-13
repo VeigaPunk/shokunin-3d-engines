@@ -380,6 +380,18 @@ and actual marker global transform are asserted before fixed markers.
 This is a live Node3D follower in headless scene-tree coordinates, not
 skinned mesh deformation, pixels or GPU evidence.
 
+## Sphere ShapeCast3D swept query (round 41)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only shapecast3d_sphere,shapecast3d_sphere_offset`
+creates a live radius-0.5 `ShapeCast3D` starting at z4 and sweeping -6Z
+toward a static 2×2×2 box. The centered cast hits the box front at z1 with
++Z normal, one collider, approximate safe/unsafe fractions 0.414062/0.417969;
+with the same cast shifted to X4 it misses and reports safe1. Both arms
+assert the live collider/shape setup; success markers follow measured
+contact/fraction checks. Fractions are Godot's swept-shape estimates, not
+hand-exact collision distances. This does not establish continuous body
+movement, tunneling prevention, pixels or GPU behavior.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
