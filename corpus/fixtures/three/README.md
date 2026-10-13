@@ -71,3 +71,18 @@ It shares asserted NDC x=0.5/y=1/3 with depths 4,8,12 but has live
 controls and the far-outside control. Near=0.1 must fail on the measured
 near-point inclusion before fixed setting/depth checks. This is a bounded
 Node math result, not a rendered pixel or general precision threshold.
+
+## Translated triangle Raycaster (round 63)
+
+```sh
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_ray_cases.mjs
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_ray_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r63.json
+```
+
+Real three.js `BufferGeometry` triangle vertices (-1,-1,0),(1,-1,0),
+(0,1,0) live in a `Mesh` translated to (2,0,-5). A ray from (2,0,0)
+down -Z must hit its interior at hand-derived (2,0,-5), distance 5;
+parallel ray from x=5 misses while the first hit remains live. A runtime
+mesh x-offset 2→3 must make the original interior ray lose its hit and
+exit 1 on observed hit count. The exact-stream runner hashes its four
+seeds. No renderer, GL, pixels, browser or arbitrary-mesh guarantee.
