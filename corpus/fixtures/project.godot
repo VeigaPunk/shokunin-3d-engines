@@ -1,0 +1,20 @@
+; Seed project for the game-dev-3d round-1 headless battery.
+; Treated read-only: run_battery.py copies this directory into
+; corpus/live/runs/<ts>/scratch before invoking Godot, so no .godot/ import
+; cache is ever written next to the seeds.
+;
+; The physics tick is pinned so every fixture's authored delta is 1/60 and no
+; fixture depends on wall-clock time or on a host's frame rate.
+;
+; Note: in --headless the root Window reports a fixed 64x64 viewport and the
+; display/window/size project settings are not applied, so camera3d_project.gd
+; authors its own SubViewport instead of relying on the root viewport.
+
+[application]
+
+config/name="GameDev3DFixtures"
+config/features=PackedStringArray("4.7")
+
+[physics]
+
+common/physics_ticks_per_second=60

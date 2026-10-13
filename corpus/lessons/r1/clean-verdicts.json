@@ -1,0 +1,392 @@
+{
+  "godot": "/usr/bin/godot",
+  "godot_version": "4.7.2.stable.arch_linux.ed1daf0bf",
+  "godot_version_exit": 0,
+  "godot_version_error": null,
+  "started_utc": "20261013T025210271414Z",
+  "seed": "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/fixtures",
+  "scratch": "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+  "case_timeout_seconds": 20,
+  "only": null,
+  "probe_failing": false,
+  "seeds_unchanged": true,
+  "seed_digests": {
+    "README.md": "c49da7523d507d5a56352bd40f549fd6b8679fad24a7032091d7c1a8b7e580e7",
+    "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+    "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+    "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+    "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+    "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+    "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+    "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+    "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+    "run_battery.py": "303e4179e1e2238434a510031705b478380a4be576b3db8f9cf57b050bb5a59b",
+    "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+    "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+  },
+  "results": [
+    {
+      "case": "body3d_contact",
+      "script": "body3d_slide.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://body3d_slide.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.436,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "body3d_contact_far",
+      "script": "body3d_slide.gd",
+      "flags": [
+        "--far-body"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://body3d_slide.gd",
+        "--",
+        "--far-body"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: body3d_contact no_contact_at_far_arrangement start_z=40.000 final_z=30.000 expected_plane_z=2.500 contacts=0 on_wall=false wall_intact=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.404,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: body3d_contact no_contact_at_far_arrangement start_z=40.000 final_z=30.000 expected_plane_z=2.500 contacts=0 on_wall=false wall_intact=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "area3d_chain",
+      "script": "area3d_chain.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://area3d_chain.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS area3d_chain collected=1 entries=1 overlapping=1 body_name=Runner3D body_layer=2 entry_x=4.200 pickup_x=6.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.416,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS area3d_chain collected=1 entries=1 overlapping=1 body_name=Runner3D body_layer=2 entry_x=4.200 pickup_x=6.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "area3d_chain_no_overlap",
+      "script": "area3d_chain.gd",
+      "flags": [
+        "--no-overlap"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://area3d_chain.gd",
+        "--",
+        "--no-overlap"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: area3d_chain no_overlap_signal_absent collected=0 entries=0 overlapping=0 runner_x=6.000 pickup_x=40.000 monitoring=true mask_matches_layer=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.403,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: area3d_chain no_overlap_signal_absent collected=0 entries=0 overlapping=0 runner_x=6.000 pickup_x=40.000 monitoring=true mask_matches_layer=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_project",
+      "script": "camera3d_project.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://camera3d_project.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_project viewport=800,600 fov=90.000 proj_x_scale=0.750 proj_y_scale=1.000 world=2.000,1.000,-4.000 screen=550.000,225.000 center_screen=400.000,300.000 mirror_screen=250.000,375.000 behind=false in_frustum=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.385,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_project viewport=800,600 fov=90.000 proj_x_scale=0.750 proj_y_scale=1.000 world=2.000,1.000,-4.000 screen=550.000,225.000 center_screen=400.000,300.000 mirror_screen=250.000,375.000 behind=false in_frustum=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_project_behind",
+      "script": "camera3d_project.gd",
+      "flags": [
+        "--behind-camera"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://camera3d_project.gd",
+        "--",
+        "--behind-camera"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_project behind_camera_projection_rejected point=2.000,1.000,4.000 is_position_behind=true in_frustum=false raw_screen=250.000,375.000 collides_with_mirrored_control=true lateral_screen=3400.000,300.000 lateral_in_frustum=false in_front_control_accepted=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.364,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_project behind_camera_projection_rejected point=2.000,1.000,4.000 is_position_behind=true in_frustum=false raw_screen=250.000,375.000 collides_with_mirrored_control=true lateral_screen=3400.000,300.000 lateral_in_frustum=false in_front_control_accepted=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "raycast3d_hit",
+      "script": "raycast3d.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://raycast3d.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS raycast3d hits=1 position=0.000,2.000,0.000 normal=0.000,1.000,0.000 collider=Wall collider_id_matches=true miss_hits=0",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.504,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS raycast3d hits=1 position=0.000,2.000,0.000 normal=0.000,1.000,0.000 collider=Wall collider_id_matches=true miss_hits=0"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "raycast3d_miss",
+      "script": "raycast3d.gd",
+      "flags": [
+        "--miss-ray"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://raycast3d.gd",
+        "--",
+        "--miss-ray"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: raycast3d miss_ray_no_hit control_hits=1 control_position=0.000,2.000,0.000 miss_from=0.000,6.000,9.000 miss_hits=0 miss_offset_z=9.000 box_half_depth_z=2.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.478,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: raycast3d miss_ray_no_hit control_hits=1 control_position=0.000,2.000,0.000 miss_from=0.000,6.000,9.000 miss_hits=0 miss_offset_z=9.000 box_half_depth_z=2.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "transform3d_compose",
+      "script": "transform3d_compose.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://transform3d_compose.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS transform3d_compose parent_origin=2.000,0.000,0.000 child_local_origin=0.000,0.000,-3.000 global_origin=-1.000,0.000,0.000 basis_x=0.000,0.000,-1.000 basis_y=1.000,0.000,0.000 basis_z=0.000,-1.000,0.000 composition_identity=true determinant=1.000 wrong_order_rejected=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.423,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS transform3d_compose parent_origin=2.000,0.000,0.000 child_local_origin=0.000,0.000,-3.000 global_origin=-1.000,0.000,0.000 basis_x=0.000,0.000,-1.000 basis_y=1.000,0.000,0.000 basis_z=0.000,-1.000,0.000 composition_identity=true determinant=1.000 wrong_order_rejected=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "transform3d_compose_wrong_order",
+      "script": "transform3d_compose.gd",
+      "flags": [
+        "--wrong-order"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://transform3d_compose.gd",
+        "--",
+        "--wrong-order"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: transform3d_compose wrong_order_composition_rejected expected_origin=-1.000,0.000,0.000 wrong_order_origin=2.000,0.000,-3.000 expected_basis_x=0.000,0.000,-1.000 wrong_order_basis_x=0.000,1.000,0.000 correct_order_matches=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.405,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: transform3d_compose wrong_order_composition_rejected expected_origin=-1.000,0.000,0.000 wrong_order_origin=2.000,0.000,-3.000 expected_basis_x=0.000,0.000,-1.000 wrong_order_basis_x=0.000,1.000,0.000 correct_order_matches=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "input3d_move",
+      "script": "input3d_move.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://input3d_move.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS input3d_move key=W receipts=1 releases=1 ticks=10 displacement=1.000,0.000,0.000 expected_x=1.000 post_release_ticks=5 post_release_displacement=0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.677,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS input3d_move key=W receipts=1 releases=1 ticks=10 displacement=1.000,0.000,0.000 expected_x=1.000 post_release_ticks=5 post_release_displacement=0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "input3d_move_no_event",
+      "script": "input3d_move.gd",
+      "flags": [
+        "--no-input"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025210271414Z/scratch",
+        "--script",
+        "res://input3d_move.gd",
+        "--",
+        "--no-input"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: input3d_move no_event_zero_displacement receipts=0 intent=false ticks=10 displacement=0.000,0.000,0.000 late_control_receipts=1 late_control_ticks=5 late_control_displacement=0.500",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.66,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: input3d_move no_event_zero_displacement receipts=0 intent=false ticks=10 displacement=0.000,0.000,0.000 late_control_receipts=1 late_control_ticks=5 late_control_displacement=0.500"
+      ],
+      "stderr": []
+    }
+  ],
+  "probe": null,
+  "totals": {
+    "cases": 12,
+    "pass": 12,
+    "fail": 0,
+    "ordinary": 6,
+    "negative_controls": 6
+  },
+  "verdict": "PASS"
+}

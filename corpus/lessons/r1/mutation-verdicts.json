@@ -1,0 +1,91 @@
+{
+  "mutation": {
+    "case": "body3d_contact",
+    "script": "body3d_slide.gd",
+    "flags": [],
+    "old": "const BOX_SIZE := Vector3(4.0, 4.0, 4.0)",
+    "new": "const BOX_SIZE := Vector3(4.0, 4.0, 6.0)",
+    "expected_exit": 1,
+    "forbidden_stdout": "PASS body3d_contact",
+    "expected_diagnostic": "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500"
+  },
+  "detected": true,
+  "seeds_unchanged": true,
+  "seeded_expectation": {
+    "case": "body3d_contact",
+    "script": "body3d_slide.gd",
+    "expected_exit": 0,
+    "marker": "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000"
+  },
+  "record": {
+    "case": "mutant_body3d_contact",
+    "script": "body3d_slide.gd",
+    "flags": [],
+    "command": [
+      "/usr/bin/godot",
+      "--headless",
+      "--path",
+      "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025219873184Z/mutation-scratch",
+      "--script",
+      "res://body3d_slide.gd",
+      "--"
+    ],
+    "expected_exit": 0,
+    "actual_exit": 1,
+    "error": null,
+    "kind": "ordinary",
+    "marker": "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000",
+    "verdict": "FAIL",
+    "reasons": [
+      "exit 1 != expected 0",
+      "exact stdout marker missing",
+      "unexpected diagnostic: ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500"
+    ],
+    "elapsed_seconds": 1.425,
+    "stdout": [
+      "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org"
+    ],
+    "stderr": [
+      "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500",
+      "   at: push_error (core/variant/variant_utility.cpp:1023)",
+      "   GDScript backtrace (most recent call first):",
+      "       [0] _fail (res://body3d_slide.gd:152)",
+      "       [1] _contact_verdict (res://body3d_slide.gd:122)",
+      "       [2] _run (res://body3d_slide.gd:100)"
+    ]
+  },
+  "seed_digests_before": {
+    "README.md": "c49da7523d507d5a56352bd40f549fd6b8679fad24a7032091d7c1a8b7e580e7",
+    "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+    "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+    "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+    "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+    "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+    "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+    "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+    "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+    "run_battery.py": "303e4179e1e2238434a510031705b478380a4be576b3db8f9cf57b050bb5a59b",
+    "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+    "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+  },
+  "seed_digests_after": {
+    "README.md": "c49da7523d507d5a56352bd40f549fd6b8679fad24a7032091d7c1a8b7e580e7",
+    "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+    "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+    "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+    "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+    "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+    "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+    "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+    "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+    "run_battery.py": "303e4179e1e2238434a510031705b478380a4be576b3db8f9cf57b050bb5a59b",
+    "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+    "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+  },
+  "mutation_scratch": "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025219873184Z/mutation-scratch",
+  "expected_diagnostic_lines": [
+    "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500"
+  ],
+  "verdict": "PASS",
+  "bounded_claim": "one authored constant (wall box depth 4.0 -> 6.0) mutated in a scratch copy of body3d_slide.gd; proves the contact-plane assertion measures engine geometry instead of restating it. Not a general mutation-coverage claim."
+}

@@ -1,0 +1,96 @@
+{
+  "purpose": "battery-level rejection controls for the round-1 exit contract: the runner must exit nonzero when the runtime crashes, when it exits nonzero without markers, and when an authored constant is mutated so the marker disappears",
+  "controls": [
+    {
+      "control": "crashing runtime (SIGSEGV stub substituted for --godot)",
+      "godot": "/tmp/g3d-controls/crash-godot",
+      "battery_verdict": "FAIL",
+      "battery_exit_code": 1,
+      "cases": 12,
+      "pass": 0,
+      "fail": 12,
+      "sample_case": {
+        "case": "body3d_contact",
+        "actual_exit": -11,
+        "expected_exit": 0,
+        "reasons": [
+          "process died on signal 11",
+          "exact stdout marker missing"
+        ]
+      },
+      "distinct_rejection_reasons": [
+        "exact stdout marker missing",
+        "process died on signal 11"
+      ]
+    },
+    {
+      "control": "silent nonzero runtime (/usr/bin/false substituted for --godot)",
+      "godot": "/usr/bin/false",
+      "battery_verdict": "FAIL",
+      "battery_exit_code": 1,
+      "cases": 12,
+      "pass": 0,
+      "fail": 12,
+      "sample_case": {
+        "case": "body3d_contact",
+        "actual_exit": 1,
+        "expected_exit": 0,
+        "reasons": [
+          "exit 1 != expected 0",
+          "exact stdout marker missing"
+        ]
+      },
+      "distinct_rejection_reasons": [
+        "exact stdout marker missing",
+        "exit 1 != expected 0",
+        "exit 1 != expected 2"
+      ]
+    },
+    {
+      "control": "adversarial mutation of exactly one authored constant in a scratch copy",
+      "run_dir": "20261013T025219873184Z",
+      "battery_exit_code": 0,
+      "detected": true,
+      "seeds_unchanged": true,
+      "mutated_constant": {
+        "file": "body3d_slide.gd",
+        "old": "const BOX_SIZE := Vector3(4.0, 4.0, 4.0)",
+        "new": "const BOX_SIZE := Vector3(4.0, 4.0, 6.0)"
+      },
+      "mutant_actual_exit": 1,
+      "mutant_classifier_reasons": [
+        "exit 1 != expected 0",
+        "exact stdout marker missing",
+        "unexpected diagnostic: ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500"
+      ],
+      "expected_diagnostic": "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500",
+      "observed_mutant_stderr": [
+        "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] _fail (res://body3d_slide.gd:152)",
+        "       [1] _contact_verdict (res://body3d_slide.gd:122)",
+        "       [2] _run (res://body3d_slide.gd:100)"
+      ],
+      "receipt": "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025219873184Z/mutation-verdicts.json"
+    },
+    {
+      "control": "unknown --only case name",
+      "battery_exit_code": 1,
+      "console": "FAIL unknown case names: ['nope']",
+      "run_dir": "20261013T025232653245Z",
+      "note": "exits before any case runs; the run directory holds only the empty scratch"
+    },
+    {
+      "control": "--only subset still passes",
+      "battery_exit_code": 0,
+      "run_dir": "20261013T025231595362Z",
+      "cases": 2
+    }
+  ],
+  "crash_control_run_dir": "20261013T025231025111Z",
+  "silent_control_run_dir": "20261013T025231561318Z",
+  "crash_control_console": "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025219873184Z/control-crash-runtime.txt",
+  "silent_control_console": "/tmp/mint-game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T025219873184Z/control-silent-runtime.txt",
+  "verdict": "PASS"
+}
