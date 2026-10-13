@@ -71,6 +71,20 @@ Supporting scripts are not cases and carry no exit signature: `runner3d.gd`
 (deterministic-drive `CharacterBody3D` actor), `input_mover3d.gd` (key-intent
 actor), `pickup_orb3d.gd` (`Area3D` trigger with the `collected` chain).
 
+## Optional direct-child signal classification (round 3)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-crash-exit`
+adds a **separate, uncounted** pair using `crash_exit3d.gd`. Both arms set up
+a Node3D and print the exact `CRASH_EXIT_3D: spatial node ready` line. The
+normal arm `quit(1)` passes the existing classifier when expecting exit 1;
+the `--hold-open` arm remains live after printing, receives parent SIGTERM,
+and must return -15 and be rejected by the same classifier despite the
+marker. The paired streams, liveness, exit, and cleanup are in ignored
+`corpus/live/runs/<timestamp>/crash-exit-verdicts.json`; rerun the command
+for evidence. Eight seconds bounds marker observation; three seconds bounds
+cleanup before forced kill. This is not a spontaneous crash or process-tree
+guarantee. The twelve default cases are unchanged.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

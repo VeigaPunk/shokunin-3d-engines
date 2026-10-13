@@ -16,9 +16,13 @@ Battery exit code is 0 only when every case passes.
 import argparse
 import hashlib
 import json
+import os
 import re
+import select
 import shutil
+import signal
 import subprocess
+import time
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -148,6 +152,84 @@ def classify(stdout, stderr, code, error, expected_exit, marker):
     return (not reasons, reasons)
 
 
+def probe_crash_exit(godot, scratch, run_dir):
+    marker = "CRASH_EXIT_3D: spatial node ready"
+    script = "res://crash_exit3d.gd"
+    normal_command = [godot, "--headless", "--path", str(scratch), "--script", script, "--"]
+    normal_out, normal_err, normal_code, normal_error = run_process(normal_command, 8)
+    normal_pass, normal_reasons = classify(normal_out, normal_err, normal_code, normal_error, 1, marker)
+    normal = {"command": normal_command, "actual_exit": normal_code, "stdout": normal_out,
+              "stderr": normal_err, "error": normal_error, "classified_normal": normal_pass,
+              "reasons": normal_reasons}
+
+    signal_command = normal_command + ["--hold-open"]
+    signaled = {"command": signal_command, "actual_exit": None, "stdout": "", "stderr": "",
+                "error": None, "marker_observed_while_live": False, "signal_sent": False,
+                "classified_normal": None, "reasons": []}
+    process = None
+    try:
+        if os.name != "posix":
+            signaled["error"] = "POSIX SIGTERM unavailable"
+        else:
+            process = subprocess.Popen(signal_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            deadline = time.monotonic() + 8
+            pending = b""
+            while time.monotonic() < deadline:
+                readable, _, _ = select.select([process.stdout], [], [],
+                                                min(0.1, max(0, deadline - time.monotonic())))
+                if readable:
+                    chunk = os.read(process.stdout.fileno(), 4096)
+                    pending += chunk
+                    if any(line.strip() == marker.encode() for line in pending.split(b"\n")[:-1]):
+                        signaled["marker_observed_while_live"] = process.poll() is None
+                        break
+                    if not chunk:
+                        break
+                if process.poll() is not None:
+                    break
+            if signaled["marker_observed_while_live"]:
+                process.send_signal(signal.SIGTERM)
+                signaled["signal_sent"] = True
+            else:
+                signaled["error"] = "exact marker not observed while child live before 8s deadline"
+            try:
+                remainder, stderr = process.communicate(timeout=3)
+            except subprocess.TimeoutExpired:
+                signaled["error"] = "cleanup exceeded 3s; child killed"
+                process.kill()
+                remainder, stderr = process.communicate(timeout=3)
+            signaled["stdout"] = (pending + remainder).decode(errors="replace")
+            signaled["stderr"] = stderr.decode(errors="replace")
+            signaled["actual_exit"] = process.returncode
+            classified, reasons = classify(signaled["stdout"], signaled["stderr"],
+                                           process.returncode, signaled["error"], 1, marker)
+            signaled["classified_normal"] = classified
+            signaled["reasons"] = reasons
+    except (OSError, ValueError) as exc:
+        signaled["error"] = f"signal probe failed: {exc}"
+    finally:
+        if process is not None and process.poll() is None:
+            process.kill()
+            try:
+                process.communicate(timeout=3)
+            except subprocess.TimeoutExpired:
+                signaled["error"] = "forced cleanup exceeded 3s"
+
+    verdict = (normal_pass and normal_err == "" and signaled["error"] is None
+               and signaled["marker_observed_while_live"] and signaled["signal_sent"]
+               and signaled["actual_exit"] == -signal.SIGTERM
+               and signaled["classified_normal"] is False
+               and f"process died on signal {signal.SIGTERM}" in signaled["reasons"]
+               and signaled["stderr"] == "")
+    result = {"verdict": "PASS" if verdict else "FAIL", "marker": marker,
+              "normal": normal, "signaled": signaled, "bounded_claim":
+              "One Godot 4.7.2 Node3D setup and direct-child normal exit versus POSIX SIGTERM; "
+              "not a spontaneous crash, process-tree timeout, or rendered output."}
+    (run_dir / "crash-exit-verdicts.json").write_text(json.dumps(result, indent=2) + "\n")
+    print(f"{result['verdict']} crash-exit probe: {run_dir / 'crash-exit-verdicts.json'}", flush=True)
+    return verdict
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -156,6 +238,8 @@ def main():
     parser.add_argument("--only", default="", help="comma-separated case names to run")
     parser.add_argument("--probe-failing", action="store_true",
                         help="also mutate one authored constant in a scratch copy and prove detection")
+    parser.add_argument("--probe-crash-exit", action="store_true",
+                        help="compare a normal Godot exit to a SIGTERM-terminated live Godot child")
     args = parser.parse_args()
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
@@ -205,6 +289,10 @@ def main():
 
     for case in selected:
         execute(*case, scratch)
+
+    crash_probe_ok = True
+    if args.probe_crash_exit:
+        crash_probe_ok = probe_crash_exit(args.godot, scratch, run_dir)
 
     probe = None
     if args.probe_failing:
@@ -272,15 +360,16 @@ def main():
               f"{'(scratch mutation)':18} {'-/1':9} probe")
     print(f"totals: cases={len(results)} pass={passed} fail={failed} "
           f"ordinary={ordinary} negative_controls={negative} "
-          f"probes={1 if probe is not None else 0}")
+          f"probes={(1 if probe is not None else 0) + (1 if args.probe_crash_exit else 0)}")
 
-    verdict = ("PASS" if failed == 0 and seeds_unchanged
+    verdict = ("PASS" if failed == 0 and seeds_unchanged and crash_probe_ok
                and (probe is None or probe["verdict"] == "PASS") else "FAIL")
     payload = {"godot": args.godot, "godot_version": godot_version,
                "godot_version_exit": version_code, "godot_version_error": version_error,
                "started_utc": stamp, "seed": str(HERE), "scratch": str(scratch),
                "case_timeout_seconds": CASE_TIMEOUT_SECONDS, "only": args.only or None,
-               "probe_failing": args.probe_failing, "seeds_unchanged": seeds_unchanged,
+               "probe_failing": args.probe_failing, "probe_crash_exit": args.probe_crash_exit,
+               "crash_probe_ok": crash_probe_ok, "seeds_unchanged": seeds_unchanged,
                "seed_digests": digests_before, "results": results, "probe": probe,
                "totals": {"cases": len(results), "pass": passed, "fail": failed,
                           "ordinary": ordinary, "negative_controls": negative},
