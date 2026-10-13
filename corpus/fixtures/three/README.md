@@ -124,3 +124,14 @@ and distance before exact negative marker. `--mutate-near-clip` changes
 near4→2, yielding two measured hits and exit1 rather than a false
 single-far hit. These are sampled numeric distance gates, not exact
 boundary precision or rendered occlusion.
+
+## Sampled inclusive Raycaster bounds (round 67)
+
+`run_order_cases.mjs` also checks exact near=5 and far=3 on the
+unchanged two-triangle geometry. Each boundary invocation first recasts
+under default near=0/far=10 and checks both object identities, exact
+points and distances in the same process, then checks the one-hit
+filtered result. `--mutate-near-boundary` changes near5→5.25; actual
+zero hits must exit1 with a measured diagnostic while baseline stays two.
+These integer-coordinate samples are exactly representable here; no
+claim extends to arbitrary floating-point boundary precision or rendering.
