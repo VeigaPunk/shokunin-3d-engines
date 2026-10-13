@@ -319,6 +319,20 @@ identical. CPU-side checks read indices and vertices back from Godot's
 mesh/instance bounds. This does not establish GPU winding, culling, pixels,
 vertex-normal generation, or collision geometry.
 
+## Mesh-derived static physics collision (round 35)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_trimesh_hit,mesh3d_trimesh_outside`
+builds a triangle `ArrayMesh`, converts it via `create_trimesh_shape()`, and
+attaches the generated `ConcavePolygonShape3D` to a live `StaticBody3D`.
+`backface_collision=true` on that shape and `hit_back_faces=true` on both
+queries are explicit: initial default-shape experiments missed the triangle
+although its face array was populated. After four physics ticks, the
+interior ray at (0.5,0.5) hits (0.5,0.5,0), +Z normal, collider identity and
+face index **0**; lateral x3 ray is empty. Both cases run the interior hit
+first, so the negative arm's miss is not attributable to a dead world.
+This tests one two-sided generated concave collider/raycast, not default
+backface semantics, moving body contacts, mesh rendering or GPU behavior.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
