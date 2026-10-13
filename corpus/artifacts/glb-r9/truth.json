@@ -1,0 +1,36 @@
+{
+  "artifact": "triangle.glb",
+  "format": "glTF 2.0 GLB",
+  "sha256": "78f51afa040c1066f10c47f22bd4ea9c812005351493acda3f62cae9eec65fbc",
+  "byteLength": 532,
+  "jsonChunkLength": 468,
+  "binChunkLength": 36,
+  "jsonChunkOffset": 20,
+  "binChunkOffset": 496,
+  "node": "TriangleNode",
+  "translation": [
+    2,
+    0,
+    -3
+  ],
+  "mesh": "Triangle",
+  "primitiveMode": 4,
+  "positions": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      0
+    ]
+  ],
+  "rejection": "triangle-invalid.glb has GLB header total length decremented by one while physical bytes unchanged; strict parser must reject"
+}
