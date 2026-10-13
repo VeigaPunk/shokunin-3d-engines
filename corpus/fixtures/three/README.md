@@ -97,3 +97,19 @@ has zero intersections under `FrontSide`. `--backface --double-side`
 changes only material side and must fail on measured reverse hit count=1,
 with the forward hit still live. This is CPU-side Raycaster material-side
 behavior, not rendered backface culling or all mesh winding regimes.
+
+## Ordered Raycaster hits across two meshes (round 65)
+
+```sh
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_order_cases.mjs
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_order_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r65.json
+```
+
+Two separate translated triangle Mesh objects share a ray at x=2,y=0,
+placed at depths 3 and 5. `Raycaster.intersectObjects` receives them in
+reverse argument order yet must report nearest mesh first with measured
+points/distances (2,0,-3)/3 and (2,0,-5)/5. Moving only the near mesh
+to x=5 leaves the far hit live and yields the negative marker. Swapping
+their depths must fail on measured object identity/order even though two
+hits remain. This is Node CPU ray geometry, not rendered occlusion,
+transparency, GPU behavior or arbitrary scene ordering.
