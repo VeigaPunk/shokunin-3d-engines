@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("slope3d_travel", "slope3d_travel.gd", [], 0,
+     "PASS slope3d_travel downhill_x=-0.0810 y=1.3203 grounded_ticks=52 normal_y=0.866 stop_on_slope=false"),
+    ("slope3d_travel_level", "slope3d_travel.gd", ["--level"], 2,
+     "NEGATIVE REJECTED: slope3d_travel level_no_downhill x=0.0000 y=1.0001 grounded_ticks=44 normal_y=1.000"),
     ("jump3d_land", "jump3d_gravity.gd", [], 0,
      "PASS jump3d_gravity apex_tick=29 apex_y=2.451 landing_tick=60 final_y=1.001 initially_grounded=true grounded=true"),
     ("jump3d_no_floor", "jump3d_gravity.gd", ["--lower-floor"], 2,

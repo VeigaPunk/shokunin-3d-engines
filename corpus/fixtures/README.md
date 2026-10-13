@@ -238,6 +238,18 @@ subsequent impulse/gravity calls still produce apex tick29 and landing tick60
 or free final y≈0.9. Exact markers include `initially_grounded=`. This is a
 sampled precondition, not proof of grounded state before the probing move.
 
+## Downhill travel with explicit floor-stop policy (round 28)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only slope3d_travel,slope3d_travel_level`
+uses a wide static 30° box slope or intact level box, a unit CharacterBody3D
+and 60 explicit frame-paced downward-gravity `move_and_slide` calls. **The
+nondefault `floor_stop_on_slope=false` is required** on this Godot build:
+with default true, feasibility run stayed at x=0 despite contact. With false,
+slope x≈-0.081 after 60 calls, on floor at final check and grounded for 52
+calls; level x≈0, grounded 44 calls. Literal tolerances check signed X,
+center y, contact normal, rotation and policy. These observed small motions do
+not prove a general slope acceleration/friction law or all-tick grounding.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
