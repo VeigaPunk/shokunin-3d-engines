@@ -508,6 +508,16 @@ continues to(3,0,3). The first next-point read is the start on this build.
 This is explicitly scripted in-flight following, not built-in locomotion,
 avoidance, mesh baking, physical collision or rendered evidence.
 
+## Retarget actor endpoint attribution (round 52)
+
+`navagent3d_retarget.gd` keeps the same paired markers, but now uses an
+independent literal destination for the final actor check, separate from
+the expected agent route. In ignored scratch only, retargeting X1→2 and
+adjusting the agent route expectation to X2 passes the route guard but
+fails on observed actor final(2,0,3) against intact actor expectation
+(1,0,3). The private copy is not a registered battery case and the test
+is limited to this scripted flat-map follow, not general navigation.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

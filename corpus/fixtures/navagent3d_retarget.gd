@@ -35,7 +35,8 @@ func _run() -> void:
 	var expected_start := actor.before_switch if retarget else Vector3(1, 0, 1)
 	if actor.after_path.size() != 2 or actor.after_path[0].distance_to(expected_start) > 0.004 or actor.after_path[1].distance_to(expected_end) > 0.001 or actor.after_next.distance_to(expected_end) > 0.001:
 		return _fail(actor, "agent route after switch mismatch path=%s next=%s" % [actor.after_path, actor.after_next])
-	if actor.final.distance_to(expected_end) > 0.001 or actor.global_position.distance_to(actor.final) > 0.001 or not agent.is_target_reached() or not agent.is_navigation_finished():
+	var expected_actor_end := Vector3(1, 0, 3) if retarget else Vector3(3, 0, 3)
+	if actor.final.distance_to(expected_actor_end) > 0.001 or actor.global_position.distance_to(actor.final) > 0.001 or not agent.is_target_reached() or not agent.is_navigation_finished():
 		return _fail(actor, "agent-guided actor endpoint mismatch final=%s target=%s reached=%s finished=%s" % [actor.final, agent.target_position, agent.is_target_reached(), agent.is_navigation_finished()])
 	_cleanup(actor)
 	if retarget:
