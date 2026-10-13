@@ -414,6 +414,18 @@ quarter(1,0,0.5), midpoint(2,0,1). Readback and sampled positions are
 asserted before fixed markers. This is headless path geometry, not a
 navigation agent, collision, rendered line or pixel output.
 
+## Live PathFollow3D on baked curve (round 44)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only pathfollow3d_curve,pathfollow3d_curve_straight`
+attaches a `PathFollow3D` and offset marker Node3D to the r43-style
+three-point curve. With `ROTATION_NONE`, progress at quarter/three-quarter
+baked length moves the live bent follower to≈(0.917532,1.118620,0.458766)
+and≈(3.082469,1.118619,1.541234); marker global positions add Z1.
+The intact straight control remains at Y0 at both progress samples.
+`PathFollow3D`'s node samples differ slightly from direct `sample_baked`
+values, so assertions use observed tolerances. Progress is assigned directly;
+this is not timed navigation, rendered motion, or collision.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
