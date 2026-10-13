@@ -62,6 +62,12 @@ CASES = [
     ("camera3d_depth_near", "camera3d_depth.gd", ["--near-point"], 2,
      "NEGATIVE REJECTED: camera3d_depth near_point_depth=0.500 screen=550.000,225.000 "
      "in_frustum=false api_behind=true geometric_front=true near_control_visible=true"),
+    ("navigation3d_path", "navigation3d_path.gd", [], 0,
+     "PASS navigation3d_path points=2 start=1.000,0.000,1.000 end=3.000,0.000,3.000 region_active=true"),
+    ("navigation3d_path_disconnected", "navigation3d_path.gd", ["--disconnected"], 2,
+     "NEGATIVE REJECTED: navigation3d_path disconnected_endpoint_rejected "
+     "source_end=4.000,0.000,3.000 target_end=23.000,0.000,3.000 "
+     "source_control_points=2 target_control_points=2"),
     ("raycast3d_hit", "raycast3d.gd", [], 0,
      "PASS raycast3d hits=1 position=0.000,2.000,0.000 normal=0.000,1.000,0.000 "
      "collider=Wall collider_id_matches=true miss_hits=0"),
