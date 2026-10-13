@@ -181,6 +181,17 @@ instances share the resource and all sizes move X1→X2. The fixture checks
 actual mesh identities, sizes and flag readback. This is one file and Godot
 build, not arbitrary saved-scene compatibility or GPU rendering.
 
+## Orthographic Camera3D depth-invariant pixels (round 23)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside`
+uses a headless 800×600 SubViewport and `Camera3D.PROJECTION_ORTHOGONAL`,
+vertical size 8, near 1, far 10. The authored pixel scale is 600/8=75 per
+world unit: world (2,1,-4) and (2,1,-8) both project to (550,225) while
+both remain in frustum. Lateral (6,1,-4) projects to (850,225), beyond the
+viewport and outside frustum, with both valid depth controls retained. Mode,
+size and planes are read back before claims. This is projection/frustum math,
+not a rendered image or GPU culling proof.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

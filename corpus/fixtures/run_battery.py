@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("camera3d_ortho", "camera3d_ortho.gd", [], 0,
+     "PASS camera3d_ortho viewport=800,600 front_screen=550.000,225.000 deep_screen=550.000,225.000 near=1.000 far=10.000"),
+    ("camera3d_ortho_outside", "camera3d_ortho.gd", ["--outside"], 2,
+     "NEGATIVE REJECTED: camera3d_ortho lateral_outside screen=850.000,225.000 in_frustum=false controls_same_pixel=true"),
     ("scene3d_resource_disk_local", "scene3d_resource_disk.gd", [], 0,
      "PASS scene3d_resource_disk local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true"),
     ("scene3d_resource_disk_shared", "scene3d_resource_disk.gd", ["--shared"], 2,
