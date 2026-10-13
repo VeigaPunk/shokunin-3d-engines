@@ -426,6 +426,17 @@ The intact straight control remains at Y0 at both progress samples.
 values, so assertions use observed tolerances. Progress is assigned directly;
 this is not timed navigation, rendered motion, or collision.
 
+## Frame-paced PathFollow3D progress (round 45)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only pathfollow3d_paced,pathfollow3d_paced_stationary`
+advances a live follower on the bent r43-style path with 60 explicit
+`await physics_frame` calls and `progress += 3/60` each call. After 30
+increments the follower is≈(0.906026,1.105767,0.453013); after 60 it is
+≈(1.968047,1.997535,0.984023), progress≈3, with marker global Z+1.
+The same 60-frame stationary speed0 control remains at origin. This is
+scripted frame-paced progress, not `PathFollow3D` moving autonomously or
+an AnimationPlayer/NavigationAgent controller; no pixels or GPU output.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

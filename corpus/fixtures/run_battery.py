@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("pathfollow3d_paced", "pathfollow3d_paced.gd", [], 0,
+     "PASS pathfollow3d_paced speed=3.000 progress=3.000 first_y=1.105767 second_y=1.997535"),
+    ("pathfollow3d_paced_stationary", "pathfollow3d_paced.gd", ["--stationary"], 2,
+     "NEGATIVE REJECTED: pathfollow3d_paced stationary progress=0.000 first_y=0.000 second_y=0.000"),
     ("pathfollow3d_curve", "pathfollow3d_curve.gd", [], 0,
      "PASS pathfollow3d_curve bent first_y=1.118620 second_y=1.118619 marker_offset_z=1.000"),
     ("pathfollow3d_curve_straight", "pathfollow3d_curve.gd", ["--straight"], 2,
