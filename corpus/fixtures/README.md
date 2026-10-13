@@ -262,6 +262,16 @@ exits 1 on normal(-0.642788,0.766044,0) versus authored
 (-0.5,0.8660254,0). These scratch controls attribute the failure to separate
 behavior predicates, not a general slope-sensitivity guarantee.
 
+## Explicit sampled 3D animation evaluation (round 30)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only animation3d_keys,animation3d_keys_still`
+instantiates a live `Node3D` target and `AnimationPlayer` with one linear
+`TYPE_POSITION_3D` track. `play`, then `seek(0.5,true)` and `seek(1.0,true)`
+sample target positions X=2/X=4 from keys X=0→4; an intact constant-key
+track yields X=0/X=0. Checks examine track binding/library and live actor
+positions before fixed markers. Explicit seeks evaluate samples; this does
+not prove timed playback, animation blending, rendering or sprites.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

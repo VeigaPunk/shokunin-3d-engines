@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("animation3d_keys", "animation3d_keys.gd", [], 0,
+     "PASS animation3d_keys position_track mid_x=2.000 end_x=4.000 seek_update=true"),
+    ("animation3d_keys_still", "animation3d_keys.gd", ["--still"], 2,
+     "NEGATIVE REJECTED: animation3d_keys constant_track mid_x=0.000 end_x=0.000"),
     ("slope3d_travel", "slope3d_travel.gd", [], 0,
      "PASS slope3d_travel downhill_x=-0.0810 y=1.3203 grounded_ticks=52 normal_y=0.866 stop_on_slope=false"),
     ("slope3d_travel_level", "slope3d_travel.gd", ["--level"], 2,
