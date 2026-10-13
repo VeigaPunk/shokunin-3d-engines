@@ -2,7 +2,7 @@
 
 Bounded Godot 4.7.2 `--headless` fixtures for 3D mechanics. The original
 six classes each have a positive and a discriminating negative control; later
-rounds extend the battery to 77 registered cases (37 ordinary and 40 negative
+rounds extend the battery to 79 registered cases (38 ordinary and 41 negative
 controls). A negative control must demonstrate a live setup before attributing
 an absent or changed effect to its arrangement. These finite headless checks
 do not establish rendered output or behavior in other engines.
@@ -519,6 +519,16 @@ adjusting the agent route expectation to X2 passes the route guard but
 fails on observed actor final(2,0,3) against intact actor expectation
 (1,0,3). The private copy is not a registered battery case and the test
 is limited to this scripted flat-map follow, not general navigation.
+
+## Orthographic adjacent near-plane samples (round 54)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside`
+uses the same near=1, far=10 orthographic camera and world lateral (2,1)
+for two samples. At forward depth 1.01, the point is in-frustum; at 0.99,
+it is out-of-frustum while depth4/8 remain accepted and depth0.5 remains
+rejected. Both samples project to (550,225) despite different frustum
+classifications. This samples either side of near=1 at a 0.01 offset; it
+does not establish the exact threshold at 1.0, rasterization or GPU culling.
 
 ## Determinism rules for new cases
 

@@ -7,6 +7,8 @@ const FRONT := Vector3(2, 1, -4)
 const DEEP := Vector3(2, 1, -8)
 const OUTSIDE := Vector3(6, 1, -4)
 const NEAR_POINT := Vector3(2, 1, -0.5)
+const NEAR_INSIDE := Vector3(2, 1, -1.01)
+const NEAR_OUTSIDE := Vector3(2, 1, -0.99)
 const FAR_POINT := Vector3(2, 1, -12)
 var frames := 0
 var active_viewport: SubViewport
@@ -24,6 +26,8 @@ func _run() -> void:
 	var outside := "--outside" in OS.get_cmdline_user_args()
 	var near_point := "--near-point" in OS.get_cmdline_user_args()
 	var far_point := "--far-point" in OS.get_cmdline_user_args()
+	var near_inside := "--near-boundary-inside" in OS.get_cmdline_user_args()
+	var near_outside := "--near-boundary-outside" in OS.get_cmdline_user_args()
 	var viewport := SubViewport.new()
 	viewport.size = VIEWPORT
 	root.add_child(viewport)
@@ -46,6 +50,29 @@ func _run() -> void:
 		return _fail("depth-invariant projection mismatch near=%s deep=%s" % [near_screen, deep_screen])
 	if camera.is_position_behind(FRONT) or camera.is_position_behind(DEEP) or not camera.is_position_in_frustum(FRONT) or not camera.is_position_in_frustum(DEEP):
 		return _fail("two valid depth controls rejected")
+	if near_inside or near_outside:
+		var inside_screen := camera.unproject_position(NEAR_INSIDE)
+		var outside_screen := camera.unproject_position(NEAR_OUTSIDE)
+		var inside_frustum := camera.is_position_in_frustum(NEAR_INSIDE)
+		var outside_frustum := camera.is_position_in_frustum(NEAR_OUTSIDE)
+		var control_frustum := camera.is_position_in_frustum(NEAR_POINT)
+		var inside_behind := camera.is_position_behind(NEAR_INSIDE)
+		var outside_behind := camera.is_position_behind(NEAR_OUTSIDE)
+		if inside_screen.distance_to(Vector2(550, 225)) > 0.0001 or outside_screen.distance_to(inside_screen) > 0.0001 or control_frustum or not inside_frustum or inside_behind:
+			return _fail("near boundary setup failed inside_screen=%s outside_screen=%s inside_frustum=%s control_frustum=%s" % [inside_screen, outside_screen, inside_frustum, control_frustum])
+		if near_outside:
+			if outside_frustum:
+				return _fail("near outside sample entered frustum measured_depth=%.3f in_frustum=%s" % [-NEAR_OUTSIDE.z, outside_frustum])
+			_cleanup()
+			print("NEGATIVE REJECTED: camera3d_ortho near_boundary_outside depth=%.3f screen=550.000,225.000 in_frustum=false api_behind=%s inside_control=true" % [-NEAR_OUTSIDE.z, str(outside_behind)])
+			quit(2)
+			return
+		if outside_frustum:
+			return _fail("near inside control lost rejection measured_depth=%.3f in_frustum=%s" % [-NEAR_OUTSIDE.z, outside_frustum])
+		_cleanup()
+		print("PASS camera3d_ortho near_boundary_inside depth=%.3f screen=550.000,225.000 in_frustum=true outside_control=false" % -NEAR_INSIDE.z)
+		quit(0)
+		return
 	if far_point:
 		var far_screen := camera.unproject_position(FAR_POINT)
 		var forward_depth := -FAR_POINT.z
