@@ -20,13 +20,17 @@ node .shokunin/game-dev-3d/corpus/fixtures/three/run_camera_cases.mjs
 node .shokunin/game-dev-3d/corpus/fixtures/three/run_camera_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r58.json
 ```
 
-This separate three-case battery uses three.js `PerspectiveCamera`,
+This separate camera battery uses three.js `PerspectiveCamera`,
 `Vector3.project`, and `Frustum.containsPoint` under Node. With near=1,
 far=10, vertical FOV=90°, aspect=4/3 and camera at the origin, (2,1,-4)
 is inside; (6,3,-12) has the same normalized x=0.375, y=0.25
 (corresponding mathematically to 550,225 in an 800×600 viewport) but is
-beyond the far plane. The deliberate far=20 flag must fail on the live
-frustum result before its depth-projection check. The runner checks exact
+beyond the far plane. Round 59 adds (0.25,0.125,-0.5) at positive
+forward depth 0.5: it has the same normalized x/y but lies before near=1.
+The new near-negative checks the live inside and far controls; near=0.1
+must fail on its measured frustum result before the fixed-depth check.
+The deliberate far=20 flag must likewise fail on the live far-frustum
+result before its depth-projection check. The runner checks exact
 exit, stdout/stderr, no signal, five-second process bound and seed digests.
 This is projection/frustum math only: no `WebGLRenderer`, GL context,
 rendered pixels, browser, or claim about camera behavior in another engine.
