@@ -357,6 +357,17 @@ world/rest-combined child position. Assertions check hierarchy, separate
 rest and pose readbacks before fixed markers. This headless API evidence
 does not establish skinning, deformed vertices, pixels or GPU behavior.
 
+## Child pose composition under parent rotation (round 39)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only skeleton3d_rotation,skeleton3d_unrotated`
+sets a live two-bone `Skeleton3D` Root pose to +90° about Z with Tip local
+pose origin(0,3,0). Tip global **pose** then reads origin(-3,0,0), basis
+X(0,1,0)/Y(-1,0,0). With an intact identity Root pose, Tip global pose
+stays (0,3,0) with identity basis. Both retain the same child global
+**rest** origin(1,2,0). Quaternion tolerance 0.001 rad accounts for
+Godot float readback; composed origin/basis tolerances remain 0.0001.
+This pose hierarchy data is not a skinned vertex or rendered movement.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
