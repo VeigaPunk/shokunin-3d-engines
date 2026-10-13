@@ -1,0 +1,16 @@
+{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "1.0",
+  "FriendlyName": "Headless 3D Fixture",
+  "Description": "Static descriptor study; no Unreal runtime or source module installed",
+  "Category": "Examples",
+  "CanContainContent": false,
+  "Modules": [
+    {
+      "Name": "Headless3DFixture",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
