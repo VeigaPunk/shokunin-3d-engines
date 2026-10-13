@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("mesh3d_array", "mesh3d_array.gd", [], 0,
+     "PASS mesh3d_array triangle last_z=0.000 aabb_size=2.000,3.000,0.00001"),
+    ("mesh3d_array_shifted", "mesh3d_array.gd", ["--shifted"], 2,
+     "NEGATIVE REJECTED: mesh3d_array shifted_vertex last_z=1.000 aabb_size=2.000,3.000,1.000"),
     ("animation3d_blend", "animation3d_blend.gd", [], 0,
      "PASS animation3d_blend fade_seconds=0.5 mid_x=1.931 end_x=4.000 physics_frames=15+30"),
     ("animation3d_blend_cut", "animation3d_blend.gd", ["--cut"], 2,

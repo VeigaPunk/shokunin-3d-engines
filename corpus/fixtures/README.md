@@ -296,6 +296,18 @@ transition (`--cut`) yield X4 at both checks. Assertions sample live
 positions and track binding before fixed markers. This observes one
 engine-specific cross-fade schedule, not a universal blend curve or pixels.
 
+## Procedural ArrayMesh triangle (round 33)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_array,mesh3d_array_shifted`
+constructs a live `ArrayMesh` triangle with vertices (0,0,0), (2,0,0),
+(0,3,0) and attaches it to `MeshInstance3D`. Godot returns an AABB of size
+(2,3,0.00001) for the planar surface: the tiny Z thickness is observed
+engine behavior, not the authored geometric Z extent. The paired intact
+triangle moves its third vertex to Z1, giving AABB size (2,3,1). Both cases
+check the surface data readback and instance bounds before fixed markers.
+This verifies CPU-visible mesh API data, not pixels, GPU buffers, winding
+visibility or collision meshes.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
