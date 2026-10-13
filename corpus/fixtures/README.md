@@ -192,6 +192,17 @@ viewport and outside frustum, with both valid depth controls retained. Mode,
 size and planes are read back before claims. This is projection/frustum math,
 not a rendered image or GPU culling proof.
 
+## Orthographic near-plane gate (round 24)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near`
+adds a near-negative (2,1,-0.5) to the r23 orthographic scene. Its geometric
+camera-forward depth is +0.5 (in front of the origin, but less than near=1),
+and numerical projection still equals the two valid depths' (550,225).
+Godot 4.7.2 reports `is_position_in_frustum=false` **and**
+`is_position_behind=true` for this point; the API's “behind” is not a claim
+that its geometric forward depth is negative. Existing depth4/depth8 controls
+remain in-frustum; no near-boundary precision or rendered pixels proven.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
