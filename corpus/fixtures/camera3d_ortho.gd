@@ -11,6 +11,7 @@ const NEAR_INSIDE := Vector3(2, 1, -1.01)
 const NEAR_EXACT := Vector3(2, 1, -1.0)
 const NEAR_OUTSIDE := Vector3(2, 1, -0.99)
 const FAR_INSIDE := Vector3(2, 1, -9.99)
+const FAR_EXACT := Vector3(2, 1, -10.0)
 const FAR_OUTSIDE := Vector3(2, 1, -10.01)
 const FAR_POINT := Vector3(2, 1, -12)
 var frames := 0
@@ -33,6 +34,7 @@ func _run() -> void:
 	var near_exact := "--near-boundary-exact" in OS.get_cmdline_user_args()
 	var near_outside := "--near-boundary-outside" in OS.get_cmdline_user_args()
 	var far_inside := "--far-boundary-inside" in OS.get_cmdline_user_args()
+	var far_exact := "--far-boundary-exact" in OS.get_cmdline_user_args()
 	var far_outside := "--far-boundary-outside" in OS.get_cmdline_user_args()
 	var viewport := SubViewport.new()
 	viewport.size = VIEWPORT
@@ -91,6 +93,20 @@ func _run() -> void:
 			return _fail("near inside control lost rejection measured_depth=%.3f in_frustum=%s" % [-NEAR_OUTSIDE.z, outside_frustum])
 		_cleanup()
 		print("PASS camera3d_ortho near_boundary_inside depth=%.3f screen=550.000,225.000 in_frustum=true outside_control=false" % -NEAR_INSIDE.z)
+		quit(0)
+		return
+	if far_exact:
+		var exact_screen := camera.unproject_position(FAR_EXACT)
+		var exact_frustum := camera.is_position_in_frustum(FAR_EXACT)
+		var exact_behind := camera.is_position_behind(FAR_EXACT)
+		var inside_frustum := camera.is_position_in_frustum(FAR_INSIDE)
+		var outside_frustum := camera.is_position_in_frustum(FAR_OUTSIDE)
+		if exact_screen.distance_to(Vector2(550, 225)) > 0.0001 or camera.unproject_position(FAR_INSIDE).distance_to(exact_screen) > 0.0001 or camera.unproject_position(FAR_OUTSIDE).distance_to(exact_screen) > 0.0001 or not inside_frustum or outside_frustum:
+			return _fail("far exact setup failed screen=%s inside=%s outside=%s" % [exact_screen, inside_frustum, outside_frustum])
+		if not exact_frustum or exact_behind:
+			return _fail("far exact measured contradiction depth=%.3f in_frustum=%s api_behind=%s" % [-FAR_EXACT.z, exact_frustum, exact_behind])
+		_cleanup()
+		print("PASS camera3d_ortho far_boundary_exact depth=%.3f screen=550.000,225.000 in_frustum=%s api_behind=%s inside_control=true outside_control=false" % [-FAR_EXACT.z, str(exact_frustum), str(exact_behind)])
 		quit(0)
 		return
 	if far_inside or far_outside:

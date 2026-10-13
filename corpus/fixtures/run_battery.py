@@ -120,6 +120,8 @@ CASES = [
      "PASS jump3d_gravity apex_tick=29 apex_y=2.451 landing_tick=60 final_y=1.001 initially_grounded=true grounded=true"),
     ("jump3d_no_floor", "jump3d_gravity.gd", ["--lower-floor"], 2,
      "NEGATIVE REJECTED: jump3d_gravity no_floor_landing apex_tick=29 apex_y=2.450 final_y=0.900 initially_grounded=false grounded=false floor_intact=true"),
+    ("camera3d_ortho_far_boundary_exact", "camera3d_ortho.gd", ["--far-boundary-exact"], 0,
+     "PASS camera3d_ortho far_boundary_exact depth=10.000 screen=550.000,225.000 in_frustum=true api_behind=false inside_control=true outside_control=false"),
     ("camera3d_ortho_far_boundary_inside", "camera3d_ortho.gd", ["--far-boundary-inside"], 0,
      "PASS camera3d_ortho far_boundary_inside depth=9.990 screen=550.000,225.000 in_frustum=true outside_control=false"),
     ("camera3d_ortho_far_boundary_outside", "camera3d_ortho.gd", ["--far-boundary-outside"], 2,

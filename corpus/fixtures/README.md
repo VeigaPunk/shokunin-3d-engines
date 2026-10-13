@@ -2,7 +2,7 @@
 
 Bounded Godot 4.7.2 `--headless` fixtures for 3D mechanics. The original
 six classes each have a positive and a discriminating negative control; later
-rounds extend the battery to 82 registered cases (40 ordinary and 42 negative
+rounds extend the battery to 83 registered cases (41 ordinary and 42 negative
 controls). A negative control must demonstrate a live setup before attributing
 an absent or changed effect to its arrangement. These finite headless checks
 do not establish rendered output or behavior in other engines.
@@ -548,6 +548,15 @@ exactly 1.0 against camera near=1.0. The 1.01 and 0.99 controls stay on
 opposite sides; all three project to (550,225). This is one Godot 4.7.2
 headless point, not a precision guarantee across transforms or engines,
 rendered pixels, or GPU culling.
+
+## Orthographic exact far-plane sample (round 57)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_far_boundary_exact,camera3d_ortho_far_boundary_inside,camera3d_ortho_far_boundary_outside`
+measures `is_position_in_frustum` and `is_position_behind` at forward depth
+exactly 10.0 against camera far=10.0. The 9.99 and 10.01 controls remain
+on opposite sides; all three project to (550,225). This is one Godot 4.7.2
+headless point, not a portable numerical precision guarantee, rendered
+pixels or GPU culling.
 
 ## Determinism rules for new cases
 
