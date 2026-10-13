@@ -1,0 +1,2871 @@
+{
+  "godot": "/usr/bin/godot",
+  "godot_version": "4.7.2.stable.arch_linux.ed1daf0bf",
+  "godot_version_exit": 0,
+  "godot_version_error": null,
+  "started_utc": "20261013T230627836811Z",
+  "seed": "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures",
+  "scratch": "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+  "case_timeout_seconds": 20,
+  "only": null,
+  "probe_failing": true,
+  "probe_crash_exit": true,
+  "crash_probe_ok": true,
+  "probe_stream_attribution": true,
+  "stream_probe_ok": true,
+  "probe_tree_timeout": true,
+  "tree_probe_ok": true,
+  "seeds_unchanged": true,
+  "seed_digests": {
+    "README.md": "130c7bccedc75d7488530e23872c9265f63d44e210573f558ba41b99f9cb0906",
+    "animation3d_blend.gd": "4638ecc8c64891872594391bc1db38ac1d1ccb5145f21f56766fc87629d22925",
+    "animation3d_keys.gd": "5c4cec8830aff171cd2ac8981c226f55036d6fea4c1f37435829ff29d0e4121b",
+    "animation3d_playback.gd": "1f6027cf153fe7b95721c0a5f02fa7ef61b8d12e0f6fc4f9c7f30e2d04affe38",
+    "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+    "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+    "camera3d_depth.gd": "a34f38e862fd6947fe9c6cca2121592a145710b0abac15476175b4f818669ed9",
+    "camera3d_ortho.gd": "4b9ae949e536947f8a924049588cd1a2d597f25f74217e4ffe9e15ba3d2cd19d",
+    "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+    "crash_exit3d.gd": "efee43b93070f838d4174cfceacec98b056fb34c60525f0479e8e6e1e4c38f99",
+    "curve3d_path.gd": "7e9a71a07a9c76bd063b7d2da74369744230de43adc638fdbd3ba686b3128b7e",
+    "floor3d_ground.gd": "b30c116b522e2e5e7347584e0b68f5dfcf1d10aaf453f5eca7652533f5d82e29",
+    "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+    "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+    "jump3d_gravity.gd": "27730ed5c9c63bc9b1495807159db8c1e280de0bdeb22627052411876a0a48d0",
+    "mesh3d_array.gd": "8dcbf29d6739d43787f47a221645e6226853b369ec38a47d721df06e66bae6cd",
+    "mesh3d_faces_hit.gd": "566e290f9a2e112e8e20921edcbeba04139c40fb0259a986e369372bbd174310",
+    "mesh3d_indexed.gd": "14ce1bae6d7b6a4cfea2aa01a5aa7e4e0a5a10cf58f537339b3e229c738f40a6",
+    "mesh3d_trimesh_hit.gd": "bae284fe0cafb162284d14072a0846897994d9cef725d014fbb9aedbcce27c93",
+    "navagent3d_detour.gd": "669c539d0bb38c82184f1b39df0a4d70059276e532def125438f352899a7fc45",
+    "navagent3d_distance.gd": "b820e469c35e68cf60d3f87bda94c1968cbc9b943b78513a6bf61bd0761c803a",
+    "navagent3d_follow.gd": "2bdcca4a08bd290bdcb097155c2299ae0fa6b5ac4893f68c2a04b073b782830c",
+    "navagent3d_next.gd": "f0ea0fbb0c8400b7b6fd4b5e5139ae02d0487a1ddedfe483e1fd3c3f6ac5e94f",
+    "navagent3d_retarget.gd": "6ad8584642edf8b1c41fb7116f39bf0e2d9513a2d73a99f0ea83d5cd4e1059d0",
+    "navfollow3d_driver.gd": "ec094e7f7baa317636b093d622687cae4f30928df417a547900406f759d28bbf",
+    "navigation3d_path.gd": "914f08956be5e5b94457876263a13c57c97760e552e8e515472fb2e2fe678710",
+    "navretarget3d_driver.gd": "310a1419c878f13b973b7fff895f5f1d536c7d69bcfb6e5faab98a9f2e7b0102",
+    "pathfollow3d_callback.gd": "991fdb9a59fec593fbf59aa603d6fcb881f5de710510a23816ac50ee692ccc7b",
+    "pathfollow3d_curve.gd": "1a7259fbc3b84b2584f341cc8a75b2a5629736631551f4b9fa3de67e9e40629d",
+    "pathfollow3d_driver.gd": "5fefa9c7fb58da75227312e5b98b61ce07e15ec8aea58076906aa56ba78567a2",
+    "pathfollow3d_paced.gd": "4215453f9eb7e4cae1f56748b2cd2640efe35d14148ef8eb0e87464aa491f8b0",
+    "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+    "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+    "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+    "remote3d_transform.gd": "65422bef734af4f8f50dc269c09853f3e7c9c8aa74225ecf4d3fe853f4b9fed4",
+    "run_battery.py": "5a7d6c13ac4a24960ce8f24bcc45b24a65da31919e78b5cc5934e3c248a79dee",
+    "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+    "scene3d_disk.gd": "95f53495cbcf2aab082af23b75fa0d9ba5db344f3f858352c3364a115c41c207",
+    "scene3d_instance.gd": "bf47af512df4e9e7750ebed024c65ccdede38c65e6cdc4c49aacfd1b655385cb",
+    "scene3d_resource.gd": "7bbd986c1bc22921a7a2b85c43f0a06530efdafb35eb411494a1eecbb718181c",
+    "scene3d_resource_disk.gd": "996514bf30214bb2f7363bcb033bfe73a658c49fed1d3ba336871e89d452070f",
+    "shapecast3d_graze.gd": "e26a0304aced8c9cab7b2ec54edc1497cc3a2c8a8b608c11b63d4bd13298e8f2",
+    "shapecast3d_sphere.gd": "7a9f5f3efeb606501dbc228b43e76b65faa65ed97c0ba171886833c5e0de5ce9",
+    "skeleton3d_attachment.gd": "25851f8ccd4711c0e5be848716211c7c52ed19f0d00ba888ef5d96fcc5125cb5",
+    "skeleton3d_pose.gd": "dd6a3b3b2bb72d68debc66429cc211a327a2dde8cf3892aefab5ab44809ad9cc",
+    "skeleton3d_rotation.gd": "5eee57aa24f71118d9e1a613013eab524b7eba3722013fc59d6a2318eb404153",
+    "slope3d_angle.gd": "0833050b4581738aaf7c784db3b473455ee3bb429eb11a0ed9b4f13f2bce4ccc",
+    "slope3d_travel.gd": "c18a285ec1b30edddc2fa524c8d560c76c1282241a21bdf42942467aef47ef44",
+    "stream_attribution3d.gd": "ab923ceeac3797f1d0fabfd6695238f88529ef69fb9f452c45ec61b76eefa796",
+    "timeout_descendant.py": "c3a52834c19bf6c6ed8bf177b59bbfd541f08192141786d35c8303bed181e460",
+    "timeout_tree3d.gd": "403a2e3e5f4a49fda283a147fd51577eda18a10a2d791cebb60be8d9d0712210",
+    "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+  },
+  "results": [
+    {
+      "case": "navagent3d_retarget",
+      "script": "navagent3d_retarget.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_retarget.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_retarget callbacks=120 before=1.730676,0.000,1.730676 after_end=1.000,0.000,3.000 final=1.000,0.000,3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 2.413,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_retarget callbacks=120 before=1.730676,0.000,1.730676 after_end=1.000,0.000,3.000 final=1.000,0.000,3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_retarget_fixed",
+      "script": "navagent3d_retarget.gd",
+      "flags": [
+        "--fixed"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_retarget.gd",
+        "--",
+        "--fixed"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_retarget fixed callbacks=120 after_end=3.000,0.000,3.000 final=3.000,0.000,3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 2.429,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_retarget fixed callbacks=120 after_end=3.000,0.000,3.000 final=3.000,0.000,3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_follow",
+      "script": "navagent3d_follow.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_follow.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_follow callbacks=90 first=1.612825,0.000,1.612825 final=3.000,0.000,3.000 reached=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.953,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_follow callbacks=90 first=1.612825,0.000,1.612825 final=3.000,0.000,3.000 reached=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_follow_stationary",
+      "script": "navagent3d_follow.gd",
+      "flags": [
+        "--stationary"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_follow.gd",
+        "--",
+        "--stationary"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_follow stationary callbacks=90 final=1.000,0.000,1.000 reached=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.946,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_follow stationary callbacks=90 final=1.000,0.000,1.000 reached=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_next",
+      "script": "navagent3d_next.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_next.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_next path_end=3.000,0.000,3.000 next=3.000,0.000,3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.828,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_next path_end=3.000,0.000,3.000 next=3.000,0.000,3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_next_alternate",
+      "script": "navagent3d_next.gd",
+      "flags": [
+        "--alternate"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_next.gd",
+        "--",
+        "--alternate"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_next alternate path_end=3.000,0.000,1.000 next=3.000,0.000,1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.853,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_next alternate path_end=3.000,0.000,1.000 next=3.000,0.000,1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_distance",
+      "script": "navagent3d_distance.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_distance.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_distance distance=2.828427 final=3.000,0.000,3.000 next=3.000,0.000,3.000 reached=false reachable=true finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.828,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_distance distance=2.828427 final=3.000,0.000,3.000 next=3.000,0.000,3.000 reached=false reachable=true finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_distance_wide_reach",
+      "script": "navagent3d_distance.gd",
+      "flags": [
+        "--wide-reach"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_distance.gd",
+        "--",
+        "--wide-reach"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_distance wide_reach distance=2.828427 reached=true finished=true reachable=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.825,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_distance wide_reach distance=2.828427 reached=true finished=true reachable=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour",
+      "script": "navagent3d_detour.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,1.000 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.832,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,1.000 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_straight",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--straight"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--straight"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_detour straight distance=2.828427 euclid=2.828427 pathlen=2.828427 discriminates=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.847,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_detour straight distance=2.828427 euclid=2.828427 pathlen=2.828427 discriminates=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_assert_pathsum",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--assert-pathsum"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--assert-pathsum"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_detour assert_pathsum distance=3.605551 expected_pathsum=4.130649 euclid=3.605551",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.792,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_detour assert_pathsum distance=3.605551 expected_pathsum=4.130649 euclid=3.605551"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "remote3d_transform",
+      "script": "remote3d_transform.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://remote3d_transform.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS remote3d_transform bound target=2.000,1.000,-3.000 basis_x=0.000,1.000,0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.356,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS remote3d_transform bound target=2.000,1.000,-3.000 basis_x=0.000,1.000,0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "remote3d_transform_unbound",
+      "script": "remote3d_transform.gd",
+      "flags": [
+        "--unbound"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://remote3d_transform.gd",
+        "--",
+        "--unbound"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: remote3d_transform unbound target=0.000,0.000,0.000 source=2.000,1.000,-3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.362,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: remote3d_transform unbound target=0.000,0.000,0.000 source=2.000,1.000,-3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "pathfollow3d_callback",
+      "script": "pathfollow3d_callback.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://pathfollow3d_callback.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS pathfollow3d_callback callbacks=60 delta_sum=1.000 progress=3.000 first_y=1.105767 second_y=1.997535",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.498,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS pathfollow3d_callback callbacks=60 delta_sum=1.000 progress=3.000 first_y=1.105767 second_y=1.997535"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "pathfollow3d_callback_stationary",
+      "script": "pathfollow3d_callback.gd",
+      "flags": [
+        "--stationary"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://pathfollow3d_callback.gd",
+        "--",
+        "--stationary"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: pathfollow3d_callback stationary callbacks=60 progress=0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.515,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: pathfollow3d_callback stationary callbacks=60 progress=0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "pathfollow3d_paced",
+      "script": "pathfollow3d_paced.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://pathfollow3d_paced.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS pathfollow3d_paced speed=3.000 progress=3.000 first_y=1.105767 second_y=1.997535",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.394,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS pathfollow3d_paced speed=3.000 progress=3.000 first_y=1.105767 second_y=1.997535"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "pathfollow3d_paced_stationary",
+      "script": "pathfollow3d_paced.gd",
+      "flags": [
+        "--stationary"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://pathfollow3d_paced.gd",
+        "--",
+        "--stationary"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: pathfollow3d_paced stationary progress=0.000 first_y=0.000 second_y=0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.382,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: pathfollow3d_paced stationary progress=0.000 first_y=0.000 second_y=0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "pathfollow3d_curve",
+      "script": "pathfollow3d_curve.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://pathfollow3d_curve.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS pathfollow3d_curve bent first_y=1.118620 second_y=1.118619 marker_offset_z=1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.346,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS pathfollow3d_curve bent first_y=1.118620 second_y=1.118619 marker_offset_z=1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "pathfollow3d_curve_straight",
+      "script": "pathfollow3d_curve.gd",
+      "flags": [
+        "--straight"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://pathfollow3d_curve.gd",
+        "--",
+        "--straight"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: pathfollow3d_curve straight first_y=0.000 second_y=0.000 marker_offset_z=1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.361,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: pathfollow3d_curve straight first_y=0.000 second_y=0.000 marker_offset_z=1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "curve3d_path",
+      "script": "curve3d_path.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://curve3d_path.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS curve3d_path bent length=6.072724 quarter_y=1.118591 midpoint_y=2.000000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.378,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS curve3d_path bent length=6.072724 quarter_y=1.118591 midpoint_y=2.000000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "curve3d_path_straight",
+      "script": "curve3d_path.gd",
+      "flags": [
+        "--straight"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://curve3d_path.gd",
+        "--",
+        "--straight"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: curve3d_path straight length=4.472136 midpoint=2.000,0.000,1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.371,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: curve3d_path straight length=4.472136 midpoint=2.000,0.000,1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "shapecast3d_graze",
+      "script": "shapecast3d_graze.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://shapecast3d_graze.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS shapecast3d_graze radius=0.500 sphere_hits=1 ray_hits=0 point=1.000,0.000,1.000 safe=0.425781",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.438,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS shapecast3d_graze radius=0.500 sphere_hits=1 ray_hits=0 point=1.000,0.000,1.000 safe=0.425781"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "shapecast3d_graze_small",
+      "script": "shapecast3d_graze.gd",
+      "flags": [
+        "--small"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://shapecast3d_graze.gd",
+        "--",
+        "--small"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: shapecast3d_graze small_radius=0.100 sphere_hits=0 ray_hits=0",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.442,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: shapecast3d_graze small_radius=0.100 sphere_hits=0 ray_hits=0"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "shapecast3d_sphere",
+      "script": "shapecast3d_sphere.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://shapecast3d_sphere.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS shapecast3d_sphere radius=0.500 contact_z=1.000 safe=0.414062 unsafe=0.417969 hits=1",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.46,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS shapecast3d_sphere radius=0.500 contact_z=1.000 safe=0.414062 unsafe=0.417969 hits=1"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "shapecast3d_sphere_offset",
+      "script": "shapecast3d_sphere.gd",
+      "flags": [
+        "--offset"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://shapecast3d_sphere.gd",
+        "--",
+        "--offset"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: shapecast3d_sphere lateral_miss x=4.000 hits=0 safe=1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.45,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: shapecast3d_sphere lateral_miss x=4.000 hits=0 safe=1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "skeleton3d_attachment",
+      "script": "skeleton3d_attachment.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://skeleton3d_attachment.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS skeleton3d_attachment parent_z=90 attached_marker=-3.000,1.000,0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.401,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS skeleton3d_attachment parent_z=90 attached_marker=-3.000,1.000,0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "skeleton3d_attachment_unrotated",
+      "script": "skeleton3d_attachment.gd",
+      "flags": [
+        "--unrotated"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://skeleton3d_attachment.gd",
+        "--",
+        "--unrotated"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: skeleton3d_attachment unrotated attached_marker=1.000,3.000,0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.393,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: skeleton3d_attachment unrotated attached_marker=1.000,3.000,0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "skeleton3d_rotation",
+      "script": "skeleton3d_rotation.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://skeleton3d_rotation.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS skeleton3d_rotation parent_z=90 child_global=-3.000,0.000,0.000 basis_x=0.000,1.000,0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.438,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS skeleton3d_rotation parent_z=90 child_global=-3.000,0.000,0.000 basis_x=0.000,1.000,0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "skeleton3d_unrotated",
+      "script": "skeleton3d_rotation.gd",
+      "flags": [
+        "--unrotated"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://skeleton3d_rotation.gd",
+        "--",
+        "--unrotated"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: skeleton3d_rotation unrotated child_global=0.000,3.000,0.000 basis_x=1.000,0.000,0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.559,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: skeleton3d_rotation unrotated child_global=0.000,3.000,0.000 basis_x=1.000,0.000,0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "skeleton3d_pose",
+      "script": "skeleton3d_pose.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://skeleton3d_pose.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS skeleton3d_pose parent=0 child_rest=1.000,2.000,0.000 child_pose_y=3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.361,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS skeleton3d_pose parent=0 child_rest=1.000,2.000,0.000 child_pose_y=3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "skeleton3d_rest_only",
+      "script": "skeleton3d_pose.gd",
+      "flags": [
+        "--rest-only"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://skeleton3d_pose.gd",
+        "--",
+        "--rest-only"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: skeleton3d_pose rest_only child_rest=1.000,2.000,0.000 child_pose_y=0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.38,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: skeleton3d_pose rest_only child_rest=1.000,2.000,0.000 child_pose_y=0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_faces_hit",
+      "script": "mesh3d_faces_hit.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_faces_hit.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS mesh3d_faces_hit two_faces face_a=0 face_b=1 outside_hits=0",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.457,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS mesh3d_faces_hit two_faces face_a=0 face_b=1 outside_hits=0"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_faces_reordered",
+      "script": "mesh3d_faces_hit.gd",
+      "flags": [
+        "--reversed"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_faces_hit.gd",
+        "--",
+        "--reversed"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: mesh3d_faces_hit reordered face_a=1 face_b=0 outside_hits=0",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.501,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: mesh3d_faces_hit reordered face_a=1 face_b=0 outside_hits=0"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_trimesh_hit",
+      "script": "mesh3d_trimesh_hit.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_trimesh_hit.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS mesh3d_trimesh_hit interior_hit=0.500,0.500,0.000 normal_z=1.000 face_index=0 outside_hits=0",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.46,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS mesh3d_trimesh_hit interior_hit=0.500,0.500,0.000 normal_z=1.000 face_index=0 outside_hits=0"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_trimesh_outside",
+      "script": "mesh3d_trimesh_hit.gd",
+      "flags": [
+        "--outside"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_trimesh_hit.gd",
+        "--",
+        "--outside"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: mesh3d_trimesh_hit outside_ray control_hit=0.500,0.500,0.000 outside_hits=0 face_index=0",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.492,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: mesh3d_trimesh_hit outside_ray control_hit=0.500,0.500,0.000 outside_hits=0 face_index=0"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_indexed",
+      "script": "mesh3d_indexed.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_indexed.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS mesh3d_indexed forward_indices triangles=2 cross_z=6.000 shared_vertices=4",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.375,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS mesh3d_indexed forward_indices triangles=2 cross_z=6.000 shared_vertices=4"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_indexed_reversed",
+      "script": "mesh3d_indexed.gd",
+      "flags": [
+        "--reversed"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_indexed.gd",
+        "--",
+        "--reversed"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: mesh3d_indexed reversed_indices triangles=2 cross_z=-6.000 shared_vertices=4",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.396,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: mesh3d_indexed reversed_indices triangles=2 cross_z=-6.000 shared_vertices=4"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_array",
+      "script": "mesh3d_array.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_array.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS mesh3d_array triangle last_z=0.000 aabb_size=2.000,3.000,0.00001",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.386,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS mesh3d_array triangle last_z=0.000 aabb_size=2.000,3.000,0.00001"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "mesh3d_array_shifted",
+      "script": "mesh3d_array.gd",
+      "flags": [
+        "--shifted"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://mesh3d_array.gd",
+        "--",
+        "--shifted"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: mesh3d_array shifted_vertex last_z=1.000 aabb_size=2.000,3.000,1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.403,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: mesh3d_array shifted_vertex last_z=1.000 aabb_size=2.000,3.000,1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "animation3d_blend",
+      "script": "animation3d_blend.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://animation3d_blend.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS animation3d_blend fade_seconds=0.5 mid_x=1.931 end_x=4.000 physics_frames=15+30",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.214,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS animation3d_blend fade_seconds=0.5 mid_x=1.931 end_x=4.000 physics_frames=15+30"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "animation3d_blend_cut",
+      "script": "animation3d_blend.gd",
+      "flags": [
+        "--cut"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://animation3d_blend.gd",
+        "--",
+        "--cut"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: animation3d_blend instant_cut mid_x=4.000 end_x=4.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.205,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: animation3d_blend instant_cut mid_x=4.000 end_x=4.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "animation3d_playback",
+      "script": "animation3d_playback.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://animation3d_playback.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS animation3d_playback mid_x=0.967 later_x=1.967 physics_frames=60 playing=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.373,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS animation3d_playback mid_x=0.967 later_x=1.967 physics_frames=60 playing=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "animation3d_playback_still",
+      "script": "animation3d_playback.gd",
+      "flags": [
+        "--still"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://animation3d_playback.gd",
+        "--",
+        "--still"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: animation3d_playback constant_track mid_x=0.000 later_x=0.000 physics_frames=60",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.382,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: animation3d_playback constant_track mid_x=0.000 later_x=0.000 physics_frames=60"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "animation3d_keys",
+      "script": "animation3d_keys.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://animation3d_keys.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS animation3d_keys position_track mid_x=2.000 end_x=4.000 seek_update=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.348,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS animation3d_keys position_track mid_x=2.000 end_x=4.000 seek_update=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "animation3d_keys_still",
+      "script": "animation3d_keys.gd",
+      "flags": [
+        "--still"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://animation3d_keys.gd",
+        "--",
+        "--still"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: animation3d_keys constant_track mid_x=0.000 end_x=0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.378,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: animation3d_keys constant_track mid_x=0.000 end_x=0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "slope3d_travel",
+      "script": "slope3d_travel.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://slope3d_travel.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS slope3d_travel downhill_x=-0.0810 y=1.3203 grounded_ticks=52 normal_y=0.866 stop_on_slope=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.462,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS slope3d_travel downhill_x=-0.0810 y=1.3203 grounded_ticks=52 normal_y=0.866 stop_on_slope=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "slope3d_travel_level",
+      "script": "slope3d_travel.gd",
+      "flags": [
+        "--level"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://slope3d_travel.gd",
+        "--",
+        "--level"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: slope3d_travel level_no_downhill x=0.0000 y=1.0001 grounded_ticks=44 normal_y=1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.375,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: slope3d_travel level_no_downhill x=0.0000 y=1.0001 grounded_ticks=44 normal_y=1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "jump3d_land",
+      "script": "jump3d_gravity.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://jump3d_gravity.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS jump3d_gravity apex_tick=29 apex_y=2.451 landing_tick=60 final_y=1.001 initially_grounded=true grounded=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.359,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS jump3d_gravity apex_tick=29 apex_y=2.451 landing_tick=60 final_y=1.001 initially_grounded=true grounded=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "jump3d_no_floor",
+      "script": "jump3d_gravity.gd",
+      "flags": [
+        "--lower-floor"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://jump3d_gravity.gd",
+        "--",
+        "--lower-floor"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: jump3d_gravity no_floor_landing apex_tick=29 apex_y=2.450 final_y=0.900 initially_grounded=false grounded=false floor_intact=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.358,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: jump3d_gravity no_floor_landing apex_tick=29 apex_y=2.450 final_y=0.900 initially_grounded=false grounded=false floor_intact=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_far_boundary_exact",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--far-boundary-exact"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--far-boundary-exact"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_ortho far_boundary_exact depth=10.000 screen=550.000,225.000 in_frustum=true api_behind=false inside_control=true outside_control=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.348,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_ortho far_boundary_exact depth=10.000 screen=550.000,225.000 in_frustum=true api_behind=false inside_control=true outside_control=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_far_boundary_inside",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--far-boundary-inside"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--far-boundary-inside"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_ortho far_boundary_inside depth=9.990 screen=550.000,225.000 in_frustum=true outside_control=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.349,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_ortho far_boundary_inside depth=9.990 screen=550.000,225.000 in_frustum=true outside_control=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_far_boundary_outside",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--far-boundary-outside"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--far-boundary-outside"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_ortho far_boundary_outside depth=10.010 screen=550.000,225.000 in_frustum=false api_behind=false inside_control=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.371,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_ortho far_boundary_outside depth=10.010 screen=550.000,225.000 in_frustum=false api_behind=false inside_control=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_near_boundary_exact",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--near-boundary-exact"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--near-boundary-exact"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_ortho near_boundary_exact depth=1.000 screen=550.000,225.000 in_frustum=true api_behind=false inside_control=true outside_control=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.353,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_ortho near_boundary_exact depth=1.000 screen=550.000,225.000 in_frustum=true api_behind=false inside_control=true outside_control=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_near_boundary_inside",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--near-boundary-inside"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--near-boundary-inside"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_ortho near_boundary_inside depth=1.010 screen=550.000,225.000 in_frustum=true outside_control=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.362,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_ortho near_boundary_inside depth=1.010 screen=550.000,225.000 in_frustum=true outside_control=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_near_boundary_outside",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--near-boundary-outside"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--near-boundary-outside"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_ortho near_boundary_outside depth=0.990 screen=550.000,225.000 in_frustum=false api_behind=true inside_control=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.382,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_ortho near_boundary_outside depth=0.990 screen=550.000,225.000 in_frustum=false api_behind=true inside_control=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho",
+      "script": "camera3d_ortho.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_ortho viewport=800,600 front_screen=550.000,225.000 deep_screen=550.000,225.000 near=1.000 far=10.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.377,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_ortho viewport=800,600 front_screen=550.000,225.000 deep_screen=550.000,225.000 near=1.000 far=10.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_outside",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--outside"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--outside"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_ortho lateral_outside screen=850.000,225.000 in_frustum=false controls_same_pixel=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.364,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_ortho lateral_outside screen=850.000,225.000 in_frustum=false controls_same_pixel=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_near",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--near-point"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--near-point"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_ortho near_plane_depth=0.500 screen=550.000,225.000 in_frustum=false api_behind=true geometric_front=true controls_same_pixel=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.373,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_ortho near_plane_depth=0.500 screen=550.000,225.000 in_frustum=false api_behind=true geometric_front=true controls_same_pixel=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_ortho_far",
+      "script": "camera3d_ortho.gd",
+      "flags": [
+        "--far-point"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_ortho.gd",
+        "--",
+        "--far-point"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_ortho far_plane_depth=12.000 screen=550.000,225.000 in_frustum=false api_behind=false geometric_front=true controls_same_pixel=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.376,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_ortho far_plane_depth=12.000 screen=550.000,225.000 in_frustum=false api_behind=false geometric_front=true controls_same_pixel=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_resource_disk_local",
+      "script": "scene3d_resource_disk.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_resource_disk.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS scene3d_resource_disk local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.363,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS scene3d_resource_disk local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_resource_disk_shared",
+      "script": "scene3d_resource_disk.gd",
+      "flags": [
+        "--shared"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_resource_disk.gd",
+        "--",
+        "--shared"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: scene3d_resource_disk shared_mesh_mutation second_size=2.000,1.000,1.000 loaded_size=2.000,1.000,1.000 same_resource=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.38,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: scene3d_resource_disk shared_mesh_mutation second_size=2.000,1.000,1.000 loaded_size=2.000,1.000,1.000 same_resource=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_resource_local",
+      "script": "scene3d_resource.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_resource.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS scene3d_resource local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.347,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS scene3d_resource local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_resource_shared",
+      "script": "scene3d_resource.gd",
+      "flags": [
+        "--shared"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_resource.gd",
+        "--",
+        "--shared"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: scene3d_resource shared_mesh_mutation second_size=2.000,1.000,1.000 source_size=2.000,1.000,1.000 same_resource=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.379,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: scene3d_resource shared_mesh_mutation second_size=2.000,1.000,1.000 source_size=2.000,1.000,1.000 same_resource=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_disk",
+      "script": "scene3d_disk.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_disk.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS scene3d_disk loaded_world=11.000,2.000,2.000 source_intact=true mesh_present=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.395,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS scene3d_disk loaded_world=11.000,2.000,2.000 source_intact=true mesh_present=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_disk_wrong_local",
+      "script": "scene3d_disk.gd",
+      "flags": [
+        "--wrong-local"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_disk.gd",
+        "--",
+        "--wrong-local"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: scene3d_disk loadable_wrong_local source_intact=true loaded_world=12.000,2.000,2.000 expected_world=11.000,2.000,2.000 mesh_present=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.405,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: scene3d_disk loadable_wrong_local source_intact=true loaded_world=12.000,2.000,2.000 expected_world=11.000,2.000,2.000 mesh_present=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_instances",
+      "script": "scene3d_instance.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_instance.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS scene3d_instances source_intact=true first_world=11.000,2.000,-3.000 second_world=-9.000,2.000,2.000 distinct_nodes=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.373,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS scene3d_instances source_intact=true first_world=11.000,2.000,-3.000 second_world=-9.000,2.000,2.000 distinct_nodes=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "scene3d_instances_wrong_local",
+      "script": "scene3d_instance.gd",
+      "flags": [
+        "--wrong-local"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://scene3d_instance.gd",
+        "--",
+        "--wrong-local"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: scene3d_instances wrong_second_local source_intact=true first_world=11.000,2.000,-3.000 second_world=-8.000,2.000,2.000 expected_second=-9.000,2.000,2.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.369,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: scene3d_instances wrong_second_local source_intact=true first_world=11.000,2.000,-3.000 second_world=-8.000,2.000,2.000 expected_second=-9.000,2.000,2.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "slope3d_floor",
+      "script": "slope3d_angle.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://slope3d_angle.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS slope3d_floor normal_y=0.866 floor_limit=45.000 on_floor=true on_wall=false live_contact=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.643,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS slope3d_floor normal_y=0.866 floor_limit=45.000 on_floor=true on_wall=false live_contact=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "slope3d_steep",
+      "script": "slope3d_angle.gd",
+      "flags": [
+        "--steep"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://slope3d_angle.gd",
+        "--",
+        "--steep"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: slope3d_angle steep_contact_not_floor normal_y=0.500 floor_limit=45.000 on_floor=false on_wall=true live_contact=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.496,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: slope3d_angle steep_contact_not_floor normal_y=0.500 floor_limit=45.000 on_floor=false on_wall=true live_contact=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "floor3d_ground",
+      "script": "floor3d_ground.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://floor3d_ground.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS floor3d_ground final_y=1.000 first_contact_tick=30 normal=0.000,1.000,0.000 on_floor=true ticks=60",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.402,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS floor3d_ground final_y=1.000 first_contact_tick=30 normal=0.000,1.000,0.000 on_floor=true ticks=60"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "floor3d_airborne",
+      "script": "floor3d_ground.gd",
+      "flags": [
+        "--lower-floor"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://floor3d_ground.gd",
+        "--",
+        "--lower-floor"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: floor3d_ground airborne_with_lower_floor final_y=-2.000 contacts=0 on_floor=false floor_intact=true ticks=60",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.408,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: floor3d_ground airborne_with_lower_floor final_y=-2.000 contacts=0 on_floor=false floor_intact=true ticks=60"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "body3d_contact",
+      "script": "body3d_slide.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://body3d_slide.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.419,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "body3d_contact_far",
+      "script": "body3d_slide.gd",
+      "flags": [
+        "--far-body"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://body3d_slide.gd",
+        "--",
+        "--far-body"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: body3d_contact no_contact_at_far_arrangement start_z=40.000 final_z=30.000 expected_plane_z=2.500 contacts=0 on_wall=false wall_intact=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.391,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: body3d_contact no_contact_at_far_arrangement start_z=40.000 final_z=30.000 expected_plane_z=2.500 contacts=0 on_wall=false wall_intact=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "area3d_chain",
+      "script": "area3d_chain.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://area3d_chain.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS area3d_chain collected=1 entries=1 overlapping=1 body_name=Runner3D body_layer=2 entry_x=4.200 pickup_x=6.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.395,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS area3d_chain collected=1 entries=1 overlapping=1 body_name=Runner3D body_layer=2 entry_x=4.200 pickup_x=6.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "area3d_chain_no_overlap",
+      "script": "area3d_chain.gd",
+      "flags": [
+        "--no-overlap"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://area3d_chain.gd",
+        "--",
+        "--no-overlap"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: area3d_chain no_overlap_signal_absent collected=0 entries=0 overlapping=0 runner_x=6.000 pickup_x=40.000 monitoring=true mask_matches_layer=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.364,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: area3d_chain no_overlap_signal_absent collected=0 entries=0 overlapping=0 runner_x=6.000 pickup_x=40.000 monitoring=true mask_matches_layer=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_project",
+      "script": "camera3d_project.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_project.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_project viewport=800,600 fov=90.000 proj_x_scale=0.750 proj_y_scale=1.000 world=2.000,1.000,-4.000 screen=550.000,225.000 center_screen=400.000,300.000 mirror_screen=250.000,375.000 behind=false in_frustum=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.39,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_project viewport=800,600 fov=90.000 proj_x_scale=0.750 proj_y_scale=1.000 world=2.000,1.000,-4.000 screen=550.000,225.000 center_screen=400.000,300.000 mirror_screen=250.000,375.000 behind=false in_frustum=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_project_behind",
+      "script": "camera3d_project.gd",
+      "flags": [
+        "--behind-camera"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_project.gd",
+        "--",
+        "--behind-camera"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_project behind_camera_projection_rejected point=2.000,1.000,4.000 is_position_behind=true in_frustum=false raw_screen=250.000,375.000 collides_with_mirrored_control=true lateral_screen=3400.000,300.000 lateral_in_frustum=false in_front_control_accepted=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.375,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_project behind_camera_projection_rejected point=2.000,1.000,4.000 is_position_behind=true in_frustum=false raw_screen=250.000,375.000 collides_with_mirrored_control=true lateral_screen=3400.000,300.000 lateral_in_frustum=false in_front_control_accepted=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_depth",
+      "script": "camera3d_depth.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_depth.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS camera3d_depth camera=10.000,0.000,0.000 visible=14.000,1.000,2.000 screen=550.000,225.000 depth=4.000 far=10.000 near=1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.369,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS camera3d_depth camera=10.000,0.000,0.000 visible=14.000,1.000,2.000 screen=550.000,225.000 depth=4.000 far=10.000 near=1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_depth_far",
+      "script": "camera3d_depth.gd",
+      "flags": [
+        "--far-point"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_depth.gd",
+        "--",
+        "--far-point"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_depth far_point_depth=12.000 screen=550.000,225.000 in_frustum=false behind=false near_control_visible=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.377,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_depth far_point_depth=12.000 screen=550.000,225.000 in_frustum=false behind=false near_control_visible=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "camera3d_depth_near",
+      "script": "camera3d_depth.gd",
+      "flags": [
+        "--near-point"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://camera3d_depth.gd",
+        "--",
+        "--near-point"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: camera3d_depth near_point_depth=0.500 screen=550.000,225.000 in_frustum=false api_behind=true geometric_front=true near_control_visible=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.391,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: camera3d_depth near_point_depth=0.500 screen=550.000,225.000 in_frustum=false api_behind=true geometric_front=true near_control_visible=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navigation3d_path",
+      "script": "navigation3d_path.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navigation3d_path.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navigation3d_path points=2 start=1.000,0.000,1.000 end=3.000,0.000,3.000 region_active=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.462,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navigation3d_path points=2 start=1.000,0.000,1.000 end=3.000,0.000,3.000 region_active=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navigation3d_path_disconnected",
+      "script": "navigation3d_path.gd",
+      "flags": [
+        "--disconnected"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://navigation3d_path.gd",
+        "--",
+        "--disconnected"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navigation3d_path disconnected_endpoint_rejected source_end=4.000,0.000,3.000 target_end=23.000,0.000,3.000 source_control_points=2 target_control_points=2",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.559,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navigation3d_path disconnected_endpoint_rejected source_end=4.000,0.000,3.000 target_end=23.000,0.000,3.000 source_control_points=2 target_control_points=2"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "raycast3d_hit",
+      "script": "raycast3d.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://raycast3d.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS raycast3d hits=1 position=0.000,2.000,0.000 normal=0.000,1.000,0.000 collider=Wall collider_id_matches=true miss_hits=0",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.457,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS raycast3d hits=1 position=0.000,2.000,0.000 normal=0.000,1.000,0.000 collider=Wall collider_id_matches=true miss_hits=0"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "raycast3d_miss",
+      "script": "raycast3d.gd",
+      "flags": [
+        "--miss-ray"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://raycast3d.gd",
+        "--",
+        "--miss-ray"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: raycast3d miss_ray_no_hit control_hits=1 control_position=0.000,2.000,0.000 miss_from=0.000,6.000,9.000 miss_hits=0 miss_offset_z=9.000 box_half_depth_z=2.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.46,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: raycast3d miss_ray_no_hit control_hits=1 control_position=0.000,2.000,0.000 miss_from=0.000,6.000,9.000 miss_hits=0 miss_offset_z=9.000 box_half_depth_z=2.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "transform3d_compose",
+      "script": "transform3d_compose.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://transform3d_compose.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS transform3d_compose parent_origin=2.000,0.000,0.000 child_local_origin=0.000,0.000,-3.000 global_origin=-1.000,0.000,0.000 basis_x=0.000,0.000,-1.000 basis_y=1.000,0.000,0.000 basis_z=0.000,-1.000,0.000 composition_identity=true determinant=1.000 wrong_order_rejected=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.383,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS transform3d_compose parent_origin=2.000,0.000,0.000 child_local_origin=0.000,0.000,-3.000 global_origin=-1.000,0.000,0.000 basis_x=0.000,0.000,-1.000 basis_y=1.000,0.000,0.000 basis_z=0.000,-1.000,0.000 composition_identity=true determinant=1.000 wrong_order_rejected=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "transform3d_compose_wrong_order",
+      "script": "transform3d_compose.gd",
+      "flags": [
+        "--wrong-order"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://transform3d_compose.gd",
+        "--",
+        "--wrong-order"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: transform3d_compose wrong_order_composition_rejected expected_origin=-1.000,0.000,0.000 wrong_order_origin=2.000,0.000,-3.000 expected_basis_x=0.000,0.000,-1.000 wrong_order_basis_x=0.000,1.000,0.000 correct_order_matches=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.362,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: transform3d_compose wrong_order_composition_rejected expected_origin=-1.000,0.000,0.000 wrong_order_origin=2.000,0.000,-3.000 expected_basis_x=0.000,0.000,-1.000 wrong_order_basis_x=0.000,1.000,0.000 correct_order_matches=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "input3d_move",
+      "script": "input3d_move.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://input3d_move.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS input3d_move key=W receipts=1 releases=1 ticks=10 displacement=1.000,0.000,0.000 expected_x=1.000 post_release_ticks=5 post_release_displacement=0.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.639,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS input3d_move key=W receipts=1 releases=1 ticks=10 displacement=1.000,0.000,0.000 expected_x=1.000 post_release_ticks=5 post_release_displacement=0.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "input3d_move_no_event",
+      "script": "input3d_move.gd",
+      "flags": [
+        "--no-input"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/scratch",
+        "--script",
+        "res://input3d_move.gd",
+        "--",
+        "--no-input"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: input3d_move no_event_zero_displacement receipts=0 intent=false ticks=10 displacement=0.000,0.000,0.000 late_control_receipts=1 late_control_ticks=5 late_control_displacement=0.500",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.667,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: input3d_move no_event_zero_displacement receipts=0 intent=false ticks=10 displacement=0.000,0.000,0.000 late_control_receipts=1 late_control_ticks=5 late_control_displacement=0.500"
+      ],
+      "stderr": []
+    }
+  ],
+  "probe": {
+    "mutation": {
+      "case": "body3d_contact",
+      "script": "body3d_slide.gd",
+      "flags": [],
+      "old": "const BOX_SIZE := Vector3(4.0, 4.0, 4.0)",
+      "new": "const BOX_SIZE := Vector3(4.0, 4.0, 6.0)",
+      "expected_exit": 1,
+      "forbidden_stdout": "PASS body3d_contact",
+      "expected_diagnostic": "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500"
+    },
+    "detected": true,
+    "seeds_unchanged": true,
+    "seeded_expectation": {
+      "case": "body3d_contact",
+      "script": "body3d_slide.gd",
+      "expected_exit": 0,
+      "marker": "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000"
+    },
+    "record": {
+      "case": "mutant_body3d_contact",
+      "script": "body3d_slide.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/mutation-scratch",
+        "--script",
+        "res://body3d_slide.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 1,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS body3d_contact start_z=6.000 expected_plane_z=2.500 final_z=2.500 ticks=60 first_contact_tick=21 on_wall=true normal=0.000,0.000,1.000",
+      "verdict": "FAIL",
+      "reasons": [
+        "exit 1 != expected 0",
+        "exact stdout marker missing",
+        "unexpected stderr line: ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500",
+        "unexpected stderr line: at: push_error (core/variant/variant_utility.cpp:1023)",
+        "unexpected stderr line: GDScript backtrace (most recent call first):",
+        "unexpected stderr line: [0] _fail (res://body3d_slide.gd:152)",
+        "unexpected stderr line: [1] _contact_verdict (res://body3d_slide.gd:122)",
+        "unexpected stderr line: [2] _run (res://body3d_slide.gd:100)",
+        "unexpected diagnostic: ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500"
+      ],
+      "elapsed_seconds": 1.386,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org"
+      ],
+      "stderr": [
+        "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500",
+        "   at: push_error (core/variant/variant_utility.cpp:1023)",
+        "   GDScript backtrace (most recent call first):",
+        "       [0] _fail (res://body3d_slide.gd:152)",
+        "       [1] _contact_verdict (res://body3d_slide.gd:122)",
+        "       [2] _run (res://body3d_slide.gd:100)"
+      ]
+    },
+    "seed_digests_before": {
+      "README.md": "130c7bccedc75d7488530e23872c9265f63d44e210573f558ba41b99f9cb0906",
+      "animation3d_blend.gd": "4638ecc8c64891872594391bc1db38ac1d1ccb5145f21f56766fc87629d22925",
+      "animation3d_keys.gd": "5c4cec8830aff171cd2ac8981c226f55036d6fea4c1f37435829ff29d0e4121b",
+      "animation3d_playback.gd": "1f6027cf153fe7b95721c0a5f02fa7ef61b8d12e0f6fc4f9c7f30e2d04affe38",
+      "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+      "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+      "camera3d_depth.gd": "a34f38e862fd6947fe9c6cca2121592a145710b0abac15476175b4f818669ed9",
+      "camera3d_ortho.gd": "4b9ae949e536947f8a924049588cd1a2d597f25f74217e4ffe9e15ba3d2cd19d",
+      "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+      "crash_exit3d.gd": "efee43b93070f838d4174cfceacec98b056fb34c60525f0479e8e6e1e4c38f99",
+      "curve3d_path.gd": "7e9a71a07a9c76bd063b7d2da74369744230de43adc638fdbd3ba686b3128b7e",
+      "floor3d_ground.gd": "b30c116b522e2e5e7347584e0b68f5dfcf1d10aaf453f5eca7652533f5d82e29",
+      "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+      "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+      "jump3d_gravity.gd": "27730ed5c9c63bc9b1495807159db8c1e280de0bdeb22627052411876a0a48d0",
+      "mesh3d_array.gd": "8dcbf29d6739d43787f47a221645e6226853b369ec38a47d721df06e66bae6cd",
+      "mesh3d_faces_hit.gd": "566e290f9a2e112e8e20921edcbeba04139c40fb0259a986e369372bbd174310",
+      "mesh3d_indexed.gd": "14ce1bae6d7b6a4cfea2aa01a5aa7e4e0a5a10cf58f537339b3e229c738f40a6",
+      "mesh3d_trimesh_hit.gd": "bae284fe0cafb162284d14072a0846897994d9cef725d014fbb9aedbcce27c93",
+      "navagent3d_detour.gd": "669c539d0bb38c82184f1b39df0a4d70059276e532def125438f352899a7fc45",
+      "navagent3d_distance.gd": "b820e469c35e68cf60d3f87bda94c1968cbc9b943b78513a6bf61bd0761c803a",
+      "navagent3d_follow.gd": "2bdcca4a08bd290bdcb097155c2299ae0fa6b5ac4893f68c2a04b073b782830c",
+      "navagent3d_next.gd": "f0ea0fbb0c8400b7b6fd4b5e5139ae02d0487a1ddedfe483e1fd3c3f6ac5e94f",
+      "navagent3d_retarget.gd": "6ad8584642edf8b1c41fb7116f39bf0e2d9513a2d73a99f0ea83d5cd4e1059d0",
+      "navfollow3d_driver.gd": "ec094e7f7baa317636b093d622687cae4f30928df417a547900406f759d28bbf",
+      "navigation3d_path.gd": "914f08956be5e5b94457876263a13c57c97760e552e8e515472fb2e2fe678710",
+      "navretarget3d_driver.gd": "310a1419c878f13b973b7fff895f5f1d536c7d69bcfb6e5faab98a9f2e7b0102",
+      "pathfollow3d_callback.gd": "991fdb9a59fec593fbf59aa603d6fcb881f5de710510a23816ac50ee692ccc7b",
+      "pathfollow3d_curve.gd": "1a7259fbc3b84b2584f341cc8a75b2a5629736631551f4b9fa3de67e9e40629d",
+      "pathfollow3d_driver.gd": "5fefa9c7fb58da75227312e5b98b61ce07e15ec8aea58076906aa56ba78567a2",
+      "pathfollow3d_paced.gd": "4215453f9eb7e4cae1f56748b2cd2640efe35d14148ef8eb0e87464aa491f8b0",
+      "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+      "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+      "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+      "remote3d_transform.gd": "65422bef734af4f8f50dc269c09853f3e7c9c8aa74225ecf4d3fe853f4b9fed4",
+      "run_battery.py": "5a7d6c13ac4a24960ce8f24bcc45b24a65da31919e78b5cc5934e3c248a79dee",
+      "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+      "scene3d_disk.gd": "95f53495cbcf2aab082af23b75fa0d9ba5db344f3f858352c3364a115c41c207",
+      "scene3d_instance.gd": "bf47af512df4e9e7750ebed024c65ccdede38c65e6cdc4c49aacfd1b655385cb",
+      "scene3d_resource.gd": "7bbd986c1bc22921a7a2b85c43f0a06530efdafb35eb411494a1eecbb718181c",
+      "scene3d_resource_disk.gd": "996514bf30214bb2f7363bcb033bfe73a658c49fed1d3ba336871e89d452070f",
+      "shapecast3d_graze.gd": "e26a0304aced8c9cab7b2ec54edc1497cc3a2c8a8b608c11b63d4bd13298e8f2",
+      "shapecast3d_sphere.gd": "7a9f5f3efeb606501dbc228b43e76b65faa65ed97c0ba171886833c5e0de5ce9",
+      "skeleton3d_attachment.gd": "25851f8ccd4711c0e5be848716211c7c52ed19f0d00ba888ef5d96fcc5125cb5",
+      "skeleton3d_pose.gd": "dd6a3b3b2bb72d68debc66429cc211a327a2dde8cf3892aefab5ab44809ad9cc",
+      "skeleton3d_rotation.gd": "5eee57aa24f71118d9e1a613013eab524b7eba3722013fc59d6a2318eb404153",
+      "slope3d_angle.gd": "0833050b4581738aaf7c784db3b473455ee3bb429eb11a0ed9b4f13f2bce4ccc",
+      "slope3d_travel.gd": "c18a285ec1b30edddc2fa524c8d560c76c1282241a21bdf42942467aef47ef44",
+      "stream_attribution3d.gd": "ab923ceeac3797f1d0fabfd6695238f88529ef69fb9f452c45ec61b76eefa796",
+      "timeout_descendant.py": "c3a52834c19bf6c6ed8bf177b59bbfd541f08192141786d35c8303bed181e460",
+      "timeout_tree3d.gd": "403a2e3e5f4a49fda283a147fd51577eda18a10a2d791cebb60be8d9d0712210",
+      "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+    },
+    "seed_digests_after": {
+      "README.md": "130c7bccedc75d7488530e23872c9265f63d44e210573f558ba41b99f9cb0906",
+      "animation3d_blend.gd": "4638ecc8c64891872594391bc1db38ac1d1ccb5145f21f56766fc87629d22925",
+      "animation3d_keys.gd": "5c4cec8830aff171cd2ac8981c226f55036d6fea4c1f37435829ff29d0e4121b",
+      "animation3d_playback.gd": "1f6027cf153fe7b95721c0a5f02fa7ef61b8d12e0f6fc4f9c7f30e2d04affe38",
+      "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+      "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+      "camera3d_depth.gd": "a34f38e862fd6947fe9c6cca2121592a145710b0abac15476175b4f818669ed9",
+      "camera3d_ortho.gd": "4b9ae949e536947f8a924049588cd1a2d597f25f74217e4ffe9e15ba3d2cd19d",
+      "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+      "crash_exit3d.gd": "efee43b93070f838d4174cfceacec98b056fb34c60525f0479e8e6e1e4c38f99",
+      "curve3d_path.gd": "7e9a71a07a9c76bd063b7d2da74369744230de43adc638fdbd3ba686b3128b7e",
+      "floor3d_ground.gd": "b30c116b522e2e5e7347584e0b68f5dfcf1d10aaf453f5eca7652533f5d82e29",
+      "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+      "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+      "jump3d_gravity.gd": "27730ed5c9c63bc9b1495807159db8c1e280de0bdeb22627052411876a0a48d0",
+      "mesh3d_array.gd": "8dcbf29d6739d43787f47a221645e6226853b369ec38a47d721df06e66bae6cd",
+      "mesh3d_faces_hit.gd": "566e290f9a2e112e8e20921edcbeba04139c40fb0259a986e369372bbd174310",
+      "mesh3d_indexed.gd": "14ce1bae6d7b6a4cfea2aa01a5aa7e4e0a5a10cf58f537339b3e229c738f40a6",
+      "mesh3d_trimesh_hit.gd": "bae284fe0cafb162284d14072a0846897994d9cef725d014fbb9aedbcce27c93",
+      "navagent3d_detour.gd": "669c539d0bb38c82184f1b39df0a4d70059276e532def125438f352899a7fc45",
+      "navagent3d_distance.gd": "b820e469c35e68cf60d3f87bda94c1968cbc9b943b78513a6bf61bd0761c803a",
+      "navagent3d_follow.gd": "2bdcca4a08bd290bdcb097155c2299ae0fa6b5ac4893f68c2a04b073b782830c",
+      "navagent3d_next.gd": "f0ea0fbb0c8400b7b6fd4b5e5139ae02d0487a1ddedfe483e1fd3c3f6ac5e94f",
+      "navagent3d_retarget.gd": "6ad8584642edf8b1c41fb7116f39bf0e2d9513a2d73a99f0ea83d5cd4e1059d0",
+      "navfollow3d_driver.gd": "ec094e7f7baa317636b093d622687cae4f30928df417a547900406f759d28bbf",
+      "navigation3d_path.gd": "914f08956be5e5b94457876263a13c57c97760e552e8e515472fb2e2fe678710",
+      "navretarget3d_driver.gd": "310a1419c878f13b973b7fff895f5f1d536c7d69bcfb6e5faab98a9f2e7b0102",
+      "pathfollow3d_callback.gd": "991fdb9a59fec593fbf59aa603d6fcb881f5de710510a23816ac50ee692ccc7b",
+      "pathfollow3d_curve.gd": "1a7259fbc3b84b2584f341cc8a75b2a5629736631551f4b9fa3de67e9e40629d",
+      "pathfollow3d_driver.gd": "5fefa9c7fb58da75227312e5b98b61ce07e15ec8aea58076906aa56ba78567a2",
+      "pathfollow3d_paced.gd": "4215453f9eb7e4cae1f56748b2cd2640efe35d14148ef8eb0e87464aa491f8b0",
+      "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+      "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+      "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+      "remote3d_transform.gd": "65422bef734af4f8f50dc269c09853f3e7c9c8aa74225ecf4d3fe853f4b9fed4",
+      "run_battery.py": "5a7d6c13ac4a24960ce8f24bcc45b24a65da31919e78b5cc5934e3c248a79dee",
+      "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+      "scene3d_disk.gd": "95f53495cbcf2aab082af23b75fa0d9ba5db344f3f858352c3364a115c41c207",
+      "scene3d_instance.gd": "bf47af512df4e9e7750ebed024c65ccdede38c65e6cdc4c49aacfd1b655385cb",
+      "scene3d_resource.gd": "7bbd986c1bc22921a7a2b85c43f0a06530efdafb35eb411494a1eecbb718181c",
+      "scene3d_resource_disk.gd": "996514bf30214bb2f7363bcb033bfe73a658c49fed1d3ba336871e89d452070f",
+      "shapecast3d_graze.gd": "e26a0304aced8c9cab7b2ec54edc1497cc3a2c8a8b608c11b63d4bd13298e8f2",
+      "shapecast3d_sphere.gd": "7a9f5f3efeb606501dbc228b43e76b65faa65ed97c0ba171886833c5e0de5ce9",
+      "skeleton3d_attachment.gd": "25851f8ccd4711c0e5be848716211c7c52ed19f0d00ba888ef5d96fcc5125cb5",
+      "skeleton3d_pose.gd": "dd6a3b3b2bb72d68debc66429cc211a327a2dde8cf3892aefab5ab44809ad9cc",
+      "skeleton3d_rotation.gd": "5eee57aa24f71118d9e1a613013eab524b7eba3722013fc59d6a2318eb404153",
+      "slope3d_angle.gd": "0833050b4581738aaf7c784db3b473455ee3bb429eb11a0ed9b4f13f2bce4ccc",
+      "slope3d_travel.gd": "c18a285ec1b30edddc2fa524c8d560c76c1282241a21bdf42942467aef47ef44",
+      "stream_attribution3d.gd": "ab923ceeac3797f1d0fabfd6695238f88529ef69fb9f452c45ec61b76eefa796",
+      "timeout_descendant.py": "c3a52834c19bf6c6ed8bf177b59bbfd541f08192141786d35c8303bed181e460",
+      "timeout_tree3d.gd": "403a2e3e5f4a49fda283a147fd51577eda18a10a2d791cebb60be8d9d0712210",
+      "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+    },
+    "mutation_scratch": "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r70-verifier/runs/20261013T230627836811Z/mutation-scratch",
+    "expected_diagnostic_lines": [
+      "ERROR: body3d_slide: body did not stop at the contact plane final_z=3.500 expected=2.500"
+    ],
+    "verdict": "PASS",
+    "bounded_claim": "one authored constant (wall box depth 4.0 -> 6.0) mutated in a scratch copy of body3d_slide.gd; proves the contact-plane assertion measures engine geometry instead of restating it. Not a general mutation-coverage claim."
+  },
+  "totals": {
+    "cases": 88,
+    "pass": 88,
+    "fail": 0,
+    "ordinary": 43,
+    "negative_controls": 45
+  },
+  "verdict": "PASS"
+}
