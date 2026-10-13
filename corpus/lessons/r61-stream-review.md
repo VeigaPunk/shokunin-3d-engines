@@ -1,0 +1,30 @@
+# r61 exact Node stream bytes — independent non-author review
+
+Reviewed work commit `6c2e02597a08890cfa41ac9fa482e9c1d60367c0`, round-61 pre-declaration in `.shokunin/game-dev-3d/LOG.md`, and three corpus READMEs (`corpus/README.md`, `corpus/fixtures/README.md`, `corpus/fixtures/three/README.md`). Reviewed the `6b1af7e`→work diff of all three Node runners. Node v26.11.1, pinned three.js 0.186.1, Godot 4.7.2. This reviewer did not author implementation or judge integration.
+
+## Counterfactual — original runner falsely accepts an extra positive blank line
+
+In private `/tmp/game-dev-3d-r61-review-7v7o99f5`, copied the three source scripts, three runners, `package.json`, `package-lock.json`; linked `node_modules` to the lane-local pinned installation. Used `git show 6b1af7e:.shokunin/game-dev-3d/corpus/fixtures/three/<runner> > <scratch>/old_<runner>` for each old runner. Source-only scratch injection **prepended** this wrapper to each copied source (no tracked source edit):
+
+```js
+const __originalLog = console.log.bind(console);
+console.log = (...args) => { __originalLog(...args); if (typeof args[0] === 'string' && args[0].startsWith('PASS ')) __originalLog(''); };
+```
+
+All six trials used `node <scratch>/<old_ or current runner> --receipt <scratch>/<age>_<kind>.json`. Each pair used the **same** injected source and pinned modules. The pre-injection source remained identical except for this wrapper, and the copied package/lock matched tracked bytes. The actual positive child stdout was exactly its expected PASS line followed by **two** newline bytes (`\n\n`); child exit=0, stderr=`''`, `signal=null`, `error=null`. The additional empty line is output only after a PASS, not after negative or diagnostic markers. All nonpositive rows kept their expected exits and streams and passed in both runner generations; both generations reported `seedsUnchanged=true` against their respective scratch digests.
+
+| runner / positive arm | old `6b1af7e` runner | new `6c2e025` runner | extra-newline raw stdout |
+|---|---|---|---|
+| `run_cases.mjs` / `positive` | overall PASS 3/3, positive PASS (false accept) | overall FAIL, positive FAIL; other 2 PASS | `PASS three3d scene_graph world=-1.000,0.000,0.000 parent_intact=true reverse_rejected=true\n\n` |
+| `run_camera_cases.mjs` / `inside` | overall PASS 5/5, inside PASS (false accept) | overall FAIL, inside FAIL; other 4 PASS | `PASS three3d camera inside_depth=4.000 inside_frustum=true outside_frustum=false screen=550.000,225.000\n\n` |
+| `run_ortho_cases.mjs` / `inside` | overall PASS 3/3, inside PASS (false accept) | overall FAIL, inside FAIL; other 2 PASS | `PASS three3d ortho front=4.000 deep=8.000 both_in_frustum=true,true outside_frustum=false screen=600.000,200.000\n\n` |
+
+Old versions use `.trim()` on selected output (`run_cases` also splits after trimming). All three revised versions compare `selectedStream === expectedLine + '\n'` with the other channel exactly empty; status/signal/error checks remain. Old/new runner SHA-256 respectively: Object3D `f9f40d4763748223a40e761c09c01e4762f21218744f09aeefe74f069a547d7f` / `97eca1b2e26db106e5ab7efe71767b533d99abdc1ee9ff80156ac402e11458e5`; camera `c7bf14bd49101f40f3a63b36348473bc40720796d0492ec3f04f1770985737da` / `b6aee605bf63fff2b3c5ee843bf4231c2f4c82bc3be80bbc252e359923bf8f6c`; ortho `2f07585d756e3a3fb7a85bfb1d1cc4318cd8e8e43c33a92b888479b28c45f921` / `80b7ef77ffeada27e2748c8ab34afd048fa77b7bbc934b86dcea45248fdcd946`.
+
+## Normal replay and regression comparison
+
+From repository root, ran each current `node .shokunin/game-dev-3d/corpus/fixtures/three/run_<...>.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r61-review-<kind>.json`. `three-r61-review-object.json` SHA-256 `ac0c4c2ccd7dfa48e2160db23165a49d211c86787d4ff9a73e3b5cef261de2ac`: 3/3 PASS. `three-r61-review-camera.json` SHA-256 `fb622cb6752cdaf66f1eac2043174c0117d694a62f69f80ec0c19e0ebaa032fb`: 5/5 PASS. `three-r61-review-ortho.json` SHA-256 `d36154df903f5e71cbbaab8617deb662530a7e87154faa9265771a29ef924d60`: 3/3 PASS. Each runner exited 0 with `seedsUnchanged=true`; ordinary/negative child exits 0/2 and expected single-line stdout ending exactly `\n`, empty stderr; mutation child exit 1 and expected single diagnostic stderr ending `\n`, empty stdout; all error/signal values null. All 11 stable raw result fields match earlier `corpus/live/three-r58-review-old.json`, `three-r59-review.json`, `three-r60-review.json` respectively. Source and package/lock hashes stayed equal; the only prior-to-current seed hash differences were the three edited runner hashes listed above. Normal receipts contain complete raw streams and all seed hashes.
+
+Ran `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing`: exit 0, Godot 83/83 PASS (41 ordinary, 42 negative), crash/stream/tree probes PASS and scratch mutation detected/PASS (four opt-ins); `corpus/live/runs/20261013T125635545655Z/verdicts.json` SHA-256 `a8b419e34af0815cf4dfb0bef2b4098b156b9f72e2831d0da365e6c950b9d433`. Compared with prior r60 `corpus/live/runs/20261013T124957709993Z/verdicts.json`: all 83 cases in the same order have exactly matching `case`, `script`, `flags`, `expected_exit`, `actual_exit`, `error`, `kind`, `marker`, `verdict`, `reasons`, `stdout`, `stderr`; all 50 seed SHA-256 hashes match, both `seeds_unchanged=true`. Commands embed run-specific scratch paths and elapsed seconds are excluded from comparison.
+
+**Finding:** The declared bounded calibration improvement is reproducible: all three old classifiers falsely accepted the actual extra-blank-line stdout; each current classifier rejected it solely as a stream mismatch while preserving child exit 0 and normal 3/5/3 signatures. Coverage/depth unchanged in this review. Contract concerns only these Node scripts' UTF-8 newline strings, not arbitrary bytes/terminal formats, Godot logging, rendered pixels, WebGL/browser/GPU, or cross-engine semantics. No implementation, LOG, report, SCORECARD, commit, push, or merge by reviewer.
