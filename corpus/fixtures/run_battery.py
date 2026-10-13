@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("mesh3d_indexed", "mesh3d_indexed.gd", [], 0,
+     "PASS mesh3d_indexed forward_indices triangles=2 cross_z=6.000 shared_vertices=4"),
+    ("mesh3d_indexed_reversed", "mesh3d_indexed.gd", ["--reversed"], 2,
+     "NEGATIVE REJECTED: mesh3d_indexed reversed_indices triangles=2 cross_z=-6.000 shared_vertices=4"),
     ("mesh3d_array", "mesh3d_array.gd", [], 0,
      "PASS mesh3d_array triangle last_z=0.000 aabb_size=2.000,3.000,0.00001"),
     ("mesh3d_array_shifted", "mesh3d_array.gd", ["--shifted"], 2,

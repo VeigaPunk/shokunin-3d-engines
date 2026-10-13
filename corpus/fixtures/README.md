@@ -308,6 +308,17 @@ check the surface data readback and instance bounds before fixed markers.
 This verifies CPU-visible mesh API data, not pixels, GPU buffers, winding
 visibility or collision meshes.
 
+## Indexed ArrayMesh topology readback (round 34)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_indexed,mesh3d_indexed_reversed`
+constructs one four-vertex, two-triangle indexed XY quad. The forward
+index array [0,1,2,0,2,3] returns cross-product Z+6 for both triangles;
+paired reversed [0,2,1,0,3,2] returns Z-6 while vertices and AABB remain
+identical. CPU-side checks read indices and vertices back from Godot's
+`ArrayMesh`, compute cross products from those returned arrays, and compare
+mesh/instance bounds. This does not establish GPU winding, culling, pixels,
+vertex-normal generation, or collision geometry.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
