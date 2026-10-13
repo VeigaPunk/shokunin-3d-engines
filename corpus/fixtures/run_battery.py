@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("mesh3d_faces_hit", "mesh3d_faces_hit.gd", [], 0,
+     "PASS mesh3d_faces_hit two_faces face_a=0 face_b=1 outside_hits=0"),
+    ("mesh3d_faces_reordered", "mesh3d_faces_hit.gd", ["--reversed"], 2,
+     "NEGATIVE REJECTED: mesh3d_faces_hit reordered face_a=1 face_b=0 outside_hits=0"),
     ("mesh3d_trimesh_hit", "mesh3d_trimesh_hit.gd", [], 0,
      "PASS mesh3d_trimesh_hit interior_hit=0.500,0.500,0.000 normal_z=1.000 face_index=0 outside_hits=0"),
     ("mesh3d_trimesh_outside", "mesh3d_trimesh_hit.gd", ["--outside"], 2,

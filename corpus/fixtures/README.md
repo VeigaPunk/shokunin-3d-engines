@@ -333,6 +333,18 @@ first, so the negative arm's miss is not attributable to a dead world.
 This tests one two-sided generated concave collider/raycast, not default
 backface semantics, moving body contacts, mesh rendering or GPU behavior.
 
+## Two-face mesh-derived static collision (round 36)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_faces_hit,mesh3d_faces_reordered`
+converts an indexed four-vertex/two-triangle XY quad into one generated
+`ConcavePolygonShape3D` on a live static collider with explicit two-sided
+policy. After four physics ticks, separate interior rays at (1.5,0.5) and
+(0.5,1.5) hit the same collider with face indices 0/1; swapping the two
+triangle index triples reverses the returned face indices 1/0 while the
+hit points and +Z normals remain the same. A third x3 ray misses. The
+fixture checks actual physics-space dictionaries; it does not imply stable
+face ordering across engine builds, GPU winding, or rendered pixels.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
