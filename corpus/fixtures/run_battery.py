@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("scene3d_resource_disk_local", "scene3d_resource_disk.gd", [], 0,
+     "PASS scene3d_resource_disk local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true"),
+    ("scene3d_resource_disk_shared", "scene3d_resource_disk.gd", ["--shared"], 2,
+     "NEGATIVE REJECTED: scene3d_resource_disk shared_mesh_mutation second_size=2.000,1.000,1.000 loaded_size=2.000,1.000,1.000 same_resource=true"),
     ("scene3d_resource_local", "scene3d_resource.gd", [], 0,
      "PASS scene3d_resource local_mesh_mutation first_size=2.000,1.000,1.000 second_size=1.000,1.000 distinct_resources=true"),
     ("scene3d_resource_shared", "scene3d_resource.gd", ["--shared"], 2,

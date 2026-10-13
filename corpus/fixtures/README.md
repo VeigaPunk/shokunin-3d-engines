@@ -169,6 +169,18 @@ and post-mutation dimensions and
 free the nodes before exit. This is mutable scene-resource behavior, not GPU
 rendering, material identity, disk scene persistence or other engines.
 
+## Saved-scene BoxMesh resource locality (round 21)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_resource_disk_local,scene3d_resource_disk_shared`
+saves an owned BoxMesh scene as scratch `generated-resource3d.tscn`, loads it
+with cache ignored, and instantiates three copies. With scene-local true, the
+saved file contains `resource_local_to_scene = true`; first/second/loaded
+reference distinct meshes, first size X2 after mutation and others X1. With
+flag false, Godot omits the default false field from `.tscn`; three loaded
+instances share the resource and all sizes move X1→X2. The fixture checks
+actual mesh identities, sizes and flag readback. This is one file and Godot
+build, not arbitrary saved-scene compatibility or GPU rendering.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
