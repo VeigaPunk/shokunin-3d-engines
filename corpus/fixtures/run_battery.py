@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("slope3d_floor", "slope3d_angle.gd", [], 0,
+     "PASS slope3d_floor normal_y=0.866 floor_limit=45.000 on_floor=true on_wall=false live_contact=true"),
+    ("slope3d_steep", "slope3d_angle.gd", ["--steep"], 2,
+     "NEGATIVE REJECTED: slope3d_angle steep_contact_not_floor normal_y=0.500 floor_limit=45.000 on_floor=false on_wall=true live_contact=true"),
     ("floor3d_ground", "floor3d_ground.gd", [], 0,
      "PASS floor3d_ground final_y=1.000 first_contact_tick=30 normal=0.000,1.000,0.000 on_floor=true ticks=60"),
     ("floor3d_airborne", "floor3d_ground.gd", ["--lower-floor"], 2,

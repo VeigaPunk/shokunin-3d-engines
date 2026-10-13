@@ -118,6 +118,17 @@ for evidence. Eight seconds bounds marker observation; three seconds bounds
 cleanup before forced kill. This is not a spontaneous crash or process-tree
 guarantee. The twelve default cases are unchanged.
 
+## Slope floor-angle classification (round 15)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only slope3d_floor,slope3d_steep`
+executes `slope3d_angle.gd` in grounded mode. One intact box slab is tilted
+30° or 60° around Z; `floor_max_angle=45°`, up direction +Y. Drive is pinned
+vertically downward until contact (at most 30 physics ticks). The contact
+normal is checked against the hand-derived rotated +Y vector: (-0.5, 0.866, 0)
+versus (-0.866, 0.5, 0). A shallow contact must be classified floor, while a
+steep contact must be classified wall, never an absent-geometry surrogate.
+This checks angle classification, not gravity, downhill travel or friction.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
