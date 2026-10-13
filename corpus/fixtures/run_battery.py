@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("navagent3d_retarget", "navagent3d_retarget.gd", [], 0,
+     "PASS navagent3d_retarget callbacks=120 before=1.730676,0.000,1.730676 after_end=1.000,0.000,3.000 final=1.000,0.000,3.000"),
+    ("navagent3d_retarget_fixed", "navagent3d_retarget.gd", ["--fixed"], 2,
+     "NEGATIVE REJECTED: navagent3d_retarget fixed callbacks=120 after_end=3.000,0.000,3.000 final=3.000,0.000,3.000"),
     ("navagent3d_follow", "navagent3d_follow.gd", [], 0,
      "PASS navagent3d_follow callbacks=90 first=1.612825,0.000,1.612825 final=3.000,0.000,3.000 reached=true"),
     ("navagent3d_follow_stationary", "navagent3d_follow.gd", ["--stationary"], 2,

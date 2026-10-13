@@ -496,6 +496,18 @@ next point is the start before agent path initializes on this build.
 Motion is **scripted**, not automatic NavigationAgent3D locomotion;
 no avoidance, baking, collision or rendered pixels.
 
+## In-flight NavigationAgent3D retarget (round 51)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_retarget,navagent3d_retarget_fixed`
+uses a live `navretarget3d_driver.gd` callback script under an attached
+NavigationAgent3D on a flat authored 4×4 map. Both arms begin toward(3,0,3)
+at speed2. After 35 callbacks, actor≈(1.730676,0,1.730676), one arm changes
+the agent target to(1,0,3); the next-point and current path then end there,
+and the actor reaches it by callback120. The unchanged-target control
+continues to(3,0,3). The first next-point read is the start on this build.
+This is explicitly scripted in-flight following, not built-in locomotion,
+avoidance, mesh baking, physical collision or rendered evidence.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
