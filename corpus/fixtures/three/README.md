@@ -113,3 +113,14 @@ to x=5 leaves the far hit live and yields the negative marker. Swapping
 their depths must fail on measured object identity/order even though two
 hits remain. This is Node CPU ray geometry, not rendered occlusion,
 transparency, GPU behavior or arbitrary scene ordering.
+
+## Raycaster near/far distance gates (round 66)
+
+`node .shokunin/game-dev-3d/corpus/fixtures/three/run_order_cases.mjs`
+now adds two controls with both original triangles intact. Ray near=4,
+far=10 excludes depth3 but retains depth5; ray near=0,far=4 retains
+depth3 but excludes depth5. Each checks measured object identity, point
+and distance before exact negative marker. `--mutate-near-clip` changes
+near4→2, yielding two measured hits and exit1 rather than a false
+single-far hit. These are sampled numeric distance gates, not exact
+boundary precision or rendered occlusion.

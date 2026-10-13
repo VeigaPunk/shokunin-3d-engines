@@ -13,14 +13,17 @@ const before = digests();
 const cases = [
   ['ordered', [], 0, 'PASS three3d ray_order first=near distance=3.000 second=far distance=5.000 hits=2'],
   ['near_off_axis', ['--near-off-axis'], 2, 'NEGATIVE REJECTED: three3d ray_order near_off_axis hits=1 remaining=far depth=5.000'],
+  ['near_clip', ['--near-clip'], 2, 'NEGATIVE REJECTED: three3d ray_range near_clip hits=1 remaining=far distance=5.000'],
+  ['far_clip', ['--far-clip'], 2, 'NEGATIVE REJECTED: three3d ray_range far_clip hits=1 remaining=near distance=3.000'],
   ['swap_depths', ['--swap-depths'], 1, 'ERROR: three3d ray order measured contradiction hits=2 first=far distances=3.000,5.000'],
+  ['mutate_near_clip', ['--mutate-near-clip'], 1, 'ERROR: three3d ray range measured contradiction hits=2 first=near near=2.000 far=10.000'],
 ];
 const results = cases.map(([name, flags, expectedExit, expectedLine]) => {
   const command = [process.execPath, script, ...flags];
   const proc = spawnSync(command[0], command.slice(1), { encoding: 'utf8', timeout: 5000 });
   const stdout = proc.stdout ?? '';
   const stderr = proc.stderr ?? '';
-  const diagnostic = name === 'swap_depths';
+  const diagnostic = name === 'swap_depths' || name === 'mutate_near_clip';
   const selectedStream = diagnostic ? stderr : stdout;
   const other = diagnostic ? stdout : stderr;
   const pass = !proc.error && proc.status === expectedExit && proc.signal === null

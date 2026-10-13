@@ -3,6 +3,9 @@ import { BufferGeometry, DoubleSide, Float32BufferAttribute, Mesh, MeshBasicMate
 
 const nearOffAxis = process.argv.includes('--near-off-axis');
 const swapDepths = process.argv.includes('--swap-depths');
+const nearClip = process.argv.includes('--near-clip') || process.argv.includes('--mutate-near-clip');
+const mutateNearClip = process.argv.includes('--mutate-near-clip');
+const farClip = process.argv.includes('--far-clip');
 const geometry = new BufferGeometry();
 geometry.setAttribute('position', new Float32BufferAttribute([-1, -1, 0, 1, -1, 0, 0, 1, 0], 3));
 const material = new MeshBasicMaterial({ side: DoubleSide });
@@ -12,13 +15,26 @@ nearMesh.position.set(nearOffAxis ? 5 : 2, 0, swapDepths ? -5 : -3);
 farMesh.position.set(2, 0, swapDepths ? -3 : -5);
 nearMesh.updateMatrixWorld(true);
 farMesh.updateMatrixWorld(true);
-const ray = new Raycaster(new Vector3(2, 0, 0), new Vector3(0, 0, -1), 0, 10);
+const ray = new Raycaster(new Vector3(2, 0, 0), new Vector3(0, 0, -1),
+  nearClip ? (mutateNearClip ? 2 : 4) : 0, farClip ? 4 : 10);
 const hits = ray.intersectObjects([farMesh, nearMesh], false);
 const close = (a, b) => Math.abs(a - b) < 1e-9;
 if (geometry.getAttribute('position').count !== 3 || !nearMesh.isMesh || !farMesh.isMesh
   || nearMesh === farMesh || nearMesh.geometry !== farMesh.geometry) {
   console.error('ERROR: three3d ray order mesh setup failed');
   process.exit(1);
+}
+if (nearClip || farClip) {
+  const expected = nearClip ? farMesh : nearMesh;
+  const distance = nearClip ? 5 : 3;
+  const point = new Vector3(2, 0, -distance);
+  if (hits.length !== 1 || hits[0].object !== expected || !close(hits[0].distance, distance)
+    || hits[0].point.distanceTo(point) > 1e-9) {
+    console.error(`ERROR: three3d ray range measured contradiction hits=${hits.length} first=${hits[0]?.object === nearMesh ? 'near' : 'far'} near=${ray.near.toFixed(3)} far=${ray.far.toFixed(3)}`);
+    process.exit(1);
+  }
+  console.log(`NEGATIVE REJECTED: three3d ray_range ${nearClip ? 'near_clip' : 'far_clip'} hits=${hits.length} remaining=${nearClip ? 'far' : 'near'} distance=${distance.toFixed(3)}`);
+  process.exit(2);
 }
 if (nearOffAxis) {
   if (hits.length !== 1 || hits[0].object !== farMesh || !close(hits[0].distance, 5)
