@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("navagent3d_follow", "navagent3d_follow.gd", [], 0,
+     "PASS navagent3d_follow callbacks=90 first=1.612825,0.000,1.612825 final=3.000,0.000,3.000 reached=true"),
+    ("navagent3d_follow_stationary", "navagent3d_follow.gd", ["--stationary"], 2,
+     "NEGATIVE REJECTED: navagent3d_follow stationary callbacks=90 final=1.000,0.000,1.000 reached=false"),
     ("navagent3d_next", "navagent3d_next.gd", [], 0,
      "PASS navagent3d_next path_end=3.000,0.000,3.000 next=3.000,0.000,3.000"),
     ("navagent3d_next_alternate", "navagent3d_next.gd", ["--alternate"], 2,

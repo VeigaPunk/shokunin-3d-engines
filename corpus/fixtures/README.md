@@ -483,6 +483,19 @@ author feasibility run. The regular arm reports two points ending
 The actor remains at (1,0,1). This proves a bounded agent query, not
 agent-driven movement, avoidance, baked navigation mesh or pixels.
 
+## Scripted NavigationAgent3D-guided actor movement (round 50)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_follow,navagent3d_follow_stationary`
+attaches `navfollow3d_driver.gd` (live Node3D `_physics_process(delta)`)
+and NavigationAgent3D to an actor starting(1,0,1) on a flat 4×4 authored
+map. Each callback reads `get_next_path_position()`; speed2 driver uses
+`move_toward(next,2*delta)` for 90 calls, first tick30≈(1.612825,0,1.612825)
+and final(3,0,3), with reached/finished true. Speed0 control runs same
+90 callbacks/path yet remains start and unreached. The first callback's
+next point is the start before agent path initializes on this build.
+Motion is **scripted**, not automatic NavigationAgent3D locomotion;
+no avoidance, baking, collision or rendered pixels.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
