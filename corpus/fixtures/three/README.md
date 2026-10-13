@@ -34,3 +34,19 @@ result before its depth-projection check. The runner checks exact
 exit, stdout/stderr, no signal, five-second process bound and seed digests.
 This is projection/frustum math only: no `WebGLRenderer`, GL context,
 rendered pixels, browser, or claim about camera behavior in another engine.
+
+## Orthographic depth-invariant projection/frustum (round 60)
+
+```sh
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_ortho_cases.mjs
+node .shokunin/game-dev-3d/corpus/fixtures/three/run_ortho_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r60.json
+```
+
+The three-case runner uses three.js `OrthographicCamera` under Node with
+left/right=-4/4, top/bottom=3/-3, near/far=1/10. World points
+(2,1,-4), (2,1,-8), (2,1,-12) share NDC x=0.5 and y=1/3,
+mathematically (600,200) for 800×600; the first two are in the live
+frustum, the last is beyond far. The negative keeps both inside controls
+live; far=20 must fail on the measured last-point frustum status before
+literal depth checks. This is math-only evidence, not rendered pixels,
+GL, GPU culling, browser or cross-engine equivalence.
