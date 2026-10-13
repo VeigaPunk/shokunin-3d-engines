@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("scene3d_disk", "scene3d_disk.gd", [], 0,
+     "PASS scene3d_disk loaded_world=11.000,2.000,2.000 source_intact=true mesh_present=true"),
+    ("scene3d_disk_wrong_local", "scene3d_disk.gd", ["--wrong-local"], 2,
+     "NEGATIVE REJECTED: scene3d_disk loadable_wrong_local source_intact=true loaded_world=12.000,2.000,2.000 expected_world=11.000,2.000,2.000 mesh_present=true"),
     ("scene3d_instances", "scene3d_instance.gd", [], 0,
      "PASS scene3d_instances source_intact=true first_world=11.000,2.000,-3.000 second_world=-9.000,2.000,2.000 distinct_nodes=true"),
     ("scene3d_instances_wrong_local", "scene3d_instance.gd", ["--wrong-local"], 2,

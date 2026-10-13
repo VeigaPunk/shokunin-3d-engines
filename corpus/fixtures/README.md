@@ -144,6 +144,19 @@ stay intact; both instances and source are freed before exit. This is live
 headless scene instancing and transform isolation, not persisted scene-file
 serialization or rendered pixels.
 
+## Authored text-scene round-trip (round 18)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_disk,scene3d_disk_wrong_local`
+packs an owned Node3D/MeshInstance3D subtree and saves it as a scratch
+`generated-scene3d.tscn`, then loads/instances the file and checks the local
+(1,2,-3) and world (11,2,2) child transform against literal expectations.
+The negative changes only the serialized X translation from 1 to 2 after
+save. The resulting text scene must still load with its mesh and source
+untouched, but the observed world (12,2,2) differs. No seed project or
+persisted artifact outside ignored run scratch is modified; this proves a
+headless Godot serialization/load path, not visual output or arbitrary scene
+file validation.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
