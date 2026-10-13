@@ -21,15 +21,15 @@ farMesh.updateMatrixWorld(true);
 const ray = new Raycaster(new Vector3(2, 0, 0), new Vector3(0, 0, -1),
   nearBoundary ? (mutateNearBoundary ? 5.25 : 5) : nearClip ? (mutateNearClip ? 2 : 4) : 0,
   farBoundary ? 3 : farClip ? 4 : 10);
-const hits = ray.intersectObjects([farMesh, nearMesh], false);
 const close = (a, b) => Math.abs(a - b) < 1e-9;
 if (geometry.getAttribute('position').count !== 3 || !nearMesh.isMesh || !farMesh.isMesh
   || nearMesh === farMesh || nearMesh.geometry !== farMesh.geometry) {
   console.error('ERROR: three3d ray order mesh setup failed');
   process.exit(1);
 }
+let baseline;
 if (nearBoundary || farBoundary) {
-  const baseline = new Raycaster(ray.ray.origin.clone(), ray.ray.direction.clone(), 0, 10)
+  baseline = new Raycaster(ray.ray.origin.clone(), ray.ray.direction.clone(), 0, 10)
     .intersectObjects([farMesh, nearMesh], false);
   if (baseline.length !== 2 || baseline[0].object !== nearMesh || baseline[1].object !== farMesh
     || baseline[0].distance !== 3 || baseline[1].distance !== 5
@@ -38,6 +38,9 @@ if (nearBoundary || farBoundary) {
     console.error(`ERROR: three3d ray boundary baseline failed measured_hits=${baseline.length}`);
     process.exit(1);
   }
+}
+const hits = ray.intersectObjects([farMesh, nearMesh], false);
+if (nearBoundary || farBoundary) {
   const expected = nearBoundary ? farMesh : nearMesh;
   const distance = nearBoundary ? 5 : 3;
   if (hits.length !== 1 || hits[0].object !== expected || hits[0].distance !== distance
