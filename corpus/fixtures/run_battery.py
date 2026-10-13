@@ -53,6 +53,12 @@ CASES = [
      "point=2.000,1.000,4.000 is_position_behind=true in_frustum=false "
      "raw_screen=250.000,375.000 collides_with_mirrored_control=true "
      "lateral_screen=3400.000,300.000 lateral_in_frustum=false in_front_control_accepted=true"),
+    ("camera3d_depth", "camera3d_depth.gd", [], 0,
+     "PASS camera3d_depth camera=10.000,0.000,0.000 visible=14.000,1.000,2.000 "
+     "screen=550.000,225.000 depth=4.000 far=10.000 near=1.000"),
+    ("camera3d_depth_far", "camera3d_depth.gd", ["--far-point"], 2,
+     "NEGATIVE REJECTED: camera3d_depth far_point_depth=12.000 screen=550.000,225.000 "
+     "in_frustum=false behind=false near_control_visible=true"),
     ("raycast3d_hit", "raycast3d.gd", [], 0,
      "PASS raycast3d hits=1 position=0.000,2.000,0.000 normal=0.000,1.000,0.000 "
      "collider=Wall collider_id_matches=true miss_hits=0"),
