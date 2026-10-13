@@ -33,8 +33,10 @@ func _run() -> void:
 		print("NEGATIVE REJECTED: remote3d_transform unbound target=0.000,0.000,0.000 source=2.000,1.000,-3.000")
 		quit(2)
 		return
-	if target.global_position.distance_to(Vector3(2, 1, -3)) > 0.0001 or target.global_basis.x.distance_to(Vector3(0, 1, 0)) > 0.0001 or target.global_basis.y.distance_to(Vector3(-1, 0, 0)) > 0.0001:
-		return _fail(stage, "remote target propagation mismatch target=%s" % target.global_transform)
+	if target.global_position.distance_to(Vector3(2, 1, -3)) > 0.0001:
+		return _fail(stage, "remote target position mismatch target=%s" % target.global_transform)
+	if target.global_basis.x.distance_to(Vector3(0, 1, 0)) > 0.0001 or target.global_basis.y.distance_to(Vector3(-1, 0, 0)) > 0.0001:
+		return _fail(stage, "remote target basis mismatch target=%s" % target.global_transform)
 	stage.free()
 	print("PASS remote3d_transform bound target=2.000,1.000,-3.000 basis_x=0.000,1.000,0.000")
 	quit(0)

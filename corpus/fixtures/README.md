@@ -460,6 +460,17 @@ target stays origin/identity. Both arms assert source, target and binding
 state before fixed markers. This is scene-tree transform propagation, not
 network replication, rendered motion or GPU output.
 
+## Remote target rotation assertion attribution (round 48)
+
+The r47 `remote3d_transform` fixture now separates target position and
+basis diagnostics while retaining both exact baseline markers. Private
+scratch source angle90→60 plus adjusted source basis expectation passes
+source/target-origin checks and fails on measured target basis X≈(.5,.866,0)
+instead of (0,1,0). A second scratch `update_rotation=false` with only its
+policy setup guard bypassed preserves target origin(2,1,-3) but returns
+identity basis and fails the same target basis check. These are one binding
+and two private controls, not network replication or rendered motion.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
