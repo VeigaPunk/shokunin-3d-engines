@@ -63,8 +63,14 @@ func _run() -> void:
 		print("NEGATIVE REJECTED: slope3d_travel level_no_downhill x=0.0000 y=1.0001 grounded_ticks=44 normal_y=1.000")
 		quit(2)
 		return
-	if absf(rad_to_deg(slab.rotation.z) - 30.0) > 0.001 or absf(actor.position.x + 0.0810) > 0.003 or absf(actor.position.y - 1.3203) > 0.003 or grounded_ticks != 52 or first_normal.distance_to(Vector3(-0.5, 0.8660254, 0)) > 0.0001:
-		return _fail("slope travel failed x=%.4f y=%.4f grounded=%d normal=%s" % [actor.position.x, actor.position.y, grounded_ticks, first_normal])
+	if absf(rad_to_deg(slab.rotation.z) - 30.0) > 0.001:
+		return _fail("slope rotation mismatch angle=%.3f expected=30.000" % rad_to_deg(slab.rotation.z))
+	if absf(actor.position.x + 0.0810) > 0.003:
+		return _fail("slope displacement mismatch x=%.4f expected=-0.0810" % actor.position.x)
+	if absf(actor.position.y - 1.3203) > 0.003 or grounded_ticks != 52:
+		return _fail("slope vertical/grounded mismatch y=%.4f grounded=%d" % [actor.position.y, grounded_ticks])
+	if first_normal.distance_to(Vector3(-0.5, 0.8660254, 0)) > 0.0001:
+		return _fail("slope normal mismatch normal=%s" % first_normal)
 	_cleanup()
 	print("PASS slope3d_travel downhill_x=-0.0810 y=1.3203 grounded_ticks=52 normal_y=0.866 stop_on_slope=false")
 	quit(0)

@@ -250,6 +250,18 @@ calls; level x≈0, grounded 44 calls. Literal tolerances check signed X,
 center y, contact normal, rotation and policy. These observed small motions do
 not prove a general slope acceleration/friction law or all-tick grounding.
 
+## Slope assertion attribution (round 29)
+
+The r28 slope assertions now fail with separate diagnostics for rotation,
+horizontal displacement, vertical/grounded state and first floor normal.
+Private copied angle 30→40 plus rotation-literal 30→40 keeps the setup guard
+satisfied yet exits 1 on observed X=-0.1347 versus original X=-0.0810.
+A second private copy adjusts only the X/Y/grounded expectations to the
+mutant's observed values, leaving the original normal literal untouched; it
+exits 1 on normal(-0.642788,0.766044,0) versus authored
+(-0.5,0.8660254,0). These scratch controls attribute the failure to separate
+behavior predicates, not a general slope-sensitivity guarantee.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
