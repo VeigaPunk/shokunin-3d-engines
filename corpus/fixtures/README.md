@@ -15,7 +15,7 @@ and Godot's `.godot/` import cache is created inside the scratch copy only.
 ## Running
 
 ```
-python3 corpus/fixtures/run_battery.py                     # all 14 cases (round 7)
+python3 corpus/fixtures/run_battery.py                     # all 15 cases (round 8)
 python3 corpus/fixtures/run_battery.py --probe-failing     # + one adversarial mutation
 python3 corpus/fixtures/run_battery.py --only raycast3d_hit,raycast3d_miss
 python3 run_battery.py --godot /path/to/godot --runs /path/to/receipts
@@ -62,6 +62,7 @@ and classifies stdout and stderr separately.
 | `camera3d_project_behind` | `camera3d_project.gd` | `--behind-camera` | 2 | behind-camera point `(2,1,4)` rejected by `is_position_behind`/frustum gate; its raw projection aliases the legitimate mirror pixel `(250,375)`; lateral off-frustum point projects to `x=3400`, outside the viewport rect |
 | `camera3d_depth` | `camera3d_depth.gd` | — | 0 | translated/rotated Camera3D at (10,0,0) looking +X projects local (2,1,-4) to (550,225), world (14,1,2), depth 4 inside authored near 1/far 10 |
 | `camera3d_depth_far` | `camera3d_depth.gd` | `--far-point` | 2 | farther local (6,3,-12) projects to identical pixel but is beyond far 10; near control remains visible, so frustum rejection is depth-driven |
+| `camera3d_depth_near` | `camera3d_depth.gd` | `--near-point` | 2 | geometrically front-facing local (0.25,0.125,-0.5) at depth 0.5 < near 1 projects to (550,225), outside near plane; Godot `is_position_behind=true` here despite positive forward depth, depth-2 control remains visible |
 | `raycast3d_hit` | `raycast3d.gd` | — | 0 | `PhysicsDirectSpaceState3D.intersect_ray` hits `(0,2,0)` with normal `(0,1,0)` on the authored collider; offset ray returns an empty Dictionary |
 | `raycast3d_miss` | `raycast3d.gd` | `--miss-ray` | 2 | hitting control ray proves the space is live, then the `z=9` offset ray (7.0 clear of the box half-depth) returns zero hits |
 | `transform3d_compose` | `transform3d_compose.gd` | — | 0 | parent `R_y(90)` at `(2,0,0)` ∘ child `R_x(90)` at `(0,0,-3)` → global origin `(-1,0,0)`, basis columns `(0,0,-1) (1,0,0) (0,-1,0)`, determinant 1, composition identity holds, reversed order rejected |

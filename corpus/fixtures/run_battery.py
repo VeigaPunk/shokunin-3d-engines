@@ -59,6 +59,9 @@ CASES = [
     ("camera3d_depth_far", "camera3d_depth.gd", ["--far-point"], 2,
      "NEGATIVE REJECTED: camera3d_depth far_point_depth=12.000 screen=550.000,225.000 "
      "in_frustum=false behind=false near_control_visible=true"),
+    ("camera3d_depth_near", "camera3d_depth.gd", ["--near-point"], 2,
+     "NEGATIVE REJECTED: camera3d_depth near_point_depth=0.500 screen=550.000,225.000 "
+     "in_frustum=false api_behind=true geometric_front=true near_control_visible=true"),
     ("raycast3d_hit", "raycast3d.gd", [], 0,
      "PASS raycast3d hits=1 position=0.000,2.000,0.000 normal=0.000,1.000,0.000 "
      "collider=Wall collider_id_matches=true miss_hits=0"),
