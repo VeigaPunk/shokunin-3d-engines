@@ -71,6 +71,16 @@ Supporting scripts are not cases and carry no exit signature: `runner3d.gd`
 (deterministic-drive `CharacterBody3D` actor), `input_mover3d.gd` (key-intent
 actor), `pickup_orb3d.gd` (`Area3D` trigger with the `collected` chain).
 
+## Optional stdout/stderr attribution (round 4)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-stream-attribution`
+adds an uncounted pair using the same `stream_attribution3d.gd` script. Both
+set up a Node3D, exit 0 and print exactly `STREAM_3D_STDOUT: spatial node ready`
+on stdout. Only `--emit-stderr` also prints `STREAM_3D_STDERR` on stderr;
+`classify` rejects any nonempty stderr line. The raw paired streams, exit,
+reasons and verdict are recorded in ignored `corpus/live/runs/<timestamp>/stream-attribution-verdicts.json`;
+rerun the command. Default twelve cases remain unchanged.
+
 ## Optional direct-child signal classification (round 3)
 
 `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-crash-exit`

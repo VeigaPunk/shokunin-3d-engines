@@ -139,6 +139,9 @@ def classify(stdout, stderr, code, error, expected_exit, marker):
     lines = [line.strip() for line in stdout.splitlines()]
     if marker not in lines:
         reasons.append("exact stdout marker missing")
+    for line in stderr.splitlines():
+        if line.strip():
+            reasons.append(f"unexpected stderr line: {line.strip()}")
     for stream_name, stream in (("stdout", stdout), ("stderr", stderr)):
         if "SCRIPT ERROR:" in stream:
             reasons.append(f"SCRIPT ERROR on {stream_name}")
@@ -230,6 +233,35 @@ def probe_crash_exit(godot, scratch, run_dir):
     return verdict
 
 
+def probe_stream_attribution(godot, scratch, run_dir):
+    marker = "STREAM_3D_STDOUT: spatial node ready"
+    diagnostic = "STREAM_3D_STDERR"
+    script = "res://stream_attribution3d.gd"
+    results = []
+    for name, flags in (("accept", []), ("reject", ["--emit-stderr"])):
+        command = [godot, "--headless", "--path", str(scratch), "--script", script, "--", *flags]
+        stdout, stderr, code, error = run_process(command, 8)
+        classified, reasons = classify(stdout, stderr, code, error, 0, marker)
+        results.append({"case": name, "command": command, "stdout": stdout, "stderr": stderr,
+                        "actual_exit": code, "error": error, "classified": classified,
+                        "reasons": reasons})
+    accept, reject = results
+    marker_once = all(r["stdout"].splitlines().count(marker) == 1 for r in results)
+    verdict = (marker_once and accept["stdout"] == reject["stdout"]
+               and all(r["actual_exit"] == 0 and r["error"] is None for r in results)
+               and accept["stderr"] == "" and accept["classified"] is True
+               and reject["stderr"].strip() == diagnostic and reject["classified"] is False
+               and reject["reasons"] == [f"unexpected stderr line: {diagnostic}"])
+    payload = {"verdict": "PASS" if verdict else "FAIL", "marker": marker,
+               "diagnostic": diagnostic, "results": results, "bounded_claim":
+               "One Godot 4.7.2 Node3D fixture, same exit/stdout, unexpected stderr line; "
+               "not general logging policy or other-engine behavior."}
+    (run_dir / "stream-attribution-verdicts.json").write_text(json.dumps(payload, indent=2) + "\n")
+    print(f"{payload['verdict']} stream-attribution probe: "
+          f"{run_dir / 'stream-attribution-verdicts.json'}", flush=True)
+    return verdict
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -240,6 +272,8 @@ def main():
                         help="also mutate one authored constant in a scratch copy and prove detection")
     parser.add_argument("--probe-crash-exit", action="store_true",
                         help="compare a normal Godot exit to a SIGTERM-terminated live Godot child")
+    parser.add_argument("--probe-stream-attribution", action="store_true",
+                        help="compare identical stdout/exit with and without unexpected stderr")
     args = parser.parse_args()
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
@@ -293,6 +327,9 @@ def main():
     crash_probe_ok = True
     if args.probe_crash_exit:
         crash_probe_ok = probe_crash_exit(args.godot, scratch, run_dir)
+    stream_probe_ok = True
+    if args.probe_stream_attribution:
+        stream_probe_ok = probe_stream_attribution(args.godot, scratch, run_dir)
 
     probe = None
     if args.probe_failing:
@@ -360,16 +397,17 @@ def main():
               f"{'(scratch mutation)':18} {'-/1':9} probe")
     print(f"totals: cases={len(results)} pass={passed} fail={failed} "
           f"ordinary={ordinary} negative_controls={negative} "
-          f"probes={(1 if probe is not None else 0) + (1 if args.probe_crash_exit else 0)}")
+          f"probes={(1 if probe is not None else 0) + (1 if args.probe_crash_exit else 0) + (1 if args.probe_stream_attribution else 0)}")
 
     verdict = ("PASS" if failed == 0 and seeds_unchanged and crash_probe_ok
-               and (probe is None or probe["verdict"] == "PASS") else "FAIL")
+               and stream_probe_ok and (probe is None or probe["verdict"] == "PASS") else "FAIL")
     payload = {"godot": args.godot, "godot_version": godot_version,
                "godot_version_exit": version_code, "godot_version_error": version_error,
                "started_utc": stamp, "seed": str(HERE), "scratch": str(scratch),
                "case_timeout_seconds": CASE_TIMEOUT_SECONDS, "only": args.only or None,
                "probe_failing": args.probe_failing, "probe_crash_exit": args.probe_crash_exit,
-               "crash_probe_ok": crash_probe_ok, "seeds_unchanged": seeds_unchanged,
+               "crash_probe_ok": crash_probe_ok, "probe_stream_attribution": args.probe_stream_attribution,
+               "stream_probe_ok": stream_probe_ok, "seeds_unchanged": seeds_unchanged,
                "seed_digests": digests_before, "results": results, "probe": probe,
                "totals": {"cases": len(results), "pass": passed, "fail": failed,
                           "ordinary": ordinary, "negative_controls": negative},
