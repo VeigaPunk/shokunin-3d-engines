@@ -449,6 +449,17 @@ stays at origin. The SceneTree script only awaits physics frames and reads
 the driver; it never assigns moving progress. This is a callback-driven
 headless scene-tree transform, not autonomous navigation or rendered motion.
 
+## RemoteTransform3D target propagation (round 47)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only remote3d_transform,remote3d_transform_unbound`
+creates separate live source `RemoteTransform3D` and target `Node3D` under
+one stage. Binding `../Target` and then setting source position(2,1,-3)
+and Z rotation90° propagates matching target global origin/basis after
+process frames. With an intact unbound source under identical assignments,
+target stays origin/identity. Both arms assert source, target and binding
+state before fixed markers. This is scene-tree transform propagation, not
+network replication, rendered motion or GPU output.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

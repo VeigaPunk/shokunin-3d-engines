@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("remote3d_transform", "remote3d_transform.gd", [], 0,
+     "PASS remote3d_transform bound target=2.000,1.000,-3.000 basis_x=0.000,1.000,0.000"),
+    ("remote3d_transform_unbound", "remote3d_transform.gd", ["--unbound"], 2,
+     "NEGATIVE REJECTED: remote3d_transform unbound target=0.000,0.000,0.000 source=2.000,1.000,-3.000"),
     ("pathfollow3d_callback", "pathfollow3d_callback.gd", [], 0,
      "PASS pathfollow3d_callback callbacks=60 delta_sum=1.000 progress=3.000 first_y=1.105767 second_y=1.997535"),
     ("pathfollow3d_callback_stationary", "pathfollow3d_callback.gd", ["--stationary"], 2,
