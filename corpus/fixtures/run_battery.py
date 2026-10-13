@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("curve3d_path", "curve3d_path.gd", [], 0,
+     "PASS curve3d_path bent length=6.072724 quarter_y=1.118591 midpoint_y=2.000000"),
+    ("curve3d_path_straight", "curve3d_path.gd", ["--straight"], 2,
+     "NEGATIVE REJECTED: curve3d_path straight length=4.472136 midpoint=2.000,0.000,1.000"),
     ("shapecast3d_graze", "shapecast3d_graze.gd", [], 0,
      "PASS shapecast3d_graze radius=0.500 sphere_hits=1 ray_hits=0 point=1.000,0.000,1.000 safe=0.425781"),
     ("shapecast3d_graze_small", "shapecast3d_graze.gd", ["--small"], 2,

@@ -403,6 +403,17 @@ query; radius is the distinguishing input. Tolerances bound observed Godot
 solver estimates, not exact grazing time/normal theory. No continuous body
 movement, tunneling proof or rendered pixels.
 
+## Baked Curve3D path geometry (round 43)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only curve3d_path,curve3d_path_straight`
+attaches a three-point `Curve3D` to live `Path3D`. Middle point (2,2,1)
+has in/out tangent handles (-0.5,0,-0.25)/(0.5,0,0.25), giving measured
+baked length≈6.072724, quarter point≈(0.917559,1.118591,0.45878),
+midpoint(2,2,1). The intact collinear-middle control has length≈4.472136,
+quarter(1,0,0.5), midpoint(2,0,1). Readback and sampled positions are
+asserted before fixed markers. This is headless path geometry, not a
+navigation agent, collision, rendered line or pixel output.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
