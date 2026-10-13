@@ -32,6 +32,10 @@ CASE_TIMEOUT_SECONDS = 20
 
 # (case name, script, flags, expected exit, exact stdout marker line)
 CASES = [
+    ("shapecast3d_graze", "shapecast3d_graze.gd", [], 0,
+     "PASS shapecast3d_graze radius=0.500 sphere_hits=1 ray_hits=0 point=1.000,0.000,1.000 safe=0.425781"),
+    ("shapecast3d_graze_small", "shapecast3d_graze.gd", ["--small"], 2,
+     "NEGATIVE REJECTED: shapecast3d_graze small_radius=0.100 sphere_hits=0 ray_hits=0"),
     ("shapecast3d_sphere", "shapecast3d_sphere.gd", [], 0,
      "PASS shapecast3d_sphere radius=0.500 contact_z=1.000 safe=0.414062 unsafe=0.417969 hits=1"),
     ("shapecast3d_sphere_offset", "shapecast3d_sphere.gd", ["--offset"], 2,

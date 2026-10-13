@@ -1,0 +1,32 @@
+# Round 42 independent grazing ShapeCast3D review
+
+Reviewer: named LEAF non-author `game-dev-3d-r42-graze-review`. Baseline HEAD in LOG r42: `4a781d398ce40b2969caf685396951af77a1030f`; Godot `/usr/bin/godot` 4.7.2.stable.arch_linux.ed1daf0bf, Linux headless. I changed no implementation, seed, runner, README or LOG and did not push/merge. This is my sole tracked write; private copy and receipts are ignored under `corpus/live/runs/`.
+
+## Exact replay
+
+From repository root, both commands exit 0:
+
+```sh
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only shapecast3d_graze,shapecast3d_graze_small
+```
+
+Full run `corpus/live/runs/20261013T072547453626Z/verdicts.json` SHA-256 `18daffa9224d5b21f972492e6dc73850a51a87146a43b6c50fa8c4ef0ad329ee`: 61/61 PASS (29 ordinary, 32 negatives) plus all four opt-ins PASS: tree timeout `tree-timeout-verdicts.json` SHA-256 `5c25853477a3655aa5aba43437d72c9c4b99c034b18e359d44304df561d84c8c`, direct-child crash exit `crash-exit-verdicts.json` `79541c7090aaf44f180cb11c6807db1cd245f832d9ed5009a1c5470e0ad01958`, stream attribution `stream-attribution-verdicts.json` `727db8d059e91d5633edfd60a2046c64ebd5192ebbf6b1cc38f3e5ddec9a72c9`, and pre-existing *body-contact* failing mutation `mutation-verdicts.json` `ff8be1697b1d40f99666406a1b34722f929c963fab3a84711a9cb01faa4986bd`. The optional failing probe is not the grazing-specific mutation below. Seeds unchanged before/after.
+
+Pair `corpus/live/runs/20261013T072547454619Z/verdicts.json` SHA-256 `a9b65f21a9be29f4494dcc4cfe506150b081d63dfec776d3930d40aa8765d054`: 2/2 PASS, one ordinary exit 0 and one negative exit 2, no stderr/rejection reasons, same seed map as full. Exact case records/commands/streams appear in each `verdicts.json`; pair's `--headless --path <pair scratch> --script res://shapecast3d_graze.gd --` optionally appends `--small`. Ordinary stdout marker `PASS shapecast3d_graze radius=0.500 sphere_hits=1 ray_hits=0 point=1.000,0.000,1.000 safe=0.425781`; small marker `NEGATIVE REJECTED: shapecast3d_graze small_radius=0.100 sphere_hits=0 ray_hits=0`.
+
+Prior r41 full `corpus/live/runs/20261013T071906657777Z/verdicts.json` SHA-256 `98d2b72bbe5cc7b9c195ab7b962a47b346264162b564cfe3164aec5ddf3021cd` has 59/59 PASS. All 59 old case records are **exactly equal** to new full records on `case, script, flags, expected_exit, actual_exit, error, kind, marker, verdict, reasons, stdout, stderr`; scratch paths in `command` and runtime durations necessarily differ. Seed hashes differ only `README.md` `7f8efe603e80c4f4626b258f85ff69a5e9b1c5711ebe71a7e3e4abb1ffba6f02` → `0c20d630610670e87ece957c7a2ad87505a2a63c47dfa200bc3db6bd9e0adde8`, `run_battery.py` `7a133b7f8c0ea9a318bf1490e38f63c19c602ee5f0867b0c8585abc4201d9456` → `bcb00e59a7b0cda53961cc6b3fb56ea9459e6aed7391b492f8cf544cecfba403`, and new `shapecast3d_graze.gd` `e26a0304aced8c9cab7b2ec54edc1497cc3a2c8a8b608c11b63d4bd13298e8f2`. All other 36 previous seed hashes are identical; both runs report seed preservation.
+
+## Live geometry and causal control
+
+`corpus/fixtures/shapecast3d_graze.gd` SHA-256 `e26a0304aced8c9cab7b2ec54edc1497cc3a2c8a8b608c11b63d4bd13298e8f2` constructs live static box size (2,2,2), centered at origin (X half-width 1), with a `ShapeCast3D` centered at (1.25,0,4) sweeping (0,0,-6). `PhysicsDirectSpaceState3D.intersect_ray` on that exact centerline, from (1.25,0,4) to (1.25,0,-2), returns empty in **both** arms; it passes outside X=1 rather than crossing the box. Four physics frames and `force_shapecast_update()` precede assertions. Both arms check live tree, box dimensions, cast shape identity, position/target, matching layer/mask and empty ray. With radius 0.5, sphere cast reports one collision with the actual wall, point (1,0,1), oblique normal approximately (0.509856,0,0.86026), and safe fraction approximately 0.42578125. With only authored radius changed to 0.1, same cast/box/path/ray reports zero collision and safe fraction 1.0. The positive tests hit count and a **compound** collider identity/point/normal/safe predicate; these components have not been individually mutation-isolated. The marker prints fixed formatted values after measurement, not a raw point/normal dump. Small-arm radius tolerance 0.0001 is deliberate: LOG r42 records an adverse author's exact `sphere.radius != 0.1` float guard rejecting the otherwise measured count0/safe1 arm; that failed feasibility is not admission evidence.
+
+Private copy of fixture seeds: `corpus/live/runs/r42-graze-review-private/`. Changed **only** `sphere.radius = 0.1 if small else 0.5` → `sphere.radius = 0.1 if small else 0.1` in its copied `shapecast3d_graze.gd` (mutated SHA-256 `c66cdb38903dcaa74470370b5889b30ab45b4a1345ec180bbad718435ea2725d`), never seeded source. Executed:
+
+```sh
+godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r42-graze-review-private --script res://shapecast3d_graze.gd > .shokunin/game-dev-3d/corpus/live/runs/r42-graze-review-private/mutation.stdout 2> .shokunin/game-dev-3d/corpus/live/runs/r42-graze-review-private/mutation.stderr
+```
+
+It exits **1**, no PASS or negative marker. Stdout has only Godot banner/blank line (SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e`); stderr SHA-256 `ae8b0ffdedd42a5b8a80405de3a58103c7f15abd16e9cdadea39b5b5060f41bc` starts `ERROR: shapecast3d_graze: finite sphere missed grazing box count=0` at `_run` line 44; no `Parse Error:`, `SCRIPT ERROR:`, or ObjectDB leak. It passes the unchanged setup and same-path empty-ray tests; the ordinary arm has no direct positive radius guard, so failure is the **measured absent collision**, not a setup-only assertion. This mutation does not independently test point, normal or safe-fraction thresholds because hit-count fails first.
+
+Bounded conclusion: **depth improved** over r41's centered sphere hit/lateral miss because this one headless Godot configuration distinguishes finite radius from its same-path empty ray and radius-0.1 miss; coverage unchanged (same ShapeCast3D family), calibration unchanged (same classifier and tolerances). No observed harm to 59 prior case fields or unchanged seed hashes. Solver normal/safe estimates are sampled tolerances, not analytically exact time of impact, an edge-normal theorem, universal backend stability, continuous moving-body/tunneling prevention, rendering, pixels or GPU evidence.

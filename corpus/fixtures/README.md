@@ -392,6 +392,17 @@ contact/fraction checks. Fractions are Godot's swept-shape estimates, not
 hand-exact collision distances. This does not establish continuous body
 movement, tunneling prevention, pixels or GPU behavior.
 
+## Grazing finite-radius sphere versus ray (round 42)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only shapecast3d_graze,shapecast3d_graze_small`
+aims from (1.25,0,4) along -6Z at a box with X half-width1. The
+same-centerline ray misses. A radius0.5 ShapeCast3D hits the box edge at
+(1,0,1) with measured oblique normal≈(0.509856,0,0.86026) and safe≈0.425781;
+a radius0.1 cast misses with safe1. Both run the identical live ray and box
+query; radius is the distinguishing input. Tolerances bound observed Godot
+solver estimates, not exact grazing time/normal theory. No continuous body
+movement, tunneling proof or rendered pixels.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
