@@ -107,7 +107,8 @@ def seed_digests() -> dict:
     # seed, so it is excluded from both the digest map and the scratch copy.
     return {str(path.relative_to(HERE)): hashlib.sha256(path.read_bytes()).hexdigest()
             for path in sorted(HERE.rglob("*"))
-            if path.is_file() and "__pycache__" not in path.parts}
+            if path.is_file() and "__pycache__" not in path.parts
+            and path.relative_to(HERE).parts[0] != "three"}
 
 
 def run_process(command, timeout_seconds):
@@ -407,7 +408,7 @@ def main():
     scratch.mkdir(parents=True)
     digests_before = seed_digests()
     for item in HERE.iterdir():
-        if item.name in ("run_battery.py", "__pycache__") or item.name.startswith("."):
+        if item.name in ("run_battery.py", "__pycache__", "three") or item.name.startswith("."):
             continue
         if item.is_dir():
             shutil.copytree(item, scratch / item.name,
