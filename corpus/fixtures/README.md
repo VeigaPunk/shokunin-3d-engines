@@ -596,6 +596,34 @@ bound stays `nulls >= 8` for host variance. This pins one build
 measured live-only — 7/10 cells re-bind, cast/btm differ on solver
 constants, and `static_nopair` inverts (above).
 
+## PhysicsServer3D backend split + write-phase delta (round 84)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only phys3d_events_phase_delta,phys3d_events_jolt_edge`
+pins two r83 corrections as first-class cells. `phase_delta` issues the
+same rigid-node teleport into the same settled `Area3D` twice — once
+from the process phase (`await process_frame` continuation) and once
+from the physics phase — and pins `body_entered` at delta=2 vs delta=1
+inside one cell (write-phase-dependent latency, r83 critic C1; the same
+deltas replicate live-only under Jolt on this build). `jolt_edge`
+re-execs the same script through `/bin/sh` under a generated
+`physics/3d/physics_engine="Jolt Physics"` project (the `threaded_edge`
+thrproj pattern; `timeout -s KILL 30`-bounded, child output
+file-redirected to `joltproj/child.log` so its diagnostics never reach
+the case stream). The child replays reduced copies of five parent cells
+and reports `CHILD_RESULT jolt_<arm>=<class>`; the parent pins the
+split: `isect`/`contact_stale` keep the DEFAULT signature,
+`cast`/`btm` keep the edge on different solver constants (safe
+0.149841/0.150024, travel -0.998535), and `static_nopair` INVERTS — the
+teleported static body fires `body_entered` at delta=1 with ov=1, so the
+movers-only re-pair rule is GodotPhysics-scoped (r83 critic C2). The arm
+gates on the `physics/3d/physics_engine` hint containing `Jolt Physics`;
+a build without Jolt reports `BLOCKED` rather than fabricating the
+split, and the child separately asserts `JoltPhysicsServer3D` is the
+live server class (a silent fallback would print
+`jolt_backend=unexpected` and fail). Any child-side `ERROR:` line is a
+defect — there is no expected-witness error class under Jolt. Bounded
+to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

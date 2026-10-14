@@ -436,6 +436,10 @@ CASES = [
      "NEGATIVE REJECTED: phys3d_events static_nopair static_tp_fired=false ticks=3 area_move_delta=1"),
     ("phys3d_events_threaded_edge", "phys3d_events.gd", ["--arm=threaded_edge"], 0,
      "PASS phys3d_events threaded_edge pp_edge0=true proc_dss_refused=true srv_ok=true child_exit=0"),
+    ("phys3d_events_phase_delta", "phys3d_events.gd", ["--arm=phase_delta"], 0,
+     "PASS phys3d_events phase_delta proc_delta=2 phys_delta=1"),
+    ("phys3d_events_jolt_edge", "phys3d_events.gd", ["--arm=jolt_edge"], 0,
+     "PASS phys3d_events jolt_edge backend=Jolt isect=same cast=constants btm=constants contact_stale=same static_nopair=inverts child_exit=0"),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored
