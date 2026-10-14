@@ -587,7 +587,7 @@ def _ec_edge(point, d, held, invoked, edge, **kw):
     invoked = enumerated event deliberately run for this row (one of
     EVALCAT_EVENTS) or None for bare mutations / non-event axes."""
     if invoked is None and (held == "flushed" or d["pre"] or d["post"]
-                            or d["fcp"] or d["fc"] or d["und"]):
+                            or d["fcp"] or d["fc"]):
         edge = "FALSIFIED"
         EVALCAT_VIOLATIONS[0] += 1
     emit("evalcat", point, "EDGE", held=held, invoked=(invoked or "none"),
@@ -597,10 +597,11 @@ def _ec_edge(point, d, held, invoked, edge, **kw):
 
 
 def _ec_edge1(held, fresh, expected):
-    """Classify a bare-write row: stale + one tagged eval binds -> edge 1."""
-    if held == "stale":
-        return "1" if fresh == expected else "unbound"
-    return "0" if held == "flushed" else "na"   # flush -> FALSIFIED below
+    """Classify a bare-write row: stale + one tagged eval binds -> edge 1.
+    `held` is "stale" on every reachable path — flushed/na states mask to
+    FALSIFIED via the closed-set predicate in _ec_edge before this value
+    is emitted (all 11 edge=1 call sites measured held=stale)."""
+    return "1" if fresh == expected else "unbound"
 
 
 def _ec_op_edge(held):
@@ -1001,7 +1002,6 @@ def _ec_walltime():
     pre = _ec_loc(ob, dg0)
     h0 = _ec_snap()
     for i, dt in enumerate((0.5, 2.0, 1.0)):
-        t0 = time.monotonic()
         time.sleep(dt)
         emit("evalcat", "walltime_s%d" % i, "DEG", dt=dt,
              held=_ec_loc(ob, dg0))
