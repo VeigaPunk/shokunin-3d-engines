@@ -466,7 +466,7 @@ MUTATION = {
 }
 
 LEAKED_OBJECTDB = re.compile(
-    r"^WARNING: [1-9][0-9]* ObjectDB instances were leaked at exit"
+    r"^WARNING: [1-9][0-9]* ObjectDB instances? (?:were|was) leaked at exit"
     r"(?: \(run with `--verbose` for details\)\.)?$")
 
 

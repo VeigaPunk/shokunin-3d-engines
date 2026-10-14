@@ -962,14 +962,13 @@ func _child_threaded() -> void:
 
 
 # --- r85: the generated-project child bodies share one sweep ---------------
-# jolt_edge (r84), jolt_threaded and dummy_refused (r85) differ only in the
-# engine key written into the generated child project, the threading flag
-# and the CHILD_RESULT key prefix; the sweep itself is literally the same
-# code (`_child_split`), so a class difference between the three receipts
-# can never be a difference in the sweep code — the r84 simplifier's
-# deferred V2 fold, now justified by the third and fourth child-spawn
-# sites. Each reduced arm replays its parent cell's geometry, prints the
-# raw fields as CHILD_NOTE (child.log evidence), then one
+# jolt_edge (r84), jolt_threaded and dummy_refused (r85) share `_child_split`:
+# a class difference between the three receipts can never be a difference in
+# the sweep code (the bodies differ only in engine key, threading flag,
+# prefix, plus jolt_threaded's pre-sweep witness loop + allow_inaccessible —
+# the r84 simplifier's deferred V2 fold, landed). Each reduced arm replays
+# its parent cell's geometry, prints the raw fields as CHILD_NOTE
+# (child.log evidence), then one
 # `CHILD_RESULT <prefix>_<arm>=<class>` where class is
 # same-signature (raw tuple equals the DEFAULT signature) |
 # differs-constants (the edge/structure holds; settled constants match the
@@ -995,7 +994,7 @@ func _child_jolt_threaded() -> void:
 	# Threading witness, measured before the sweep: an explicit
 	# process-context space_get_direct_state from an idle-frame continuation
 	# is refused under run_on_separate_thread=true and granted without it
-	# (r85 author probe: 12/12 null on Jolt+threaded, 0/12 on DEFAULT). The
+	# (r85 author probe: 11/12 null on Jolt+threaded, 0/12 on DEFAULT). The
 	# >=8-of-12 tolerance mirrors the landed threaded_edge arm's
 	# proc_dss_refused witness. The refusal ERRORs are this arm's expected
 	# witness class, so the parent spawns it with allow_inaccessible=true.
@@ -1029,7 +1028,7 @@ func _child_split(prefix: String) -> void:
 	if dss == null:
 		# r85: the deferred _run() fetch is refused under threading more
 		# often than the r85 scout's size ladder predicted (measured: the
-		# jolt_threaded child was refused at this fixture size, 12/12
+		# jolt_threaded child was refused at this fixture size, 10/10
 		# refusals in the author probe). Retry on a bounded physics-frame
 		# budget — the position the engine grants under
 		# run_on_separate_thread — instead of inheriting a startup race.
