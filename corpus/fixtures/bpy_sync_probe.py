@@ -1000,7 +1000,7 @@ def _ec_walltime():
         t0 = time.monotonic()
         time.sleep(dt)
         emit("evalcat", "walltime_s%d" % i, "DEG", dt=dt,
-             held=_ec_loc(ob, dg0), slept="%.2f" % (time.monotonic() - t0))
+             held=_ec_loc(ob, dg0))
     _ = C.scene.frame_current
     _ = bpy.context.view_layer
     post = _ec_loc(ob, dg0)
