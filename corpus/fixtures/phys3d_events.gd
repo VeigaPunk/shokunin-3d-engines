@@ -18,12 +18,15 @@
 #                fires at the next physics tick (delta=1)
 #   sync_cb      body_set_state_sync_callback fires once per tick while the
 #                body is active; never fires on a static body
-#   srv_area_cb  server-level area_set_monitor_callback: enter/exit each land
-#                one tick after their triggering write
+#   srv_area_cb  server-level area_set_monitor_callback: enter/exit land at
+#                the next physics tick — delta=1 from a physics-phase write,
+#                delta=2 from a process-phase write (write-phase-dependent,
+#                critic C1; this fixture writes from the physics phase)
 #   static_nopair NEGATIVE: a teleported STATIC body never re-pairs with a
 #                settled Area3D (no signal, overlaps=0) — the pair only forms
-#                when the AREA itself moves (proves the event tier re-pairs
-#                movers, not the whole space)
+#                when the AREA itself moves. GodotPhysics3D ONLY: under Jolt
+#                the same cell fires (ov=1 sig=1, 3/3 — critic C2), so the
+#                only-movers rule is backend-scoped, not universal
 #   threaded_edge parent arm: spawns a second godot with
 #                physics/3d/run_on_separate_thread=true and checks the
 #                conversion — inside _physics_process the write->query edge is
@@ -143,7 +146,6 @@ class PPQueries extends Node:
 	var probe: RID
 	var wspace: RID
 	var dss: PhysicsDirectSpaceState3D  # null forces the in-callback fetch path
-	var tries := 0
 	var printed := false
 	var ray_hit := true
 	var isect_n := -1
@@ -159,7 +161,6 @@ class PPQueries extends Node:
 	func _physics_process(_delta: float) -> void:
 		if printed:
 			return
-		tries += 1
 		var d := dss
 		if d == null:
 			d = PhysicsServer3D.space_get_direct_state(wspace)
@@ -204,6 +205,10 @@ func _run() -> void:
 	var arm := _argval("--arm=", "isect")
 	wspace = root.get_world_3d().space
 	dss = root.get_world_3d().direct_space_state
+	# a null process-context fetch must fail named — a silent null would
+	# hang the query arms to the harness timeout instead (reviewer F3)
+	if dss == null:
+		return _fail("dss null at process-context fetch")
 
 	match arm:
 		"isect":
@@ -478,6 +483,10 @@ func _run() -> void:
 			area.position = WALL_FAR
 			await _frames(1)
 			area.position = Vector3.ZERO
+			# Clear the tp-phase entries — without this the control's
+			# mv_delta reads a stale first entry and prints a nonsense
+			# negative delta on the failing path (critic C2).
+			sig_log.clear()
 			var f_mv := Engine.get_physics_frames()
 			await _frames(2)
 			var mv_fired := sig_log.size() > 0
@@ -511,11 +520,13 @@ func _run() -> void:
 			f.close()
 			var selfpath := ProjectSettings.globalize_path("res://phys3d_events.gd")
 			var logpath := thrdir.path_join("child.log")
-			var cmd := ("\"%s\" --headless --path \"%s\" --script \"%s\""
+			# `timeout -s KILL` bounds the child: without it a hung child
+			# survives the battery's kill of the direct /bin/sh parent and
+			# is orphaned (reviewer F2). 30 s covers the ~2 s healthy run.
+			var cmd := ("timeout -s KILL 30 \"%s\" --headless --path \"%s\" --script \"%s\""
 					+ " -- --child > \"%s\" 2>&1") % [
 					OS.get_executable_path(), thrdir, selfpath, logpath]
-			var sh_out := []
-			var code := OS.execute("/bin/sh", ["-c", cmd], sh_out, false)
+			var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
 			var verdict := ""
 			var script_err := false
 			var lf := FileAccess.open(logpath, FileAccess.READ)
@@ -525,6 +536,11 @@ func _run() -> void:
 					if line.begins_with("CHILD_RESULT "):
 						verdict = line
 					elif "SCRIPT ERROR" in line or "Parse Error" in line:
+						script_err = true
+					elif (line.begins_with("ERROR:")
+							and "Space state is inaccessible" not in line):
+						# the refusal-class ERRORs are the expected witness;
+						# any other engine ERROR is a defect (reviewer F4)
 						script_err = true
 				lf.close()
 			else:
@@ -537,8 +553,7 @@ func _run() -> void:
 			_exit_ok("PASS phys3d_events threaded_edge pp_edge0=true proc_dss_refused=true srv_ok=true child_exit=0")
 
 		_:
-			_fail("unknown arm " + arm)
-			return
+			return _fail("unknown arm " + arm)
 
 
 # --child mode body: runs entirely inside the threaded project. Pins are
@@ -546,8 +561,7 @@ func _run() -> void:
 func _child_threaded() -> void:
 	wspace = root.get_world_3d().space
 	# (b) pre-physics process-context dss fetch: refused under threading.
-	var early: PhysicsDirectSpaceState3D = PhysicsServer3D.space_get_direct_state(wspace)
-	var early_null := early == null
+	var early_null := PhysicsServer3D.space_get_direct_state(wspace) == null
 
 	var wall := _mk_body(Vector3(0, 0, -3))
 	var probe := _mk_body(Vector3.ZERO, PhysicsServer3D.BODY_MODE_KINEMATIC)

@@ -564,27 +564,37 @@ pixels or GPU culling.
 measures the split inside PhysicsServer3D between query APIs and generated
 events on GodotPhysics3D (`physics_engine=DEFAULT`, 60 tps). Query calls —
 `intersect_shape`, `cast_motion`, `body_test_motion`, `intersect_ray` — answer
-in the same turn as a `body_set_state` write, in both directions, from process
-context and inside `_physics_process` (edge 0, extending the r74–r82
-frontier's `{*:0}` result beyond `intersect_ray`). Generated events bind at
-the physics tick: `get_contact_count` stays stale one full turn in both
-directions (0 while `intersect_shape` already reports overlap; still 4 one
-turn after teleporting away), `Area3D.body_entered`/`body_exited` and the
-server-level `area_set_monitor_callback` each land exactly one tick after
-their triggering write, and `body_set_state_sync_callback` fires once per
-tick while the body is active (never on a static body). The `static_nopair`
-negative proves the generated-event tier only re-pairs movers: a teleported
-STATIC body never produces an area pair, while moving the area itself fires
-enter at the next tick. `threaded_edge` re-execs the same script through
-`/bin/sh` under a generated `physics/3d/run_on_separate_thread=true` project
-(the child's diagnostics are file-redirected, never reaching the case
-stream): inside `_physics_process` the write→query edge is still 0, while
-process-context `space_get_direct_state` is refused (the "Space state is
-inaccessible" error) — server calls `body_get_state`/`body_test_motion` keep
-answering mid-frame. This pins one build (4.7.2.stable.arch_linux.ed1daf0bf)
-and one backend pair; Jolt was measured live-only (same lattice, different
-solver constants), and process-context refusal under threading is a
-majority-not-total property (pinned as a ≥8/12 threshold, not an absolute).
+in the same turn as a `body_set_state` write (edge 0, extending the r74–r82
+frontier's `{*:0}` result beyond `intersect_ray`); the both-directions
+measurement is earned for `intersect_shape` (process context and inside
+`_physics_process`); `cast`/`body_test_motion` are measured from process
+context. Generated events bind at the physics tick: `get_contact_count`
+stays stale one full turn in both directions (0 while `intersect_shape`
+already reports overlap; still 4 one turn after teleporting away),
+`Area3D.body_entered`/`body_exited` and the server-level
+`area_set_monitor_callback` land at the NEXT physics tick — one frame
+after a physics-phase write, two after a process-phase write (write-phase
+dependent, r83 critic C1; this fixture's writes are physics-phase) — and
+`body_set_state_sync_callback` fires once per tick while the body is
+active (never on a static body). The `static_nopair` negative pins a
+backend-scoped rule: on GodotPhysics3D a teleported STATIC body never
+produces an area pair, while moving the area itself fires enter at the
+next tick; under Jolt the same cell fires (ov=1 sig=1, 3/3 — r83 critic
+C2) so "the event tier only re-pairs movers" is GodotPhysics-scoped, not
+universal. `threaded_edge` re-execs the same script through `/bin/sh`
+under a generated `physics/3d/run_on_separate_thread=true` project (the
+child's diagnostics are file-redirected, never reaching the case stream;
+the spawn is `timeout -s KILL 30`-bounded so a hung child cannot orphan —
+r83 reviewer F2): inside `_physics_process` the write→query edge is still
+0, while process-context `space_get_direct_state` is refused (the "Space
+state is inaccessible" error) — server calls `body_get_state`/
+`body_test_motion` keep answering mid-frame. That refusal is a
+deterministic context gate on this build: the one granted sample is
+always the in-physics one (12/12 — r83 critic correction), and the pinned
+bound stays `nulls >= 8` for host variance. This pins one build
+(4.7.2.stable.arch_linux.ed1daf0bf) and one backend pair; Jolt was
+measured live-only — 7/10 cells re-bind, cast/btm differ on solver
+constants, and `static_nopair` inverts (above).
 
 ## Determinism rules for new cases
 
