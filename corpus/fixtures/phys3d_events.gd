@@ -49,6 +49,26 @@
 #                (tp fires ov=1 sig=1 delta=1 under Jolt — critic C2).
 #                Gated on the physics_engine hint containing "Jolt
 #                Physics"; absent -> honest BLOCKED row, no fabrication
+#   jolt_threaded cross-product arm (round 85): generated child carrying
+#                BOTH physics_engine="Jolt Physics" AND
+#                3d/run_on_separate_thread=true — pins whether the
+#                backend split holds identically under the threaded
+#                stepper. A threading witness (proc-context
+#                space_get_direct_state refusals) is pinned in the map so
+#                a silently-nonthreaded child fails loudly
+#   dummy_refused negative-control arm (round 85): generated child under
+#                physics_engine="Dummy" runs the SAME reduced sweep —
+#                every arm must classify 'unexpected' (zero/silent reads
+#                never earn a known-class label), proving the split is
+#                backend-real, not a map coincidence
+#   srv_phase_delta server-write phase delta (round 85 stretch):
+#                PhysicsServer3D.body_set_state writes vs the
+#                node-position writes of phase_delta — same event-tier
+#                boundaries (proc-phase -> delta=2, physics-phase ->
+#                delta=1): the write PATH is not a tier, the write PHASE
+#                is. A raw server RID carries no instance id, so the
+#                monitor is the server-level area_set_monitor_callback
+#                (a node Area3D's body_entered cannot resolve it)
 #
 # Reproduce one arm:
 #   godot --headless --path <scratch> --script res://phys3d_events.gd -- --arm=isect
@@ -154,6 +174,74 @@ func _exit_ok(marker: String) -> void:
 	quit(0)
 
 
+# r85: the jolt_threaded and dummy_refused arms are the third and fourth
+# child-spawn sites, so the r84 simplifier's deferred V2 fold lands —
+# _spawn_child single-sources the project generation, the
+# `timeout -s KILL 30` /bin/sh spawn, the stale-log unlink, and the
+# CHILD_RESULT/error scan. `allow_inaccessible` admits the refusal-class
+# "Space state is inaccessible" ERROR lines a threaded child emits on
+# its proc-context dss witness; every other ERROR: is a defect, as is
+# any SCRIPT ERROR/Parse Error or ObjectDB-leak WARNING (r84 reviewer
+# F1). Returns {code, verdicts, last, serr} on spawn, or {err} where the
+# caller fails with `err` verbatim (identical fail text to the unfolded
+# arms — their receipts stay byte-identical).
+func _spawn_child(dirname: String, project_body: String, arm: String,
+		allow_inaccessible: bool) -> Dictionary:
+	var dir := ProjectSettings.globalize_path("res://" + dirname)
+	var mk := DirAccess.make_dir_recursive_absolute(dir)
+	if mk != OK:
+		return {"err": "%s cannot make %s err=%d" % [arm, dirname, mk]}
+	var pf := FileAccess.open(dir.path_join("project.godot"), FileAccess.WRITE)
+	if pf == null:
+		return {"err": "%s cannot write child project" % arm}
+	pf.store_string(project_body)
+	pf.close()
+	var selfpath := ProjectSettings.globalize_path("res://phys3d_events.gd")
+	var logpath := dir.path_join("child.log")
+	# `timeout -s KILL` bounds the child: without it a hung child
+	# survives the battery's kill of the direct /bin/sh parent and is
+	# orphaned (r83 reviewer F2). 30 s covers the ~2 s healthy run.
+	var cmd := ("timeout -s KILL 30 \"%s\" --headless --path \"%s\""
+			+ " --script \"%s\" -- --child --arm=%s"
+			+ " > \"%s\" 2>&1") % [
+			OS.get_executable_path(), dir, selfpath, arm, logpath]
+	# r84 critic: child.log is a never-unlinked single slot -- a stale
+	# log from a prior run would forge a verdict map, so remove it
+	# before spawn (missing-after-spawn stays a named failure).
+	DirAccess.remove_absolute(logpath)
+	var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
+	var res := {"code": code, "verdicts": {}, "last": "", "serr": false}
+	var lf := FileAccess.open(logpath, FileAccess.READ)
+	if lf == null:
+		return {"err": "%s child log missing" % arm}
+	while not lf.eof_reached():
+		var line := lf.get_line()
+		if line.begins_with("CHILD_RESULT "):
+			res["last"] = line
+			var kv := line.substr(13).split("=", true, 1)
+			if kv.size() == 2:
+				res["verdicts"][kv[0]] = kv[1]
+		elif "SCRIPT ERROR" in line or "Parse Error" in line:
+			res["serr"] = true
+		elif ("ObjectDB" in line and "leaked" in line):
+			res["serr"] = true
+		elif line.begins_with("ERROR:") and (
+				not allow_inaccessible
+				or "Space state is inaccessible" not in line):
+			res["serr"] = true
+	lf.close()
+	return res
+
+
+# The physics_engine hint gates child arms that need a named backend:
+# absent -> honest BLOCKED row, never a fabricated split.
+func _engine_hint_has(engine: String) -> bool:
+	for prop in ProjectSettings.get_property_list():
+		if prop.name == "physics/3d/physics_engine":
+			return engine in prop.hint_string
+	return false
+
+
 # Write + same-tick query inside _physics_process (callsite-tier cell).
 # Stores measured outcomes; never prints (the parent asserts the fields so
 # the marker is earned, not claimed).
@@ -213,9 +301,12 @@ class PPQueries extends Node:
 
 func _run() -> void:
 	# child modes: this same script is re-exec'd by the threaded_edge
-	# parent under a generated run_on_separate_thread=true project, and by
+	# parent under a generated run_on_separate_thread=true project, by
 	# the jolt_edge parent under a generated physics_engine="Jolt
-	# Physics" project (the --arm selects which child body runs).
+	# Physics" project, by the jolt_threaded parent under a generated
+	# project carrying BOTH, and by the dummy_refused parent under a
+	# generated physics_engine="Dummy" project (the --arm selects which
+	# child body runs).
 	if "--child" in OS.get_cmdline_user_args():
 		# r84 critic: the child dispatch must be total -- a bare or
 		# unknown --arm used to run the threaded body silently. The
@@ -223,6 +314,10 @@ func _run() -> void:
 		match _argval("--arm=", ""):
 			"jolt_edge":
 				await _child_jolt()
+			"jolt_threaded":
+				await _child_jolt_threaded()
+			"dummy_refused":
+				await _child_dummy()
 			"threaded_edge":
 				await _child_threaded()
 			var bad:
@@ -531,62 +626,25 @@ func _run() -> void:
 
 		"threaded_edge":
 			# conversion cell: same queries under run_on_separate_thread=true.
-			# The parent writes a threaded project under res://thrproj and
-			# re-execs this script with --child through /bin/sh so the child's
+			# _spawn_child (r85 V2 fold) writes res://thrproj and re-execs
+			# this script with --child through /bin/sh so the child's
 			# stdout+stderr land in a log file (OS.execute's output array only
 			# captured the startup banner on this build — measured hazard);
 			# the child's ERROR diagnostics can then never reach the case
-			# stream, and the log doubles as evidence.
-			var thrdir := ProjectSettings.globalize_path("res://thrproj")
-			var mk := DirAccess.make_dir_recursive_absolute(thrdir)
-			if mk != OK:
-				return _fail("threaded_edge cannot make thrproj err=%d" % mk)
-			var f := FileAccess.open(thrdir.path_join("project.godot"), FileAccess.WRITE)
-			if f == null:
-				return _fail("threaded_edge cannot write child project")
-			f.store_string("[application]\n\nconfig/name=\"ThrChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/run_on_separate_thread=true\n")
-			f.close()
-			var selfpath := ProjectSettings.globalize_path("res://phys3d_events.gd")
-			var logpath := thrdir.path_join("child.log")
-			# `timeout -s KILL` bounds the child: without it a hung child
-			# survives the battery's kill of the direct /bin/sh parent and
-			# is orphaned (reviewer F2). 30 s covers the ~2 s healthy run.
-			var cmd := ("timeout -s KILL 30 \"%s\" --headless --path \"%s\" --script \"%s\""
-					+ " -- --child --arm=threaded_edge > \"%s\" 2>&1") % [
-					OS.get_executable_path(), thrdir, selfpath, logpath]
-			# r84 critic: child.log is a never-unlinked single slot -- a
-			# stale log from a prior run would forge a verdict map, so
-			# remove it before spawn (missing-after-spawn stays _fail).
-			DirAccess.remove_absolute(logpath)
-			var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
-			var verdict := ""
-			var script_err := false
-			var lf := FileAccess.open(logpath, FileAccess.READ)
-			if lf != null:
-				while not lf.eof_reached():
-					var line := lf.get_line()
-					if line.begins_with("CHILD_RESULT "):
-						verdict = line
-					elif "SCRIPT ERROR" in line or "Parse Error" in line:
-						script_err = true
-					elif ("ObjectDB" in line and "leaked" in line):
-						# ObjectDB-only leaks print as WARNING, not ERROR
-						# (r84 reviewer F1): mirror the battery classifier's
-						# LEAKED_OBJECTDB arm into the parent scan.
-						script_err = true
-					elif (line.begins_with("ERROR:")
-							and "Space state is inaccessible" not in line):
-						# the refusal-class ERRORs are the expected witness;
-						# any other engine ERROR is a defect (reviewer F4)
-						script_err = true
-				lf.close()
-			else:
-				return _fail("threaded_edge child log missing")
+			# stream, and the log doubles as evidence. The refusal-class
+			# "Space state is inaccessible" ERRORs are the expected witness
+			# (allow_inaccessible); any other engine ERROR is a defect
+			# (reviewer F4).
+			var spawned := _spawn_child("thrproj",
+					"[application]\n\nconfig/name=\"ThrChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/run_on_separate_thread=true\n",
+					"threaded_edge", true)
+			if spawned.has("err"):
+				return _fail(spawned["err"])
 			var expect := ("CHILD_RESULT pp_edge0=true "
 					+ "proc_dss_refused=true srv_ok=true")
-			if code != 0 or script_err or verdict != expect:
+			if spawned["code"] != 0 or spawned["serr"] or spawned["last"] != expect:
 				return _fail("threaded_edge child mismatch exit=%d serr=%s verdict='%s'"
-						% [code, str(script_err), verdict])
+						% [spawned["code"], str(spawned["serr"]), spawned["last"]])
 			_exit_ok("PASS phys3d_events threaded_edge pp_edge0=true proc_dss_refused=true srv_ok=true child_exit=0")
 
 		"phase_delta":
@@ -667,67 +725,26 @@ func _run() -> void:
 		"jolt_edge":
 			# backend-split cell: re-exec this script under a generated
 			# physics/3d/physics_engine="Jolt Physics" project (the
-			# threaded_edge thrproj pattern -> joltproj) and pin the
-			# per-arm split {same-signature | differs-constants |
-			# inverts}. static_nopair is the known inverter (r83 critic
-			# C2: under Jolt the teleported static body pairs and fires).
-			# Gate first: if this build's engine hint lacks "Jolt
-			# Physics" the row reports BLOCKED, never a fabricated split.
-			var jolt_avail := false
-			for prop in ProjectSettings.get_property_list():
-				if prop.name == "physics/3d/physics_engine":
-					jolt_avail = "Jolt Physics" in prop.hint_string
-			if not jolt_avail:
+			# threaded_edge thrproj pattern -> joltproj, now through
+			# _spawn_child) and pin the per-arm split {same-signature |
+			# differs-constants | inverts}. static_nopair is the known
+			# inverter (r83 critic C2: under Jolt the teleported static
+			# body pairs and fires). Gate first: if this build's engine
+			# hint lacks "Jolt Physics" the row reports BLOCKED, never a
+			# fabricated split.
+			if not _engine_hint_has("Jolt Physics"):
 				_cleanup_nodes()
 				_cleanup_rids()
 				print("BLOCKED phys3d_events jolt_edge jolt_absent=true")
 				quit(1)
 				return
-			var joltdir := ProjectSettings.globalize_path("res://joltproj")
-			var mk := DirAccess.make_dir_recursive_absolute(joltdir)
-			if mk != OK:
-				return _fail("jolt_edge cannot make joltproj err=%d" % mk)
-			var jf := FileAccess.open(joltdir.path_join("project.godot"),
-					FileAccess.WRITE)
-			if jf == null:
-				return _fail("jolt_edge cannot write child project")
-			jf.store_string("[application]\n\nconfig/name=\"JoltChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Jolt Physics\"\n")
-			jf.close()
-			var selfpath := ProjectSettings.globalize_path("res://phys3d_events.gd")
-			var logpath := joltdir.path_join("child.log")
-			# `timeout -s KILL` bounds the child exactly like
-			# threaded_edge (r83 reviewer F2); stdout+stderr are
-			# file-redirected so child diagnostics never reach the case
-			# stream (the OS.execute output-array hazard, r83 author).
-			var cmd := ("timeout -s KILL 30 \"%s\" --headless --path \"%s\""
-					+ " --script \"%s\" -- --child --arm=jolt_edge"
-					+ " > \"%s\" 2>&1") % [
-					OS.get_executable_path(), joltdir, selfpath, logpath]
-			DirAccess.remove_absolute(logpath)  # stale-slot guard (r84 critic)
-			var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
-			var verdicts := {}
-			var script_err := false
-			var lf := FileAccess.open(logpath, FileAccess.READ)
-			if lf != null:
-				while not lf.eof_reached():
-					var line := lf.get_line()
-					if line.begins_with("CHILD_RESULT "):
-						var kv := line.substr(13).split("=", true, 1)
-						if kv.size() == 2:
-							verdicts[kv[0]] = kv[1]
-					elif "SCRIPT ERROR" in line or "Parse Error" in line:
-						script_err = true
-					elif ("ObjectDB" in line and "leaked" in line):
-						# WARNING-class ObjectDB leak (r84 reviewer F1) --
-						# not an ERROR line, mirrors LEAKED_OBJECTDB
-						script_err = true
-					elif line.begins_with("ERROR:"):
-						# no expected-witness class under Jolt: any
-						# engine ERROR is a defect (r83 reviewer F4)
-						script_err = true
-				lf.close()
-			else:
-				return _fail("jolt_edge child log missing")
+			var spawned := _spawn_child("joltproj",
+					"[application]\n\nconfig/name=\"JoltChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Jolt Physics\"\n",
+					"jolt_edge", false)
+			if spawned.has("err"):
+				return _fail(spawned["err"])
+			# no expected-witness error class under Jolt: any engine
+			# ERROR: is a defect (r83 reviewer F4) — allow_inaccessible=0.
 			var expect := {
 				"jolt_backend": "Jolt Physics",
 				"jolt_dss_class": "JoltPhysicsDirectSpaceState3D",
@@ -737,10 +754,153 @@ func _run() -> void:
 				"jolt_contact_stale": "same-signature",
 				"jolt_static_nopair": "inverts",
 			}
-			if code != 0 or script_err or verdicts != expect:
+			if spawned["code"] != 0 or spawned["serr"] \
+					or spawned["verdicts"] != expect:
 				return _fail("jolt_edge child mismatch exit=%d serr=%s verdicts=%s"
-						% [code, str(script_err), str(verdicts)])
+						% [spawned["code"], str(spawned["serr"]),
+						str(spawned["verdicts"])])
 			_exit_ok("PASS phys3d_events jolt_edge backend=Jolt isect=same cast=constants btm=constants contact_stale=same static_nopair=inverts child_exit=0")
+
+		"jolt_threaded":
+			# cross-product cell (r85): generated child carrying BOTH
+			# physics_engine="Jolt Physics" AND
+			# 3d/run_on_separate_thread=true. Pins whether the backend
+			# split {same-signature | differs-constants | inverts} holds
+			# identically under the threaded stepper. The map additionally
+			# pins jt_threaded=true — the child's process-context
+			# space_get_direct_state refusals — so a project whose
+			# threading flag was silently ignored fails loudly (those
+			# refusal ERRORs are the expected witness class here).
+			if not _engine_hint_has("Jolt Physics"):
+				_cleanup_nodes()
+				_cleanup_rids()
+				print("BLOCKED phys3d_events jolt_threaded jolt_absent=true")
+				quit(1)
+				return
+			var spawned := _spawn_child("joltthrproj",
+					"[application]\n\nconfig/name=\"JoltThrChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Jolt Physics\"\n3d/run_on_separate_thread=true\n",
+					"jolt_threaded", true)
+			if spawned.has("err"):
+				return _fail(spawned["err"])
+			var expect_jt := {
+				"jt_backend": "Jolt Physics",
+				"jt_threaded": "true",
+				"jt_dss_class": "JoltPhysicsDirectSpaceState3D",
+				"jt_isect": "same-signature",
+				"jt_cast": "differs-constants",
+				"jt_btm": "differs-constants",
+				"jt_contact_stale": "same-signature",
+				"jt_static_nopair": "inverts",
+			}
+			if spawned["code"] != 0 or spawned["serr"] \
+					or spawned["verdicts"] != expect_jt:
+				return _fail("jolt_threaded child mismatch exit=%d serr=%s verdicts=%s"
+						% [spawned["code"], str(spawned["serr"]),
+						str(spawned["verdicts"])])
+			_exit_ok("PASS phys3d_events jolt_threaded backend=Jolt threaded=true isect=same cast=constants btm=constants contact_stale=same static_nopair=inverts child_exit=0")
+
+		"dummy_refused":
+			# negative control (r85): the SAME reduced sweep under
+			# physics_engine="Dummy". Dummy answers every query with
+			# zero/silent reads, so every arm must classify 'unexpected'
+			# — never a known-class label. This cell proves the
+			# {same|differs|inverts} split is backend-real: the verdict
+			# map changes with the backend, not with the sweep code.
+			if not _engine_hint_has("Dummy"):
+				_cleanup_nodes()
+				_cleanup_rids()
+				print("BLOCKED phys3d_events dummy_refused dummy_absent=true")
+				quit(1)
+				return
+			var spawned := _spawn_child("dummyproj",
+					"[application]\n\nconfig/name=\"DummyChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n",
+					"dummy_refused", false)
+			if spawned.has("err"):
+				return _fail(spawned["err"])
+			var expect_dm := {
+				"dummy_backend": "Dummy",
+				"dummy_dss_class": "PhysicsDirectSpaceState3DDummy",
+				"dummy_isect": "unexpected",
+				"dummy_cast": "unexpected",
+				"dummy_btm": "unexpected",
+				"dummy_contact_stale": "unexpected",
+				"dummy_static_nopair": "unexpected",
+			}
+			if spawned["code"] != 0 or spawned["serr"] \
+					or spawned["verdicts"] != expect_dm:
+				return _fail("dummy_refused child mismatch exit=%d serr=%s verdicts=%s"
+						% [spawned["code"], str(spawned["serr"]),
+						str(spawned["verdicts"])])
+			_exit_ok("PASS phys3d_events dummy_refused backend=Dummy isect=unexpected cast=unexpected btm=unexpected contact_stale=unexpected static_nopair=unexpected child_exit=0")
+
+		"srv_phase_delta":
+			# server-write phase delta (r85 stretch): a
+			# PhysicsServer3D-level body_set_state write vs the
+			# node-position writes of phase_delta — the event tier lands
+			# at the SAME boundaries (proc -> delta=2, physics -> delta=1):
+			# the write PATH is not a tier, the write PHASE is. The
+			# monitor must be the server-level area_set_monitor_callback:
+			# a raw server RID carries no instance id, so a node Area3D's
+			# body_entered / get_overlapping_bodies can never resolve it
+			# (measured r85: node monitor stays silent under a
+			# server-write pair).
+			var srv_log := []
+			var sashape := PhysicsServer3D.box_shape_create()
+			PhysicsServer3D.shape_set_data(sashape, Vector3(2.0, 2.0, 2.0))
+			var sarea := PhysicsServer3D.area_create()
+			PhysicsServer3D.area_add_shape(sarea, sashape)
+			PhysicsServer3D.area_set_collision_layer(sarea, 1)
+			PhysicsServer3D.area_set_collision_mask(sarea, 1)
+			PhysicsServer3D.area_set_space(sarea, wspace)
+			PhysicsServer3D.area_set_transform(sarea,
+					Transform3D(Basis(), Vector3.ZERO))
+			owned.append_array([sarea, sashape])
+			PhysicsServer3D.area_set_monitor_callback(sarea,
+					func(status, _rid, _iid, _shape, _self_shape):
+					srv_log.append("%d@%d" % [status, Engine.get_physics_frames()]))
+			var srig := _mk_body(WALL_FAR, PhysicsServer3D.BODY_MODE_RIGID)
+			PhysicsServer3D.body_set_param(srig,
+					PhysicsServer3D.BODY_PARAM_GRAVITY_SCALE, 0.0)
+			await _frames(SETTLE)
+			# (a) process-phase server write -> enter lands TWO ticks
+			# later (the phase_delta boundary, via the server path).
+			await process_frame
+			var f0 := Engine.get_physics_frames()
+			PhysicsServer3D.body_set_state(srig,
+					PhysicsServer3D.BODY_STATE_TRANSFORM,
+					Transform3D(Basis(), Vector3.ZERO))
+			var s_w0 := srv_log.size()
+			await _frames(1)
+			var s_n1 := srv_log.size()
+			await _frames(1)
+			var s_n2 := srv_log.size()
+			if s_w0 != 0 or s_n1 != 0 or s_n2 != 1 \
+					or srv_log != ["0@%d" % (f0 + 2)]:
+				return _fail("srv_phase_delta proc drift w0=%d n1=%d n2=%d log=%s"
+						% [s_w0, s_n1, s_n2, str(srv_log)])
+			# (b) dissolve (exit at +1 from this in-phase write), clear,
+			# then the physics-phase contrast: enter at +1.
+			PhysicsServer3D.body_set_state(srig,
+					PhysicsServer3D.BODY_STATE_TRANSFORM,
+					Transform3D(Basis(), WALL_FAR))
+			var fexit := Engine.get_physics_frames()
+			await _frames(1)
+			var exit_ok := srv_log.size() == 2 \
+					and srv_log.has("1@%d" % (fexit + 1))
+			await _frames(5)
+			srv_log.clear()
+			var f1 := Engine.get_physics_frames()
+			PhysicsServer3D.body_set_state(srig,
+					PhysicsServer3D.BODY_STATE_TRANSFORM,
+					Transform3D(Basis(), Vector3.ZERO))
+			var s_p0 := srv_log.size()
+			await _frames(1)
+			var s_p1 := srv_log.size()
+			if not exit_ok or s_p0 != 0 or s_p1 != 1 \
+					or srv_log != ["0@%d" % (f1 + 1)]:
+				return _fail("srv_phase_delta phys drift exit=%s p0=%d p1=%d log=%s"
+						% [str(exit_ok), s_p0, s_p1, str(srv_log)])
+			_exit_ok("PASS phys3d_events srv_phase_delta srv_proc_delta=2 srv_phys_delta=1")
 
 		_:
 			return _fail("unknown arm " + arm)
@@ -801,31 +961,98 @@ func _child_threaded() -> void:
 	quit(0)
 
 
-# --child --arm=jolt_edge body: runs entirely inside the generated Jolt
-# project. Each reduced arm replays its parent cell's geometry, prints
-# the raw fields as CHILD_NOTE (child.log evidence), then one
-# `CHILD_RESULT jolt_<arm>=<class>` where class is
+# --- r85: the generated-project child bodies share one sweep ---------------
+# jolt_edge (r84), jolt_threaded and dummy_refused (r85) differ only in the
+# engine key written into the generated child project, the threading flag
+# and the CHILD_RESULT key prefix; the sweep itself is literally the same
+# code (`_child_split`), so a class difference between the three receipts
+# can never be a difference in the sweep code — the r84 simplifier's
+# deferred V2 fold, now justified by the third and fourth child-spawn
+# sites. Each reduced arm replays its parent cell's geometry, prints the
+# raw fields as CHILD_NOTE (child.log evidence), then one
+# `CHILD_RESULT <prefix>_<arm>=<class>` where class is
 # same-signature (raw tuple equals the DEFAULT signature) |
-# differs-constants (the edge/structure holds; settled constants match
-# the Jolt signature measured on this build) | inverts (the cell's
-# verdict flips — static_nopair fires under Jolt) | unexpected
-# (outside both known signatures; fails the parent's compare loudly).
+# differs-constants (the edge/structure holds; settled constants match the
+# signature measured on this build) | inverts (the cell's verdict flips —
+# static_nopair fires under Jolt) | unexpected (outside both known
+# signatures; fails the parent's compare loudly).
+
+
+# --child --arm=jolt_edge body (r84): the reduced split sweep under a
+# generated physics_engine="Jolt Physics" project.
 func _child_jolt() -> void:
+	await _child_split("jolt")
+
+
+# --child --arm=jolt_threaded body (r85 cross-product): the same sweep under
+# a generated project carrying BOTH physics_engine="Jolt Physics" AND
+# 3d/run_on_separate_thread=true. The split is expected identical to
+# jolt_edge (r85 scout §1.1 measured the child route byte-identical under
+# threading); the extra pin is the threading witness, so a child whose
+# run_on_separate_thread key was silently ignored fails loudly instead of
+# reprinting the Jolt map as if the flag had taken effect.
+func _child_jolt_threaded() -> void:
+	# Threading witness, measured before the sweep: an explicit
+	# process-context space_get_direct_state from an idle-frame continuation
+	# is refused under run_on_separate_thread=true and granted without it
+	# (r85 author probe: 12/12 null on Jolt+threaded, 0/12 on DEFAULT). The
+	# >=8-of-12 tolerance mirrors the landed threaded_edge arm's
+	# proc_dss_refused witness. The refusal ERRORs are this arm's expected
+	# witness class, so the parent spawns it with allow_inaccessible=true.
+	var nulls := 0
+	for i in range(12):
+		if PhysicsServer3D.space_get_direct_state(root.get_world_3d().space) == null:
+			nulls += 1
+		await process_frame
+	prints("CHILD_RESULT jt_threaded=%s" % str(nulls >= 8))
+	await _child_split("jt")
+
+
+# --child --arm=dummy_refused body (r85 negative control): the same sweep
+# under a generated physics_engine="Dummy" project. Dummy answers every
+# query with zero/silent reads (r85 scout §2.2), so every arm must classify
+# 'unexpected' — a known class here would mean the {same|differs|inverts}
+# split is a map coincidence, not backend truth. No proc-context fetch loop
+# on this body: the Dummy server silently hangs a threaded child (r85 scout
+# §2.3, rc 137 at the 20 s bound).
+func _child_dummy() -> void:
+	await _child_split("dummy")
+
+
+# The shared reduced sweep: runs entirely inside the generated child project,
+# prints `CHILD_RESULT <prefix>_<arm>=<class>` per arm, and terminates the
+# child (cleanup + quit(0)); a refused direct space state bails named with
+# exit 1 rather than reading every arm blind.
+func _child_split(prefix: String) -> void:
 	wspace = root.get_world_3d().space
 	dss = root.get_world_3d().direct_space_state
+	if dss == null:
+		# r85: the deferred _run() fetch is refused under threading more
+		# often than the r85 scout's size ladder predicted (measured: the
+		# jolt_threaded child was refused at this fixture size, 12/12
+		# refusals in the author probe). Retry on a bounded physics-frame
+		# budget — the position the engine grants under
+		# run_on_separate_thread — instead of inheriting a startup race.
+		for i in range(8):
+			await physics_frame
+			dss = root.get_world_3d().direct_space_state
+			if dss != null:
+				break
 	var jolt_cls := ClassDB.class_exists("JoltPhysicsServer3D")
 	var godot_cls := ClassDB.class_exists("GodotPhysicsServer3D")
 	var engine := str(ProjectSettings.get_setting("physics/3d/physics_engine"))
-	prints("CHILD_NOTE jolt_class=%s godot_class=%s engine=%s"
-			% [str(jolt_cls), str(godot_cls), engine])
+	prints("CHILD_NOTE %s_class=%s godot_class=%s engine=%s"
+			% [prefix, str(jolt_cls), str(godot_cls), engine])
 	# The child must really be running Jolt: a silent backend fallback
 	# would let GodotPhysics impersonate the split. The ClassDB pair
 	# swaps exactly one member per backend on this build (r83 gate).
-	prints("CHILD_RESULT jolt_backend=%s"
-			% ("Jolt Physics" if jolt_cls and not godot_cls else "unexpected"))
+	prints("CHILD_RESULT %s_backend=%s"
+			% [prefix, ("Dummy" if ClassDB.class_exists("PhysicsServer3DDummy")
+					else ("Jolt Physics" if jolt_cls and not godot_cls
+					else "unexpected"))])
 	if dss == null:
 		# a null handle would read every query arm as blind — bail named
-		prints("CHILD_NOTE jolt dss_null=true")
+		prints("CHILD_NOTE %s dss_null=true" % prefix)
 		_cleanup_nodes()
 		_cleanup_rids()
 		quit(1)
@@ -833,9 +1060,9 @@ func _child_jolt() -> void:
 	# r84 critic: the ClassDB pair is registry-level evidence; the live
 	# space-state object's class is the active-backend witness and is
 	# pinned in the parent's verdict map.
-	prints("CHILD_RESULT jolt_dss_class=%s" % dss.get_class())
+	prints("CHILD_RESULT %s_dss_class=%s" % [prefix, dss.get_class()])
 
-	# jolt_isect: the isect arm's wall/sphere pair, both directions.
+	# <prefix>_isect: the isect arm's wall/sphere pair, both directions.
 	var wall := _mk_body(Vector3(0, 0, -3))
 	await _frames(SETTLE)
 	var q := _sphere_params(Vector3(0, 0, -2.5))
@@ -851,8 +1078,8 @@ func _child_jolt() -> void:
 			PhysicsServer3D.BODY_STATE_TRANSFORM,
 			Transform3D(Basis(), Vector3(0, 0, -3)))
 	var back := dss.intersect_shape(q).size()
-	prints("CHILD_NOTE jolt_isect s0=%d m0=%d away=%d n1=%d back=%d"
-			% [s0, m0, away, away_n1, back])
+	prints("CHILD_NOTE %s_isect s0=%d m0=%d away=%d n1=%d back=%d"
+			% [prefix, s0, m0, away, away_n1, back])
 	var cls := "unexpected"
 	if s0 == 1 and m0 == 0 and away == 0 and away_n1 == 0 and back == 1:
 		cls = "same-signature"
@@ -861,9 +1088,9 @@ func _child_jolt() -> void:
 		# a backend that returns nothing at all (Dummy) would otherwise
 		# earn a known class from zero reads
 		cls = "differs-constants"
-	prints("CHILD_RESULT jolt_isect=%s" % cls)
+	prints("CHILD_RESULT %s_isect=%s" % [prefix, cls])
 
-	# jolt_cast: settled fractions are solver constants; the wall->far
+	# <prefix>_cast: settled fractions are solver constants; the wall->far
 	# edge to [1,1] is the lattice signature.
 	await _frames(2)  # let the wall re-settle at -3 before the sample
 	var qc := _sphere_params(Vector3.ZERO, Vector3(0, 0, -10))
@@ -877,11 +1104,11 @@ func _child_jolt() -> void:
 	if c0.size() < 2 or c1.size() < 2 or c2.size() < 2:
 		# r84 critic/reviewer F2: a backend can return a size-0 pair --
 		# indexing it aborts with a SCRIPT ERROR instead of classifying
-		prints("CHILD_NOTE jolt_cast degenerate sizes=%d,%d,%d"
-				% [c0.size(), c1.size(), c2.size()])
+		prints("CHILD_NOTE %s_cast degenerate sizes=%d,%d,%d"
+				% [prefix, c0.size(), c1.size(), c2.size()])
 	else:
-		prints("CHILD_NOTE jolt_cast safe=%.6f unsafe=%.6f w0=%.6f,%.6f n1=%.6f,%.6f"
-				% [c0[0], c0[1], c1[0], c1[1], c2[0], c2[1]])
+		prints("CHILD_NOTE %s_cast safe=%.6f unsafe=%.6f w0=%.6f,%.6f n1=%.6f,%.6f"
+				% [prefix, c0[0], c0[1], c1[0], c1[1], c2[0], c2[1]])
 		var cast_edge := absf(c1[0] - 1.0) < 0.0001 \
 				and absf(c1[1] - 1.0) < 0.0001 \
 				and absf(c2[0] - 1.0) < 0.0001 and absf(c2[1] - 1.0) < 0.0001
@@ -892,9 +1119,9 @@ func _child_jolt() -> void:
 			elif absf(c0[0] - 0.14984130859375) < 0.0001 \
 					and absf(c0[1] - 0.1500244140625) < 0.0001:
 				cls = "differs-constants"
-	prints("CHILD_RESULT jolt_cast=%s" % cls)
+	prints("CHILD_RESULT %s_cast=%s" % [prefix, cls])
 
-	# jolt_btm: kinematic probe vs the same wall (returned to -3); the
+	# <prefix>_btm: kinematic probe vs the same wall (returned to -3); the
 	# settled travel is a solver constant, the hit->miss edge the
 	# signature.
 	var probe := _mk_body(Vector3.ZERO, PhysicsServer3D.BODY_MODE_KINEMATIC)
@@ -917,8 +1144,8 @@ func _child_jolt() -> void:
 	var res2 := PhysicsTestMotionResult3D.new()
 	var r2 := PhysicsServer3D.body_test_motion(probe, params, res2)
 	var t2: float = res2.get_travel().z
-	prints("CHILD_NOTE jolt_btm r0=%s t0=%.6f r1=%s t1=%.6f r2=%s t2=%.6f"
-			% [str(r0), t0, str(r1), t1, str(r2), t2])
+	prints("CHILD_NOTE %s_btm r0=%s t0=%.6f r1=%s t1=%.6f r2=%s t2=%.6f"
+			% [prefix, str(r0), t0, str(r1), t1, str(r2), t2])
 	cls = "unexpected"
 	var btm_edge := r0 and not r1 and absf(t1 + 10.0) < 0.0001 \
 			and not r2 and absf(t2 + 10.0) < 0.0001
@@ -927,10 +1154,10 @@ func _child_jolt() -> void:
 			cls = "same-signature"
 		elif absf(t0 + 0.99853515625) < 0.0001:
 			cls = "differs-constants"
-	prints("CHILD_RESULT jolt_btm=%s" % cls)
+	prints("CHILD_RESULT %s_btm=%s" % [prefix, cls])
 	_cleanup_rids()
 
-	# jolt_contact_stale: the two-tier discriminant; the contact count is
+	# <prefix>_contact_stale: the two-tier discriminant; the contact count is
 	# a solver constant, the stale->live pattern the signature.
 	var floor_b := _mk_body(Vector3(0, -1, 0))
 	var rig := _mk_body(Vector3(0, 8, 0), PhysicsServer3D.BODY_MODE_RIGID)
@@ -953,18 +1180,18 @@ func _child_jolt() -> void:
 	var out_w0_c := _contacts(rig)
 	await _frames(1)
 	var out_n1_c := _contacts(rig)
-	prints("CHILD_NOTE jolt_contact_stale set=%d,%d in=%d,%d,%d out=%d,%d"
-			% [set_c, set_i, in_w0_c, in_w0_i, in_n1_c, out_w0_c, out_n1_c])
+	prints("CHILD_NOTE %s_contact_stale set=%d,%d in=%d,%d,%d out=%d,%d"
+			% [prefix, set_c, set_i, in_w0_c, in_w0_i, in_n1_c, out_w0_c, out_n1_c])
 	cls = "unexpected"
 	var stale_pat := set_c == 0 and set_i == 1 and in_w0_c == 0 \
 			and in_w0_i == 1 and in_n1_c > 0 and out_w0_c == in_n1_c \
 			and out_n1_c == 0
 	if stale_pat:
 		cls = "same-signature" if in_n1_c == 4 else "differs-constants"
-	prints("CHILD_RESULT jolt_contact_stale=%s" % cls)
+	prints("CHILD_RESULT %s_contact_stale=%s" % [prefix, cls])
 	_cleanup_rids()
 
-	# jolt_static_nopair: the known inverter. Under GodotPhysics the
+	# <prefix>_static_nopair: the known inverter. Under GodotPhysics the
 	# teleported STATIC body stays silent (no pair, no signal) while the
 	# area-move control fires at delta=1; under Jolt the same cell fires
 	# at delta=1 (sig/ov at n1+, measured this round). sig_log is
@@ -1018,8 +1245,8 @@ func _child_jolt() -> void:
 	var mv_delta: int = -1
 	if mv_sig > 0:
 		mv_delta = sig_log[0] - f_mv
-	prints("CHILD_NOTE jolt_static_nopair tp=%d,%d,%d,%d,%d,%d,%d,%d delta=%d mv=%d,%d,%d"
-			% [tp[0], tp[1], tp[2], tp[3], tp[4], tp[5], tp[6], tp[7],
+	prints("CHILD_NOTE %s_static_nopair tp=%d,%d,%d,%d,%d,%d,%d,%d delta=%d mv=%d,%d,%d"
+			% [prefix, tp[0], tp[1], tp[2], tp[3], tp[4], tp[5], tp[6], tp[7],
 			tp_delta, mv_sig, mv_ov, mv_delta])
 	cls = "unexpected"
 	var silent: bool = tp[0] == 0 and tp[1] == 0 and tp[6] == 0 and tp[7] == 0
@@ -1030,7 +1257,7 @@ func _child_jolt() -> void:
 			cls = "same-signature"
 		elif fired:
 			cls = "inverts"
-	prints("CHILD_RESULT jolt_static_nopair=%s" % cls)
+	prints("CHILD_RESULT %s_static_nopair=%s" % [prefix, cls])
 	_cleanup_nodes()
 	_cleanup_rids()
 	quit(0)

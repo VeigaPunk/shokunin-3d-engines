@@ -440,6 +440,12 @@ CASES = [
      "PASS phys3d_events phase_delta proc_delta=2 phys_delta=1"),
     ("phys3d_events_jolt_edge", "phys3d_events.gd", ["--arm=jolt_edge"], 0,
      "PASS phys3d_events jolt_edge backend=Jolt isect=same cast=constants btm=constants contact_stale=same static_nopair=inverts child_exit=0"),
+    ("phys3d_events_jolt_threaded", "phys3d_events.gd", ["--arm=jolt_threaded"], 0,
+     "PASS phys3d_events jolt_threaded backend=Jolt threaded=true isect=same cast=constants btm=constants contact_stale=same static_nopair=inverts child_exit=0"),
+    ("phys3d_events_dummy_refused", "phys3d_events.gd", ["--arm=dummy_refused"], 0,
+     "PASS phys3d_events dummy_refused backend=Dummy isect=unexpected cast=unexpected btm=unexpected contact_stale=unexpected static_nopair=unexpected child_exit=0"),
+    ("phys3d_events_srv_phase_delta", "phys3d_events.gd", ["--arm=srv_phase_delta"], 0,
+     "PASS phys3d_events srv_phase_delta srv_proc_delta=2 srv_phys_delta=1"),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored
