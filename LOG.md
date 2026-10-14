@@ -1106,3 +1106,26 @@ corpus/knowledge/seed.md).
   child.log not byte-stable — map is the witness; >=8/12 never <11.
 - Seats: author(completion) + boundary + critic + reviewer + simplifier
   + verifier + baseline + scribe all landed. ADMIT-corr.
+
+## Round 86 — statement-band + deferred-hang + backend-tier + dummy-floor
+
+- ARMED 4e65726. Wave-B all deepseek-flash.
+- VERIFIED: 195/195 across author x2 + reviewer x2 + verifier x2 + fold;
+  prior-191 byte-identical at identical positions (stdout+stderr bytes);
+  verifier re-derived every arm with its own generated children; mutation
+  matrix author 9/9 + verifier 3/4 detected (V-M2 no-detect, mechanism
+  proven); baseline zero-drift both phases, 4 inserted rows @192-195.
+- FOLDS (dd1737a): simplifier SP1 (13 project literals -> _project_body
+  generator, 15/15 project.godot byte-identical) + SP2 (17 exit tails ->
+  _quit_clean); critic A1 (abort witness needs 'null instance'), A2
+  (contrast child gets HANG_BOUND_S), A3 (statement-count wording), A4
+  (min_thr needs engine callsite line — merged log can't prove
+  provenance), A5 (solver_iterations zero-vs-pos, not literal 16.0).
+- RECORDED: nav-cell park was a HARNESS artifact (missing project.godot),
+  not a scout falsehood — reviewer F1 + verifier both reproduced
+  safe_n=10 with any project file present (17/17) vs safe_n=0 without
+  (11/11). Park stays on procedure; the recorded ground was corrected.
+- RECORDED: band is stochastic (50%-point session-dependent); hang is
+  wall-clock 8s bound; jolt/dummy splits are one build.
+- Seats: author + boundary + baseline + scribe + critic + reviewer +
+  verifier + simplifier all landed. ADMIT-corr.

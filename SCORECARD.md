@@ -146,3 +146,4 @@ Sol `r83-adjudicator.md`: ADMIT-corr — lattice confirmed with backend scope ho
 Sol `r84-adjudicator.md`: ADMIT-corr — Jolt pinning with live witness, write-phase cell landed, child-path totality hardened. Verifier AGREE 15/15 on `01f7d4f`; baseline zero-drift `c4b2fa2`->`01f7d4f`. Bounded: Godot 4.7.2, GodotPhysics3D/Jolt pair, this host. Work `01f7d4f` + folds `a56f683`.
 
 | r85 | game-dev-3d | backend x threading | ADMIT-corr | f230443 + 4e6fbe3 |
+| r86 | game-dev-3d | statement-band + hang + backend tier + dummy floor | ADMIT-corr | 4e65726 + dd1737a |
