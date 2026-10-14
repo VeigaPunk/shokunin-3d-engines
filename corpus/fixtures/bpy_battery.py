@@ -21,6 +21,22 @@ CASES pin per-cell attribution of reordered bytes and an order_checks
 block on raw stdout pins the discriminating topology (child bytes
 physically precede the parent's pre-spawn-emitted row) plus the splice
 boundary (a glued line must be dropped, not misattributed).
+
+r82 adds: (a) six more evalcat bare classes (ext2_*: update_tag,
+matrix_world custom setter, libraries.load, instance_collection,
+batch_remove, evaluated_get on a stale ID) plus two documentary DEG side
+cells, folded per the r80-critic remainder list -- all inside arm_evalcat
+before `closed`, under the closed-set falsifier; (b) parser-hazard
+CONTRACT pins (xconnector X6): a live forged violations=0 row injected
+mid-stream (absorbed by physical last-wins -- the genuine trailing
+closed row keeps the cell), a live dup_flush same-key row (later forged
+value wins -- pinned as the contract), and hazard_checks on raw stdout +
+subprocess capture pinning the demonstrated resolutions: forgery landing
+physically LAST does mask a real violation (parser detects nothing),
+non-UTF-8 fd1 bytes raise UnicodeDecodeError unhandled out of
+run_process, and a detached descendant holding fd1 makes run_process
+return only via the TIMEOUT branch. These document measured behavior --
+never "the parser is safe".
 """
 
 import argparse
@@ -28,6 +44,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -237,6 +254,83 @@ CASES = [
      {"held": "stale", "invoked": "none", "dpost": "0", "edge": "absent",
       "purged": "1", "rna_meshes_before": "2", "rna_meshes_after": "1",
       "held_names": "o", "fresh_names": "o"}, False),
+    # ------------- r82 evalcat residual fold (r80-critic remainder) -----
+    # Six more measured-inert bare classes + two documentary DEG side
+    # cells; same discipline: inside arm_evalcat before `closed`, so a
+    # bare row that flushes/fires is auto-FALSIFIED and counted. Values
+    # pre-measured by r82-scout (r82_classes_probe.py, runs a+b identical)
+    # and folded verbatim into the tracked fixture.
+    # update_tag: tag != eval -- the window holds ONLY ob.update_tag();
+    # the pending write binds at the next tagged get (get_dup=1, fc=0)
+    ("evalcat_ext2_update_tag",     "evalcat", "ext2_update_tag_obj", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1",
+      "held_loc": "(0.000,0.000,0.000)", "fresh_loc": "(5.000,0.000,0.000)",
+      "get_dup": "1", "get_fc": "0"}, False),
+    # custom setter: matrix_world decomposes into RNA writes + tags
+    ("evalcat_ext2_custom_mw",      "evalcat", "ext2_custom_matrix_world", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1",
+      "held_loc": "(0.000,0.000,0.000)", "fresh_loc": "(3.000,0.000,0.000)",
+      "rna_loc": "(3.000,0.000,0.000)", "get_dup": "1", "get_fc": "0"}, False),
+    # libraries.load(link=True): data-layer; RNA gains the linked ID at
+    # w0, held dg0 does not know it, the tagged get serves it
+    ("evalcat_ext2_libraries_load", "evalcat", "ext2_libraries_load", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1",
+      "held_loc": "(0.000,0.000,0.000)", "fresh_loc": "(4.000,0.000,0.000)",
+      "pre_names": "o", "held_names": "o", "fresh_names": "libo|o",
+      "rna_lib": "True", "get_dup": "1", "get_fc": "0"}, False),
+    # instance_collection on an Empty: held dg0 has no instanced child;
+    # the fresh graph carries is_instance=True
+    ("evalcat_ext2_instance_empty", "evalcat", "ext2_instance_empty", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1",
+      "held_loc": "(0.000,0.000,0.000)", "fresh_loc": "(2.000,0.000,0.000)",
+      "held_inst_pre": "0", "held_inst_post": "0", "fresh_inst": "1",
+      "held_all": "inst", "fresh_all": "ic_o|inst",
+      "rna_type": "COLLECTION", "rna_coll": "ic",
+      "get_dup": "1", "get_fc": "0"}, False),
+    # documentary DEG side cell: mesh objects REFUSE instance_type=
+    # 'COLLECTION' (TypeError enum rejection; collection write is a no-op)
+    ("evalcat_ext2_instance_refused", "evalcat", "ext2_instance_refused", "DEG",
+     {"step1": 'ERR:TypeError:bpy_struct:_item.attr_=_val:_enum_"COLLECTION"_not_found_in_',
+      "step2": "ok", "type_after": "NONE", "coll_after": "none",
+      "dpre": "0", "dpost": "0", "dfcp": "0", "dfc": "0"}, False),
+    # batch_remove (bpy.data.batch_remove on LIVE ids only): held dg0
+    # still enumerates the freed IDs; the fresh graph drops them
+    ("evalcat_ext2_batch_remove",   "evalcat", "ext2_batch_remove", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1", "ret_type": "NoneType",
+      "held_loc": "(0.000,0.000,0.000)", "fresh_loc": "(5.000,0.000,0.000)",
+      "pre_names": "ctl|o|o2", "held_names": "ctl|o|o2",
+      "fresh_names": "ctl", "rna_objs": "ctl",
+      "get_dup": "1", "get_fc": "0"}, False),
+    # evaluated_get on a stale (out-of-graph) ID -- the name-vs-behavior
+    # edge: it returns the ORIGINAL object (same_id=True) whose .location
+    # is the RNA value (fresh-looking, un-evaluated); the linked control
+    # on the same held handle returns the stale evaluated copy
+    ("evalcat_ext2_evalget_unlinked", "evalcat", "ext2_evalget_unlinked", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1",
+      "held_loc": "(0.000,0.000,0.000)", "fresh_loc": "(7.000,0.000,0.000)",
+      "og_in_dg": "False", "ctl_in_dg": "True", "og_same_id": "True",
+      "og_ev_loc": "(4.000,0.000,0.000)", "og_ev_name": "og",
+      "og_err": "none", "og_rna_loc": "(4.000,0.000,0.000)",
+      "ctl_same_id": "False", "ctl_ev_loc": "(0.000,0.000,0.000)",
+      "get_dup": "1", "get_fc": "0"}, False),
+    # documentary DEG side cell: evaluated_get on a FREED ID raises
+    # ReferenceError on this build (name-read failure mode)
+    ("evalcat_ext2_evalget_freed",  "evalcat", "ext2_evalget_freed", "DEG",
+     {"res": "ERR:ReferenceError", "ev_loc": "na", "ev_name": "na",
+      "dpre": "0", "dpost": "0", "dfcp": "0", "dfc": "0"}, False),
+    # ---- r82 parser-hazard CONTRACT cells (X6) --------------------------
+    # dup_flush: two same-key rows on the wire; the physically LATER
+    # forged value wins the cell. Pinned AS THE CONTRACT (parse_arms is
+    # physical last-wins) -- documents that a later forged row silently
+    # rewrites a pinned row; a contract pin, never a safety claim.
+    ("hazard_dup_flush_lastwins",   "hazard", "dup_flush", "PARSE",
+     {"v": "forged", "src": "row2_forged"}, False),
     # ---- r81 reorder (X1): fd1-inheritance parse-survival cells ---------
     # A spawned descendant inherits fd1; the block-buffered parent withholds
     # pre-spawn bytes -> child rows land as a prefix. These pins cover
@@ -369,6 +463,107 @@ def main():
     for n, ok in order_checks:
         print("{}  order-check {}".format("PASS" if ok else "FAIL", n))
 
+    # ---- r82: parser-hazard CONTRACT pins (xconnector X6) --------------
+    # Each cell documents the DEMONSTRATED resolution of a residual hazard
+    # through the tracked capture/parse path (run_process :281-292,
+    # parse_arms :295-304). These are contract pins on measured behavior,
+    # never safety claims ("the demonstrated hazard resolves as X").
+    CLOSED = ("evalcat", "closed", "EDGE")
+    DUPK = ("hazard", "dup_flush", "PARSE")
+    closed_kv = arms.get(CLOSED, {})
+    # H2 (synthetic, tracked parse_arms): same-key dup rows, both orders --
+    # physical last-wins decides; byte order alone picks the cell value.
+    _DUP_A = "ARM hazard | dup_flush | PARSE | src=row1 v=first\n"
+    _DUP_B = "ARM hazard | dup_flush | PARSE | src=row2_forged v=forged\n"
+    dup_ab = parse_arms(_DUP_A + _DUP_B).get(DUPK, {}).get("v")
+    dup_ba = parse_arms(_DUP_B + _DUP_A).get(DUPK, {}).get("v")
+    # H1 (synthetic, tracked parse_arms): a forged violations=0 row.
+    # Landing BEFORE the real row it is absorbed; landing physically LAST
+    # it takes the cell -- the parser detects no forgery (r82-critic live
+    # demo: forged-post + forged-detached rows masked a real violations=1
+    # and the battery still reported PASS).
+    _REAL3 = "ARM evalcat | closed | EDGE | violations=3 events=e\n"
+    _FORGE0 = "ARM evalcat | closed | EDGE | violations=0 forged=1\n"
+    forge_last = parse_arms(_REAL3 + _FORGE0).get(CLOSED, {})
+    forge_first = parse_arms(_FORGE0 + _REAL3).get(CLOSED, {})
+    # H3 binjunk: tracked run_process decodes text=True strictly and its
+    # except clauses catch only TimeoutExpired/OSError, so a non-UTF-8 fd1
+    # raises UnicodeDecodeError UNHANDLED (measured on this host:
+    # 'utf-8' codec can't decode byte 0xff). Known failure mode, pinned.
+    try:
+        run_process([sys.executable, "-c",
+                     "import sys;"
+                     "sys.stdout.buffer.write(b'ARM h | j | B | k=1\\n');"
+                     "sys.stdout.buffer.write(b'BINJUNK:\\xff\\xfe');"
+                     "sys.stdout.buffer.flush()"], 10)
+        binjunk_raised = "none"
+    except BaseException as exc:          # noqa: BLE001 - measuring the mode
+        binjunk_raised = type(exc).__name__
+    # H4 detach-child EOF-hold (bounded): the direct child prints and
+    # exits, but a detached descendant inherits fd1 and withholds pipe
+    # EOF -> the tracked run_process returns ONLY via the TIMEOUT branch
+    # (rc stays None) while the parent's bytes were already captured.
+    # The 8s sleeper self-terminates past the 3s timeout (no SIGTERM
+    # needed); a control run without the detached holder returns fast.
+    t0 = time.monotonic()
+    eof_out, _eof_err, eof_rc, eof_error = run_process(
+        ["/bin/sh", "-c",
+         "printf 'EOF_PARENT_DONE\\n'; (exec sleep 8) & exit 0"], 3)
+    eof_wall = round(time.monotonic() - t0, 3)
+    ctl_out, _ctl_err, ctl_rc, ctl_error = run_process(
+        ["/bin/sh", "-c", "printf 'EOF_PARENT_DONE\\n'; exit 0"], 10)
+    hazard_checks = [
+        # live: the probe's mid-stream forged violations=0 row (emitted at
+        # the top of arm_evalcat) is present in raw bytes -- marker pin.
+        ("hazard_forge_marker_present",
+         "violations=0 forged=parent_midstream" in stdout),
+        # independent invariant (critic r82): the winning closed cell must
+        # be the GENUINE row regardless of the marker -- a forgery that
+        # lands physically last and copies the genuine key set is
+        # undetectable from the parsed cell, so this is the only guard.
+        ("hazard_forge_closed_cell_genuine",
+         closed_kv.get("violations") == "0"
+         and "events" in closed_kv
+         and "forged" not in closed_kv),
+        # synthetic: the parser's physical last-wins is the whole defense;
+        # a forgery landing LAST wins the cell (the demonstrated mask).
+        ("hazard_forge_last_wins_cell",
+         forge_last.get("violations") == "0"
+         and forge_first.get("violations") == "3"),
+        # synthetic: dup_flush resolves by byte order, both directions.
+        ("hazard_dup_flush_order_decides",
+         dup_ab == "forged" and dup_ba == "first"),
+        # capture: non-UTF-8 bytes raise UnicodeDecodeError unhandled out
+        # of the tracked run_process (pinned failure mode, not a fix).
+        ("hazard_binjunk_decode_raises",
+         binjunk_raised == "UnicodeDecodeError"),
+        # capture: a detached descendant holding fd1 withholds EOF; the
+        # harness returns via TIMEOUT with the parent's bytes captured.
+        ("hazard_detach_eof_hold",
+         eof_error is not None and eof_error.startswith("TIMEOUT")
+         and eof_rc is None and "EOF_PARENT_DONE" in eof_out),
+        # control: without the detached holder the same parent returns
+        # immediately with rc=0 (the hold is the inherited pipe, not the
+        # child's runtime).
+        ("hazard_eof_control_fast",
+         ctl_error is None and ctl_rc == 0
+         and ctl_out.strip() == "EOF_PARENT_DONE"),
+    ]
+    hazard_failed = [n for n, ok in hazard_checks if not ok]
+    for n, ok in hazard_checks:
+        print("{}  hazard-check {}".format("PASS" if ok else "FAIL", n))
+    hazard_detail = {
+        "forge_midstream_in_stdout":
+            "violations=0 forged=parent_midstream" in stdout,
+        "closed_cell_has_forged_key": "forged" in closed_kv,
+        "synthetic_forge_last_violations": forge_last.get("violations"),
+        "synthetic_forge_first_violations": forge_first.get("violations"),
+        "dup_ab": dup_ab, "dup_ba": dup_ba,
+        "binjunk_raised": binjunk_raised,
+        "eof_hold_wall_s": eof_wall, "eof_hold_error": eof_error,
+        "eof_hold_rc": eof_rc, "eof_control_rc": ctl_rc,
+    }
+
     passed = sum(1 for r in results if r["verdict"] == "PASS")
     failed = len(results) - passed
     signal_failed = sum(1 for r in results
@@ -386,7 +581,8 @@ def main():
           f"fatals={len(fatals)} exit={code}")
 
     verdict = "PASS" if (signal_failed == 0 and launch_ok and done_marker
-                         and not fatals and not order_failed) else "FAIL"
+                         and not fatals and not order_failed
+                         and not hazard_failed) else "FAIL"
     payload = {"blender": args.blender, "blender_version": blender_version,
                "blender_version_exit": version_code,
                "blender_version_error": version_err,
@@ -396,6 +592,9 @@ def main():
                "n_arm_lines": len(arms), "results": results,
                "order_checks": [{"case": n, "pass": ok}
                                 for n, ok in order_checks],
+               "hazard_checks": [{"case": n, "pass": ok}
+                                 for n, ok in hazard_checks],
+               "hazard_detail": hazard_detail,
                "totals": {"cases": len(results), "pass": passed, "fail": failed,
                           "signal_fail": signal_failed,
                           "quirk_drift": quirk_drift},

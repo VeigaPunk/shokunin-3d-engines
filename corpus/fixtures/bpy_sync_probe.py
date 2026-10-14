@@ -1174,11 +1174,330 @@ def _ec_x_orphan_purge():
              rna_meshes_after=post_n, held_names=post, fresh_names=fresh)
 
 
+# ===================================================== r82: evalcat fold 2
+# Round-82 residual fold: the r80-critic fold list's uncovered remainder,
+# pre-measured by r82-scout (corpus/live/r82-scout/r82_classes_probe.py,
+# runs/classes a+b identical) and independently by r82-critic. Same witness
+# discipline as the r81 fold: fresh factory scene + handler reinstall per
+# sub-probe; fixtures built OUTSIDE the witness window; pending RNA writes
+# land PRE-window so the window holds only the class action; the held dg0
+# is captured pre-window. All six EDGE rows are bare (invoked=None) and run
+# inside arm_evalcat before `closed`, so any flush/handler fire is
+# auto-emitted edge=FALSIFIED and counted. The two DEG side cells are
+# documentary (name-vs-behavior / refused-enum edges), not falsifier rows.
+def _ec_all_names(dg):
+    try:
+        return "|".join(sorted(i.object.name for i in dg.object_instances))
+    except Exception as e:
+        return "ERR:" + type(e).__name__
+
+
+def _ec_inst_count(dg):
+    try:
+        return sum(1 for i in dg.object_instances if i.is_instance)
+    except Exception:
+        return -1
+
+
+def _ec_in_dg(dg, ob):
+    """Name-membership precondition (pointer equality against i.object is
+    unreliable: instances expose the evaluated copy)."""
+    try:
+        return str(ob.name in [i.object.name for i in dg.object_instances])
+    except Exception:
+        return "ERR"
+
+
+def _ec_x2_update_tag():
+    """update_tag: tag != eval -- the purest discriminating witness.
+    Pending RNA write lands PRE-window; the window holds only
+    ob.update_tag(). held must stay stale with zero deltas; the next
+    tagged get binds the pending write (get_dup=1, fc NEVER fires)."""
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    ob.location = (5.0, 0.0, 0.0)              # pending, pre-window
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    ob.update_tag()                            # the class action
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    h1 = _ec_snap()
+    fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
+    d2 = _ec_since(h1)
+    _ec_edge("ext2_update_tag_obj", d, held, None,
+             _ec_edge1(held, fresh, "(5.000,0.000,0.000)"),
+             held_loc=post, fresh_loc=fresh,
+             get_dup=d2["post"], get_fc=d2["fc"])
+
+
+def _ec_x2_custom_matrix_world():
+    """Custom setter class (matrix_world): the setter decomposes into
+    loc/rot/scale RNA writes and tags the object internally. held stays
+    stale; the RNA read is immediate; the tagged get binds."""
+    from mathutils import Matrix
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    ob.matrix_world = Matrix.Translation((3.0, 0.0, 0.0))
+    d = _ec_since(h0)
+    rna_loc = v3(ob.location)                  # tier-0 read, immediate
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    h1 = _ec_snap()
+    fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
+    d2 = _ec_since(h1)
+    _ec_edge("ext2_custom_matrix_world", d, held, None,
+             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             held_loc=post, fresh_loc=fresh, rna_loc=rna_loc,
+             get_dup=d2["post"], get_fc=d2["fc"])
+
+
+def _ec_x2_libraries_load():
+    """Data-layer class (libraries.load, link=True): a .blend is written
+    pre-window, then a linked object is pulled in + scene-linked. The RNA
+    collection gains it at w0; the held dg0 does not know it; the tagged
+    get serves it."""
+    import tempfile
+    _ec_reset()
+    path = os.path.join(tempfile.mkdtemp(), "r82_lib_load.blend")
+    src_ob = D.objects.new("libo", _ec_tri("libm"))  # built pre-window
+    D.libraries.write(path, {src_ob})
+    _ec_reset()                                    # fresh scene, same lib
+    ob, dg0 = _ec_settle()
+    ob.location = (4.0, 0.0, 0.0)              # pending, pre-window
+    pre = _ec_loc(ob, dg0)
+    pre_names = _ec_names(dg0)
+    h0 = _ec_snap()
+    with D.libraries.load(path, link=True) as (src, dst):
+        dst.objects = list(src.objects)
+    loaded = D.objects["libo"]
+    C.scene.collection.objects.link(loaded)
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    held_names = _ec_names(dg0)
+    h1 = _ec_snap()
+    fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
+    fresh_names = _ec_names(C.evaluated_depsgraph_get())
+    d2 = _ec_since(h1)
+    _ec_edge("ext2_libraries_load", d, held, None,
+             _ec_edge1(held, fresh, "(4.000,0.000,0.000)"),
+             held_loc=post, fresh_loc=fresh,
+             pre_names=pre_names, held_names=held_names,
+             fresh_names=fresh_names,
+             rna_lib=str(loaded.library is not None),
+             get_dup=d2["post"], get_fc=d2["fc"])
+
+
+def _ec_x2_instance_empty():
+    """Relations class (instance_empty / instance_collection): an Empty
+    switched to COLLECTION-instance of an orphan collection. Held dg0 does
+    not see the instanced child; the fresh graph carries is_instance=True."""
+    _ec_reset()
+    scn = C.scene
+    col = D.collections.new("ic")                  # orphan, pre-window
+    src = D.objects.new("ic_o", _ec_tri("icm"))
+    col.objects.link(src)
+    e = D.objects.new("inst", None)                # Empty accepts COLLECTION
+    scn.collection.objects.link(e)
+    C.view_layer.update()
+    dg0 = C.evaluated_depsgraph_get()
+    e.location = (2.0, 0.0, 0.0)                   # pending, pre-window
+    pre = _ec_loc(e, dg0)
+    held_inst_pre = _ec_inst_count(dg0)
+    h0 = _ec_snap()
+    e.instance_type = "COLLECTION"
+    e.instance_collection = col
+    d = _ec_since(h0)
+    post = _ec_loc(e, dg0)
+    held = _ec_held(pre, post, d)
+    held_inst_post = _ec_inst_count(dg0)
+    held_all = _ec_all_names(dg0)
+    h1 = _ec_snap()
+    fresh = _ec_loc(e, C.evaluated_depsgraph_get())
+    fresh_inst = _ec_inst_count(C.evaluated_depsgraph_get())
+    fresh_all = _ec_all_names(C.evaluated_depsgraph_get())
+    d2 = _ec_since(h1)
+    _ec_edge("ext2_instance_empty", d, held, None,
+             _ec_edge1(held, fresh, "(2.000,0.000,0.000)"),
+             held_loc=post, fresh_loc=fresh,
+             held_inst_pre=held_inst_pre, held_inst_post=held_inst_post,
+             fresh_inst=fresh_inst,
+             held_all=held_all, fresh_all=fresh_all,
+             rna_type=str(e.instance_type),
+             rna_coll=str(e.instance_collection.name
+                          if e.instance_collection else "none"),
+             get_dup=d2["post"], get_fc=d2["fc"])
+
+
+def _ec_x2_instance_refused():
+    """Documentary side cell (DEG layer, outside the EDGE catalogue): mesh
+    objects refuse instance_type='COLLECTION' on this build ("Only empty
+    objects support collection instances") -- the enum assignment raises
+    TypeError, the collection assignment is then a no-op write."""
+    _ec_reset()
+    col = D.collections.new("ic2")
+    ob, dg0 = _ec_settle()
+    h0 = _ec_snap()
+    # The enum rejection ALSO prints a C-level "reports | ERROR" line to
+    # fd1 with an uptime timestamp -- it bypasses the (buffered) print()
+    # path and would jitter the receipt's raw stdout, so the two
+    # assignments run under a bounded fd1->devnull redirect. Python emit()
+    # bytes are buffered and unaffected; fd1 is restored in finally.
+    _fd1 = os.dup(1)
+    try:
+        _dn = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(_dn, 1)
+        os.close(_dn)
+        try:
+            ob.instance_type = "COLLECTION"
+            step1 = "ok"
+        except Exception as exc:
+            step1 = ("ERR:" + type(exc).__name__ + ":"
+                     + str(exc)[:60]).replace(" ", "_")
+        try:
+            ob.instance_collection = col
+            step2 = "ok"
+        except Exception as exc:
+            step2 = ("ERR:" + type(exc).__name__ + ":"
+                     + str(exc)[:40]).replace(" ", "_")
+    finally:
+        os.dup2(_fd1, 1)
+        os.close(_fd1)
+    type_after = str(ob.instance_type)
+    coll_after = str(ob.instance_collection.name
+                     if ob.instance_collection else "none")
+    d = _ec_since(h0)
+    emit("evalcat", "ext2_instance_refused", "DEG",
+         step1=step1, step2=step2,
+         type_after=type_after, coll_after=coll_after,
+         dpre=d["pre"], dpost=d["post"], dfcp=d["fcp"], dfc=d["fc"])
+
+
+def _ec_x2_batch_remove():
+    """Destructive batch class: bpy.data.batch_remove([live ids]). The
+    witness rides a separate ctl object (subjects are freed); the held dg0
+    still enumerates the freed IDs (freed-ID read -- stable on this build,
+    fragile; r82-critic measured a SEGFAULT when batch_remove is applied to
+    stale/already-freed references -- only live IDs are removed here)."""
+    _ec_reset()
+    scn = C.scene
+    ob, _ = _ec_settle()
+    ob2 = D.objects.new("o2", _ec_tri("m2"))
+    scn.collection.objects.link(ob2)
+    ctl = D.objects.new("ctl", _ec_tri("mc"))
+    scn.collection.objects.link(ctl)
+    C.view_layer.update()
+    dg0 = C.evaluated_depsgraph_get()
+    ctl.location = (5.0, 0.0, 0.0)             # witness pending, pre-window
+    pre = _ec_loc(ctl, dg0)
+    pre_names = _ec_names(dg0)
+    h0 = _ec_snap()
+    ret = D.batch_remove([ob, ob2])            # the class action
+    d = _ec_since(h0)
+    post = _ec_loc(ctl, dg0)
+    held = _ec_held(pre, post, d)
+    held_names = _ec_names(dg0)
+    h1 = _ec_snap()
+    fresh = _ec_loc(ctl, C.evaluated_depsgraph_get())
+    fresh_names = _ec_names(C.evaluated_depsgraph_get())
+    d2 = _ec_since(h1)
+    _ec_edge("ext2_batch_remove", d, held, None,
+             _ec_edge1(held, fresh, "(5.000,0.000,0.000)"),
+             held_loc=post, fresh_loc=fresh,
+             ret_type=type(ret).__name__,
+             pre_names=pre_names, held_names=held_names,
+             fresh_names=fresh_names,
+             rna_objs="|".join(sorted(o.name for o in D.objects)),
+             get_dup=d2["post"], get_fc=d2["fc"])
+
+
+def _ec_x2_evalget_unlinked():
+    """evaluated_get on a stale ID -- the name-vs-behavior edge: an object
+    NOT in the held graph returns the ORIGINAL object (same_id=True) whose
+    .location is the RNA value (fresh-looking, un-evaluated); the linked
+    control on the same held handle returns the evaluated copy (stale)."""
+    _ec_reset()
+    scn = C.scene
+    ob = D.objects.new("og", _ec_tri("mg"))        # will leave the graph
+    ctl = D.objects.new("ctl", _ec_tri("mc"))      # linked control
+    scn.collection.objects.link(ob)
+    scn.collection.objects.link(ctl)
+    C.view_layer.update()
+    scn.collection.objects.unlink(ob)              # out-of-graph ID
+    C.view_layer.update()
+    dg0 = C.evaluated_depsgraph_get()              # graph WITHOUT og
+    og_in_dg = _ec_in_dg(dg0, ob)
+    ctl_in_dg = _ec_in_dg(dg0, ctl)
+    ob.location = (4.0, 0.0, 0.0)              # pending, pre-window
+    ctl.location = (7.0, 0.0, 0.0)             # control pending, pre-window
+    pre_ctl = _ec_loc(ctl, dg0)
+    h0 = _ec_snap()
+    try:
+        ev = ob.evaluated_get(dg0)             # the class action
+        og_same = bool(ev == ob)
+        og_loc = v3(ev.location)
+        og_name = str(ev.name)
+        og_err = "none"
+    except Exception as exc:
+        og_same, og_loc, og_name = "na", "na", "na"
+        og_err = type(exc).__name__ + ":" + str(exc)[:60]
+    evc = ctl.evaluated_get(dg0)               # linked control, same handle
+    ctl_same = bool(evc == ctl)
+    ctl_loc = v3(evc.location)
+    d = _ec_since(h0)
+    post_ctl = _ec_loc(ctl, dg0)
+    held = _ec_held(pre_ctl, post_ctl, d)
+    h1 = _ec_snap()
+    fresh_ctl = _ec_loc(ctl, C.evaluated_depsgraph_get())
+    d2 = _ec_since(h1)
+    _ec_edge("ext2_evalget_unlinked", d, held, None,
+             _ec_edge1(held, fresh_ctl, "(7.000,0.000,0.000)"),
+             held_loc=post_ctl, fresh_loc=fresh_ctl,
+             og_in_dg=og_in_dg, ctl_in_dg=ctl_in_dg,
+             og_same_id=og_same, og_ev_loc=og_loc, og_ev_name=og_name,
+             og_err=og_err, og_rna_loc=v3(ob.location),
+             ctl_same_id=ctl_same, ctl_ev_loc=ctl_loc,
+             get_dup=d2["post"], get_fc=d2["fc"])
+
+
+def _ec_x2_evalget_freed():
+    """Documentary side cell (DEG layer, outside the EDGE catalogue):
+    evaluated_get on a FREED ID -- the name-read failure mode on this
+    build is ReferenceError (r82-critic: applying the *removal* to stale
+    references can segfault; only the post-removal READ is probed here)."""
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    D.objects.remove(ob)
+    h0 = _ec_snap()
+    try:
+        ev = ob.evaluated_get(dg0)
+        res = "ok"
+        ev_loc = v3(ev.location)
+        ev_name = str(ev.name)
+    except Exception as exc:
+        res = "ERR:" + type(exc).__name__
+        ev_loc, ev_name = "na", "na"
+    d = _ec_since(h0)
+    emit("evalcat", "ext2_evalget_freed", "DEG",
+         res=res, ev_loc=ev_loc, ev_name=ev_name,
+         dpre=d["pre"], dpost=d["post"], dfcp=d["fcp"], dfc=d["fc"])
+
+
 # --------------------------------------------------------- arm: evalcat
 def arm_evalcat():
     """One arm, per-class edge rows: every sub-probe gets a fresh factory
     scene + handler reinstall. A FALSIFIED edge row (or a nonzero
     `closed` violations count) is the claim's refutation surface."""
+    # r82 H1 (hazard cell, not a falsifier row): a forged `violations=0`
+    # row injected mid-stream -- it lands BEFORE the genuine trailing
+    # `closed` row, so parse_arms' physical last-wins keeps the real cell.
+    # The battery pins the demonstrated resolution: forgery visible in raw
+    # bytes only; a forgery landing physically LAST would take the cell.
+    emit("evalcat", "closed", "EDGE", violations=0,
+         forged="parent_midstream")
     for sp in (_ec_events, _ec_driver, _ec_keyframe, _ec_con_rna,
                _ec_op_apply, _ec_op_add, _ec_op_modapply, _ec_op_modes,
                _ec_op_conadd, _ec_walltime,
@@ -1186,7 +1505,13 @@ def arm_evalcat():
                # armed catalogue -- they run before `closed`, so a FALSIFIED
                # ext row still increments the violations counter.
                _ec_x_frame_current, _ec_x_hier_link, _ec_x_data_swap,
-               _ec_x_parent_write, _ec_x_obj_remove, _ec_x_orphan_purge):
+               _ec_x_parent_write, _ec_x_obj_remove, _ec_x_orphan_purge,
+               # r82 residual fold: six more bare classes (r80-critic
+               # remainder) + two documentary DEG side cells.
+               _ec_x2_update_tag, _ec_x2_custom_matrix_world,
+               _ec_x2_libraries_load, _ec_x2_instance_empty,
+               _ec_x2_instance_refused, _ec_x2_batch_remove,
+               _ec_x2_evalget_unlinked, _ec_x2_evalget_freed):
         try:
             sp()
         except Exception:
@@ -1251,9 +1576,24 @@ def arm_reorder():
     sys.stdout.flush()
 
 
+# ============================================ r82: parser-hazard cells
+# ARM-B probe side (xconnector X6): the residual parse_hazard cells pinned
+# by the battery live in raw stdout / subprocess capture, which the CASES
+# model cannot express -- so the probe emits only the cells that resolve
+# through the tracked parse_arms. Hazard pins are CONTRACT pins: they
+# document measured parser behavior, never safety claims.
+def arm_hazards():
+    """dup_flush: two same-key rows on one stream -- the physically LATER
+    forged value wins the (arm, point, layer) cell (parse_arms is
+    last-wins). Pinned as the CONTRACT: a later forged row silently
+    rewrites the pinned row; documented, not hidden."""
+    emit("hazard", "dup_flush", "PARSE", src="row1", v="first")
+    emit("hazard", "dup_flush", "PARSE", src="row2_forged", v="forged")
+
+
 for f in (arm_transform, arm_hide, arm_modifier, arm_collection,
           arm_membership, arm_draincheck, arm_shared, arm_fresh_handle,
-          arm_vis_quirk, arm_evalcat, arm_reorder):
+          arm_vis_quirk, arm_evalcat, arm_reorder, arm_hazards):
     try:
         f()
     except Exception:
