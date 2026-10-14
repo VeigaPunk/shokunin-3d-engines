@@ -212,7 +212,11 @@
 #   The SERVE edge splits by class: for link kills it is JITTERED —
 #   measured fresh at w1 on ~15-20% of identical runs, w2 dominant —
 #   while for region transforms it moves DETERMINISTICALLY 3f->2f
-#   (9/9 reps, r77-critic). The tracked arm therefore pins only the
+#   (9/9 reps, r77-critic). Mechanism (r77-scribe): the w0 forcing read
+#   marks the stamped-dirty map so the next scheduled sync publishes a
+#   frame early — a mark-vs-phase race; single-read-per-rung callers see
+#   NO serve collapse (link stays 2, region stays 3). The tracked arm
+#   therefore pins only the
 #   deterministic facts — w0: getter applied + serve stale; w3: fresh
 #   clamp — and skips the jittered w1 sample: mut_force_link vs
 #   mut_force_ctl.
