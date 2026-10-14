@@ -190,6 +190,37 @@
 #   origin). The agent channel additionally dedups BEFORE its synchronous
 #   clear: same-value navigation_layers leaves the array intact same-turn,
 #   while an effective write clears it to [] instantly (mut_same_agent).
+# Round-77 arms (mutation APPLY-ORDER + map_force_update reach + wait-ladder
+# verdict groups, measured on this build — Godot 4.7.2):
+#   apply-order: a step's "mutate" may be an ARRAY of dicts, each applied in
+#   sequence through _apply_mutation's fixed order (the hand-ordered
+#   override); a bare dict keeps the fixed order. Order IS load-bearing for
+#   one measured class: a setter that lands on a doomed RID is voided —
+#   {transform then delete+recreate} serves the unmoved corridor (region
+#   readback xform=(0,0,0), the write dead with the freed RID) while the
+#   fixed {delete+recreate then transform} lands the +5x on the fresh RID
+#   and serves the moved mesh [(5,0,0.5),(5,0,1.0)] (mut_ord_xform_renew vs
+#   mut_ord_renew_xform). Order is INERT for surviving-object pairs: link
+#   disable+endpoint-move both orders serve the same clamp AND the same
+#   post-sync internals (en=false, endpoints moved — writes on a disabled
+#   link still land); link kill + map_set_active(false) both orders leave
+#   the committed tuple served under the frozen map and replay the 2f edge
+#   on reactivation (mut_ord_link_*, mut_ord_*mapoff*).
+#   map_force_update: flushes the queued RID writes NOW — the getter edge
+#   collapses to same-turn (link en=false + iter stamped at w0) while the
+#   SERVE edge does not collapse (stale at w0). NOTE: under force the
+#   serve boundary is JITTERED — measured fresh at w1 on some runs, w2 on
+#   others on this host (the forced drain lands the rebuild on the next
+#   scheduled sync phase, unlike the deterministic unforced w2 edge). The
+#   tracked arm therefore pins the two deterministic facts — w0: getter
+#   applied + serve stale; w3: fresh clamp — and skips the w1 sample:
+#   mut_force_link vs mut_force_ctl.
+#   wait-ladder: the "ladder" cfg partitions the per-step SERVED tuples by
+#   identical canonical signature (_tuple_sig); the first boundary index
+#   is the measured window edge — unit waits make the sample index equal
+#   the cumulative post-mutate frames. mut_ladder_link derives bound=2
+#   (sizes 2,2), mut_ladder_region bound=3 (sizes 3,2) — the r76 edges
+#   re-derived as partition boundaries, not hand-pinned per step.
 extends SceneTree
 var owned: Array[RID] = []
 var owned_nodes: Array[Node] = []
@@ -1643,6 +1674,315 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 						"dist": 3.162278,
 						"path": [Vector3(1.5, 0, 0.5), Vector3(2, 0, 1), f],
 						"reachable": true, "reached": false, "finished": false}]}
+		# Round-77 apply-order arms. A step's "mutate" may be an ARRAY of
+		# dicts — each sub-dict is applied in sequence through
+		# _apply_mutation's fixed order (the hand-ordered override), while a
+		# bare dict keeps the fixed order for the whole set. New mutate
+		# keys: "link_start"/"link_end" (endpoint move),
+		# "map_force" (NavigationServer3D.map_force_update flush). New step
+		# key "srv_get": object-level getter assertions captured after the
+		# step's wait, before its forcing read. Arm cfg key "ladder":
+		# {"bound":N,"groups":M} — partition of the per-step SERVED tuple
+		# signatures; bound is the first sample index whose signature
+		# differs from sample 0 (unit waits -> index == cumulated frames).
+		# (a) doomed-RID voiding — the measured DIVERGENT order pair:
+		# fixed dict order delete->recreate->transform lands the +5x on
+		# the fresh RID (moved mesh served); the hand order transform->
+		# {delete,recreate} voids the write on the freed RID (unmoved
+		# corridor served, readback xform stays identity).
+		"mut_ord_renew_xform":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"region_delete": true, "region_recreate": true,
+							"region_transform": Vector3(5, 0, 0)},
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"srv_get": {"region_transform": Vector3(5, 0, 0)},
+						"idx": 0, "next": Vector3(5, 0, 0.5),
+						"final": Vector3(5, 0, 1.0), "dist": 3.605551,
+						"path": [Vector3(5, 0, 0.5), Vector3(5, 0, 1.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		"mut_ord_xform_renew":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": [{"region_transform": Vector3(5, 0, 0)},
+							{"region_delete": true, "region_recreate": true}],
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"srv_get": {"region_transform": Vector3(0, 0, 0)},
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (b) surviving-object pair — INERT: link disable + endpoint move in
+		# dict order (enabled->move) vs the hand order (move->disable).
+		# Served tuples identical (dead link -> corridor clamp) and the
+		# post-sync internals identical too (en=false, endpoints moved —
+		# writes on a disabled link still land, srv_get pins them).
+		"mut_ord_link_offmv":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_enabled": false,
+							"link_start": Vector3(2.5, 0, 3.9),
+							"link_end": Vector3(2.5, 0, 5.9)},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false,
+							"link_start": Vector3(2.5, 0, 3.9),
+							"link_end": Vector3(2.5, 0, 5.9)},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		"mut_ord_link_mvoff":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": [{"link_start": Vector3(2.5, 0, 3.9),
+							"link_end": Vector3(2.5, 0, 5.9)},
+							{"link_enabled": false}],
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false,
+							"link_start": Vector3(2.5, 0, 3.9),
+							"link_end": Vector3(2.5, 0, 5.9)},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (c) absorbing map — INERT: deactivating the map freezes its sync
+		# regardless of whether the link kill is queued before (dict order:
+		# link write lands on the still-active map's queue, then the map
+		# freezes) or after (the write queues under an inactive map). Both
+		# serve the committed tuple under the dead map and replay the 2f
+		# edge on reactivation.
+		"mut_ord_kill_mapoff":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_enabled": false, "map_active": false},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": false, "link_enabled": false},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"map_active": true}, "wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": true, "link_enabled": false},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		"mut_ord_mapoff_kill":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": [{"map_active": false}, {"link_enabled": false}],
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": false, "link_enabled": false},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"map_active": true}, "wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": true, "link_enabled": false},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (d) map_force_update reach: same-turn link kill + force collapses
+		# the object-getter edge to w0 (srv_get en=false, link_iter=2 —
+		# applied NOW, no frame elapsed) while the SERVE edge does not
+		# collapse: w0 still serves the stale bridge. The serve boundary
+		# under force is JITTERED on this build — fresh at w1 on some runs,
+		# w2 on others — so the arm skips the w1 sample and pins the two
+		# stable facts: stale serve + applied getter at w0, fresh clamp at
+		# w3. The unforced control runs the same ladder with the getter
+		# still queued at w0 (en=true, iter=1), applied at w1, serve fresh
+		# at the deterministic w2 edge. Force flushes the command queue but
+		# does not accelerate invalidation.
+		"mut_force_link":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_enabled": false, "map_force": true}, "wait": 0,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false, "link_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 3,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		"mut_force_ctl":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_enabled": false}, "wait": 0,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": true, "link_iter": 1},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false, "link_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (e) wait-ladder verdict groups: the per-step SERVED tuples are
+		# partitioned by identical canonical signature (_tuple_sig); the
+		# first boundary index is the derived window edge. Each step still
+		# pins its own full tuple — the ladder adds the derived partition
+		# on top (bound == sample index == cumulative post-mutate frames
+		# under unit waits). Link kill: stale,stale | fresh,fresh ->
+		# bound=2 groups=2. Region transform: stale x3 | fresh x2 ->
+		# bound=3 groups=2 — the r76 edges as partition boundaries.
+		"mut_ladder_link":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"ladder": {"bound": 2, "groups": 2},
+				"steps": [
+					{"mutate": {"link_enabled": false}, "wait": 0,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		"mut_ladder_region":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"ladder": {"bound": 3, "groups": 2},
+				"steps": [
+					{"mutate": {"region_transform": Vector3(5, 0, 0)}, "wait": 0,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 0, "next": Vector3(5, 0, 0.5),
+						"final": Vector3(5, 0, 1.0), "dist": 3.605551,
+						"path": [Vector3(5, 0, 0.5), Vector3(5, 0, 1.0)],
+						"reachable": false, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 0,
+						"peek_path": [Vector3(5, 0, 0.5), Vector3(5, 0, 1.0)],
+						"idx": 0, "next": Vector3(5, 0, 0.5),
+						"final": Vector3(5, 0, 1.0), "dist": 3.605551,
+						"path": [Vector3(5, 0, 0.5), Vector3(5, 0, 1.0)],
+						"reachable": false, "reached": false, "finished": false}]}
 	return {}
 
 # Shared observable-tuple predicate for the arm families (r72 pop/tp, r73
@@ -1684,6 +2024,17 @@ func _read_state(agent: NavigationAgent3D, actor: Node3D) -> Dictionary:
 		"pathlen": pathlen, "dist": agent.distance_to_target(),
 		"final": agent.get_final_position(), "reachable": agent.is_target_reachable(),
 		"reached": agent.is_target_reached(), "finished": agent.is_navigation_finished()}
+
+# Round-77: canonical signature of a step's SERVED tuple — the verdict-group
+# key for wait-ladder arms. Two samples share a group iff every observable
+# field matches; the partition boundary is the measured sync edge.
+func _tuple_sig(st: Dictionary) -> String:
+	var pp := PackedStringArray()
+	for p in st["path"]:
+		pp.append(_v3(p))
+	return "idx=%d next=%s final=%s dist=%.6f flags=%s,%s,%s path=%s" % [
+		int(st["idx"]), _v3(st["next"]), _v3(st["final"]), float(st["dist"]),
+		st["reachable"], st["reached"], st["finished"], ";".join(pp)]
 
 func _run_pop_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 		st: Dictionary, st2: Dictionary) -> bool:
@@ -1806,6 +2157,13 @@ func _run_link_arm(actor: Node3D, agent: NavigationAgent3D, region: RID,
 # BEFORE _read_state's forcing get_next_path_position). "peek_only"
 # steps skip the forcing read entirely: the captured path/idx are the
 # stale stored state — mutation with no forcing call is a proven no-op.
+# Round-77: "mutate" may be an ARRAY of dicts — each sub-dict is applied
+# in sequence through _apply_mutation's fixed intra-dict order (the
+# hand-ordered override that makes apply-order an authored axis). The
+# step key "srv_get" (dict of server-side getter names) captures the
+# object-level truth after the wait, before the forcing read — the
+# getter-stage readback whose edge (~1f, or same-turn under
+# map_force_update) sits strictly inside the serve edge (2f/3f).
 func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
 		srv: Dictionary) -> Array:
 	var out: Array = []
@@ -1815,13 +2173,16 @@ func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
 		if step.has("tp"):
 			actor.global_position = step["tp"]
 		if step.has("mutate"):
-			_apply_mutation(step["mutate"], srv)
+			for m in _mut_list(step):
+				_apply_mutation(m, srv)
 		for i in range(int(step.get("wait", 5))):
 			await physics_frame
 		var st_i := {}
 		if step.has("peek_path") or step.has("peek_idx") or step.get("peek_only", false):
 			st_i["peek_path"] = agent.get_current_navigation_path()
 			st_i["peek_idx"] = agent.get_current_navigation_path_index()
+		if step.has("srv_get"):
+			st_i["srv"] = _read_srv(step["srv_get"], srv)
 		if step.get("peek_only", false):
 			st_i["pos"] = actor.global_position
 			st_i["path"] = st_i["peek_path"]
@@ -1838,6 +2199,19 @@ func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
 # re-joins the same map with the same mesh); the remaining keys map 1:1
 # onto server or agent setters. Order inside a mutate dict is fixed:
 # delete -> recreate -> transform/enabled/layers -> link -> agent.
+# Round-77: the order is load-bearing for doomed-RID writes — a
+# region_transform ahead of delete+recreate dies with the freed RID,
+# while the fixed order lands it on the fresh RID (mut_ord_* arms).
+# New keys: link_start/link_end (endpoint move, applied after
+# enabled/layers inside the link block), map_force (map_force_update
+# flushes the queued writes now — collapses the getter edge to
+# same-turn, never the serve edge; placed after all RID/agent writes
+# so a force in the same dict still flushes them, before map_active so
+# a force+deactivate dict flushes then freezes).
+func _mut_list(step: Dictionary) -> Array:
+	var mut = step.get("mutate", {})
+	return mut if mut is Array else [mut]
+
 func _apply_mutation(m: Dictionary, srv: Dictionary) -> void:
 	if m.get("region_delete", false) and srv["region"].is_valid():
 		owned.erase(srv["region"])
@@ -1864,13 +2238,53 @@ func _apply_mutation(m: Dictionary, srv: Dictionary) -> void:
 		NavigationServer3D.link_set_enabled(link, bool(m["link_enabled"]))
 	if m.has("link_layers") and link.is_valid():
 		NavigationServer3D.link_set_navigation_layers(link, int(m["link_layers"]))
+	# Round-77: endpoint move inside the link block — writes on a
+	# disabled link still land (mut_ord_link_* arms pin it via srv_get).
+	if m.has("link_start") and link.is_valid():
+		NavigationServer3D.link_set_start_position(link, m["link_start"])
+	if m.has("link_end") and link.is_valid():
+		NavigationServer3D.link_set_end_position(link, m["link_end"])
 	if m.has("agent_layers"):
 		srv["agent"].navigation_layers = int(m["agent_layers"])
+	# Round-77: map_force_update drains the command queue now — the
+	# object-getter edge collapses to same-turn while the served-path
+	# edge is unmoved (mut_force_link vs mut_force_ctl). Placed after
+	# every RID/agent write so a force flushes the whole dict, and before
+	# map_active so a force+deactivate dict flushes then freezes.
+	if m.get("map_force", false):
+		NavigationServer3D.map_force_update(srv["map"])
 	# Round-76: map activity toggle goes last — deactivating the map stops
 	# its sync entirely, so a queued RID write in the same dict stays
 	# invisible to queries regardless of setter order.
 	if m.has("map_active"):
 		NavigationServer3D.map_set_active(srv["map"], bool(m["map_active"]))
+
+# Round-77: object-level server readback for a step's "srv_get" dict —
+# the values are captured after the step's wait, before its forcing read,
+# and asserted verbatim in _run_motion_arm. Keys are getter names on the
+# live objects in srv; Vector3 values compare within POS_TOL. The getter
+# edge (~1f) sits strictly inside the serve edge (2f/3f) — this readout
+# is what separates "write applied" from "state served" (map_force_update
+# collapses only this stage, mut_force_link pins link_iter=2 at w0).
+func _read_srv(want: Dictionary, srv: Dictionary) -> Dictionary:
+	var got := {}
+	var link: RID = srv["link_node"].get_rid() if srv["link_node"] != null else srv["link_rid"]
+	if want.has("link_enabled"):
+		got["link_enabled"] = NavigationServer3D.link_get_enabled(link) if link.is_valid() else null
+	if want.has("link_layers"):
+		got["link_layers"] = int(NavigationServer3D.link_get_navigation_layers(link)) if link.is_valid() else null
+	if want.has("link_iter"):
+		got["link_iter"] = NavigationServer3D.link_get_iteration_id(link) if link.is_valid() else -1
+	if want.has("link_start"):
+		got["link_start"] = NavigationServer3D.link_get_start_position(link) if link.is_valid() else null
+	if want.has("link_end"):
+		got["link_end"] = NavigationServer3D.link_get_end_position(link) if link.is_valid() else null
+	if want.has("map_active"):
+		got["map_active"] = NavigationServer3D.map_is_active(srv["map"])
+	if want.has("region_transform"):
+		var rr: RID = srv["region"]
+		got["region_transform"] = NavigationServer3D.region_get_transform(rr).origin if rr.is_valid() else null
+	return got
 
 # Round-75: folds the authored arm flags plus every step's "mutate" dict
 # into the final expected server-side state, so the post-step gate reads
@@ -1894,36 +2308,40 @@ func _final_srv_state(cfg: Dictionary) -> Dictionary:
 		"any_mut": false,
 		"map_active": true}
 	for step in cfg.get("steps", []):
-		var m: Dictionary = step.get("mutate", {})
-		if m.is_empty():
-			continue
-		fs["any_mut"] = true
-		if m.get("region_delete", false):
-			fs["region_gone"] = true
-			fs["region_mut"] = true
-		if m.get("region_recreate", false):
-			fs["region_gone"] = false
-			fs["region_mut"] = true
-			fs["region_enabled"] = true
-			fs["region_layers"] = 1
-			fs["region_xform"] = Transform3D.IDENTITY
-		if m.has("region_enabled"):
-			fs["region_enabled"] = bool(m["region_enabled"])
-			fs["region_mut"] = true
-		if m.has("region_layers"):
-			fs["region_layers"] = int(m["region_layers"])
-			fs["region_mut"] = true
-		if m.has("region_transform"):
-			fs["region_xform"] = Transform3D(Basis(), m["region_transform"])
-			fs["region_mut"] = true
-		if m.has("link_enabled"):
-			fs["link_enabled"] = bool(m["link_enabled"])
-		if m.has("link_layers"):
-			fs["link_layers"] = int(m["link_layers"])
-		if m.has("agent_layers"):
-			fs["agent_layers"] = int(m["agent_layers"])
-		if m.has("map_active"):
-			fs["map_active"] = bool(m["map_active"])
+		# Round-77: "mutate" may be an array of dicts (apply-order
+		# override); the fold processes sub-dicts in the same sequence the
+		# step applies them, so a recreate AFTER a transform resets the
+		# folded transform to identity — matching the voided write.
+		for m in _mut_list(step):
+			if m.is_empty():
+				continue
+			fs["any_mut"] = true
+			if m.get("region_delete", false):
+				fs["region_gone"] = true
+				fs["region_mut"] = true
+			if m.get("region_recreate", false):
+				fs["region_gone"] = false
+				fs["region_mut"] = true
+				fs["region_enabled"] = true
+				fs["region_layers"] = 1
+				fs["region_xform"] = Transform3D.IDENTITY
+			if m.has("region_enabled"):
+				fs["region_enabled"] = bool(m["region_enabled"])
+				fs["region_mut"] = true
+			if m.has("region_layers"):
+				fs["region_layers"] = int(m["region_layers"])
+				fs["region_mut"] = true
+			if m.has("region_transform"):
+				fs["region_xform"] = Transform3D(Basis(), m["region_transform"])
+				fs["region_mut"] = true
+			if m.has("link_enabled"):
+				fs["link_enabled"] = bool(m["link_enabled"])
+			if m.has("link_layers"):
+				fs["link_layers"] = int(m["link_layers"])
+			if m.has("agent_layers"):
+				fs["agent_layers"] = int(m["agent_layers"])
+			if m.has("map_active"):
+				fs["map_active"] = bool(m["map_active"])
 	return fs
 
 # Asserts the pre-motion tuple on st (same key order as _run_pop_arm),
@@ -1976,8 +2394,57 @@ func _run_motion_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 								diag = "step%d pre-read path[%d]=%s expected=%s path=%s" % [
 									i, j, _v3(st_i["peek_path"][j]), _v3(epp[j]), st_i["peek_path"]]
 								break
+			# Object-level getter pins (round-77): the srv_get capture was
+			# taken after the wait, before the forcing read — this is the
+			# getter-stage truth, strictly inside the serve edge.
+			if diag == "" and es.has("srv_get"):
+				var sg: Dictionary = es["srv_get"]
+				var got: Dictionary = st_i.get("srv", {})
+				for k in sg:
+					var want_v = sg[k]
+					var got_v = got.get(k)
+					if not got.has(k):
+						diag = "step%d srv %s not captured" % [i, k]
+					elif want_v is Vector3:
+						if not (got_v is Vector3) or got_v.distance_to(want_v) > POS_TOL:
+							diag = "step%d srv %s=%s expected=%s" % [
+								i, k, _v3(got_v) if got_v is Vector3 else str(got_v), _v3(want_v)]
+					elif got_v != want_v:
+						diag = "step%d srv %s=%s expected=%s" % [i, k, got_v, want_v]
+					if diag != "":
+						break
 			if diag != "":
 				break
+	# Round-77 wait-ladder verdict groups: partition the per-step SERVED
+	# tuples by identical canonical signature — the first boundary index
+	# is the derived window edge (unit waits make sample index ==
+	# cumulative post-mutate frames). Asserts the authored bound/groups;
+	# the PASS marker carries the derived partition.
+	var ladder_tail := ""
+	if diag == "" and cfg.has("ladder"):
+		var sigs := []
+		for st_i in states:
+			sigs.append(_tuple_sig(st_i))
+		var groups := 1
+		var bound := -1
+		var sizes: Array = [1]
+		for i in range(1, sigs.size()):
+			if sigs[i] == sigs[i - 1]:
+				sizes[sizes.size() - 1] += 1
+			else:
+				groups += 1
+				if bound < 0:
+					bound = i
+				sizes.append(1)
+		var wl: Dictionary = cfg["ladder"]
+		if bound != int(wl["bound"]) or groups != int(wl["groups"]):
+			diag = "ladder bound=%d groups=%d expected=%d,%d sigs=%s" % [
+				bound, groups, int(wl["bound"]), int(wl["groups"]), sigs]
+		else:
+			var szp := PackedStringArray()
+			for sn in sizes:
+				szp.append(str(sn))
+			ladder_tail = " bound=%d groups=%d sizes=%s" % [bound, groups, ",".join(szp)]
 	if diag != "":
 		return _fail(actor, arm_name + " " + diag)
 	var idxs := PackedStringArray()
@@ -1985,8 +2452,9 @@ func _run_motion_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 		idxs.append(str(si["idx"]))
 	var stf: Dictionary = states[states.size() - 1]
 	_cleanup(actor)
-	print("PASS navagent3d_detour %s steps=%d idxs=%s next=%s final=%s dist=%.6f pathlen=%.6f reachable=%s reached=%s finished=%s"
+	print("PASS navagent3d_detour %s steps=%d idxs=%s next=%s final=%s dist=%.6f pathlen=%.6f reachable=%s reached=%s finished=%s%s"
 		% [arm_name, states.size(), ",".join(idxs), _v3(stf["next"]), _v3(stf["final"]),
-		stf["dist"], stf["pathlen"], stf["reachable"], stf["reached"], stf["finished"]])
+		stf["dist"], stf["pathlen"], stf["reachable"], stf["reached"], stf["finished"],
+		ladder_tail])
 	quit(0)
 	return true
