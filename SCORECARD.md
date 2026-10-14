@@ -135,3 +135,12 @@ Sol `r82-adjudicator.md`: ADMIT — residual fold honest, hazard contract pinned
 | calibration | **improved** | insertion-only author diff (+597/-0 fixture, +28 README); critic falsified two claims as stated and both folds re-verified (186/186 on `4c1c100`); prior 176 rows byte-identical; verifier AGREE 18/18 |
 
 Sol `r83-adjudicator.md`: ADMIT-corr — lattice confirmed with backend scope honestly named; Jolt-pinned rows and contact-signal timing depth queued for r84. Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf, GodotPhysics3D/Jolt pair, this host.
+## Round 84 verdict — 2026-10-14
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | Jolt backend now a pinned, probed in-battery arm (jolt_edge child re-exec, 7-key verdict map incl. live jolt_dss_class witness); phase_delta makes the write-phase split a first-class cell (proc=2 / phys=1, identical across both backends) |
+| depth | **improved** | setting-string vs active-backend gap closed (impersonation guard + live dss class pin); first-entry artifact identified as the delta_pf=1 contamination source (keyed reading vindicates the pin); Dummy-degenerate backend paths now classify instead of crash |
+| calibration | **improved** | child dispatch total (silent wrong-body default removed); classifier totality (zero-evidence elif closed); stale-log forge path unlinked; ObjectDB leak arm mirrored into parent scans; insertion-only +617/-6, 188/188, prior 186 normalized prefix c0c3fcbb unchanged |
+
+Sol `r84-adjudicator.md`: ADMIT-corr — Jolt pinning with live witness, write-phase cell landed, child-path totality hardened. Verifier AGREE 15/15 on `01f7d4f`; baseline zero-drift `c4b2fa2`->`01f7d4f`. Bounded: Godot 4.7.2, GodotPhysics3D/Jolt pair, this host. Work `01f7d4f` + folds `a56f683`.

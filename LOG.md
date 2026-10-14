@@ -1058,3 +1058,27 @@ corpus/knowledge/seed.md).
   byte-identical to r82-verifier receipt — cross-round zero drift).
 - Verdict: ADMIT-corr (Sol, wave-14). Bounded: Godot
   4.7.2.stable.arch_linux.ed1daf0bf, GodotPhysics3D/Jolt, this host.
+
+## Round 84 — 2026-10-14 (wave-15)
+
+- MOVE: r83 corrections as first-class cells — phase_delta (write-phase
+  discriminant: proc write -> delta=2, phys write -> delta=1) +
+  jolt_edge (child re-exec under physics_engine="Jolt Physics",
+  pinning {same-signature|differs-constants|inverts} on 5 arms).
+- Landed `01f7d4f`: +617/-6, 2 CASES (188 total), 188/188 x2,
+  impersonation guard armed (DEFAULT + near-miss "Jolt" both fail the
+  verdict map; setting string is not state).
+- Folds `a56f683`: child dispatch made total (unknown --arm refuses
+  named, no silent threaded body); jolt_isect elif requires positive
+  edge evidence (s0/back==1, Dummy's zero reads -> unexpected);
+  cast_motion size-guard (Dummy SCRIPT-ERROR path classified);
+  remove_absolute(child.log) stale-slot guard x2; ObjectDB leak WARNING
+  fails both parent scans (was invisible, row PASSed);
+  jolt_dss_class=JoltPhysicsDirectSpaceState3D pinned (live object
+  class, not just registry pair).
+- Critic F1: boundary/reviewer delta_pf=1 premise refuted -- first-entry
+  artifact (co-located pairs contaminate logB[0]); landed pin stands,
+  keyed by sig_log.clear(). Verifier AGREE 15/15; baseline zero-drift
+  (186 prior rows byte-identical prefix sha c0c3fcbb).
+- Verdict: ADMIT-corr (Sol, wave-15). Bounded: Godot
+  4.7.2.stable.arch_linux.ed1daf0bf, GodotPhysics3D/Jolt, this host.
