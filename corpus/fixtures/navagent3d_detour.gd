@@ -364,7 +364,6 @@ func _run() -> void:
 		st = _read_state(agent, actor)
 		if arm_cfg.has("steps"):
 			states = await _run_steps(arm_cfg["steps"], agent, actor, srv)
-			st2 = states[states.size() - 1]
 		elif arm_cfg.has("tp"):
 			actor.global_position = arm_cfg["tp"]
 			for i in range(5):
@@ -2211,7 +2210,9 @@ func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
 # New keys: link_start/link_end (endpoint move, applied after
 # enabled/layers inside the link block), map_force (map_force_update
 # flushes the queued writes now — collapses the getter edge to
-# same-turn, never the serve edge; placed after all RID/agent writes
+# same-turn; the serve edge is class-dependent — link jittered {w1,w2},
+# region deterministic 3f->2f; see the r77 header block; placed after
+# all RID/agent writes
 # so a force in the same dict still flushes them, before map_active so
 # a force+deactivate dict flushes then freezes).
 func _mut_list(step: Dictionary) -> Array:
@@ -2279,8 +2280,6 @@ func _read_srv(want: Dictionary, srv: Dictionary) -> Dictionary:
 	var link: RID = srv["link_node"].get_rid() if srv["link_node"] != null else srv["link_rid"]
 	if want.has("link_enabled"):
 		got["link_enabled"] = NavigationServer3D.link_get_enabled(link) if link.is_valid() else null
-	if want.has("link_layers"):
-		got["link_layers"] = int(NavigationServer3D.link_get_navigation_layers(link)) if link.is_valid() else null
 	if want.has("link_iter"):
 		got["link_iter"] = NavigationServer3D.link_get_iteration_id(link) if link.is_valid() else -1
 	if want.has("link_start"):
