@@ -1645,6 +1645,34 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 						"reachable": true, "reached": false, "finished": false}]}
 	return {}
 
+# Shared observable-tuple predicate for the arm families (r72 pop/tp, r73
+# link, r74+r75 motion pre-motion + per-step): returns "" when obs matches
+# want on idx -> next -> final -> dist -> flags -> path-size ->
+# path-elements, in that order, else the first diagnostic. `prefix` labels
+# the step variant ("step%d "); pre-teleport, peek, and metadata checks
+# stay in the callers.
+func _check_tuple(obs: Dictionary, want: Dictionary, prefix := "") -> String:
+	var want_path: Array = want["path"]
+	if obs["idx"] != want["idx"]:
+		return "%sidx=%d expected=%d" % [prefix, obs["idx"], want["idx"]]
+	if obs["next"].distance_to(want["next"]) > POS_TOL:
+		return "%snext=%s expected=%s" % [prefix, _v3(obs["next"]), _v3(want["next"])]
+	if obs["final"].distance_to(want["final"]) > POS_TOL:
+		return "%sfinal=%s expected=%s" % [prefix, _v3(obs["final"]), _v3(want["final"])]
+	if absf(obs["dist"] - want["dist"]) > DIST_TOL:
+		return "%sdist=%.6f expected=%.6f" % [prefix, obs["dist"], want["dist"]]
+	if obs["reachable"] != want["reachable"] or obs["reached"] != want["reached"] \
+			or obs["finished"] != want["finished"]:
+		return "%sflags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
+			prefix, obs["reachable"], obs["reached"], obs["finished"],
+			want["reachable"], want["reached"], want["finished"]]
+	if obs["path"].size() != want_path.size():
+		return "%snpath=%d expected=%d path=%s" % [prefix, obs["path"].size(), want_path.size(), obs["path"]]
+	for i in range(want_path.size()):
+		if obs["path"][i].distance_to(want_path[i]) > POS_TOL:
+			return "%spath[%d]=%s expected=%s path=%s" % [prefix, i, _v3(obs["path"][i]), _v3(want_path[i]), obs["path"]]
+	return ""
+
 func _read_state(agent: NavigationAgent3D, actor: Node3D) -> Dictionary:
 	var next := agent.get_next_path_position()
 	var idx := agent.get_current_navigation_path_index()
@@ -1659,28 +1687,8 @@ func _read_state(agent: NavigationAgent3D, actor: Node3D) -> Dictionary:
 
 func _run_pop_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 		st: Dictionary, st2: Dictionary) -> bool:
-	var diag := ""
+	var diag := _check_tuple(st2, cfg)
 	var want_path: Array = cfg["path"]
-	if st2["idx"] != cfg["idx"]:
-		diag = "idx=%d expected=%d" % [st2["idx"], cfg["idx"]]
-	elif st2["next"].distance_to(cfg["next"]) > POS_TOL:
-		diag = "next=%s expected=%s" % [_v3(st2["next"]), _v3(cfg["next"])]
-	elif st2["final"].distance_to(cfg["final"]) > POS_TOL:
-		diag = "final=%s expected=%s" % [_v3(st2["final"]), _v3(cfg["final"])]
-	elif absf(st2["dist"] - cfg["dist"]) > DIST_TOL:
-		diag = "dist=%.6f expected=%.6f" % [st2["dist"], cfg["dist"]]
-	elif st2["reachable"] != cfg["reachable"] or st2["reached"] != cfg["reached"] \
-			or st2["finished"] != cfg["finished"]:
-		diag = "flags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
-			st2["reachable"], st2["reached"], st2["finished"],
-			cfg["reachable"], cfg["reached"], cfg["finished"]]
-	elif st2["path"].size() != want_path.size():
-		diag = "npath=%d expected=%d path=%s" % [st2["path"].size(), want_path.size(), st2["path"]]
-	elif diag == "":
-		for i in range(want_path.size()):
-			if st2["path"][i].distance_to(want_path[i]) > POS_TOL:
-				diag = "path[%d]=%s expected=%s path=%s" % [i, _v3(st2["path"][i]), _v3(want_path[i]), st2["path"]]
-				break
 	# Teleport arms also pin the pre-teleport tuple and that the stored path
 	# itself did not change under the move.
 	if diag == "" and cfg.has("tp"):
@@ -1726,28 +1734,7 @@ func _run_pop_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 func _run_link_arm(actor: Node3D, agent: NavigationAgent3D, region: RID,
 		link_rid: RID, link_node: NavigationLink3D, arm_name: String,
 		cfg: Dictionary, st2: Dictionary) -> bool:
-	var diag := ""
-	var want_path: Array = cfg["path"]
-	if st2["idx"] != cfg["idx"]:
-		diag = "idx=%d expected=%d" % [st2["idx"], cfg["idx"]]
-	elif st2["next"].distance_to(cfg["next"]) > POS_TOL:
-		diag = "next=%s expected=%s" % [_v3(st2["next"]), _v3(cfg["next"])]
-	elif st2["final"].distance_to(cfg["final"]) > POS_TOL:
-		diag = "final=%s expected=%s" % [_v3(st2["final"]), _v3(cfg["final"])]
-	elif absf(st2["dist"] - cfg["dist"]) > DIST_TOL:
-		diag = "dist=%.6f expected=%.6f" % [st2["dist"], cfg["dist"]]
-	elif st2["reachable"] != cfg["reachable"] or st2["reached"] != cfg["reached"] \
-			or st2["finished"] != cfg["finished"]:
-		diag = "flags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
-			st2["reachable"], st2["reached"], st2["finished"],
-			cfg["reachable"], cfg["reached"], cfg["finished"]]
-	elif st2["path"].size() != want_path.size():
-		diag = "npath=%d expected=%d path=%s" % [st2["path"].size(), want_path.size(), st2["path"]]
-	elif diag == "":
-		for i in range(want_path.size()):
-			if st2["path"][i].distance_to(want_path[i]) > POS_TOL:
-				diag = "path[%d]=%s expected=%s path=%s" % [i, _v3(st2["path"][i]), _v3(want_path[i]), st2["path"]]
-				break
+	var diag := _check_tuple(st2, cfg)
 	var res: NavigationPathQueryResult3D = agent.get_current_navigation_result()
 	var types: PackedInt32Array = res.get_path_types()
 	var rids: Array = res.get_path_rids()
@@ -1945,28 +1932,7 @@ func _final_srv_state(cfg: Dictionary) -> Dictionary:
 # path element that moved without an authored re-query fails the step.
 func _run_motion_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 		st: Dictionary, states: Array) -> bool:
-	var diag := ""
-	var want_path: Array = cfg["path"]
-	if st["idx"] != cfg["idx"]:
-		diag = "idx=%d expected=%d" % [st["idx"], cfg["idx"]]
-	elif st["next"].distance_to(cfg["next"]) > POS_TOL:
-		diag = "next=%s expected=%s" % [_v3(st["next"]), _v3(cfg["next"])]
-	elif st["final"].distance_to(cfg["final"]) > POS_TOL:
-		diag = "final=%s expected=%s" % [_v3(st["final"]), _v3(cfg["final"])]
-	elif absf(st["dist"] - cfg["dist"]) > DIST_TOL:
-		diag = "dist=%.6f expected=%.6f" % [st["dist"], cfg["dist"]]
-	elif st["reachable"] != cfg["reachable"] or st["reached"] != cfg["reached"] \
-			or st["finished"] != cfg["finished"]:
-		diag = "flags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
-			st["reachable"], st["reached"], st["finished"],
-			cfg["reachable"], cfg["reached"], cfg["finished"]]
-	elif st["path"].size() != want_path.size():
-		diag = "npath=%d expected=%d path=%s" % [st["path"].size(), want_path.size(), st["path"]]
-	elif diag == "":
-		for i in range(want_path.size()):
-			if st["path"][i].distance_to(want_path[i]) > POS_TOL:
-				diag = "path[%d]=%s expected=%s path=%s" % [i, _v3(st["path"][i]), _v3(want_path[i]), st["path"]]
-				break
+	var diag := _check_tuple(st, cfg)
 	if diag == "":
 		var epos: Vector3 = cfg["spawn"]
 		for i in range(states.size()):
@@ -1990,27 +1956,8 @@ func _run_motion_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 							diag = "step%d peek path[%d]=%s expected=%s path=%s" % [
 								i, j, _v3(st_i["path"][j]), _v3(esp[j]), st_i["path"]]
 							break
-			elif st_i["idx"] != es["idx"]:
-				diag = "step%d idx=%d expected=%d" % [i, st_i["idx"], es["idx"]]
-			elif st_i["next"].distance_to(es["next"]) > POS_TOL:
-				diag = "step%d next=%s expected=%s" % [i, _v3(st_i["next"]), _v3(es["next"])]
-			elif st_i["final"].distance_to(es["final"]) > POS_TOL:
-				diag = "step%d final=%s expected=%s" % [i, _v3(st_i["final"]), _v3(es["final"])]
-			elif absf(st_i["dist"] - es["dist"]) > DIST_TOL:
-				diag = "step%d dist=%.6f expected=%.6f" % [i, st_i["dist"], es["dist"]]
-			elif st_i["reachable"] != es["reachable"] or st_i["reached"] != es["reached"] \
-					or st_i["finished"] != es["finished"]:
-				diag = "step%d flags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
-					i, st_i["reachable"], st_i["reached"], st_i["finished"],
-					es["reachable"], es["reached"], es["finished"]]
-			elif st_i["path"].size() != esp.size():
-				diag = "step%d npath=%d expected=%d path=%s" % [i, st_i["path"].size(), esp.size(), st_i["path"]]
-			else:
-				for j in range(esp.size()):
-					if st_i["path"][j].distance_to(esp[j]) > POS_TOL:
-						diag = "step%d path[%d]=%s expected=%s path=%s" % [
-							i, j, _v3(st_i["path"][j]), _v3(esp[j]), st_i["path"]]
-						break
+			elif not es.get("peek_only", false):
+				diag = _check_tuple(st_i, es, "step%d " % i)
 			# Pre-force stored-state pins (round-75): the non-forcing
 			# capture taken between the wait and the forcing read must
 			# still show the pre-invalidation state — the lazy-update
