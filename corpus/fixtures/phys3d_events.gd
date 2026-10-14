@@ -5,8 +5,8 @@
 # Measured on Godot 4.7.2 --headless, 60 tps, physics_engine=DEFAULT
 # (GodotPhysics3D; Jolt is pinned in-battery by the jolt_edge child arm —
 # the lattice holds on the query/event split while cast/btm differ on
-# solver constants and static_nopair inverts; Jolt is selectable on this
-# build but unprobed for crashes beyond r83-boundary's jolt-* receipts).
+# solver constants and static_nopair inverts; the r84 child runs the
+# full 6-result map under Jolt clean-exit on this build).
 #
 # Arms (run one per case):
 #   isect        intersect_shape sees a moved body same-turn, both directions
@@ -217,10 +217,17 @@ func _run() -> void:
 	# the jolt_edge parent under a generated physics_engine="Jolt
 	# Physics" project (the --arm selects which child body runs).
 	if "--child" in OS.get_cmdline_user_args():
-		if _argval("--arm=", "") == "jolt_edge":
-			await _child_jolt()
-		else:
-			await _child_threaded()
+		# r84 critic: the child dispatch must be total -- a bare or
+		# unknown --arm used to run the threaded body silently. The
+		# threaded parent passes --arm=threaded_edge explicitly.
+		match _argval("--arm=", ""):
+			"jolt_edge":
+				await _child_jolt()
+			"threaded_edge":
+				await _child_threaded()
+			var bad:
+				prints("CHILD_RESULT child_arm=unknown arm='%s'" % bad)
+				quit(2)
 		return
 
 	var arm := _argval("--arm=", "isect")
@@ -545,8 +552,12 @@ func _run() -> void:
 			# survives the battery's kill of the direct /bin/sh parent and
 			# is orphaned (reviewer F2). 30 s covers the ~2 s healthy run.
 			var cmd := ("timeout -s KILL 30 \"%s\" --headless --path \"%s\" --script \"%s\""
-					+ " -- --child > \"%s\" 2>&1") % [
+					+ " -- --child --arm=threaded_edge > \"%s\" 2>&1") % [
 					OS.get_executable_path(), thrdir, selfpath, logpath]
+			# r84 critic: child.log is a never-unlinked single slot -- a
+			# stale log from a prior run would forge a verdict map, so
+			# remove it before spawn (missing-after-spawn stays _fail).
+			DirAccess.remove_absolute(logpath)
 			var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
 			var verdict := ""
 			var script_err := false
@@ -557,6 +568,11 @@ func _run() -> void:
 					if line.begins_with("CHILD_RESULT "):
 						verdict = line
 					elif "SCRIPT ERROR" in line or "Parse Error" in line:
+						script_err = true
+					elif ("ObjectDB" in line and "leaked" in line):
+						# ObjectDB-only leaks print as WARNING, not ERROR
+						# (r84 reviewer F1): mirror the battery classifier's
+						# LEAKED_OBJECTDB arm into the parent scan.
 						script_err = true
 					elif (line.begins_with("ERROR:")
 							and "Space state is inaccessible" not in line):
@@ -687,6 +703,7 @@ func _run() -> void:
 					+ " --script \"%s\" -- --child --arm=jolt_edge"
 					+ " > \"%s\" 2>&1") % [
 					OS.get_executable_path(), joltdir, selfpath, logpath]
+			DirAccess.remove_absolute(logpath)  # stale-slot guard (r84 critic)
 			var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
 			var verdicts := {}
 			var script_err := false
@@ -700,6 +717,10 @@ func _run() -> void:
 							verdicts[kv[0]] = kv[1]
 					elif "SCRIPT ERROR" in line or "Parse Error" in line:
 						script_err = true
+					elif ("ObjectDB" in line and "leaked" in line):
+						# WARNING-class ObjectDB leak (r84 reviewer F1) --
+						# not an ERROR line, mirrors LEAKED_OBJECTDB
+						script_err = true
 					elif line.begins_with("ERROR:"):
 						# no expected-witness class under Jolt: any
 						# engine ERROR is a defect (r83 reviewer F4)
@@ -709,6 +730,7 @@ func _run() -> void:
 				return _fail("jolt_edge child log missing")
 			var expect := {
 				"jolt_backend": "Jolt Physics",
+				"jolt_dss_class": "JoltPhysicsDirectSpaceState3D",
 				"jolt_isect": "same-signature",
 				"jolt_cast": "differs-constants",
 				"jolt_btm": "differs-constants",
@@ -808,6 +830,10 @@ func _child_jolt() -> void:
 		_cleanup_rids()
 		quit(1)
 		return
+	# r84 critic: the ClassDB pair is registry-level evidence; the live
+	# space-state object's class is the active-backend witness and is
+	# pinned in the parent's verdict map.
+	prints("CHILD_RESULT jolt_dss_class=%s" % dss.get_class())
 
 	# jolt_isect: the isect arm's wall/sphere pair, both directions.
 	var wall := _mk_body(Vector3(0, 0, -3))
@@ -830,7 +856,10 @@ func _child_jolt() -> void:
 	var cls := "unexpected"
 	if s0 == 1 and m0 == 0 and away == 0 and away_n1 == 0 and back == 1:
 		cls = "same-signature"
-	elif m0 == 0 and away == 0 and away_n1 == 0:
+	elif s0 == 1 and back == 1:
+		# r84 critic: differs-constants must stand on positive evidence --
+		# a backend that returns nothing at all (Dummy) would otherwise
+		# earn a known class from zero reads
 		cls = "differs-constants"
 	prints("CHILD_RESULT jolt_isect=%s" % cls)
 
@@ -844,19 +873,25 @@ func _child_jolt() -> void:
 	var c1 := dss.cast_motion(qc)
 	await _frames(1)
 	var c2 := dss.cast_motion(qc)
-	prints("CHILD_NOTE jolt_cast safe=%.6f unsafe=%.6f w0=%.6f,%.6f n1=%.6f,%.6f"
-			% [c0[0], c0[1], c1[0], c1[1], c2[0], c2[1]])
 	cls = "unexpected"
-	var cast_edge := absf(c1[0] - 1.0) < 0.0001 \
-			and absf(c1[1] - 1.0) < 0.0001 \
-			and absf(c2[0] - 1.0) < 0.0001 and absf(c2[1] - 1.0) < 0.0001
-	if cast_edge:
-		if absf(c0[0] - 0.14453125) < 0.0001 \
-				and absf(c0[1] - 0.150390625) < 0.0001:
-			cls = "same-signature"
-		elif absf(c0[0] - 0.14984130859375) < 0.0001 \
-				and absf(c0[1] - 0.1500244140625) < 0.0001:
-			cls = "differs-constants"
+	if c0.size() < 2 or c1.size() < 2 or c2.size() < 2:
+		# r84 critic/reviewer F2: a backend can return a size-0 pair --
+		# indexing it aborts with a SCRIPT ERROR instead of classifying
+		prints("CHILD_NOTE jolt_cast degenerate sizes=%d,%d,%d"
+				% [c0.size(), c1.size(), c2.size()])
+	else:
+		prints("CHILD_NOTE jolt_cast safe=%.6f unsafe=%.6f w0=%.6f,%.6f n1=%.6f,%.6f"
+				% [c0[0], c0[1], c1[0], c1[1], c2[0], c2[1]])
+		var cast_edge := absf(c1[0] - 1.0) < 0.0001 \
+				and absf(c1[1] - 1.0) < 0.0001 \
+				and absf(c2[0] - 1.0) < 0.0001 and absf(c2[1] - 1.0) < 0.0001
+		if cast_edge:
+			if absf(c0[0] - 0.14453125) < 0.0001 \
+					and absf(c0[1] - 0.150390625) < 0.0001:
+				cls = "same-signature"
+			elif absf(c0[0] - 0.14984130859375) < 0.0001 \
+					and absf(c0[1] - 0.1500244140625) < 0.0001:
+				cls = "differs-constants"
 	prints("CHILD_RESULT jolt_cast=%s" % cls)
 
 	# jolt_btm: kinematic probe vs the same wall (returned to -3); the
