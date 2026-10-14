@@ -207,14 +207,15 @@
 #   the committed tuple served under the frozen map and replay the 2f edge
 #   on reactivation (mut_ord_link_*, mut_ord_*mapoff*).
 #   map_force_update: flushes the queued RID writes NOW — the getter edge
-#   collapses to same-turn (link en=false + iter stamped at w0) while the
-#   SERVE edge does not collapse (stale at w0). NOTE: under force the
-#   serve boundary is JITTERED — measured fresh at w1 on some runs, w2 on
-#   others on this host (the forced drain lands the rebuild on the next
-#   scheduled sync phase, unlike the deterministic unforced w2 edge). The
-#   tracked arm therefore pins the two deterministic facts — w0: getter
-#   applied + serve stale; w3: fresh clamp — and skips the w1 sample:
-#   mut_force_link vs mut_force_ctl.
+#   collapses to same-turn (link en=false + iter stamped at w0; region
+#   transform value lands same-turn but region_iter still stamps at w1).
+#   The SERVE edge splits by class: for link kills it is JITTERED —
+#   measured fresh at w1 on ~15-20% of identical runs, w2 dominant —
+#   while for region transforms it moves DETERMINISTICALLY 3f->2f
+#   (9/9 reps, r77-critic). The tracked arm therefore pins only the
+#   deterministic facts — w0: getter applied + serve stale; w3: fresh
+#   clamp — and skips the jittered w1 sample: mut_force_link vs
+#   mut_force_ctl.
 #   wait-ladder: the "ladder" cfg partitions the per-step SERVED tuples by
 #   identical canonical signature (_tuple_sig); the first boundary index
 #   is the measured window edge — unit waits make the sample index equal
@@ -1837,15 +1838,16 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 						"reachable": false, "reached": false, "finished": false}]}
 		# (d) map_force_update reach: same-turn link kill + force collapses
 		# the object-getter edge to w0 (srv_get en=false, link_iter=2 —
-		# applied NOW, no frame elapsed) while the SERVE edge does not
-		# collapse: w0 still serves the stale bridge. The serve boundary
-		# under force is JITTERED on this build — fresh at w1 on some runs,
-		# w2 on others — so the arm skips the w1 sample and pins the two
+		# applied NOW, no frame elapsed) while w0 still serves the stale
+		# bridge. The link-class serve boundary under force is JITTERED on
+		# this build — fresh at w1 on ~15-20% of identical runs, w2
+		# dominant — so the arm skips the w1 sample and pins the two
 		# stable facts: stale serve + applied getter at w0, fresh clamp at
-		# w3. The unforced control runs the same ladder with the getter
-		# still queued at w0 (en=true, iter=1), applied at w1, serve fresh
-		# at the deterministic w2 edge. Force flushes the command queue but
-		# does not accelerate invalidation.
+		# w3. (Region-class serves behave differently: their edge moves
+		# deterministically 3f->2f under force — r77-critic, 9/9.) The
+		# unforced control runs the same ladder with the getter still
+		# queued at w0 (en=true, iter=1), applied at w1, serve fresh at
+		# the deterministic w2 edge.
 		"mut_force_link":
 			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
 				"island": true,
@@ -2248,7 +2250,9 @@ func _apply_mutation(m: Dictionary, srv: Dictionary) -> void:
 		srv["agent"].navigation_layers = int(m["agent_layers"])
 	# Round-77: map_force_update drains the command queue now — the
 	# object-getter edge collapses to same-turn while the served-path
-	# edge is unmoved (mut_force_link vs mut_force_ctl). Placed after
+	# edge is class-dependent (link: jittered {w1,w2}; region:
+	# deterministic 3f->2f; both stale at w0 — mut_force_link vs
+	# mut_force_ctl). Placed after
 	# every RID/agent write so a force flushes the whole dict, and before
 	# map_active so a force+deactivate dict flushes then freezes.
 	if m.get("map_force", false):
