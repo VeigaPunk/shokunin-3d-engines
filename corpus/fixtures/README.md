@@ -686,6 +686,96 @@ pins four further classes on the r83–r85 lattice.
 
 Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
 
+## PhysicsServer3D body tier: held-handle identity, acquisition vs use, step-stamped getters, write-loss race, body-tier split, freed-space crash (round 87)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only phys3d_events_body_handle,phys3d_events_acq_use,phys3d_events_step_stamp,phys3d_events_write_loss,phys3d_events_body_tier,phys3d_events_freed_space`
+pins six further classes on the `PhysicsDirectBodyState3D` tier
+(`body_get_direct_state`). Every arm is a generated-project child; the
+three backend-split arms are gated on both engine hints (`BLOCKED`, never
+a fabricated split), and every child claim that is an engine line is
+counted in the raw child log rather than trusted from the child's print.
+
+- `body_handle` — the **identity law**. `body_get_direct_state(rid)`
+  returns ONE per-body singleton live handle: inside
+  `RigidBody3D._integrate_forces` a fresh fetch *is* the handle the
+  callback was handed, `body_set_state_sync_callback` sees the same object
+  every tick, and the held handle survives detach
+  (`body_set_space(RID())` → refetch `nil`, the held handle still reads the
+  same transform) and reattach (refetch `==` the held handle). The
+  handle's `get_space_state()` is the same object as
+  `space_get_direct_state(world_space)` and `World3D.direct_space_state`
+  — the "three-tier twin" is literal identity. Dummy is the floor
+  contrast (neither callback ever fires; the fetch answers for a detached
+  RID too), pinned as its own dict.
+- `acq_use` — the **acquisition-vs-use split** under
+  `3d/run_on_separate_thread=true`: the FETCH is gated (a fresh fetch at a
+  process-frame position returns a null-Object Variant and the engine
+  prints `Body state is inaccessible right now…`), but a handle obtained
+  once at a legal position reads live (matched against the server read at
+  the same instant) and its writes land at every later position — read
+  back through the handle same-turn *and* through the server at the next
+  in-phase position, 8/8 reps. **The gate controls acquisition, not use.**
+  The refused fetch is both the cell's witness and the threading witness:
+  a child whose threading key was silently ignored would grant every fetch
+  and fail the row loudly. `_spawn_child`'s `allow_lines` (r87, additive,
+  defaulted empty) admits that expected-witness ERROR class per arm.
+- `step_stamp` — the object's **own flush seams**. `get_step` reads a
+  backend init constant before the first solve completes
+  (`0.0010000000475` GodotPhysics / `0.0` Jolt) and the real dt
+  (`0.0166666675359`) after it. `get_total_gravity` /
+  `get_total_linear_damp` are step-stamped on **GodotPhysics only**
+  (`(0,0,0)` / `0.0` → `(0,-9.8,0)` / `0.10000000149012`); Jolt reports
+  the real values before the first solve — a backend split *inside* the
+  step-stamped class (the r87 scout summary generalised the GodotPhysics
+  behaviour; its own `ph_proj_jolt` receipt shows the split). The contact
+  buffer is the one snapshot-semantics field (last-step data: teleport out
+  of contact → the count still reads the last step's value and clears on
+  the next step) and reports **nothing at all** until
+  `body_set_max_contacts_reported > 0` opts the body in (default 0 → `0`
+  contacts while resting).
+- `write_loss` — the out-of-phase held-handle write as a **bounded
+  repeated observation** (8 reps). Each rep asserts the deterministic
+  witnesses — the fresh fetch refused, the write applied and same-turn
+  visible through the handle, the tally accounted — while the per-rep
+  landed/lost split stays evidence in the child log, never a pinned
+  outcome: the write path is ungated and unsynchronized, so the class is a
+  race class. The r87 scout's `fl_proj_thr` r1 loss was **not** reproduced
+  by this form (0 lost across 13 author child runs over 4 landed/lost
+  forms), so the row claims the precondition and the accounted tally, and
+  never a loss it did not witness.
+- `body_tier` — the **backend split at the body tier**, three children,
+  one sweep. GodotPhysics reads the FIRST in-contact step's
+  `get_contact_impulse(0)` as exactly `(0,0,0)` while Jolt reads the real
+  impact impulse; the out-of-range `get_contact_local_shape` reads `-1` vs
+  `0`; `set_sleep_state(true)` keeps the velocity on GodotPhysics and
+  zeroes it on Jolt; and the detached-body impulse write is a silent no-op
+  on GodotPhysics and a **loud** Jolt refusal (counted as the engine's own
+  line in the raw log: 0 / 1 / 0). Dummy is the silent floor. The impulse
+  cell is pinned at that first in-contact step only — on GodotPhysics the
+  same field oscillates through zero at later steps in other geometries
+  (measured: a 40-frame series with the floor at `y=-1` reads `(0,0,0)` at
+  two steps and up to `0.103` at others), so "GodotPhysics is always zero"
+  is a sampling artifact and is not claimed.
+- `freed_space` — the **crash class**, last in the file: a space-state
+  object reached THROUGH a body handle whose space was `free_rid`'d still
+  answers, and querying it kills the process. GodotPhysics reports
+  `handle_crash: Program crashed with signal 11` and aborts through its own
+  handler in ~1.5 s (`rc` **134** — measured 5/5 in this fixture form and
+  3/3 in the battery runs); the same handler was measured taking 44.2 s
+  under host load, and the `CRASH_BOUND_S := 6` bound then kills it
+  (`rc` **137**). The row therefore pins the class — the engine's crash
+  line, **no** child marker, a signal-class `rc` (134 or 137) — never the
+  handler's wall clock. Jolt's crash *mode* is heap-layout dependent on
+  this host — the scout's probe script threw an uncaught `std::system_error`
+  (3/3) while this fixture's larger child SIGSEGVs into the same handler
+  (3/3, and 3/3 again in the battery runs) — so the row requires exactly
+  one of those two engine lines and never claims one mode as the law.
+  Dummy returns `{}` and exits 0, so a Dummy child can never witness this
+  class. Freed-*body* handles are benign (silent nulls); this is the
+  freed-*space* cell only.
+
+Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and
