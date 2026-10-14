@@ -125,3 +125,13 @@ Sol `r81-adjudicator.md`: ADMIT — reorder topology + parse-survival confirmed 
 | calibration | **unchanged** | insertion-only; prior 122 keys byte-identical; sha 6a98c570 deterministic x3; falsifier liveness re-verified by critic mutant |
 
 Sol `r82-adjudicator.md`: ADMIT — residual fold honest, hazard contract pinned, masking direction documented not hidden. Bounded: Blender 5.2.1, embedded CPython 3.14.7, -b -P, this host.
+
+## Round 83 verdict — 2026-10-14
+
+| axis | verdict | evidence |
+|---|---|---|
+| depth | **improved** | two-tier lattice armed inside PhysicsServer3D: queries edge-0, generated events tick-bound, sync-callback once/tick; write-phase dependency (delta=1|2) measured and folded; ST refusal characterized as a deterministic context gate |
+| coverage | **improved** | new fixture `phys3d_events.gd` + 10 CASES rows (9 ordinary + 1 negative); threaded-backend conversion cell; backend matrix now names GodotPhysics3D vs Jolt with the `static_nopair` inversion recorded |
+| calibration | **improved** | insertion-only author diff (+597/-0 fixture, +28 README); critic falsified two claims as stated and both folds re-verified (186/186 on `4c1c100`); prior 176 rows byte-identical; verifier AGREE 18/18 |
+
+Sol `r83-adjudicator.md`: ADMIT-corr — lattice confirmed with backend scope honestly named; Jolt-pinned rows and contact-signal timing depth queued for r84. Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf, GodotPhysics3D/Jolt pair, this host.

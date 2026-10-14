@@ -1030,3 +1030,31 @@ corpus/knowledge/seed.md).
   deliberately not folded (would falsify); scene-removal
   witness-degenerate. Recorded uncovered.
 - Verdict: ADMIT (Sol, wave-13). Bounded bpy 5.2.1 -b -P, this host.
+
+## Round 83 — PhysicsServer3D two-tier lattice (wave-14 recovery)
+
+- MOVE: new `phys3d_events.gd` fixture + 10 CASES rows pin the query/
+  event split — `intersect_shape`/`cast_motion`/`body_test_motion`/
+  `intersect_ray` answer same-turn (edge 0) while `get_contact_count`,
+  `body_entered`/`body_exited`, `area_set_monitor_callback` and
+  `body_set_state_sync_callback` bind at the physics tick;
+  `static_nopair` negative + `threaded_edge` ST conversion.
+- Scout premise-correction steered the arm: the partition is by EVENT
+  KIND (queries edge-0 everywhere vs server events next-tick), Jolt is
+  present on this build, and ST conversion is an access-window gate,
+  not a deferral.
+- Critic counterexamples folded: tick latency is write-phase
+  dependent (delta=1 physics-phase / delta=2 process-phase);
+  `static_nopair` is GodotPhysics3D-scoped (Jolt fires ov=1 sig=1);
+  sig_log cleared before the control (stale-entry delta bug).
+- Reviewer folds: `timeout -s KILL 30` on the threaded child spawn
+  (orphan hazard), named fail on null dss, unexpected-ERROR scan.
+- Simplifier folds: dead `tries`, vestigial `sh_out`, `early_null`
+  collapse — all replay-identical; integrator re-run 186/186.
+- ST "majority-refused" reworded to deterministic context gate
+  (granted sample always the in-physics one, 12/12); `nulls >= 8`
+  pin retained for host variance.
+- Verifier AGREE 18/18 (case tables byte-identical ×4; prior 176 rows
+  byte-identical to r82-verifier receipt — cross-round zero drift).
+- Verdict: ADMIT-corr (Sol, wave-14). Bounded: Godot
+  4.7.2.stable.arch_linux.ed1daf0bf, GodotPhysics3D/Jolt, this host.
