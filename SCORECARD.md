@@ -27,3 +27,13 @@ retired: none.
 | calibration | **unchanged** | thresholds/tolerances untouched; verifier's relative-`--runs` tree-timeout trap recorded as pre-existing (fails closed). |
 
 Non-author `reports/round-72/r72-verifier.md`: **AGREE all five claims** — 112/112 battery, 90×12 prior 0-mismatch, 16/16 spot-checks verbatim, Node 31/31. Bounded: Godot 4.7.2 headless, this-mesh geometry; no moving-agent/metadata-flags/latch-release/cross-version claims. Work commit `05405ae`; report-last follows.
+
+## Round 73 verdict — 2026-10-14
+
+| axis | Sol verdict | evidence |
+|---|---|---|
+| depth | **improved locally** | off-mesh link traversal resolved to a measured gate system: companion arrays carry LINK-type (1) at hop-start index under `path_metadata_flags` per-bit control — opt-OUT, default 7 on 4.7.2 (critic wording correction absorbed); layers-bitmask / bidirectional-exit-side / enabled=false each independently drop the link to byte-identical no-link tuples (link-only mask → empty path + final=(0,0,0) third mode); `enter_cost` structurally inert (10/100/1e6 measured, mechanism unexplained) vs `travel_cost` live (crossover ~1.12); pop-through pinned symmetric — forward AND retro `next` across the void; `vertices.append_array` post-assignment non-write-through gotcha pinned. |
+| coverage | **improved locally** | 112→127 CASES rows (15 link arms: shortcut/meta-bits/layers/oneway/disabled/cost-pair/pop-through + island quad + server/node link authoring); mid-flight readouts, chained links, connection-radius strict bound measured at boundary; Node suites 31/31. |
+| calibration | **unchanged** | thresholds untouched; equality edges measured strict per gate; no bounds changed. |
+
+Non-author `reports/round-73/r73-verifier.md`: **AGREE all five claims** — 127/127 + 4 probes + seeds on committed `b41fb33`, 112×12 prior 0-mismatch, 15/15 verbatim CASES replay, Node 31/31. Bounded: Godot 4.7.2 headless, stationary agent, this geometry family; enter_cost inertness measured-not-explained; metadata flags verified on installed binary only. Work commit `b41fb33`; report-last commit follows.
