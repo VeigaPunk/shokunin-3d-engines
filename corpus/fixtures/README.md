@@ -756,16 +756,25 @@ counted in the raw child log rather than trusted from the child's print.
   (measured: a 40-frame series with the floor at `y=-1` reads `(0,0,0)` at
   two steps and up to `0.103` at others), so "GodotPhysics is always zero"
   is a sampling artifact and is not claimed.
-- `freed_space` — the **crash class**, last in the file: a space-state
-  object reached THROUGH a body handle whose space was `free_rid`'d still
-  answers, and querying it kills the process. GodotPhysics reports
+- `freed_space` — the **crash class**, last in the file: reaching the
+  space-state object THROUGH a body handle whose space was `free_rid`'d
+  kills the process — and on this host the crash **site** is
+  backend-specific (r87 critic F2): GodotPhysics dies **inside**
+  `held.get_space_state()` (the child's `space=` note never prints), while
+  Jolt's `get_space_state()` returns a live-looking object and the kill is
+  at `intersect_ray`. GodotPhysics reports
   `handle_crash: Program crashed with signal 11` and aborts through its own
   handler in ~1.5 s (`rc` **134** — measured 5/5 in this fixture form and
   3/3 in the battery runs); the same handler was measured taking 44.2 s
   under host load, and the `CRASH_BOUND_S := 6` bound then kills it
-  (`rc` **137**). The row therefore pins the class — the engine's crash
-  line, **no** child marker, a signal-class `rc` (134 or 137) — never the
-  handler's wall clock. Jolt's crash *mode* is heap-layout dependent on
+  (`rc` **137**). The row therefore pins the class per backend — one crash
+  line in the raw log **plus the child's breadcrumb prefix at that
+  backend's site** (GP: `held=` present, `space=` absent; Jolt: `held=` and
+  `space=` present, `ray` absent), **no** child marker, a signal-class `rc`
+  (134 or 137) — never the handler's wall clock. The crash-line count alone
+  is self-printable (r87 critic F1); the breadcrumb envelope is what raises
+  the bar — a forge must now replay the correct per-backend partial note
+  sequence, not just a line. Jolt's crash *mode* is heap-layout dependent on
   this host — the scout's probe script threw an uncaught `std::system_error`
   (3/3) while this fixture's larger child SIGSEGVs into the same handler
   (3/3, and 3/3 again in the battery runs) — so the row requires exactly

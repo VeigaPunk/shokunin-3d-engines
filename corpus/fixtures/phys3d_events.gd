@@ -150,14 +150,19 @@
 #                detached-impulse write silent vs LOUD (log-counted)
 #   freed_space  parent arm (round 87, FATAL TAIL): the one crash surface at
 #                this tier — a space-state object reached through a body
-#                handle whose SPACE was free_rid'd. GP reports signal 11 and
+#                handle whose SPACE was free_rid'd. The crash site is
+#                backend-specific on this host: GP dies INSIDE
+#                held.get_space_state() (its `space=` note never prints),
+#                Jolt's call returns and the kill is at intersect_ray.
+#                GP reports signal 11 and
 #                aborts through its own handler (rc 134 in ~1.5 s; a
 #                load-slowed handler was measured at 44.2 s and is then
 #                bound-killed at rc 137), Jolt's crash mode is heap-layout
 #                dependent (uncaught std::system_error or the same signal-11
-#                handler), Dummy returns {} and exits 0. Pinned as the
-#                engine's crash line plus the ABSENCE of any child marker,
-#                per backend
+#                handler), Dummy returns {} and exits 0. Pinned per backend
+#                as one crash line in the raw log plus the breadcrumb
+#                prefix at that backend's site plus the ABSENCE of any
+#                child marker
 #
 # Reproduce one arm:
 #   godot --headless --path <scratch> --script res://phys3d_events.gd -- --arm=isect
@@ -463,13 +468,13 @@ func _error_allowed(line: String, allow_inaccessible: bool,
 	return false
 
 
-# r87: corroborate a child claim against the ENGINE's own lines in the raw
-# child log. The child log merges 2>&1 by design (position fidelity), so a
-# child's own print could satisfy a text match in the merged stream; the
-# crash classes and Jolt's detached-impulse refusal are therefore pinned by
-# counting their signature lines in the raw log, which a self-print cannot
-# manufacture. Returns -1 when the log is unreadable (a named failure, never
-# a silent zero).
+# r87: corroborate a child claim against the lines in the raw child log.
+# The child log merges 2>&1 by design (position fidelity) — the child's own
+# prints share that stream, so a text match ALONE is self-printable (r87
+# critic F1): the crash rows therefore count the signature line AND require
+# the breadcrumb prefix the real run leaves at each backend's crash site,
+# and the refusal rows count the engine's ERROR lines == BODY_REPS. Returns
+# -1 when the log is unreadable (a named failure, never a silent zero).
 func _log_count(logpath: String, token: String) -> int:
 	var lf := FileAccess.open(logpath, FileAccess.READ)
 	if lf == null:
@@ -1008,9 +1013,7 @@ func _run() -> void:
 			# body pairs and fires). Gate first: if this build's engine
 			# hint lacks "Jolt Physics" the row reports BLOCKED, never a
 			# fabricated split.
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events jolt_edge jolt_absent=true")
-				return
+			if _gate("Jolt Physics", "jolt_edge", "jolt"): return
 			var spawned := _spawn_child("joltproj",
 					_project_body("JoltChild", "Jolt Physics", false),
 					"jolt_edge", false)
@@ -1044,9 +1047,7 @@ func _run() -> void:
 			# space_get_direct_state refusals — so a project whose
 			# threading flag was silently ignored fails loudly (those
 			# refusal ERRORs are the expected witness class here).
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events jolt_threaded jolt_absent=true")
-				return
+			if _gate("Jolt Physics", "jolt_threaded", "jolt"): return
 			var spawned := _spawn_child("joltthrproj",
 					_project_body("JoltThrChild", "Jolt Physics", true),
 					"jolt_threaded", true)
@@ -1076,9 +1077,7 @@ func _run() -> void:
 			# — never a known-class label. This cell proves the
 			# {same|differs|inverts} split is backend-real: the verdict
 			# map changes with the backend, not with the sweep code.
-			if not _engine_hint_has("Dummy"):
-				_quit_clean(1, "BLOCKED phys3d_events dummy_refused dummy_absent=true")
-				return
+			if _gate("Dummy", "dummy_refused", "dummy"): return
 			var spawned := _spawn_child("dummyproj",
 					_project_body("DummyChild", "Dummy", false),
 					"dummy_refused", false)
@@ -1314,12 +1313,8 @@ func _run() -> void:
 			# separation ray keeps the edge and differs only in solver
 			# constants. Gated on both engine hints — absent means an
 			# honest BLOCKED row, never a fabricated split.
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events backend_tier jolt_absent=true")
-				return
-			if not _engine_hint_has("Dummy"):
-				_quit_clean(1, "BLOCKED phys3d_events backend_tier dummy_absent=true")
-				return
+			if _gate("Jolt Physics", "backend_tier", "jolt"): return
+			if _gate("Dummy", "backend_tier", "dummy"): return
 			var tier_plain := _spawn_child("tierplainproj",
 					_project_body("TierPlain", "", false),
 					"tier_plain", false)
@@ -1377,9 +1372,7 @@ func _run() -> void:
 			# body and produces exactly two loud refusals on the same two
 			# calls, so the floor can never be read as a refusal: the
 			# Dummy backend answers where a real backend errors.
-			if not _engine_hint_has("Dummy"):
-				_quit_clean(1, "BLOCKED phys3d_events dummy_floor dummy_absent=true")
-				return
+			if _gate("Dummy", "dummy_floor", "dummy"): return
 			var floor_dummy := _spawn_child("floordummyproj",
 					_project_body("FloorDummy", "Dummy", false),
 					"floor_dummy", false)
@@ -1420,12 +1413,8 @@ func _run() -> void:
 			# never be a code difference. Dummy is the floor contrast (its
 			# callbacks never fire and its fetch answers for ANY RID), and
 			# the row is never a Dummy hazard detector (scout directive 8).
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events body_handle jolt_absent=true")
-				return
-			if not _engine_hint_has("Dummy"):
-				_quit_clean(1, "BLOCKED phys3d_events body_handle dummy_absent=true")
-				return
+			if _gate("Jolt Physics", "body_handle", "jolt"): return
+			if _gate("Dummy", "body_handle", "dummy"): return
 			var bh_plain := _spawn_child("bhplainproj",
 					_project_body("BhPlain", "", false), "bh_plain", false)
 			if bh_plain.has("err"):
@@ -1443,21 +1432,21 @@ func _run() -> void:
 				"bh_plain_backend": "DEFAULT",
 				"bh_plain_if_same": "true",
 				"bh_plain_ss_same": "true",
+				"bh_plain_ss_fired": ">0",
 				"bh_plain_detach": "nil",
 				"bh_plain_held_live": "true",
 				"bh_plain_reattach": "true",
 				"bh_plain_twin": "true",
-				"bh_plain_two_fetch": "true",
 			}
 			var expect_bh_jolt := {
 				"bh_jolt_backend": "Jolt Physics",
 				"bh_jolt_if_same": "true",
 				"bh_jolt_ss_same": "true",
+				"bh_jolt_ss_fired": ">0",
 				"bh_jolt_detach": "nil",
 				"bh_jolt_held_live": "true",
 				"bh_jolt_reattach": "true",
 				"bh_jolt_twin": "true",
-				"bh_jolt_two_fetch": "true",
 			}
 			# Dummy: no callback ever fires, and the fetch answers for a
 			# detached RID too — the floor contrast, pinned as its own dict
@@ -1466,11 +1455,11 @@ func _run() -> void:
 				"bh_dummy_backend": "Dummy",
 				"bh_dummy_if_same": "false",
 				"bh_dummy_ss_same": "false",
+				"bh_dummy_ss_fired": "0",
 				"bh_dummy_detach": "obj",
 				"bh_dummy_held_live": "true",
 				"bh_dummy_reattach": "true",
 				"bh_dummy_twin": "true",
-				"bh_dummy_two_fetch": "true",
 			}
 			for probe in [[bh_plain, expect_bh_plain, "plain"],
 					[bh_jolt, expect_bh_jolt, "jolt"],
@@ -1481,7 +1470,7 @@ func _run() -> void:
 					return _fail("body_handle %s drift exit=%d serr=%s v=%s"
 							% [probe[2], spawn["code"], str(spawn["serr"]),
 							str(spawn["verdicts"])])
-			_exit_ok("PASS phys3d_events body_handle if_same=true ss_same=true detach=nil held_live=true reattach=true twin=true two_fetch=true dummy_cb=never child_exit=0")
+			_exit_ok("PASS phys3d_events body_handle if_same=true ss_same=true detach=nil held_live=true reattach=true twin=true dummy_cb=never child_exit=0")
 
 		"acq_use":
 			# acquisition-vs-use split (r87): under
@@ -1495,9 +1484,7 @@ func _run() -> void:
 			# run_on_separate_thread key was silently ignored would grant
 			# every fetch and fail this row loudly instead of reprinting the
 			# unthreaded map.
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events acq_use jolt_absent=true")
-				return
+			if _gate("Jolt Physics", "acq_use", "jolt"): return
 			var au_allow := ["Body state is inaccessible"]
 			var au_plain := _spawn_child("auplainproj",
 					_project_body("AuPlain", "", true), "au_plain", false,
@@ -1523,6 +1510,18 @@ func _run() -> void:
 					return _fail("acq_use %s drift exit=%d serr=%s v=%s errs=%s"
 							% [probe[2], spawn["code"], str(spawn["serr"]),
 							str(spawn["verdicts"]), str(spawn["errs"])])
+			# r87 critic F3: allow_lines forgives the class; the count is
+			# the conjunct. Each refused fresh fetch prints one engine
+			# ERROR — == BODY_REPS in the raw log, so a silently-nil
+			# fetch (the scout's class-3 shape) can never pass as a
+			# gated refusal.
+			for dirname in ["auplainproj", "aujoltproj"]:
+				var refusals := _log_count(ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname),
+						"Body state is inaccessible")
+				if refusals != BODY_REPS:
+					return _fail("acq_use %s refusal lines=%d expected=%d"
+							% [dirname, refusals, BODY_REPS])
 			_exit_ok("PASS phys3d_events acq_use gate=refused out_of_phase=8 held_read=live write=ungated reps=8 child_exit=0")
 
 		"step_stamp":
@@ -1538,9 +1537,7 @@ func _run() -> void:
 			# the split). The contact buffer is the one snapshot-semantics
 			# field (last-step data) and reports nothing at all until
 			# body_set_max_contacts_reported opts the body in.
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events step_stamp jolt_absent=true")
-				return
+			if _gate("Jolt Physics", "step_stamp", "jolt"): return
 			var ss_plain := _spawn_child("ssplainproj",
 					_project_body("SsPlain", "", false), "ss_plain", false)
 			if ss_plain.has("err"):
@@ -1609,12 +1606,19 @@ func _run() -> void:
 					and wl_v.get("wl_plain_backend") == "DEFAULT" \
 					and wl_v.get("wl_plain_gate") == "refused" \
 					and int(wl_v.get("wl_plain_same_turn", "-1")) == BODY_REPS \
-					and int(wl_v.get("wl_plain_tally", "-1")) == BODY_REPS \
 					and wl_landed >= 1 and wl_landed + wl_lost == BODY_REPS
 			if not wl_ok:
 				return _fail("write_loss drift exit=%d v=%s errs=%s"
 						% [wl["code"], str(wl_v), str(wl["errs"])])
-			_exit_ok("PASS phys3d_events write_loss gate=refused reps=8 same_turn=8 tally=8 race=bounded child_exit=0")
+			# r87 critic F3: the refusal count is the corroborating
+			# conjunct — == BODY_REPS engine ERROR lines in the raw log.
+			var wl_refusals := _log_count(ProjectSettings.globalize_path(
+					"res://wlproj/child.log"),
+					"Body state is inaccessible")
+			if wl_refusals != BODY_REPS:
+				return _fail("write_loss refusal lines=%d expected=%d"
+						% [wl_refusals, BODY_REPS])
+			_exit_ok("PASS phys3d_events write_loss gate=refused reps=8 same_turn=8 race=bounded child_exit=0")
 
 		"body_tier":
 			# backend split at the body tier (r87): three generated children,
@@ -1629,12 +1633,8 @@ func _run() -> void:
 			# detached-body impulse write is a silent no-op on GodotPhysics
 			# and a LOUD Jolt refusal, corroborated by the engine's own line
 			# count in the raw child log. Dummy is the silent floor.
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events body_tier jolt_absent=true")
-				return
-			if not _engine_hint_has("Dummy"):
-				_quit_clean(1, "BLOCKED phys3d_events body_tier dummy_absent=true")
-				return
+			if _gate("Jolt Physics", "body_tier", "jolt"): return
+			if _gate("Dummy", "body_tier", "dummy"): return
 			var bt_allow := ["Index p_contact_idx",
 					"Failed to apply central impulse"]
 			var bt_plain := _spawn_child("btplainproj",
@@ -1700,25 +1700,26 @@ func _run() -> void:
 		"freed_space":
 			# freed-space crash class (r87, FATAL TAIL): the ONE crash
 			# surface at this tier is not the body handle but the space
-			# handle reached THROUGH it — a space-state object whose space
-			# was free_rid'd still answers, and querying it kills the
-			# process. GodotPhysics reports signal 11 and then aborts
+			# handle reached THROUGH it — reaching the space-state object
+			# on a freed space kills the process. The crash SITE is
+			# backend-specific on this host (r87 critic F2): GodotPhysics
+			# dies inside held.get_space_state() itself (the `space=` note
+			# never prints), while Jolt's get_space_state() returns the
+			# object and the kill is at intersect_ray. GodotPhysics reports
+			# signal 11 and then aborts
 			# through its own handler; Jolt's crash mode is heap-layout
 			# dependent (uncaught std::system_error OR the same signal-11
 			# handler); Dummy returns an empty dict and exits 0. The pinned
-			# class is the ENGINE's crash line in the raw child log plus the
+			# class is one crash line in the raw child log plus the
+			# breadcrumb prefix at that backend's site plus the
 			# absence of any child marker; the rc is the handler's exit
 			# PATH, not the class (GodotPhysics lands 134 in ~1.5 s when the
 			# handler completes and 137 when a bound cuts a load-slowed
 			# handler short), so both signal-class rcs are accepted and the
 			# marker carries the class. Freed-BODY handles are benign
 			# (silent nulls) — this is the freed-SPACE cell only.
-			if not _engine_hint_has("Jolt Physics"):
-				_quit_clean(1, "BLOCKED phys3d_events freed_space jolt_absent=true")
-				return
-			if not _engine_hint_has("Dummy"):
-				_quit_clean(1, "BLOCKED phys3d_events freed_space dummy_absent=true")
-				return
+			if _gate("Jolt Physics", "freed_space", "jolt"): return
+			if _gate("Dummy", "freed_space", "dummy"): return
 			var fs_plain := _spawn_child("fsplainproj",
 					_project_body("FsPlain", "", false), "fs_plain", false,
 					"res://phys3d_events.gd", CRASH_BOUND_S)
@@ -1737,8 +1738,14 @@ func _run() -> void:
 			# a crashing child can leave no marker at all: verdicts must be
 			# empty and the rc must be a signal-class exit (134 SIGABRT when
 			# the handler finishes, 137 when the bound kills the hung
-			# handler). The crash line is the engine's, counted in the raw
-			# log.
+			# handler). The crash is corroborated by the child's own
+			# breadcrumb PREFIX in the raw log at the backend-specific site
+			# (r87 critic F1/F2): a bare printed crash line is forgeable —
+			# the row requires the full envelope instead. On GodotPhysics
+			# the crash fires INSIDE held.get_space_state(), so the log
+			# ends at the `held=` note (no `space=` line); on Jolt the
+			# space-state object returns and the crash is at
+			# intersect_ray, so `space=` prints but `ray` never does.
 			var fs_gp_log := ProjectSettings.globalize_path(
 					"res://fsplainproj/child.log")
 			var fs_gp_line := _log_count(fs_gp_log,
@@ -1749,6 +1756,12 @@ func _run() -> void:
 			if not fs_plain["verdicts"].is_empty() or fs_gp_line != 1:
 				return _fail("freed_space plain marker=%s crash_lines=%d"
 						% [str(fs_plain["verdicts"]), fs_gp_line])
+			if _log_count(fs_gp_log, "CHILD_NOTE fs_plain held=") != 1 \
+					or _log_count(fs_gp_log, "held=nil") != 0 \
+					or _log_count(fs_gp_log,
+							"CHILD_NOTE fs_plain space=") != 0:
+				return _fail("freed_space plain crash-site envelope drift")
+
 			# Jolt's crash MODE is heap-layout dependent, not fixed: the freed
 			# space's memory is either still shaped enough like a live Jolt
 			# system that the internal check fires and the uncaught throw
@@ -1771,6 +1784,16 @@ func _run() -> void:
 					or fs_throw + fs_segv != 1:
 				return _fail("freed_space jolt marker=%s throw=%d segv=%d"
 						% [str(fs_jolt["verdicts"]), fs_throw, fs_segv])
+			# Jolt site pin (r87 critic F2): get_space_state() returns the
+			# object here, so `space=` prints; the crash is at
+			# intersect_ray, so `ray_empty`/`ray` never appear.
+			if _log_count(fs_jolt_log, "CHILD_NOTE fs_jolt held=") != 1 \
+					or _log_count(fs_jolt_log, "held=nil") != 0 \
+					or _log_count(fs_jolt_log,
+							"CHILD_NOTE fs_jolt space=") != 1 \
+					or _log_count(fs_jolt_log,
+							"CHILD_NOTE fs_jolt ray") != 0:
+				return _fail("freed_space jolt crash-site envelope drift")
 			if fs_dummy["code"] != 0 or fs_dummy["serr"] \
 					or fs_dummy["verdicts"] != {"fs_dummy_ray": "empty"}:
 				return _fail("freed_space dummy drift exit=%d serr=%s v=%s"
@@ -2431,13 +2454,15 @@ func _child_bh_identity(prefix: String) -> void:
 	var held_live := false
 	var reattach_same := false
 	var twin := false
-	var two_fetch := false
 	if held != null:
 		var t_before: Transform3D = held.get_transform()
 		PhysicsServer3D.body_set_space(srig, RID())
 		detach_nil = PhysicsServer3D.body_get_direct_state(srig) == null
 		# a detached body does not step, so the held handle must still read
-		# the SAME transform it read before the detach
+		# the SAME transform it read before the detach. r87 critic F5
+		# caveat: this is a FROZEN-READ witness — a zombie handle serving
+		# stale state satisfies it — not a liveness proof; the fs arm is
+		# the row that probes read-past-lifetime.
 		held_live = held.get_transform() == t_before
 		PhysicsServer3D.body_set_space(srig, wspace)
 		await _frames(1)
@@ -2445,22 +2470,19 @@ func _child_bh_identity(prefix: String) -> void:
 		var sp: Variant = held.get_space_state()
 		twin = sp == PhysicsServer3D.space_get_direct_state(wspace) \
 				and sp == root.get_world_3d().direct_space_state
-		two_fetch = PhysicsServer3D.body_get_direct_state(srig) \
-				== PhysicsServer3D.body_get_direct_state(srig)
-	prints("CHILD_NOTE %s if_fired=%s if_same=%s if_refetch=%s ss=%d/%d detach_nil=%s held_live=%s reattach_same=%s twin=%s two_fetch=%s" % [
-			prefix, str(rb.fired), str(rb.same_obj), str(if_refetch),
-			ss["fired"], ss["same"], str(detach_nil), str(held_live),
-			str(reattach_same), str(twin), str(two_fetch)])
-	prints("CHILD_RESULT %s_backend=%s" % [prefix, _backend_name()])
-	prints("CHILD_RESULT %s_if_same=%s" % [
-			prefix, str(rb.same_obj and if_refetch)])
-	prints("CHILD_RESULT %s_ss_same=%s" % [
-			prefix, str(ss["fired"] > 0 and ss["fired"] == ss["same"])])
-	prints("CHILD_RESULT %s_detach=%s" % [prefix, "nil" if detach_nil else "obj"])
-	prints("CHILD_RESULT %s_held_live=%s" % [prefix, str(held_live)])
-	prints("CHILD_RESULT %s_reattach=%s" % [prefix, str(reattach_same)])
-	prints("CHILD_RESULT %s_twin=%s" % [prefix, str(twin)])
-	prints("CHILD_RESULT %s_two_fetch=%s" % [prefix, str(two_fetch)])
+	_note(prefix, "if_fired=%s if_same=%s if_refetch=%s ss=%d/%d detach_nil=%s held_live=%s reattach_same=%s twin=%s" % [str(rb.fired), str(rb.same_obj), str(if_refetch), ss["fired"], ss["same"], str(detach_nil), str(held_live), str(reattach_same), str(twin)])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "if_same", str(rb.same_obj and if_refetch))
+	_emit(prefix, "ss_same", str(ss["fired"] > 0 and ss["fired"] == ss["same"]))
+	# r87 critic F5: `ss_same` alone never saw the fired count — a backend
+	# whose callbacks fire with a DIFFERENT object still reads ss_same=false,
+	# so `dummy_cb=never` needed the count itself. Bucketed (0 vs >0): the
+	# real-backend count is scheduling-dependent, the floor's is not.
+	_emit(prefix, "ss_fired", "0" if ss["fired"] == 0 else ">0")
+	_emit(prefix, "detach", str("nil" if detach_nil else "obj"))
+	_emit(prefix, "held_live", str(held_live))
+	_emit(prefix, "reattach", str(reattach_same))
+	_emit(prefix, "twin", str(twin))
 	_quit_clean()
 
 
@@ -2483,7 +2505,7 @@ func _child_acq_use(prefix: String) -> void:
 		if held != null:
 			break
 	if held == null:
-		prints("CHILD_NOTE %s held=nil" % prefix)
+		_note(prefix, "held=nil")
 		_quit_clean(1)
 		return
 	var out_of_phase := 0
@@ -2511,15 +2533,12 @@ func _child_acq_use(prefix: String) -> void:
 		if srv_t is Transform3D \
 				and absf(srv_t.origin.y - (30.0 + i)) < 0.0001:
 			persist += 1
-	prints("CHILD_NOTE %s reps=%d out_of_phase=%d refused=%d live=%d same_turn=%d persist=%d" % [
-			prefix, BODY_REPS, out_of_phase, refused, live, same_turn, persist])
-	prints("CHILD_RESULT %s_backend=%s" % [prefix, _backend_name()])
-	prints("CHILD_RESULT %s_gate=%s" % [
-			prefix, "refused" if refused == BODY_REPS else "granted"])
-	prints("CHILD_RESULT %s_use=%s" % [prefix,
-			"ungated" if live == BODY_REPS and same_turn == BODY_REPS
-					and persist == BODY_REPS else "gated"])
-	prints("CHILD_RESULT %s_out_of_phase=%d" % [prefix, out_of_phase])
+	_note(prefix, "reps=%d out_of_phase=%d refused=%d live=%d same_turn=%d persist=%d" % [BODY_REPS, out_of_phase, refused, live, same_turn, persist])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "gate", str("refused" if refused == BODY_REPS else "granted"))
+	_emit(prefix, "use", str("ungated" if live == BODY_REPS and same_turn == BODY_REPS
+					and persist == BODY_REPS else "gated"))
+	_emit(prefix, "out_of_phase", "%d" % [out_of_phase])
 	_quit_clean()
 
 
@@ -2554,14 +2573,11 @@ func _child_step_stamp(prefix: String) -> void:
 	var s2: Variant = PhysicsServer3D.body_get_direct_state(rig)
 	var cc_on: int = s2.get_contact_count() if s2 != null else -1
 	var post_step := -1.0
-	var post_grav := "absent"
 	var post_damp := -1.0
 	var stale_w0 := -1
 	var stale_n1 := -1
 	if s2 != null:
 		post_step = s2.get_step()
-		post_grav = "real" if s2.get_total_gravity().is_equal_approx(
-				Vector3(0, -9.8, 0)) else "other"
 		post_damp = s2.get_total_linear_damp()
 		# last-step data: teleport out of contact -> the count still reads
 		# the last step's value, and clears only on the next step
@@ -2571,18 +2587,16 @@ func _child_step_stamp(prefix: String) -> void:
 		stale_w0 = s2.get_contact_count()
 		await _frames(1)
 		stale_n1 = s2.get_contact_count()
-	prints("CHILD_NOTE %s pre=%s/%s/%s off=%d on=%d post=%s/%s/%s stale=%d,%d" % [
-			prefix, str(pre_step), pre_grav, str(pre_damp), cc_off, cc_on,
-			str(post_step), post_grav, str(post_damp), stale_w0, stale_n1])
-	prints("CHILD_RESULT %s_backend=%s" % [prefix, _backend_name()])
-	prints("CHILD_RESULT %s_step_pre=%s" % [prefix, str(pre_step)])
-	prints("CHILD_RESULT %s_grav_pre=%s" % [prefix, pre_grav])
-	prints("CHILD_RESULT %s_damp_pre=%s" % [prefix, str(pre_damp)])
-	prints("CHILD_RESULT %s_step_post=%s" % [prefix, str(post_step)])
-	prints("CHILD_RESULT %s_damp_post=%s" % [prefix, str(post_damp)])
-	prints("CHILD_RESULT %s_cc_off=%d" % [prefix, cc_off])
-	prints("CHILD_RESULT %s_cc_on=%d" % [prefix, cc_on])
-	prints("CHILD_RESULT %s_last_step=%d,%d" % [prefix, stale_w0, stale_n1])
+	_note(prefix, "pre=%s/%s/%s off=%d on=%d post=%s/%s stale=%d,%d" % [str(pre_step), pre_grav, str(pre_damp), cc_off, cc_on, str(post_step), str(post_damp), stale_w0, stale_n1])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "step_pre", str(pre_step))
+	_emit(prefix, "grav_pre", str(pre_grav))
+	_emit(prefix, "damp_pre", str(pre_damp))
+	_emit(prefix, "step_post", str(post_step))
+	_emit(prefix, "damp_post", str(post_damp))
+	_emit(prefix, "cc_off", "%d" % [cc_off])
+	_emit(prefix, "cc_on", "%d" % [cc_on])
+	_emit(prefix, "last_step", "%d,%d" % [stale_w0, stale_n1])
 	_quit_clean()
 
 
@@ -2608,7 +2622,7 @@ func _child_write_loss(prefix: String) -> void:
 		if held != null:
 			break
 	if held == null:
-		prints("CHILD_NOTE %s held=nil" % prefix)
+		_note(prefix, "held=nil")
 		_quit_clean(1)
 		return
 	var refused := 0
@@ -2636,15 +2650,12 @@ func _child_write_loss(prefix: String) -> void:
 		else:
 			lost += 1
 		rows.append("%d:%s>%s" % [i, "T" if same else "F", str(srv)])
-	prints("CHILD_NOTE %s reps=%d refused=%d same_turn=%d landed=%d lost=%d rows=%s" % [
-			prefix, BODY_REPS, refused, same_turn, landed, lost, str(rows)])
-	prints("CHILD_RESULT %s_backend=%s" % [prefix, _backend_name()])
-	prints("CHILD_RESULT %s_gate=%s" % [
-			prefix, "refused" if refused == BODY_REPS else "granted"])
-	prints("CHILD_RESULT %s_same_turn=%d" % [prefix, same_turn])
-	prints("CHILD_RESULT %s_landed=%d" % [prefix, landed])
-	prints("CHILD_RESULT %s_lost=%d" % [prefix, lost])
-	prints("CHILD_RESULT %s_tally=%d" % [prefix, landed + lost])
+	_note(prefix, "reps=%d refused=%d same_turn=%d landed=%d lost=%d rows=%s" % [BODY_REPS, refused, same_turn, landed, lost, str(rows)])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "gate", str("refused" if refused == BODY_REPS else "granted"))
+	_emit(prefix, "same_turn", "%d" % [same_turn])
+	_emit(prefix, "landed", "%d" % [landed])
+	_emit(prefix, "lost", "%d" % [lost])
 	_quit_clean()
 
 
@@ -2707,25 +2718,26 @@ func _child_body_tier(prefix: String) -> void:
 	if held2 != null:
 		held2.apply_central_impulse(Vector3(0, 1, 0))
 	PhysicsServer3D.body_set_space(rig2, wspace)
-	prints("CHILD_NOTE %s first_i=%d cc=%d impulse=%s lshape_oob=%s sleep_lv=%s detach_write=done" % [
-			prefix, first_i, cc, impulse_raw, lshape_oob, sleep_lv])
-	prints("CHILD_RESULT %s_backend=%s" % [prefix, _backend_name()])
-	prints("CHILD_RESULT %s_cc=%d" % [prefix, cc])
-	prints("CHILD_RESULT %s_impulse=%s" % [prefix, impulse])
-	prints("CHILD_RESULT %s_lshape_oob=%s" % [prefix, lshape_oob])
-	prints("CHILD_RESULT %s_sleep_lv=%s" % [prefix, sleep_lv])
+	_note(prefix, "first_i=%d cc=%d impulse=%s lshape_oob=%s sleep_lv=%s detach_write=done" % [first_i, cc, impulse_raw, lshape_oob, sleep_lv])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "cc", "%d" % [cc])
+	_emit(prefix, "impulse", str(impulse))
+	_emit(prefix, "lshape_oob", str(lshape_oob))
+	_emit(prefix, "sleep_lv", str(sleep_lv))
 	_quit_clean()
 
 
 # --child --arm=fs_plain / fs_jolt / fs_dummy (r87): the freed-SPACE crash
 # cell, and the last thing this file does — a crash cannot be caught, so the
-# child dies and the parent pins the engine's own line. The body handle is
+# child dies and the parent pins the log envelope. The body handle is
 # fetched first (the crash is not the body handle: freed BODY handles degrade
 # to silent nulls), then the world space is free_rid'd, then the space-state
-# object reached THROUGH the body handle is queried. GodotPhysics reports
-# signal 11 and aborts through its own handler, Jolt's crash mode is
-# heap-layout dependent (uncaught std::system_error or the same handler),
-# Dummy answers an empty dict and exits 0.
+# object reached THROUGH the body handle is queried. On this host the crash
+# site is backend-specific: GodotPhysics dies inside `held.get_space_state()`
+# below (the `space=` note never prints), Jolt survives that call and dies at
+# `sp.intersect_ray`. Jolt's crash mode is heap-layout dependent (uncaught
+# std::system_error or the same handler), Dummy answers an empty dict and
+# exits 0.
 func _child_freed_space(prefix: String) -> void:
 	wspace = root.get_world_3d().space
 	var rig := _mk_body(Vector3(0, 8, 0), PhysicsServer3D.BODY_MODE_RIGID)
@@ -2733,20 +2745,41 @@ func _child_freed_space(prefix: String) -> void:
 			PhysicsServer3D.BODY_PARAM_GRAVITY_SCALE, 0.0)
 	await _frames(2)
 	var held: Variant = PhysicsServer3D.body_get_direct_state(rig)
-	prints("CHILD_NOTE %s held=%s" % [
-			prefix, "nil" if held == null else held.get_class()])
+	_note(prefix, "held=%s" % ["nil" if held == null else held.get_class()])
 	PhysicsServer3D.free_rid(wspace)
 	var sp: Variant = held.get_space_state() if held != null else null
-	prints("CHILD_NOTE %s space=%s" % [
-			prefix, "nil" if sp == null else str(sp)])
+	_note(prefix, "space=%s" % ["nil" if sp == null else str(sp)])
 	if sp != null and sp is PhysicsDirectSpaceState3D:
 		var q := PhysicsRayQueryParameters3D.create(
 				Vector3(0, 10, 0), Vector3(0, -10, 0))
 		var hit: Variant = sp.intersect_ray(q)
-		prints("CHILD_NOTE %s ray_empty=%s" % [prefix, str(hit.is_empty())])
-		prints("CHILD_RESULT %s_ray=%s" % [
-				prefix, "empty" if hit.is_empty() else "hits"])
+		_note(prefix, "ray_empty=%s" % [str(hit.is_empty())])
+		_emit(prefix, "ray", str("empty" if hit.is_empty() else "hits"))
 		_quit_clean()
 		return
-	prints("CHILD_RESULT %s_ray=nospace" % prefix)
+	_emit(prefix, "ray", "nospace")
 	_quit_clean()
+
+
+# r87 simplifier: one BLOCKED gate for every arm (the r86 SP2 shape at the
+# other repeated exit). The engine hint is reported verbatim in the gate's own
+# line; the caller returns, so an absent backend can never fall through into a
+# fabricated split.
+func _gate(engine: String, arm: String, token: String) -> bool:
+	if _engine_hint_has(engine):
+		return false
+	_quit_clean(1, "BLOCKED phys3d_events %s %s_absent=true" % [arm, token])
+	return true
+
+
+# r87 simplifier: one emitter for every child verdict/note line, so the
+# "CHILD_RESULT <prefix>_<key>=<value>" / "CHILD_NOTE <prefix> <text>" shapes
+# exist once (the r86 SP1 rule: no second convention). Text-identical: the
+# same format string with the same args is formatted by the same `prints`
+# call inside the helper.
+func _emit(prefix: String, key: String, value: String) -> void:
+	prints("CHILD_RESULT %s_%s=%s" % [prefix, key, value])
+
+
+func _note(prefix: String, text: String) -> void:
+	prints("CHILD_NOTE %s %s" % [prefix, text])

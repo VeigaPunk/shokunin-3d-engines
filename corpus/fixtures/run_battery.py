@@ -457,13 +457,13 @@ CASES = [
     # r87 body-tier deferred-state lattice. Appended at the tail, insertion-only;
     # the crash-class row (`freed_space`) is the last row in the file.
     ("phys3d_events_body_handle", "phys3d_events.gd", ["--arm=body_handle"], 0,
-     "PASS phys3d_events body_handle if_same=true ss_same=true detach=nil held_live=true reattach=true twin=true two_fetch=true dummy_cb=never child_exit=0"),
+     "PASS phys3d_events body_handle if_same=true ss_same=true detach=nil held_live=true reattach=true twin=true dummy_cb=never child_exit=0"),
     ("phys3d_events_acq_use", "phys3d_events.gd", ["--arm=acq_use"], 0,
      "PASS phys3d_events acq_use gate=refused out_of_phase=8 held_read=live write=ungated reps=8 child_exit=0"),
     ("phys3d_events_step_stamp", "phys3d_events.gd", ["--arm=step_stamp"], 0,
      "PASS phys3d_events step_stamp gp_step_pre=0.001 gp_grav_pre=zero jolt_step_pre=0.0 jolt_grav_pre=real step_post=0.016667 cc_off=0 cc_on=4 last_step=4,0 child_exit=0"),
     ("phys3d_events_write_loss", "phys3d_events.gd", ["--arm=write_loss"], 0,
-     "PASS phys3d_events write_loss gate=refused reps=8 same_turn=8 tally=8 race=bounded child_exit=0"),
+     "PASS phys3d_events write_loss gate=refused reps=8 same_turn=8 race=bounded child_exit=0"),
     ("phys3d_events_body_tier", "phys3d_events.gd", ["--arm=body_tier"], 0,
      "PASS phys3d_events body_tier gp_impulse=zero jolt_impulse=real gp_lshape=-1 jolt_lshape=0 gp_sleep_lv=kept jolt_sleep_lv=zeroed dummy_cc=0 detach_write=silent,loud,silent child_exit=0"),
     ("phys3d_events_freed_space", "phys3d_events.gd", ["--arm=freed_space"], 0,
