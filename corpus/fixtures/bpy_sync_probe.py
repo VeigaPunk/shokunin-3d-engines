@@ -38,6 +38,10 @@ Companion runner: corpus/fixtures/bpy_battery.py pins the measured lattice.
 """
 
 import bpy
+import os
+import stat
+import subprocess
+import sys
 import time
 import traceback
 
@@ -1012,6 +1016,164 @@ def _ec_walltime():
          loc=_ec_loc(ob, C.evaluated_depsgraph_get()))
 
 
+# ======================================================== r81: evalcat ext
+# Round-81 fold (r80-critic fold-guidance): six representative bare classes
+# from the measured-inert sweeps join the tracked catalogue, chosen from the
+# critic's list -- scene-prop write, hierarchy link, data swap, parent
+# write, objects.remove, orphans_purge. Same witness discipline: fresh
+# factory scene + handler reinstall per sub-probe; held dg0 captured before
+# the mutation; every fixture built OUTSIDE the witness window (r81 critic
+# measured an in-window settle firing dpre/dpost -> spurious FALSIFIED).
+# All six stay under the `closed` falsifier: a bare row that flushes held
+# or fires a watched handler is auto-emitted edge=FALSIFIED and counted.
+def _ec_x_frame_current():
+    """scene-prop write: `scn.frame_current = 2` (RNA write, not frame_set)
+    is silent at w0; the next tagged get binds the frame-dependent value
+    with dup firing and fc NEVER firing (closes r80-boundary unknown (a))."""
+    _ec_reset()
+    scn = C.scene
+    ob, _ = _ec_settle()
+    scn.frame_set(1)
+    ob.location = (0.0, 0.0, 0.0)
+    ob.keyframe_insert("location", index=1, frame=1)
+    scn.frame_set(2)
+    ob.location = (0.0, 4.0, 0.0)
+    ob.keyframe_insert("location", index=1, frame=2)
+    scn.frame_set(1)
+    C.view_layer.update()
+    dg0 = C.evaluated_depsgraph_get()
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    scn.frame_current = 2                     # the bare scene-prop write
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    h1 = _ec_snap()
+    fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
+    d2 = _ec_since(h1)
+    _ec_edge("ext_frame_current", d, held, None,
+             _ec_edge1(held, fresh, "(0.000,4.000,0.000)"),
+             frame=int(scn.frame_current), held_loc=post, fresh_loc=fresh,
+             get_dup=d2["post"], get_fc=d2["fc"])
+
+
+def _ec_x_hier_link():
+    """hierarchy link: `scene.collection.children.link(orphan col)` is
+    RNA-visible at w0 while the held dg0 still serves the pre-link set."""
+    _ec_reset()
+    scn = C.scene
+    ob, dg0 = _ec_settle()
+    col2 = D.collections.new("c2")
+    n = D.objects.new("n", _ec_tri("m2"))
+    col2.objects.link(n)                      # orphan col, built pre-window
+    pre = _ec_names(dg0)
+    h0 = _ec_snap()
+    scn.collection.children.link(col2)
+    d = _ec_since(h0)
+    post = _ec_names(dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_names(C.evaluated_depsgraph_get())
+    _ec_edge("ext_hier_link", d, held, None,
+             _ec_edge1(held, fresh, "n|o"),
+             held_names=post, fresh_names=fresh,
+             rna_child=str(col2.name in
+                           [c.name for c in scn.collection.children]),
+             rna_n=int(n.name in [o.name for o in scn.objects]))
+
+
+def _ec_x_data_swap():
+    """data swap: `ob.data = grid16` -- the held evaluated mesh keeps the
+    old data until eval; the RNA vertex count flips immediately (tier 0)."""
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    me2 = _ec_grid()                          # built pre-window
+    pre = _ec_verts(ob, dg0)
+    h0 = _ec_snap()
+    ob.data = me2
+    d = _ec_since(h0)
+    post = _ec_verts(ob, dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_verts(ob, C.evaluated_depsgraph_get())
+    _ec_edge("ext_data_swap", d, held, None,
+             _ec_edge1(held, fresh, "verts16:xmax1.000"),
+             held_mesh=post, fresh_mesh=fresh,
+             rna_verts=len(ob.data.vertices))
+
+
+def _ec_x_parent_write():
+    """parent write: `ob.parent = tgt` -- held mw stays pre-parent, the
+    fresh get binds tgt's offset. RNA matrix_world sampled AT w0 (pre-eval)
+    is itself stale (tier-1 prop): the r81 scout sampling trap."""
+    _ec_reset()
+    scn = C.scene
+    tgt = D.objects.new("tgt", _ec_tri("tm"))
+    scn.collection.objects.link(tgt)
+    tgt.location = (3.0, 0.0, 0.0)
+    ob, dg0 = _ec_settle()                    # settle AFTER tgt exists
+    C.view_layer.update()
+    dg0 = C.evaluated_depsgraph_get()
+    pre = _ec_mw(ob, dg0)
+    h0 = _ec_snap()
+    ob.parent = tgt
+    d = _ec_since(h0)
+    rna_mw_w0 = v3(ob.matrix_world.translation)   # sampled AT w0, pre-eval
+    post = _ec_mw(ob, dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_mw(ob, C.evaluated_depsgraph_get())
+    _ec_edge("ext_parent_write", d, held, None,
+             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             held_mw=post, fresh_mw=fresh,
+             rna_parent=str(ob.parent.name), rna_mw_w0=rna_mw_w0)
+
+
+def _ec_x_obj_remove():
+    """objects.remove: destructive ID removal -- the held dg0 still
+    enumerates the freed object (freed-ID read: stable on this build,
+    noted fragile); the RNA collection drops it at w0."""
+    _ec_reset()
+    scn = C.scene
+    ob, _ = _ec_settle()
+    keep = D.objects.new("keep", _ec_tri("mk"))
+    scn.collection.objects.link(keep)
+    C.view_layer.update()                     # victim + control settled
+    dg0 = C.evaluated_depsgraph_get()         #   BEFORE the window
+    pre = _ec_names(dg0)
+    h0 = _ec_snap()
+    D.objects.remove(ob)
+    d = _ec_since(h0)
+    post = _ec_names(dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_names(C.evaluated_depsgraph_get())
+    _ec_edge("ext_obj_remove", d, held, None,
+             _ec_edge1(held, fresh, "keep"),
+             held_names=post, fresh_names=fresh,
+             rna_objs="|".join(sorted(o.name for o in D.objects)))
+
+
+def _ec_x_orphan_purge():
+    """orphans_purge: data-layer destruction -- the 0-user mesh is dropped
+    at w0 while the depsgraph witness is non-discriminating (o->o). No eval
+    event exists on this axis -> edge=absent (label extended to the
+    data-layer axis per the r81-scout label gap; the data-layer counts are
+    the discriminating witnesses)."""
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    _ = _ec_tri("orphan")                     # unlinked, 0 users, pre-window
+    pre_n = len(D.meshes)
+    pre = _ec_names(dg0)
+    h0 = _ec_snap()
+    n_purged = D.orphans_purge()
+    d = _ec_since(h0)
+    post_n = len(D.meshes)
+    post = _ec_names(dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_names(C.evaluated_depsgraph_get())
+    _ec_edge("ext_orphan_purge", d, held, None,
+             "absent" if held == "stale" else held,
+             purged=int(n_purged), rna_meshes_before=pre_n,
+             rna_meshes_after=post_n, held_names=post, fresh_names=fresh)
+
+
 # --------------------------------------------------------- arm: evalcat
 def arm_evalcat():
     """One arm, per-class edge rows: every sub-probe gets a fresh factory
@@ -1019,7 +1181,12 @@ def arm_evalcat():
     `closed` violations count) is the claim's refutation surface."""
     for sp in (_ec_events, _ec_driver, _ec_keyframe, _ec_con_rna,
                _ec_op_apply, _ec_op_add, _ec_op_modapply, _ec_op_modes,
-               _ec_op_conadd, _ec_walltime):
+               _ec_op_conadd, _ec_walltime,
+               # r81 fold: six representative bare classes appended to the
+               # armed catalogue -- they run before `closed`, so a FALSIFIED
+               # ext row still increments the violations counter.
+               _ec_x_frame_current, _ec_x_hier_link, _ec_x_data_swap,
+               _ec_x_parent_write, _ec_x_obj_remove, _ec_x_orphan_purge):
         try:
             sp()
         except Exception:
@@ -1030,9 +1197,63 @@ def arm_evalcat():
          events="|".join(EVALCAT_EVENTS))
 
 
+# ===================================================== r81: reorder (X1)
+# fd1-inheritance reorder, fabricated live. Under `blender -b -P` with a
+# captured stdout the parent's print() path is block-buffered
+# (line_buffering=False, write_through=False, isatty=False; buffer
+# 131072 B -- r81 scout/critic receipts), so a spawned descendant that
+# inherits fd1 commits its bytes BEFORE the parent's still-buffered ARM
+# rows: prefix reordering of the ARM stream, a live hazard class for the
+# battery's own parser (bpy_battery.py parse_arms: ^ARM-anchored,
+# last-wins per (arm,point,layer) cell).
+#
+# Construction (r81 critic corrections applied):
+#   * sys.stdout.flush() FIRST seals the prior rows' byte-prefix -- without
+#     it the child's rows land at stream byte 0 and the r79/r80 prefix
+#     chain silently drifts while case verdicts stay green.
+#   * gluevictim: first buffered row after the flush is a deliberate
+#     casualty -- the child's unterminated tail splices onto it; the parser
+#     must DROP that merged line (^ARM fails), not misattribute it.
+#   * pre_spawn: emitted before the spawn but withheld in the buffer, so it
+#     lands physically AFTER every child byte -- the discriminating
+#     topology cell (False if fd1 is not block-buffered on this runtime).
+#   * dup: the child's forged row lands first, the parent's post-spawn row
+#     lands last -> pins the parser's physical last-wins tie-break.
+#   * child_marker: a descendant's syntactically-valid ARM row parses to
+#     its own cell -- the injection surface, attributed to child bytes.
+# PYTHONUNBUFFERED does NOT collapse the window on bpy (r81 scout); only
+# flush()/reconfigure(line_buffering=True) do. The battery-side
+# order_checks are the per-runtime falsifier.
+def arm_reorder():
+    sys.stdout.flush()                        # seal prior rows' byte-prefix
+    emit("reorder", "gluevictim", "FD1", who="parent",
+         note="first-buffered-after-spawn")
+    emit("reorder", "pre_spawn", "FD1", who="parent")
+    rc = "spawnfail"
+    try:
+        rc = subprocess.run(
+            ["/bin/sh", "-c",
+             "printf 'ARM reorder | child_marker | FD1 | who=child\\n';"
+             "printf 'ARM reorder | dup | FD1 | src=child_inj\\n';"
+             "printf 'REORDERGLUE::'"]).returncode
+    except Exception as e:
+        emit("reorder", "spawn", "ERR",
+             err=type(e).__name__ + ":" + str(e)[:60])
+    emit("reorder", "dup", "FD1", src="parent")
+    try:
+        fd1_fifo = str(stat.S_ISFIFO(os.fstat(1).st_mode))
+    except Exception:
+        fd1_fifo = "na"
+    emit("reorder", "post_spawn", "FD1", who="parent", child_rc=rc,
+         line_buf=getattr(sys.stdout, "line_buffering", "na"),
+         write_through=getattr(sys.stdout, "write_through", "na"),
+         fd1_fifo=fd1_fifo)
+    sys.stdout.flush()
+
+
 for f in (arm_transform, arm_hide, arm_modifier, arm_collection,
           arm_membership, arm_draincheck, arm_shared, arm_fresh_handle,
-          arm_vis_quirk, arm_evalcat):
+          arm_vis_quirk, arm_evalcat, arm_reorder):
     try:
         f()
     except Exception:

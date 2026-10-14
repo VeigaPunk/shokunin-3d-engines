@@ -13,6 +13,14 @@ staleness witnesses (see fixture docstring).
 
 r80 adds the evalcat cases: per-mutation-class EDGE rows pinning the
 frontier eval-event catalogue, incl. the closed-set `violations=0` row.
+
+r81 adds: (a) six evalcat extension rows (ext_*) folded per r80-critic
+guidance -- they run inside arm_evalcat before `closed`, so they stay
+under the closed-set falsifier; (b) the fd1-inheritance reorder arm --
+CASES pin per-cell attribution of reordered bytes and an order_checks
+block on raw stdout pins the discriminating topology (child bytes
+physically precede the parent's pre-spawn-emitted row) plus the splice
+boundary (a glued line must be dropped, not misattributed).
 """
 
 import argparse
@@ -189,6 +197,65 @@ CASES = [
     # closure: zero falsified rows across every probed mutation class
     ("evalcat_closed_set",            "evalcat", "closed", "EDGE",
      {"violations": "0"}, False),
+    # ------------- r81 evalcat extension rows (r80-critic fold list) ----
+    # Six measured-inert bare classes join the tracked catalogue; they run
+    # inside arm_evalcat before `closed`, so any flush/handler fire on a
+    # bare row auto-FALSIFIES it AND increments the violations pin above.
+    # scene-prop write: frame_current is a lazy tag -- the next tagged get
+    # binds the frame-dependent value with dup firing and fc NEVER firing
+    # (closes r80-boundary unknown (a)).
+    ("evalcat_ext_frame_current",   "evalcat", "ext_frame_current", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1", "frame": "2",
+      "held_loc": "(0.000,0.000,0.000)", "fresh_loc": "(0.000,4.000,0.000)",
+      "get_dup": "1", "get_fc": "0"}, False),
+    # hierarchy link: children.link is RNA-visible at w0; held dg0 keeps
+    # the pre-link set
+    ("evalcat_ext_hier_link",       "evalcat", "ext_hier_link", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_names": "o", "fresh_names": "n|o", "rna_child": "True"}, False),
+    # data swap: held evaluated mesh keeps the old data; RNA verts flip now
+    ("evalcat_ext_data_swap",       "evalcat", "ext_data_swap", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_mesh": "verts3:xmax1.000", "fresh_mesh": "verts16:xmax1.000",
+      "rna_verts": "16"}, False),
+    # parent write: held mw stays pre-parent; RNA mw at w0 is itself stale
+    # (tier-1 prop, sampled pre-eval per the r81-scout trap)
+    ("evalcat_ext_parent_write",    "evalcat", "ext_parent_write", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_mw": "(0.000,0.000,0.000)", "fresh_mw": "(3.000,0.000,0.000)",
+      "rna_parent": "tgt", "rna_mw_w0": "(0.000,0.000,0.000)"}, False),
+    # objects.remove: held dg0 still enumerates the freed ID (freed-ID
+    # read -- stable on this build, noted fragile); fresh graph drops it
+    ("evalcat_ext_obj_remove",      "evalcat", "ext_obj_remove", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_names": "keep|o", "fresh_names": "keep",
+      "rna_objs": "keep"}, False),
+    # orphans_purge: data-layer destruction, no eval event on the axis;
+    # the depsgraph witness is non-discriminating (o->o) -- counts pin it
+    ("evalcat_ext_orphan_purge",    "evalcat", "ext_orphan_purge", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "absent",
+      "purged": "1", "rna_meshes_before": "2", "rna_meshes_after": "1",
+      "held_names": "o", "fresh_names": "o"}, False),
+    # ---- r81 reorder (X1): fd1-inheritance parse-survival cells ---------
+    # A spawned descendant inherits fd1; the block-buffered parent withholds
+    # pre-spawn bytes -> child rows land as a prefix. These pins cover
+    # per-cell attribution only; the byte-order relation lives in the
+    # order_checks block (the case model cannot express stream position).
+    ("reorder_pre_spawn_row",       "reorder", "pre_spawn", "FD1",
+     {"who": "parent"}, False),
+    # a descendant's valid ARM row parses to its own cell: injection
+    # surface documented, attributed to child bytes
+    ("reorder_child_marker_row",    "reorder", "child_marker", "FD1",
+     {"who": "child"}, False),
+    # physical last-wins: child's forged dup lands first in the stream,
+    # the parent's post-spawn row lands last and wins the cell
+    ("reorder_dup_lastwins",        "reorder", "dup", "FD1",
+     {"src": "parent"}, False),
+    # mechanism preconditions on this runtime (block-buffered pipe)
+    ("reorder_post_spawn_row",      "reorder", "post_spawn", "FD1",
+     {"who": "parent", "child_rc": "0", "line_buf": "False",
+      "write_through": "False", "fd1_fifo": "True"}, False),
 ]
 
 ARM_LINE = re.compile(r"^ARM (\S+) \| (\S+) \| (\S+) \| (.*)$")
@@ -264,6 +331,44 @@ def main():
                         "verdict": "PASS" if not reasons else "FAIL",
                         "reasons": reasons})
 
+    # ---- r81: reorder topology + parse-survival checks (raw stdout) ----
+    # CASES rows are order-insensitive by construction; the reorder claim
+    # lives in byte order, so these checks read raw stdout. The
+    # discriminator is child-before-pre_spawn: the parent's pre_spawn row
+    # was emitted before the spawn but withheld in the block buffer, so it
+    # lands physically after every child byte. A runtime where fd1 is not
+    # block-buffered collapses the window and fails that check -- the
+    # claim is pinned per runtime, as declared.
+    def _idx(s):
+        return stdout.find(s)
+    i_child = _idx("reorder | child_marker")
+    i_pre = _idx("reorder | pre_spawn")
+    i_post = _idx("reorder | post_spawn")
+    reorder_cells = {("reorder", "child_marker", "FD1"),
+                     ("reorder", "pre_spawn", "FD1"),
+                     ("reorder", "post_spawn", "FD1"),
+                     ("reorder", "dup", "FD1"),
+                     ("reorder", "gluevictim", "FD1"),
+                     ("reorder", "spawn", "ERR")}
+    order_checks = [
+        ("reorder_child_before_pre_spawn",
+         i_child != -1 and i_pre != -1 and i_child < i_pre),
+        ("reorder_child_before_post_spawn",
+         i_child != -1 and i_post != -1 and i_child < i_post),
+        ("reorder_no_extra_cells",
+         not sorted(k for k in arms
+                    if k[0] == "reorder" and k not in reorder_cells)),
+        # splice boundary: the child's unterminated tail glues onto the
+        # first buffered parent row -- the parser must DROP that merged
+        # line (^ARM fails): emitted bytes present, cell absent.
+        ("reorder_splice_dropped",
+         _idx("gluevictim") != -1
+         and ("reorder", "gluevictim", "FD1") not in arms),
+    ]
+    order_failed = [n for n, ok in order_checks if not ok]
+    for n, ok in order_checks:
+        print("{}  order-check {}".format("PASS" if ok else "FAIL", n))
+
     passed = sum(1 for r in results if r["verdict"] == "PASS")
     failed = len(results) - passed
     signal_failed = sum(1 for r in results
@@ -281,7 +386,7 @@ def main():
           f"fatals={len(fatals)} exit={code}")
 
     verdict = "PASS" if (signal_failed == 0 and launch_ok and done_marker
-                         and not fatals) else "FAIL"
+                         and not fatals and not order_failed) else "FAIL"
     payload = {"blender": args.blender, "blender_version": blender_version,
                "blender_version_exit": version_code,
                "blender_version_error": version_err,
@@ -289,6 +394,8 @@ def main():
                "probe_elapsed_s": elapsed, "started_utc": stamp,
                "done_marker": done_marker, "fatal_arms": fatals,
                "n_arm_lines": len(arms), "results": results,
+               "order_checks": [{"case": n, "pass": ok}
+                                for n, ok in order_checks],
                "totals": {"cases": len(results), "pass": passed, "fail": failed,
                           "signal_fail": signal_failed,
                           "quirk_drift": quirk_drift},
