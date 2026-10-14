@@ -129,6 +129,37 @@
 #     tuple, matching r72/r73.
 # No self-propelled locomotion, avoidance, baking, or rendering claim —
 # motion here is authored teleports plus target re-assignment.
+# Round-75 mutation arms (server-side map/link mutation vs a materialized
+# stored path, measured on this build — Godot 4.7.2; "mutate" = a step key
+# applying NavigationServer3D/agent setters between moves; "peek" =
+# NON-forcing reads of the stored array/index via
+# get_current_navigation_path/_index captured before the step's forcing
+# _read_state; "peek_only" = a step that performs ONLY the non-forcing
+# capture — its path/idx keys then pin the stale stored state):
+#   invalidation is LAZY and total for every unlatched agent: link
+#   enabled/layers, region layers/enabled/transform and region
+#   delete/recreate all leave the stored array untouched through pure
+#   physics ticks (peek still sees the OLD coordinates, dead link hop
+#   included) and re-query inside the first forcing call, anchored at the
+#   LIVE agent position (link killed at the bank (2.5,0,3.4) ->
+#   [(2.5,0,3.4),(2.5,0,4.0)] finished via the idx+pdd clause; region
+#   moved +5x -> [(5,0,0.5),(5,0,1.0)]). The zombie waypoint exists only
+#   as stored data — no dead-hop point is ever SERVED: the update runs
+#   before the pop/next fetch inside the same forcing call.
+#   The single synchronous exception is agent-side: writing
+#   agent.navigation_layers clears the stored path same-turn (peek=[] at
+#   0 frames) while the pop index stays readable-stale.
+#   Re-mutations restore without retarget: re-enable / re-layer /
+#   recreate all re-query and re-materialize the (link) path on the next
+#   forcing call.
+#   Empty-path tuple (nothing on the agent's layer mask): idx=0,
+#   next=agent position (NOT (0,0,0)), final=(0,0,0), path=[],
+#   reachable=false, dist stays live euclid to the raw target,
+#   reached/finished=false.
+#   The finished latch gates off invalidation too: a latched agent keeps
+#   serving the pre-mutation path through region transform AND region
+#   delete — the only truly SERVED zombie (next=(2,0,3) and
+#   reachable=true on a deleted map).
 extends SceneTree
 var owned: Array[RID] = []
 var owned_nodes: Array[Node] = []
@@ -257,10 +288,16 @@ func _run() -> void:
 	var st := {}
 	var st2 := {}
 	var states: Array = []
+	# Round-75: live server objects the mutate steps operate on; region may
+	# be recreated (delete/recreate mutation), so downstream gates read the
+	# RID out of srv, not the authoring-local variable.
+	var srv := {"map": map, "region": region, "mesh": mesh,
+		"link_rid": link_rid, "link_node": link_node, "agent": agent}
+	var fs := _final_srv_state(arm_cfg)
 	if arm != "":
 		st = _read_state(agent, actor)
 		if arm_cfg.has("steps"):
-			states = await _run_steps(arm_cfg["steps"], agent, actor)
+			states = await _run_steps(arm_cfg["steps"], agent, actor, srv)
 			st2 = states[states.size() - 1]
 		elif arm_cfg.has("tp"):
 			actor.global_position = arm_cfg["tp"]
@@ -281,9 +318,10 @@ func _run() -> void:
 				if step.has("set_target"):
 					expected_target = step["set_target"]
 	var want_polys := 1 if straight else (4 if arm_cfg.get("island", false) else 3)
+	var want_regions := 0 if fs["region_gone"] else 1
 	if not actor.is_inside_tree() or agent.get_parent() != actor \
 			or agent.get_navigation_map() != map or not NavigationServer3D.map_is_active(map) \
-			or NavigationServer3D.map_get_regions(map).size() != 1 \
+			or NavigationServer3D.map_get_regions(map).size() != want_regions \
 			or mesh.get_polygon_count() != want_polys \
 			or actor.global_position.distance_to(expected_pos) > 0.0001 \
 			or agent.target_position.distance_to(expected_target) > 0.0001:
@@ -294,14 +332,30 @@ func _run() -> void:
 		var lrid: RID = link_node.get_rid() if link_node != null else link_rid
 		if not lrid.is_valid() or NavigationServer3D.link_get_map(lrid) != map \
 				or NavigationServer3D.link_get_iteration_id(lrid) < 1 \
-				or int(NavigationServer3D.link_get_navigation_layers(lrid)) != int(arm_cfg.get("linklayers", 1)) \
-				or NavigationServer3D.link_is_bidirectional(lrid) != (not arm_cfg.get("oneway", false)) \
-				or NavigationServer3D.link_get_enabled(lrid) != (not arm_cfg.get("disabled", false)) \
-				or absf(NavigationServer3D.link_get_enter_cost(lrid) - float(arm_cfg.get("entercost", 0.0))) > 0.0001 \
-				or absf(NavigationServer3D.link_get_travel_cost(lrid) - float(arm_cfg.get("travelcost", 1.0))) > 0.0001 \
-				or int(agent.path_metadata_flags) != int(arm_cfg.get("meta", 0)) \
-				or int(agent.navigation_layers) != int(arm_cfg.get("agentlayers", 1)):
+				or int(NavigationServer3D.link_get_navigation_layers(lrid)) != fs["link_layers"] \
+				or NavigationServer3D.link_is_bidirectional(lrid) != fs["link_bidi"] \
+				or NavigationServer3D.link_get_enabled(lrid) != fs["link_enabled"] \
+				or absf(NavigationServer3D.link_get_enter_cost(lrid) - fs["link_enter"]) > 0.0001 \
+				or absf(NavigationServer3D.link_get_travel_cost(lrid) - fs["link_travel"]) > 0.0001 \
+				or int(agent.path_metadata_flags) != fs["meta"] \
+				or int(agent.navigation_layers) != fs["agent_layers"]:
 			return _fail(actor, "authored link flags not in effect")
+	# Mutation gate honesty, same contract as the link gate: every authored
+	# mutate setter must read back applied (a no-op mutation cannot
+	# falsify). Runs for any arm with mutate steps, link or not.
+	if fs["any_mut"]:
+		if int(agent.navigation_layers) != fs["agent_layers"]:
+			return _fail(actor, "mutated agent layers not in effect")
+		if fs["region_gone"]:
+			if srv["region"].is_valid() or NavigationServer3D.map_get_regions(map).size() != 0:
+				return _fail(actor, "mutated region delete not in effect")
+		elif fs["region_mut"]:
+			var rrid: RID = srv["region"]
+			if not rrid.is_valid() or NavigationServer3D.region_get_map(rrid) != map \
+					or NavigationServer3D.region_get_enabled(rrid) != fs["region_enabled"] \
+					or int(NavigationServer3D.region_get_navigation_layers(rrid)) != int(fs["region_layers"]) \
+					or NavigationServer3D.region_get_transform(rrid).origin.distance_to(fs["region_xform"].origin) > 0.0001:
+				return _fail(actor, "mutated region flags not in effect")
 	if arm != "":
 		if arm_cfg.has("steps"):
 			return _run_motion_arm(actor, arm, arm_cfg, st, states)
@@ -1053,6 +1107,271 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 						"final": Vector3(2.5, 0, 5.5), "dist": 0.1,
 						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
 						"reachable": true, "reached": true, "finished": true}]}
+		# Round-75 mutation arms. Extra step keys: "mutate" (dict of
+		# server-side setters applied after set_target/tp, before wait:
+		# link_enabled, link_layers, agent_layers, region_enabled,
+		# region_layers, region_transform, region_delete, region_recreate),
+		# "peek_path"/"peek_idx" (NON-forcing stored path/index asserted
+		# after the wait but before the step's forcing read — pins lazy
+		# invalidation: the stale array still shows pre-mutation
+		# coordinates), and "peek_only" (the step performs ONLY the
+		# non-forcing capture; its path/idx assert the stale stored state
+		# — mutation without any forcing call leaves state unchanged).
+		# Measured on this build (Godot 4.7.2): every unlatched map/link
+		# mutation invalidates LAZILY — the forcing read re-queries
+		# anchored at the live position; no dead waypoint is served after
+		# the server sync lands (~2 physics frames for link toggles, ~3
+		# for region_set_transform — a same-turn forcing call inside the
+		# setter->sync window still serves the stale hop, and mutate steps
+		# therefore need wait>=1 before their forcing read).
+		# (a) link killed mid-path while the pop index points INTO the
+		# gate: two teleports walk idx to 3 so next serves the far
+		# endpoint (2.5,0,5.5); disable the link; the stale array still
+		# holds the dead hop (peek), then the first forcing call re-queries
+		# anchored at the bank (2.5,0,3.4) -> [(2.5,0,3.4),(2.5,0,4.0)],
+		# finished via the idx+pdd unreachable clause. NO zombie served.
+		"mut_link_kill":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.0, 0, 0.9), "idx": 2, "next": Vector3(2.5, 0, 3.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 4.627094,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2.5, 0, 3.4), "idx": 3, "next": Vector3(2.5, 0, 5.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 2.1,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"link_enabled": false},
+						"peek_idx": 3,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2.5, 0, 4.0),
+						"final": Vector3(2.5, 0, 4.0), "dist": 2.1,
+						"path": [Vector3(2.5, 0, 3.4), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": true}]}
+		# (a) same kill from the spawn: the stored hop goes stale (peek),
+		# the forcing read re-queries to the no-link corridor clamp; a
+		# follow-up teleport onto the bank then pops on the NEW path —
+		# had the zombie been served, this step would read idx=3 at the
+		# dead far endpoint instead.
+		"mut_link_drop":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_enabled": false},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false},
+					{"tp": Vector3(2.5, 0, 3.9), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 1.6,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (a) the navigation_layers variant of the same gate: link layers
+		# 1->2 vs agent mask 1 drops the hop lazily — identical re-query.
+		"mut_link_layers":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_layers": 2},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (b) agent-side navigation_layers flip: SYNCHRONOUS clear —
+		# peek already reads [] with the stale pop index (1) still
+		# readable; the forcing read produces the empty-path tuple
+		# (next=agent pos, final=(0,0,0)). Flipping back re-materializes
+		# the full link path on the next forcing call, no retarget.
+		"mut_layers_agent":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"agent_layers": 2},
+						"peek_idx": 1, "peek_path": [],
+						"idx": 0, "next": s, "final": Vector3(0, 0, 0),
+						"dist": 5.385165, "path": [],
+						"reachable": false, "reached": false, "finished": false},
+					{"mutate": {"agent_layers": 1},
+						"peek_idx": 0, "peek_path": [],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (b) the critic's fw_layermask landed as a tracked arm: region
+		# navigation_layers 1->2 vs agent mask 1 invalidates LAZILY (peek
+		# = old corridor coordinates) then re-queries to the empty path:
+		# idx=0, next=agent position, final=(0,0,0).
+		"mut_layers_region":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"region_layers": 2},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 0, "next": s, "final": Vector3(0, 0, 0),
+						"dist": 3.605551, "path": [],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (c) the critic's fw_mapedit landed: region_set_transform(+5x)
+		# leaves the stored path stale (peek = pre-move coordinates), then
+		# the forcing read re-queries and clamps BOTH endpoints onto the
+		# moved mesh: [(5,0,0.5),(5,0,1.0)], idx reset to 0, reachable
+		# false — distance_to_target stays live euclid throughout.
+		"mut_region_move":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"region_transform": Vector3(5, 0, 0)},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 0, "next": Vector3(5, 0, 0.5),
+						"final": Vector3(5, 0, 1.0), "dist": 3.605551,
+						"path": [Vector3(5, 0, 0.5), Vector3(5, 0, 1.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (c) region disable: same lazy invalidation to the empty path;
+		# re-enable re-materializes the corridor path with no retarget —
+		# the lazy timing is pinned by the peeks on BOTH directions.
+		"mut_region_off":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"region_enabled": false},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 0, "next": s, "final": Vector3(0, 0, 0),
+						"dist": 3.605551, "path": [],
+						"reachable": false, "reached": false, "finished": false},
+					{"mutate": {"region_enabled": true},
+						"peek_idx": 0, "peek_path": [],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# delete/recreate the region itself: free_rid leaves the stored
+		# path stale (peek) then empties it at the forcing read; a fresh
+		# identical region re-materializes the path on the next forcing
+		# call — the map needs no target re-assignment to re-populate.
+		"mut_region_renew":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"region_delete": true},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 0, "next": s, "final": Vector3(0, 0, 0),
+						"dist": 3.605551, "path": [],
+						"reachable": false, "reached": false, "finished": false},
+					{"mutate": {"region_recreate": true},
+						"peek_idx": 0, "peek_path": [],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (d) link re-enable re-materializes the hop: disable -> forcing
+		# read re-queries to the clamp; re-enable -> the stale clamped
+		# path sits unread (peek) until the next forcing call re-queries
+		# and the link hop is back — reachable flips false->true with the
+		# SAME target untouched the whole time.
+		"mut_link_revive":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_enabled": false},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false},
+					{"mutate": {"link_enabled": true},
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (e) mutation WITHOUT a forcing call is a no-op on observable
+		# state: disable the link, wait 10 physics frames, capture the
+		# non-forcing tuple (peek_only) — the stored array and pop index
+		# are byte-identical; a second peek after 5 more frames still
+		# shows them; only the step-2 forcing read re-queries.
+		"mut_lazy":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"link_enabled": false}, "wait": 10, "peek_only": true,
+						"idx": 1,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)]},
+					{"wait": 5,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# The measured exception: once is_navigation_finished latches, the
+		# update loop early-returns and invalidation is gated OFF with it
+		# — the stored path survives a +5x region transform AND a full
+		# region delete; next still serves the pre-mutation waypoint and
+		# reachable stays frozen true. The only truly SERVED zombie.
+		"mut_latch_zombie":
+			return {"spawn": fg, "target": tg, "pdd": 1.0, "tdd": 1.6,
+				"path": [fg, fg],
+				"idx": 1, "next": fg, "final": fg, "dist": 1.5,
+				"reachable": true, "reached": true, "finished": true,
+				"steps": [
+					{"mutate": {"region_transform": Vector3(5, 0, 0)}, "wait": 10,
+						"peek_idx": 1, "peek_path": [fg, fg],
+						"idx": 1, "next": fg, "final": fg, "dist": 1.5,
+						"path": [fg, fg],
+						"reachable": true, "reached": true, "finished": true},
+					{"mutate": {"region_delete": true}, "wait": 5,
+						"peek_idx": 1, "peek_path": [fg, fg],
+						"idx": 1, "next": fg, "final": fg, "dist": 1.5,
+						"path": [fg, fg],
+						"reachable": true, "reached": true, "finished": true}]}
 	return {}
 
 func _read_state(agent: NavigationAgent3D, actor: Node3D) -> Dictionary:
@@ -1222,17 +1541,124 @@ func _run_link_arm(actor: Node3D, agent: NavigationAgent3D, region: RID,
 # post-teleport read (the lazy-anchor edge: the path pins to the position
 # live at the first forcing call, not at assignment). "wait" physics
 # frames elapse before the read (default 5; 0 reads live call-time).
-func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D) -> Array:
+# Round-75: a step may also carry "mutate" (a dict of server-side setters
+# applied after tp, before the wait — order inside a step is
+# set_target -> tp -> mutate -> wait -> read) and "peek_path"/"peek_idx"
+# (a NON-forcing capture of the stored path/index taken after the wait,
+# BEFORE _read_state's forcing get_next_path_position). "peek_only"
+# steps skip the forcing read entirely: the captured path/idx are the
+# stale stored state — mutation with no forcing call is a proven no-op.
+func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
+		srv: Dictionary) -> Array:
 	var out: Array = []
 	for step in steps:
 		if step.has("set_target"):
 			agent.target_position = step["set_target"]
 		if step.has("tp"):
 			actor.global_position = step["tp"]
+		if step.has("mutate"):
+			_apply_mutation(step["mutate"], srv)
 		for i in range(int(step.get("wait", 5))):
 			await physics_frame
-		out.append(_read_state(agent, actor))
+		var st_i := {}
+		if step.has("peek_path") or step.has("peek_idx") or step.get("peek_only", false):
+			st_i["peek_path"] = agent.get_current_navigation_path()
+			st_i["peek_idx"] = agent.get_current_navigation_path_index()
+		if step.get("peek_only", false):
+			st_i["pos"] = actor.global_position
+			st_i["path"] = st_i["peek_path"]
+			st_i["idx"] = st_i["peek_idx"]
+		else:
+			var full := _read_state(agent, actor)
+			for k in full:
+				st_i[k] = full[k]
+		out.append(st_i)
 	return out
+
+# Round-75: applies one step's server-side "mutate" dict. Region
+# delete/recreate rebuild the RID inside srv (the recreated region
+# re-joins the same map with the same mesh); the remaining keys map 1:1
+# onto server or agent setters. Order inside a mutate dict is fixed:
+# delete -> recreate -> transform/enabled/layers -> link -> agent.
+func _apply_mutation(m: Dictionary, srv: Dictionary) -> void:
+	if m.get("region_delete", false) and srv["region"].is_valid():
+		owned.erase(srv["region"])
+		NavigationServer3D.free_rid(srv["region"])
+		srv["region"] = RID()
+	if m.get("region_recreate", false):
+		if srv["region"].is_valid():
+			owned.erase(srv["region"])
+			NavigationServer3D.free_rid(srv["region"])
+		var r2 := NavigationServer3D.region_create()
+		owned.append(r2)
+		NavigationServer3D.region_set_map(r2, srv["map"])
+		NavigationServer3D.region_set_navigation_mesh(r2, srv["mesh"])
+		srv["region"] = r2
+	var region: RID = srv["region"]
+	if m.has("region_transform") and region.is_valid():
+		NavigationServer3D.region_set_transform(region, Transform3D(Basis(), m["region_transform"]))
+	if m.has("region_enabled") and region.is_valid():
+		NavigationServer3D.region_set_enabled(region, bool(m["region_enabled"]))
+	if m.has("region_layers") and region.is_valid():
+		NavigationServer3D.region_set_navigation_layers(region, int(m["region_layers"]))
+	var link: RID = srv["link_node"].get_rid() if srv["link_node"] != null else srv["link_rid"]
+	if m.has("link_enabled") and link.is_valid():
+		NavigationServer3D.link_set_enabled(link, bool(m["link_enabled"]))
+	if m.has("link_layers") and link.is_valid():
+		NavigationServer3D.link_set_navigation_layers(link, int(m["link_layers"]))
+	if m.has("agent_layers"):
+		srv["agent"].navigation_layers = int(m["agent_layers"])
+
+# Round-75: folds the authored arm flags plus every step's "mutate" dict
+# into the final expected server-side state, so the post-step gate reads
+# back that each mutation setter actually applied (a no-op setter fails
+# the arm instead of silently passing on stale expectations). Arms with
+# no steps get the r73 literals verbatim — fold is a no-op there.
+func _final_srv_state(cfg: Dictionary) -> Dictionary:
+	var fs := {
+		"link_enabled": not cfg.get("disabled", false),
+		"link_layers": int(cfg.get("linklayers", 1)),
+		"link_bidi": not cfg.get("oneway", false),
+		"link_enter": float(cfg.get("entercost", 0.0)),
+		"link_travel": float(cfg.get("travelcost", 1.0)),
+		"agent_layers": int(cfg.get("agentlayers", 1)),
+		"meta": int(cfg.get("meta", 0)),
+		"region_enabled": true,
+		"region_layers": 1,
+		"region_xform": Transform3D.IDENTITY,
+		"region_gone": false,
+		"region_mut": false,
+		"any_mut": false}
+	for step in cfg.get("steps", []):
+		var m: Dictionary = step.get("mutate", {})
+		if m.is_empty():
+			continue
+		fs["any_mut"] = true
+		if m.get("region_delete", false):
+			fs["region_gone"] = true
+			fs["region_mut"] = true
+		if m.get("region_recreate", false):
+			fs["region_gone"] = false
+			fs["region_mut"] = true
+			fs["region_enabled"] = true
+			fs["region_layers"] = 1
+			fs["region_xform"] = Transform3D.IDENTITY
+		if m.has("region_enabled"):
+			fs["region_enabled"] = bool(m["region_enabled"])
+			fs["region_mut"] = true
+		if m.has("region_layers"):
+			fs["region_layers"] = int(m["region_layers"])
+			fs["region_mut"] = true
+		if m.has("region_transform"):
+			fs["region_xform"] = Transform3D(Basis(), m["region_transform"])
+			fs["region_mut"] = true
+		if m.has("link_enabled"):
+			fs["link_enabled"] = bool(m["link_enabled"])
+		if m.has("link_layers"):
+			fs["link_layers"] = int(m["link_layers"])
+		if m.has("agent_layers"):
+			fs["agent_layers"] = int(m["agent_layers"])
+	return fs
 
 # Asserts the pre-motion tuple on st (same key order as _run_pop_arm),
 # then each step's full authored tuple including the complete stored path
@@ -1272,6 +1698,19 @@ func _run_motion_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 			var esp: Array = es["path"]
 			if st_i["pos"].distance_to(epos) > 0.0001:
 				diag = "step%d pos=%s expected=%s" % [i, _v3(st_i["pos"]), _v3(epos)]
+			elif es.get("peek_only", false):
+				# Non-forcing capture only: the step's path/idx pin the
+				# STALE stored state — no forcing call ran in this step.
+				if st_i["idx"] != es["idx"]:
+					diag = "step%d peek idx=%d expected=%d" % [i, st_i["idx"], es["idx"]]
+				elif st_i["path"].size() != esp.size():
+					diag = "step%d peek npath=%d expected=%d path=%s" % [i, st_i["path"].size(), esp.size(), st_i["path"]]
+				else:
+					for j in range(esp.size()):
+						if st_i["path"][j].distance_to(esp[j]) > POS_TOL:
+							diag = "step%d peek path[%d]=%s expected=%s path=%s" % [
+								i, j, _v3(st_i["path"][j]), _v3(esp[j]), st_i["path"]]
+							break
 			elif st_i["idx"] != es["idx"]:
 				diag = "step%d idx=%d expected=%d" % [i, st_i["idx"], es["idx"]]
 			elif st_i["next"].distance_to(es["next"]) > POS_TOL:
@@ -1293,6 +1732,24 @@ func _run_motion_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 						diag = "step%d path[%d]=%s expected=%s path=%s" % [
 							i, j, _v3(st_i["path"][j]), _v3(esp[j]), st_i["path"]]
 						break
+			# Pre-force stored-state pins (round-75): the non-forcing
+			# capture taken between the wait and the forcing read must
+			# still show the pre-invalidation state — the lazy-update
+			# edge; a synchronous or absent invalidation fails here.
+			if diag == "" and not es.get("peek_only", false):
+				if es.has("peek_idx") and int(st_i["peek_idx"]) != int(es["peek_idx"]):
+					diag = "step%d pre-read idx=%d expected=%d" % [i, st_i["peek_idx"], es["peek_idx"]]
+				elif es.has("peek_path"):
+					var epp: Array = es["peek_path"]
+					if st_i["peek_path"].size() != epp.size():
+						diag = "step%d pre-read npath=%d expected=%d path=%s" % [
+							i, st_i["peek_path"].size(), epp.size(), st_i["peek_path"]]
+					else:
+						for j in range(epp.size()):
+							if st_i["peek_path"][j].distance_to(epp[j]) > POS_TOL:
+								diag = "step%d pre-read path[%d]=%s expected=%s path=%s" % [
+									i, j, _v3(st_i["peek_path"][j]), _v3(epp[j]), st_i["peek_path"]]
+								break
 			if diag != "":
 				break
 	if diag != "":
