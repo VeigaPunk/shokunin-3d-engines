@@ -226,6 +226,35 @@
 #   the cumulative post-mutate frames. mut_ladder_link derives bound=2
 #   (sizes 2,2), mut_ladder_region bound=3 (sizes 3,2) — the r76 edges
 #   re-derived as partition boundaries, not hand-pinned per step.
+# Round-78 arms (map-off permanence ladder + mutation callsite pair,
+# measured on this build — Godot 4.7.2):
+#   map_off permanence: mut_mapoff_ladder kills the link and deactivates
+#   the map in one dict, then samples the served tuple plus srv truth at
+#   cumulative inactive-map waits +20/+60/+120/+300f. Permanent-stale is
+#   the falsifiable claim: ANY rung showing a map_iter bump or a served-
+#   tuple change is the measured bound. Measured here: map_iter frozen at
+#   2 through +300f, the queued kill reads link_enabled=false while
+#   link_iter stays 1 (applied at object level, never drained), and the
+#   committed tuple — reachable=true included — is served at every rung.
+#   Reactivation replays the normal edge (link_iter 2 at on+1, map_iter 3
+#   + fresh clamp at on+2): the write was queued-not-lost, and the bump
+#   belongs to the flush, not to reactivation itself (a bare off->on
+#   cycle with no queued write bumps nothing).
+#   callsite pair: mut_ctx_resume vs mut_ctx_phys issue the identical
+#   link kill from coroutine-resume vs _physics_process contexts (the r76
+#   critic bb_physmut finding, made durable). New step key "mutate_phys"
+#   queues the dict into a PhysMutator node's pending list; its
+#   _physics_process drains it inside the SAME tick — the physics_frame
+#   emission that resumes the coroutine precedes node processing — so
+#   the write lands in that tick's server drain and is already applied
+#   (link_enabled=false, link_iter=2) at the reader's first post-write
+#   resume, while the identical coroutine-issued "mutate" reads pending
+#   (en=true, iter=1) at its write turn and is first *observed* applied
+#   at +1 — both writes apply at the same per-tick sync drain; only the
+#   reader's sample base shifts. The
+#   served-path ladder shifts one await shallower in the arm's own
+#   sample base: resume bound=2 (stale at the write turn and +1, fresh
+#   +2), phys bound=1 (stale at the drain-resume, fresh +1 await later).
 extends SceneTree
 var owned: Array[RID] = []
 var owned_nodes: Array[Node] = []
@@ -235,6 +264,20 @@ const POS_TOL := 0.001
 # Hand-derived candidates for the authored detour geometry.
 const DETOUR_EUCLID := 3.605551   # sqrt(13)
 const DETOUR_PATHLEN := 4.130649  # sqrt(2.5) + sqrt(6.5) via vertex (2,0,1)
+
+# Round-78 callsite instrument: a tree node that drains queued mutation
+# dicts inside _physics_process through the host's _apply_mutation —
+# queued one intra-tick phase later than a resume-issued "mutate" but
+# landing in the same per-tick sync drain.
+# _run_steps appends a step's "mutate_phys" dicts to pending and awaits
+# the drain before counting the step's "wait".
+class PhysMutator extends Node3D:
+	var host = null         # the SceneTree script instance (for _apply_mutation)
+	var srv: Dictionary     # live server objects — the same dict _run threads
+	var pending: Array = [] # mutation dicts, drained FIFO each physics tick
+	func _physics_process(_d: float) -> void:
+		while not pending.is_empty():
+			host._apply_mutation(pending.pop_front(), srv)
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -359,11 +402,23 @@ func _run() -> void:
 	# RID out of srv, not the authoring-local variable.
 	var srv := {"map": map, "region": region, "mesh": mesh,
 		"link_rid": link_rid, "link_node": link_node, "agent": agent}
+	# Round-78: arms whose steps carry "mutate_phys" get the callsite
+	# instrument node — created only then, so arms without it run an
+	# unmodified tree.
+	var phys_mut: PhysMutator = null
+	for step in arm_cfg.get("steps", []):
+		if step.has("mutate_phys"):
+			phys_mut = PhysMutator.new()
+			phys_mut.host = self
+			phys_mut.srv = srv
+			root.add_child(phys_mut)
+			owned_nodes.append(phys_mut)
+			break
 	var fs := _final_srv_state(arm_cfg)
 	if arm != "":
 		st = _read_state(agent, actor)
 		if arm_cfg.has("steps"):
-			states = await _run_steps(arm_cfg["steps"], agent, actor, srv)
+			states = await _run_steps(arm_cfg["steps"], agent, actor, srv, phys_mut)
 		elif arm_cfg.has("tp"):
 			actor.global_position = arm_cfg["tp"]
 			for i in range(5):
@@ -1988,6 +2043,165 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 						"final": Vector3(5, 0, 1.0), "dist": 3.605551,
 						"path": [Vector3(5, 0, 0.5), Vector3(5, 0, 1.0)],
 						"reachable": false, "reached": false, "finished": false}]}
+		# Round-78 (a) map_off permanence ladder: link kill + map
+		# deactivation in one dict, then per-rung served tuple + srv truth
+		# at cumulative inactive-map waits +20/+60/+120/+300f. Permanent-
+		# stale is the falsifiable claim — a map_iter bump or served-tuple
+		# change at ANY rung fails the step and names the measured bound.
+		# srv_get pins the tripwire per rung: map_iter frozen at 2 while
+		# link_enabled reads false at link_iter 1 (applied, never drained).
+		# The reactivation tail proves the queued kill lands: on+1 stamps
+		# link_iter 2 with map_iter still 2, on+2 bumps map_iter 3 and
+		# serves the fresh clamp — the r76 window replayed from the write,
+		# not from deactivation.
+		"mut_mapoff_ladder":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"ladder": {"bound": 5, "groups": 2},
+				"steps": [
+					{"mutate": {"link_enabled": false, "map_active": false}, "wait": 20,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": false, "link_enabled": false,
+							"link_iter": 1, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 40,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": false, "link_enabled": false,
+							"link_iter": 1, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 60,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": false, "link_enabled": false,
+							"link_iter": 1, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 180,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": false, "link_enabled": false,
+							"link_iter": 1, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"map_active": true}, "wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": true, "link_enabled": false,
+							"link_iter": 2, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"map_active": true, "link_enabled": false,
+							"link_iter": 2, "map_iter": 3},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# Round-78 (b) callsite pair, control arm: the link kill issued by
+		# a "mutate" step in coroutine-resume context. wait:0 = the write
+		# turn itself — srv_get still pending (en=true, iter=1); +1f shows
+		# the write applied (en=false, iter=2, map_iter still 2) yet the
+		# serve stays stale; +2f rebuilds (map_iter 3) and serves the
+		# clamp. Ladder bound=2 — the r76 2-frame edge in this arm's own
+		# sample base.
+		"mut_ctx_resume":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"ladder": {"bound": 2, "groups": 2},
+				"steps": [
+					{"mutate": {"link_enabled": false}, "wait": 0,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": true, "link_iter": 1, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false, "link_iter": 2, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false, "link_iter": 2, "map_iter": 3},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# Round-78 (c) callsite pair, treatment arm: the IDENTICAL dict
+		# routed through PhysMutator._physics_process ("mutate_phys"). The
+		# queue drains inside the issue tick's node processing, so the
+		# drain-await resume (wait:0) already shows the write applied
+		# (en=false, iter=2) while the serve is still stale (map_iter 2);
+		# +1 await later the rebuild has landed and the serve is fresh.
+		# Ladder bound=1 — the callsite shift as a durable paired receipt:
+		# same mutation, same geometry, same tuple sequence modulo the
+		# one-shallower sample base.
+		"mut_ctx_phys":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"ladder": {"bound": 1, "groups": 2},
+				"steps": [
+					{"mutate_phys": {"link_enabled": false}, "wait": 0,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false, "link_iter": 2, "map_iter": 2},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"srv_get": {"link_enabled": false, "link_iter": 2, "map_iter": 3},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"srv_get": {"link_enabled": false, "link_iter": 2, "map_iter": 3},
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
 	return {}
 
 # Shared observable-tuple predicate for the arm families (r72 pop/tp, r73
@@ -2170,7 +2384,7 @@ func _run_link_arm(actor: Node3D, agent: NavigationAgent3D, region: RID,
 # getter-stage readback whose edge (~1f, or same-turn under
 # map_force_update) sits strictly inside the serve edge (2f/3f).
 func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
-		srv: Dictionary) -> Array:
+		srv: Dictionary, phys_mut: PhysMutator = null) -> Array:
 	var out: Array = []
 	for step in steps:
 		if step.has("set_target"):
@@ -2180,6 +2394,20 @@ func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
 		if step.has("mutate"):
 			for m in _mut_list(step):
 				_apply_mutation(m, srv)
+		# Round-78: "mutate_phys" queues the same dict onto the
+		# PhysMutator's pending list; its _physics_process drains the
+		# queue inside this same tick's node processing, so the write
+		# lands in that tick's sync drain (vs "mutate", issued during
+		# the emission resume). The drain await ends at the first
+		# post-fire resume; the step's "wait" then counts further
+		# physics_frames — a phys step's wait:0 read is the first
+		# observable post-write sample and already shows the write
+		# applied.
+		if step.has("mutate_phys"):
+			for m in _mut_list(step, "mutate_phys"):
+				phys_mut.pending.append(m)
+			while not phys_mut.pending.is_empty():
+				await physics_frame
 		for i in range(int(step.get("wait", 5))):
 			await physics_frame
 		var st_i := {}
@@ -2215,8 +2443,10 @@ func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D,
 # all RID/agent writes
 # so a force in the same dict still flushes them, before map_active so
 # a force+deactivate dict flushes then freezes).
-func _mut_list(step: Dictionary) -> Array:
-	var mut = step.get("mutate", {})
+# Round-78: `key` lets a step carry a second mutation channel —
+# "mutate_phys" routes through the PhysMutator callsite instrument.
+func _mut_list(step: Dictionary, key := "mutate") -> Array:
+	var mut = step.get(key, {})
 	return mut if mut is Array else [mut]
 
 func _apply_mutation(m: Dictionary, srv: Dictionary) -> void:
@@ -2288,6 +2518,11 @@ func _read_srv(want: Dictionary, srv: Dictionary) -> Dictionary:
 		got["link_end"] = NavigationServer3D.link_get_end_position(link) if link.is_valid() else null
 	if want.has("map_active"):
 		got["map_active"] = NavigationServer3D.map_is_active(srv["map"])
+	# Round-78: map_get_iteration_id — the map rebuild clock; bumps only
+	# on a dirty sync. Frozen under an inactive map; the permanence
+	# ladder pins it per rung as the late-flush tripwire.
+	if want.has("map_iter"):
+		got["map_iter"] = NavigationServer3D.map_get_iteration_id(srv["map"])
 	if want.has("region_transform"):
 		var rr: RID = srv["region"]
 		got["region_transform"] = NavigationServer3D.region_get_transform(rr).origin if rr.is_valid() else null
@@ -2319,7 +2554,7 @@ func _final_srv_state(cfg: Dictionary) -> Dictionary:
 		# override); the fold processes sub-dicts in the same sequence the
 		# step applies them, so a recreate AFTER a transform resets the
 		# folded transform to identity — matching the voided write.
-		for m in _mut_list(step):
+		for m in _mut_list(step) + _mut_list(step, "mutate_phys"):
 			if m.is_empty():
 				continue
 			fs["any_mut"] = true
