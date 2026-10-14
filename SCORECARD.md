@@ -97,3 +97,11 @@ Sol `r78-adjudicator.md`: permanence claim CONFIRMED as a bounded measured regim
 | calibration | **unchanged** | new sibling runner only; `run_battery.py` untouched, all 176 prior rows byte-stable by construction |
 
 Sol `r79-adjudicator.md` (provisional): claim ADMIT-as-narrowed — split is write-through vs evaluation-gated not RNA-vs-depsgraph. Author = operator-substituted (free-pool massacre); scout lattice reproduced 37/37 on the tracked fixture. Verifier pending post-reset. Bounded: Blender 5.2.1 LTS, `blender -b -P`, this host. Work commit follows.
+
+## Round 80 verdict — 2026-10-14
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | eval-event catalogue folded into the tracked lattice: bpy.ops-call auto-eval (new event class), driver edge=1, keyframe binds only at frame_set, handler timing split (dup vs fc), msgbus/undo_post dead headless |
+| depth | **improved** | bounded closure confirmed — ~100 probed mutation classes, 0 falsifiers across 4 independent sweeps; mechanical falsifier armed in-fixture (`closed|violations`) |
+| calibration | **unchanged** | additive arm + cases only; r79's 37 cases byte-identical; replay byte-identical ×2 after slept= removal |

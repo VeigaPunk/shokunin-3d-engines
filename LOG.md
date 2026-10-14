@@ -971,3 +971,22 @@ corpus/knowledge/seed.md).
   implicit drain. Verifier AGREE 4/4 (byte-identical x3); critic corrections
   folded 9afcdc2 (quirk_drift split). Bounded Blender 5.2.1 `blender -b -P`,
   this host. (Sol final, wave-10)
+
+## Round 80 — bpy eval-event catalogue (wave-11)
+
+- MOVE: `arm_evalcat` folded into `bpy_sync_probe.py` + 27 battery cases;
+  mechanical closure falsifier (`closed|violations=N` row) armed.
+- Measured (bounded over ~100 probed classes, four independent sweeps):
+  no mutation class flushes held state or fires watched handlers outside
+  {evaluated_depsgraph_get, view_layer.update, frame_set, dg.update,
+  bpy.ops-call}.
+- In-set refinements: bpy.ops event = the CALL (CANCELLED/poll-fail also
+  eval; pin dup≥1); frame_current write = lazy tag, flushes at next
+  tagged get with NO fc handlers; tagging≠evaluating; ID removal inert;
+  msgbus/undo_post dead headless.
+- Corrections: slept= dropped (only inter-run drift); quirk_drift split
+  already landed at r79-fix; commit subject "45+" over-attribution
+  disclosed in adjudicator (falsifier covers the 8 invoked=none rows;
+  class counts are the sweeps').
+- Verdict: ADMIT (bounded closure). 64/64 + byte-identical replay.
+  Sol final.
