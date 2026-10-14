@@ -105,3 +105,13 @@ Sol `r79-adjudicator.md` (provisional): claim ADMIT-as-narrowed — split is wri
 | coverage | **improved** | eval-event catalogue folded into the tracked lattice: bpy.ops-call auto-eval (new event class), driver edge=1, keyframe binds only at frame_set, handler timing split (dup vs fc), msgbus/undo_post dead headless |
 | depth | **improved** | bounded closure confirmed — ~100 probed mutation classes, 0 falsifiers across 4 independent sweeps; mechanical falsifier armed in-fixture (`closed|violations`) |
 | calibration | **unchanged** | additive arm + cases only; r79's 37 cases byte-identical; replay byte-identical ×2 after slept= removal |
+
+## Round 81 verdict — 2026-11-01
+
+| axis | verdict | evidence |
+|---|---|---|
+| depth | **improved** | X1 reorder fabrication confirmed on a SECOND Python runtime: bpy -b -P child bytes prefix the parent's buffered rows (child < pre_spawn); parse-survival contract pinned (gluevictim dropped, physical last-wins); PYTHONUNBUFFERED inert on bpy — per-runtime falsifier working as designed |
+| coverage | **improved** | evalcat bare catalogue 8->14 (r80-critic fold rows: frame_current/hier_link/data_swap/parent_write/obj_remove edge=1, orphans_purge edge=absent); frame_current closes r80-boundary unknown (a); 4 raw order_checks added as a new gate class |
+| calibration | **unchanged** | insertion-only (+331/-3); prior 111 ARM lines byte-identical; r79 78-line prefix + r80 34-row block preserved in order; deterministic x2 |
+
+Sol `r81-adjudicator.md`: ADMIT — reorder topology + parse-survival confirmed on bpy; bounded-closure catalogue extended honestly. Verifier replay pending at write. Bounded: Blender 5.2.1 -b -P, embedded CPython 3.14.7 (PYTHONUNBUFFERED-inert), pipe capture, this host. Work commit `65b2f26`; report-last commit follows.

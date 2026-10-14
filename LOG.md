@@ -990,3 +990,24 @@ corpus/knowledge/seed.md).
   class counts are the sweeps').
 - Verdict: ADMIT (bounded closure). 64/64 + byte-identical replay.
   Sol final.
+
+## Round 81 — bpy reorder fabrication + evalcat extension (wave-12)
+
+- MOVE: `arm_reorder` fabricates fd1-inheritance prefix reorder live on
+  `blender -b -P` (child bytes land before parent's pre-spawn-emitted
+  rows); 4 raw-stdout order_checks gated into the verdict; 6 r80-critic
+  fold rows into arm_evalcat (bare catalogue 8->14 under closed-set
+  falsifier).
+- Measured: child_marker lands before pre_spawn (buffered owner);
+  gluevictim correctly DROPPED by ^ARM parser (splice casualty);
+  dup resolves physical last-wins to parent; PYTHONUNBUFFERED inert on
+  bpy (needs --python-use-system-env) — per-runtime falsifier held.
+- Extension: all 6 edge=1 inert-or-absent under closed falsifier;
+  frame_current get_dup=1 get_fc=0 closes r80-boundary unknown (a);
+  orphans_purge edge=absent = data-layer label extension.
+- Critic mutants (flush-collapse, de-anchored parser, injected
+  view_layer.update) all correctly FAIL — pins discriminate.
+- Verifier replay pending at adjudication; baseline zero-drift on
+  freeze ae89c13 (64/64 + 176/176 + 31/31).
+- Verdict: ADMIT (Sol, wave-12). Bounded bpy 5.2.1 -b -P, CPython-embed
+  3.14.7 (131072B), this host.

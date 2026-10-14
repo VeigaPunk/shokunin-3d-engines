@@ -1,4 +1,4 @@
-"""r79 tracked fixture: bpy two-layer read timing (Blender 5.2.1 headless).
+"""r79+r80+r81 tracked fixture: bpy timing + evalcat + reorder (Blender 5.2.1 headless).
 
 Claim under test (round-79 declared axis-move):
   direct RNA writes are immediately visible to same-script RNA reads, BUT
