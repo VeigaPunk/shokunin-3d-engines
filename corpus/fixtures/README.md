@@ -630,8 +630,9 @@ to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
 pins four further classes on the r83–r85 lattice.
 
 - `script_size_gate` — the deferred process-context direct-space-state
-  fetch is released or refused by how much work the script forces at
-  startup, not by the fetch position, and on this host that is a
+  fetch is released or refused by the script's **statement count** — an
+  uncalled function body releases it too (r86 critic A3) — not by the
+  fetch position, and on this host that is a
   ~100-line **stochastic band** (~475–575 lines), not a boundary (see
   the r86 boundary report; 6 reps per point, deterministic refusal below
   the band, deterministic grant above, a race inside). The arm generates
@@ -642,8 +643,11 @@ pins four further classes on the r83–r85 lattice.
   an unthreaded project is granted — the gate does not exist without the
   threading flag. Every child is corroborated by the engine's own
   refusal-line count in its log (exactly one for the refused child, none
-  for the three granted ones), never by the child's self-report alone,
-  and the `allow_inaccessible` carve-out is deliberately not used. A
+  for the three granted ones) plus the engine's `space_get_direct_state`
+  callsite line in the raw log — the merged `2>&1` log corroborates
+  shape and count but not provenance by itself (a self-printed ERROR
+  passes a text match; the callsite line is the engine's) — and the
+  `allow_inaccessible` carve-out is deliberately not used. A
   fourth child is this fixture itself (`--child --arm=size_probe`); its
   bare fetch is granted, and the boundary seat shrank the fixture 16
   times to 725 lines without flipping it — a latent fragility, not a

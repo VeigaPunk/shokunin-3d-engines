@@ -70,9 +70,10 @@
 #                monitor is the server-level area_set_monitor_callback
 #                (a node Area3D's body_entered cannot resolve it)
 #   script_size_gate parent arm (round 86): the deferred process-context
-#                direct-space-state fetch is released or refused by how much
-#                work the script forces at startup, not by the fetch
-#                position — and on this host that is a ~100-line STOCHASTIC
+#                direct-space-state fetch is released or refused by the
+#                script's statement count, not by the fetch position — an
+#                UNCALLED function body releases it too (r86 critic A3) —
+#                and on this host that is a ~100-line STOCHASTIC
 #                BAND (~475-575 lines), not a boundary (r86 boundary §1, 6
 #                reps per point). One GENERATED probe source at two sizes in
 #                the same threaded project: the 25-line body is refused
@@ -228,17 +229,23 @@ func _cleanup_rids() -> void:
 
 func _fail(reason: String) -> bool:
 	push_error("phys3d_events: " + reason)
-	_cleanup_nodes()
-	_cleanup_rids()
-	quit(1)
+	_quit_clean(1)
 	return true
 
 
 func _exit_ok(marker: String) -> void:
+	_quit_clean(0, marker)
+
+
+# r86 simplifier: the exit protocol — every exit path in this file cleans up
+# its nodes/RIDs and quits with its own code, printing its report line (if
+# any) after the cleanup (r84: "every exit path in the file cleans up").
+func _quit_clean(code := 0, message := "") -> void:
 	_cleanup_nodes()
 	_cleanup_rids()
-	print(marker)
-	quit(0)
+	if message != "":
+		print(message)
+	quit(code)
 
 
 # r85: the jolt_threaded and dummy_refused arms are the third and fourth
@@ -311,6 +318,17 @@ func _spawn_child(dirname: String, project_body: String, arm: String,
 			res["errs"].append(line)
 	lf.close()
 	return res
+
+
+# r86 simplifier: one generator for all 13 child project bodies (four r83-r85
+# arms + nine r86 arms); the 13 literals matched this shape byte-for-byte.
+func _project_body(name: String, engine := "", threaded := false) -> String:
+	var body := "[application]\n\nconfig/name=\"%s\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n" % name
+	if engine != "":
+		body += "3d/physics_engine=\"%s\"\n" % engine
+	if threaded:
+		body += "3d/run_on_separate_thread=true\n"
+	return body
 
 
 # r86: the size-gate and hang arms need a probe whose SOURCE is generated —
@@ -467,8 +485,7 @@ func _run() -> void:
 			"floor_real":
 				await _child_floor("real")
 			var bad:
-				prints("CHILD_RESULT child_arm=unknown arm='%s'" % bad)
-				quit(2)
+				_quit_clean(2, "CHILD_RESULT child_arm=unknown arm='%s'" % bad)
 		return
 
 	var arm := _argval("--arm=", "isect")
@@ -765,10 +782,7 @@ func _run() -> void:
 			if tp_fired or tp_ov != 0 or not mv_fired or mv_delta != 1:
 				return _fail("static_nopair drift tp=%s ov=%d mv=%s delta=%d"
 						% [str(tp_fired), tp_ov, str(mv_fired), mv_delta])
-			_cleanup_nodes()
-			_cleanup_rids()
-			print("NEGATIVE REJECTED: phys3d_events static_nopair static_tp_fired=false ticks=3 area_move_delta=1")
-			quit(2)
+			_quit_clean(2, "NEGATIVE REJECTED: phys3d_events static_nopair static_tp_fired=false ticks=3 area_move_delta=1")
 
 		"threaded_edge":
 			# conversion cell: same queries under run_on_separate_thread=true.
@@ -782,7 +796,7 @@ func _run() -> void:
 			# (allow_inaccessible); any other engine ERROR is a defect
 			# (reviewer F4).
 			var spawned := _spawn_child("thrproj",
-					"[application]\n\nconfig/name=\"ThrChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/run_on_separate_thread=true\n",
+					_project_body("ThrChild", "", true),
 					"threaded_edge", true)
 			if spawned.has("err"):
 				return _fail(spawned["err"])
@@ -879,13 +893,10 @@ func _run() -> void:
 			# hint lacks "Jolt Physics" the row reports BLOCKED, never a
 			# fabricated split.
 			if not _engine_hint_has("Jolt Physics"):
-				_cleanup_nodes()
-				_cleanup_rids()
-				print("BLOCKED phys3d_events jolt_edge jolt_absent=true")
-				quit(1)
+				_quit_clean(1, "BLOCKED phys3d_events jolt_edge jolt_absent=true")
 				return
 			var spawned := _spawn_child("joltproj",
-					"[application]\n\nconfig/name=\"JoltChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Jolt Physics\"\n",
+					_project_body("JoltChild", "Jolt Physics", false),
 					"jolt_edge", false)
 			if spawned.has("err"):
 				return _fail(spawned["err"])
@@ -918,13 +929,10 @@ func _run() -> void:
 			# threading flag was silently ignored fails loudly (those
 			# refusal ERRORs are the expected witness class here).
 			if not _engine_hint_has("Jolt Physics"):
-				_cleanup_nodes()
-				_cleanup_rids()
-				print("BLOCKED phys3d_events jolt_threaded jolt_absent=true")
-				quit(1)
+				_quit_clean(1, "BLOCKED phys3d_events jolt_threaded jolt_absent=true")
 				return
 			var spawned := _spawn_child("joltthrproj",
-					"[application]\n\nconfig/name=\"JoltThrChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Jolt Physics\"\n3d/run_on_separate_thread=true\n",
+					_project_body("JoltThrChild", "Jolt Physics", true),
 					"jolt_threaded", true)
 			if spawned.has("err"):
 				return _fail(spawned["err"])
@@ -953,13 +961,10 @@ func _run() -> void:
 			# {same|differs|inverts} split is backend-real: the verdict
 			# map changes with the backend, not with the sweep code.
 			if not _engine_hint_has("Dummy"):
-				_cleanup_nodes()
-				_cleanup_rids()
-				print("BLOCKED phys3d_events dummy_refused dummy_absent=true")
-				quit(1)
+				_quit_clean(1, "BLOCKED phys3d_events dummy_refused dummy_absent=true")
 				return
 			var spawned := _spawn_child("dummyproj",
-					"[application]\n\nconfig/name=\"DummyChild\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n",
+					_project_body("DummyChild", "Dummy", false),
 					"dummy_refused", false)
 			if spawned.has("err"):
 				return _fail(spawned["err"])
@@ -1050,8 +1055,10 @@ func _run() -> void:
 
 		"script_size_gate":
 			# size-gate cell (r86): the deferred process-context fetch is
-			# released or refused by how much work the script forces at
-			# startup, NOT by the fetch position — and on this host that is
+			# released or refused by the script's STATEMENT COUNT, NOT by
+			# the fetch position — an uncalled function body releases it
+			# too (r86 critic A3: dead code at 1000 statements granted
+			# 7/7) — and on this host that is
 			# a ~100-line STOCHASTIC BAND (~475-575 lines), not a boundary
 			# (r86 boundary §1, 6 reps per point: deterministic refusal
 			# below, deterministic grant above, a race inside). One
@@ -1072,8 +1079,8 @@ func _run() -> void:
 			# exactly one refusal for the refused child, none for the three
 			# granted ones — and the carve-out is NOT used, so an extra
 			# refusal at any callsite fails the arm instead of hiding.
-			var thr_proj := "[application]\n\nconfig/name=\"SzThr\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/run_on_separate_thread=true\n"
-			var plain_proj := "[application]\n\nconfig/name=\"SzPlain\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n"
+			var thr_proj := _project_body("SzThr", "", true)
+			var plain_proj := _project_body("SzPlain", "", false)
 			var min_body := _size_probe_body(0)
 			var min_thr := _spawn_probe("szminproj", thr_proj, "szprobe.gd",
 					min_body, "guarded", false)
@@ -1109,6 +1116,23 @@ func _run() -> void:
 				if not ok:
 					return _fail("script_size_gate %s drift exit=%d v=%s errs=%s"
 							% [spec[0], spawn["code"], str(verdicts), str(errs)])
+			# the refused child's own "ERROR: Space state is inaccessible"
+			# print would satisfy the spec above (boundary MX4 / critic A4 —
+			# the child log merges 2>&1 by design for position fidelity, so
+			# corroborate by the ENGINE's provenance line in the raw log,
+			# which a self-print cannot produce).
+			var min_log := FileAccess.open(ProjectSettings.globalize_path(
+					"res://szminproj/child.log"), FileAccess.READ)
+			var saw_callsite := false
+			if min_log != null:
+				while not min_log.eof_reached():
+					if "space_get_direct_state" in min_log.get_line():
+						saw_callsite = true
+				min_log.close()
+			if not saw_callsite:
+				return _fail("script_size_gate min_thr: no engine "
+						+ "space_get_direct_state callsite line in the raw "
+						+ "child log — the refusal could be self-printed")
 			_exit_ok("PASS phys3d_events script_size_gate min_thr=refused min_plain=granted pad_thr=granted fixture_thr=granted child_exit=0")
 
 		"deferred_hang":
@@ -1128,21 +1152,24 @@ func _run() -> void:
 			# IDENTICAL body dereferences a real handle, prints its class
 			# and exits 0 — the hang is reachable only where a refusal is,
 			# never under Dummy.
-			var hang_thr := "[application]\n\nconfig/name=\"HangThr\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/run_on_separate_thread=true\n"
-			var hang_dummy := "[application]\n\nconfig/name=\"HangDummy\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n3d/run_on_separate_thread=true\n"
+			var hang_thr := _project_body("HangThr", "", true)
+			var hang_dummy := _project_body("HangDummy", "Dummy", true)
 			var hang_body := _size_probe_body(0)
 			var hung := _spawn_probe("hangproj", hang_thr, "szprobe.gd",
 					hang_body, "deref", false, HANG_BOUND_S)
 			if hung.has("err"):
 				return _fail(hung["err"])
 			var floor_ok := _spawn_probe("hangdummyproj", hang_dummy, "szprobe.gd",
-					hang_body, "deref", false)
+					hang_body, "deref", false, HANG_BOUND_S)
 			if floor_ok.has("err"):
 				return _fail(floor_ok["err"])
 			var aborted := false
 			var refused := false
 			for line in hung["errs"]:
-				if "SCRIPT ERROR" in line:
+				# the landed abort text, not just the class: an unrelated
+				# SCRIPT ERROR elsewhere in the child must not satisfy the
+				# witness (r86 critic A1).
+				if "SCRIPT ERROR" in line and "null instance" in line:
 					aborted = true
 				if str(line).begins_with("ERROR: Space state is inaccessible"):
 					refused = true
@@ -1172,29 +1199,23 @@ func _run() -> void:
 			# constants. Gated on both engine hints — absent means an
 			# honest BLOCKED row, never a fabricated split.
 			if not _engine_hint_has("Jolt Physics"):
-				_cleanup_nodes()
-				_cleanup_rids()
-				print("BLOCKED phys3d_events backend_tier jolt_absent=true")
-				quit(1)
+				_quit_clean(1, "BLOCKED phys3d_events backend_tier jolt_absent=true")
 				return
 			if not _engine_hint_has("Dummy"):
-				_cleanup_nodes()
-				_cleanup_rids()
-				print("BLOCKED phys3d_events backend_tier dummy_absent=true")
-				quit(1)
+				_quit_clean(1, "BLOCKED phys3d_events backend_tier dummy_absent=true")
 				return
 			var tier_plain := _spawn_child("tierplainproj",
-					"[application]\n\nconfig/name=\"TierPlain\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n",
+					_project_body("TierPlain", "", false),
 					"tier_plain", false)
 			if tier_plain.has("err"):
 				return _fail(tier_plain["err"])
 			var tier_jolt := _spawn_child("tierjoltproj",
-					"[application]\n\nconfig/name=\"TierJolt\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Jolt Physics\"\n",
+					_project_body("TierJolt", "Jolt Physics", false),
 					"tier_jolt", false)
 			if tier_jolt.has("err"):
 				return _fail(tier_jolt["err"])
 			var tier_dummy := _spawn_child("tierdummyproj",
-					"[application]\n\nconfig/name=\"TierDummy\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n",
+					_project_body("TierDummy", "Dummy", false),
 					"tier_dummy", false)
 			if tier_dummy.has("err"):
 				return _fail(tier_dummy["err"])
@@ -1241,18 +1262,15 @@ func _run() -> void:
 			# calls, so the floor can never be read as a refusal: the
 			# Dummy backend answers where a real backend errors.
 			if not _engine_hint_has("Dummy"):
-				_cleanup_nodes()
-				_cleanup_rids()
-				print("BLOCKED phys3d_events dummy_floor dummy_absent=true")
-				quit(1)
+				_quit_clean(1, "BLOCKED phys3d_events dummy_floor dummy_absent=true")
 				return
 			var floor_dummy := _spawn_child("floordummyproj",
-					"[application]\n\nconfig/name=\"FloorDummy\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n",
+					_project_body("FloorDummy", "Dummy", false),
 					"floor_dummy", false)
 			if floor_dummy.has("err"):
 				return _fail(floor_dummy["err"])
 			var floor_real := _spawn_child("floorrealproj",
-					"[application]\n\nconfig/name=\"FloorReal\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n",
+					_project_body("FloorReal", "", false),
 					"floor_real", false)
 			if floor_real.has("err"):
 				return _fail(floor_real["err"])
@@ -1330,9 +1348,7 @@ func _child_threaded() -> void:
 	prints("CHILD_NOTE early_null=%s" % str(early_null))
 	prints("CHILD_RESULT pp_edge0=%s proc_dss_refused=%s srv_ok=%s"
 			% [str(pp_edge0), str(proc_dss_refused), str(srv_ok)])
-	_cleanup_nodes()
-	_cleanup_rids()
-	quit(0)
+	_quit_clean()
 
 
 # --child --arm=size_probe body (r86): this fixture's OWN bare deferred
@@ -1344,8 +1360,7 @@ func _child_size() -> void:
 	var d = root.get_world_3d().direct_space_state
 	prints("CHILD_NOTE sp pf=%d null=%s" % [Engine.get_physics_frames(),
 			str(d == null)])
-	prints("CHILD_RESULT sp_fetch=%s" % ("refused" if d == null else "granted"))
-	quit(0)
+	_quit_clean(0, "CHILD_RESULT sp_fetch=%s" % ("refused" if d == null else "granted"))
 
 
 # --- r85: the generated-project child bodies share one sweep ---------------
@@ -1439,9 +1454,7 @@ func _child_split(prefix: String) -> void:
 	if dss == null:
 		# a null handle would read every query arm as blind — bail named
 		prints("CHILD_NOTE %s dss_null=true" % prefix)
-		_cleanup_nodes()
-		_cleanup_rids()
-		quit(1)
+		_quit_clean(1)
 		return
 	# r84 critic: the ClassDB pair is registry-level evidence; the live
 	# space-state object's class is the active-backend witness and is
@@ -1644,9 +1657,7 @@ func _child_split(prefix: String) -> void:
 		elif fired:
 			cls = "inverts"
 	prints("CHILD_RESULT %s_static_nopair=%s" % [prefix, cls])
-	_cleanup_nodes()
-	_cleanup_rids()
-	quit(0)
+	_quit_clean()
 
 
 # --- r86: the backend tier sweep and the Dummy floor signature -------------
@@ -1693,9 +1704,7 @@ func _child_tier(prefix: String) -> void:
 				break
 	if dss == null:
 		prints("CHILD_NOTE %s dss_null=true" % prefix)
-		_cleanup_nodes()
-		_cleanup_rids()
-		quit(1)
+		_quit_clean(1)
 		return
 	prints("CHILD_RESULT %s_dss_class=%s" % [prefix, dss.get_class()])
 
@@ -1803,9 +1812,7 @@ func _child_tier(prefix: String) -> void:
 		elif absf(sep_cast[0] - 0.1998291015625) < 0.0001:
 			cls = "differs-constants"
 	prints("CHILD_RESULT %s_sepray=%s" % [prefix, cls])
-	_cleanup_nodes()
-	_cleanup_rids()
-	quit(0)
+	_quit_clean()
 
 
 # --child --arm=floor_dummy / floor_real body (r86): the Dummy silent floor
@@ -1846,7 +1853,8 @@ func _child_floor(prefix: String) -> void:
 		"nil" if shape_data == null else "v3",
 		str(shape_type),
 		"rid0" if str(fresh) == "RID(0)" else "rid",
-		"nil" if space_param == null else "%.1f" % float(space_param),
+		("nil" if space_param == null else
+				("zero" if float(space_param) == 0.0 else "pos")),
 		"dummy" if dss_rid0 != null else "nil",
 		"nil" if b_state == null else "xform",
 		"nil" if b_param == null else "value",
@@ -1855,9 +1863,13 @@ func _child_floor(prefix: String) -> void:
 		"nil" if a_param == null else "value",
 	])
 	prints("CHILD_NOTE %s_floor tokens=%s" % [prefix, str(tokens)])
-	var floor_sig := PackedStringArray(["rid0", "nil", "2", "rid0", "0.0",
+	# r86 critic A5: solver_iterations is a TUNEABLE project default — pin
+	# the zero-vs-positive axis (Dummy floor = 0.0, real backend = whatever
+	# positive default/tuning), not the engine's literal 16.0, or a host
+	# with solver_iterations=8 fails as "refusal drift".
+	var floor_sig := PackedStringArray(["rid0", "nil", "2", "rid0", "zero",
 			"dummy", "nil", "nil", "0", "rid0", "nil"])
-	var real_sig := PackedStringArray(["rid", "v3", "3", "rid", "16.0",
+	var real_sig := PackedStringArray(["rid", "v3", "3", "rid", "pos",
 			"nil", "xform", "value", "1", "rid", "value"])
 	var cls := "unexpected"
 	if tokens == floor_sig:
@@ -1865,6 +1877,4 @@ func _child_floor(prefix: String) -> void:
 	elif tokens == real_sig:
 		cls = "real-values"
 	prints("CHILD_RESULT %s_floor=%s" % [prefix, cls])
-	_cleanup_nodes()
-	_cleanup_rids()
-	quit(0)
+	_quit_clean()
