@@ -147,3 +147,14 @@ Sol `r84-adjudicator.md`: ADMIT-corr — Jolt pinning with live witness, write-p
 
 | r85 | game-dev-3d | backend x threading | ADMIT-corr | f230443 + 4e6fbe3 |
 | r86 | game-dev-3d | statement-band + hang + backend tier + dummy floor | ADMIT-corr | 4e65726 + dd1737a |
+## Round 87 verdict — 2026-10-14
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | 6 cells: singleton-handle identity law, acquisition-vs-use split under threading, step-stamped getters with GP/Jolt in-class split, bounded write-loss observation, body-tier backend split, freed-space fatal tail |
+| depth | **improved** | crash row now pins per-backend breadcrumb envelope (GP dies inside get_space_state; Jolt at intersect_ray) — critic's self-print forge replayed and FAILS; refusal ERROR counts ==BODY_REPS corroborate gate; ss_fired makes dummy_cb=never honest |
+| calibration | **improved** | simplifier +85/-117 replay-verified; nav cell correctly refused then record-corrected (harness artifact); authored claims +876/-4 |
+
+`r87-adjudicator.md`: ADMIT-corr — body-tier lattice admitted with envelope corrections. Reviewer + swe-2 verifier AGREE; baseline zero-drift; 195/195 prior byte-identical. Work `c57fa40` + folds `a11e1ad`.
+
+| r87 | game-dev-3d | body-tier direct-state lattice | ADMIT-corr | c57fa40 + a11e1ad |

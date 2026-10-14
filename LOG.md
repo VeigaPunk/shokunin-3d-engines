@@ -1129,3 +1129,30 @@ corpus/knowledge/seed.md).
   wall-clock 8s bound; jolt/dummy splits are one build.
 - Seats: author + boundary + baseline + scribe + critic + reviewer +
   verifier + simplifier all landed. ADMIT-corr.
+## Round 87 verdict — 2026-10-14
+- ARMED: body-tier direct-state lattice — 6 cells @196-201.
+  body_get_direct_state = one per-body singleton live handle
+  (if/ss_same, detach/reattach/twin; get_space_state twin-identity).
+  acq_use: threading gates FETCH not use — held handle reads live,
+  writes land at every out-of-phase position. step_stamp: object's own
+  flush seams + GP/Jolt split inside the class. write_loss: ungated
+  unsynchronized write, bounded 8-rep observation, landed/lost split
+  evidence-only. body_tier: GP impulse=zero vs Jolt=real at first
+  in-contact step; lshape -1/0; sleep_lv kept/zeroed; detached write
+  silent/loud/silent (log-counted 0/1/0). freed_space FATAL TAIL:
+  freed space via held handle kills process.
+- VERIFIED: 201/201 folded; 195/195 prior byte-identical (semantic);
+  bpy 83/83; three.js 31/31; baseline zero-drift both phases;
+  reviewer + swe-2 verifier AGREE all claims.
+- FOLDS (a11e1ad): simplifier P1/P2/P3/G/E (+85/-117); critic F1
+  crash-envelope (self-print forge now FAILS — replayed);
+  F2 GP crash-site corrected (inside get_space_state, not
+  intersect_ray); F3 refusal-line counts ==BODY_REPS on acq_use/
+  write_loss; F5 ss_fired pin (dummy_cb=never honest); record fixes.
+- NAV CELL REFUSED by author (scout's safe_n=10 did not replicate,
+  0/8) — later found to be a harness artifact (missing project.godot);
+  record corrected, cell deferred to r88.
+- Residual: forge-resistance is envelope-level (replayed fake note
+  sequences remain possible — r88 mutation pass); dss refusal is a
+  ~475-575 stochastic band; hang detect rides rc/timeout.
+- Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf. ADMIT-corr.
