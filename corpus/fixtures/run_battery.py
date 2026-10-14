@@ -416,6 +416,26 @@ CASES = [
      "NEGATIVE REJECTED: input3d_move no_event_zero_displacement receipts=0 intent=false "
      "ticks=10 displacement=0.000,0.000,0.000 late_control_receipts=1 late_control_ticks=5 "
      "late_control_displacement=0.500"),
+    ("phys3d_events_isect", "phys3d_events.gd", ["--arm=isect"], 0,
+     "PASS phys3d_events isect settled=1 mask2=0 away_w0=0 away_n1=0 back_w0=1"),
+    ("phys3d_events_cast", "phys3d_events.gd", ["--arm=cast"], 0,
+     "PASS phys3d_events cast settled_safe=0.144531 settled_unsafe=0.150391 w0=1.000000 n1=1.000000"),
+    ("phys3d_events_btm", "phys3d_events.gd", ["--arm=btm"], 0,
+     "PASS phys3d_events btm settled_hit=true settled_travel=-0.976562 w0_hit=false w0_travel=-10.000000 n1_hit=false"),
+    ("phys3d_events_pp_queries", "phys3d_events.gd", ["--arm=pp_queries"], 0,
+     "PASS phys3d_events pp_queries ray_hit=false isect=0 safe=1.000000 btm=false travel=-10.000000"),
+    ("phys3d_events_contact_stale", "phys3d_events.gd", ["--arm=contact_stale"], 0,
+     "PASS phys3d_events contact_stale in_w0_c=0 in_w0_isect=1 in_n1_c=4 out_w0_c=4 out_n1_c=0"),
+    ("phys3d_events_contact_sig", "phys3d_events.gd", ["--arm=contact_sig"], 0,
+     "PASS phys3d_events contact_sig w0_fired=false w0_overlaps=0 n1_entered=true delta=1 n1_overlaps=1"),
+    ("phys3d_events_sync_cb", "phys3d_events.gd", ["--arm=sync_cb"], 0,
+     "PASS phys3d_events sync_cb w0=0 n1=1 n3=3 static_cb=0"),
+    ("phys3d_events_srv_area_cb", "phys3d_events.gd", ["--arm=srv_area_cb"], 0,
+     "PASS phys3d_events srv_area_cb enter=1 exit=1 reenter=1 all_delta1=true"),
+    ("phys3d_events_static_nopair", "phys3d_events.gd", ["--arm=static_nopair"], 2,
+     "NEGATIVE REJECTED: phys3d_events static_nopair static_tp_fired=false ticks=3 area_move_delta=1"),
+    ("phys3d_events_threaded_edge", "phys3d_events.gd", ["--arm=threaded_edge"], 0,
+     "PASS phys3d_events threaded_edge pp_edge0=true proc_dss_refused=true srv_ok=true child_exit=0"),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored
