@@ -161,6 +161,35 @@
 #   serving the pre-mutation path through region transform AND region
 #   delete — the only truly SERVED zombie (next=(2,0,3) and
 #   reachable=true on a deleted map).
+# Round-76 arms (the setter->server-sync WINDOW pinned as tracked CASES;
+# "window edge" = cumulative physics frames after the mutate at which a
+# forcing read first serves post-mutation state):
+#   measured edges on this build: link_set_enabled = 2 frames (forcing
+#   reads at wait 0 and 1 serve the pre-mutation stored result), region_
+#   set_transform = 3 frames (stale at 0/1/2), map_set_active(false) =
+#   NEVER (the map leaves the iteration entirely: no iter bump, no dirty
+#   flag surfaces, the committed tuple is served through arbitrary forcing
+#   calls with NO finished latch — a permanent-stale regime distinct from
+#   the latch mechanism). The object-level getter edge is ~1 frame
+#   (link_get_enabled / region_get_transform / map_is_active read the
+#   post-setter value at f1), so the fs readback gates need only >=1 frame
+#   after the last mutate — the query edge is deeper (2/3f) and is what
+#   the mut_win_* steps pin. Inside the window the forcing update still
+#   RUNS on the last-synced map: it does not see the dirty flag but still
+#   pops the stored array on the live position — mut_win_link's wait:0
+#   step serves AND pop-traverses the killed gate (idx 2->3, next=le), the
+#   r75-critic falsification made durable. Even at the edge frame the
+#   pre-force peek still shows the stale array (map synced, agent not yet
+#   re-queried) — the two-stage pin. Pending writes QUEUE under an
+#   inactive map and apply at the normal 2-frame edge on reactivation
+#   (mut_map_cycle). Same-value writes are suppressed on every probed
+#   setter — link_enabled / region_layers / region_transform(identity) /
+#   agent.navigation_layers all leave the stored array un-dirtied (the
+#   mut_same_* arms pin it via the M-witness: a re-query would re-anchor
+#   path[0] at the live position; suppression keeps it at the authored
+#   origin). The agent channel additionally dedups BEFORE its synchronous
+#   clear: same-value navigation_layers leaves the array intact same-turn,
+#   while an effective write clears it to [] instantly (mut_same_agent).
 extends SceneTree
 var owned: Array[RID] = []
 var owned_nodes: Array[Node] = []
@@ -321,7 +350,8 @@ func _run() -> void:
 	var want_polys := 1 if straight else (4 if arm_cfg.get("island", false) else 3)
 	var want_regions := 0 if fs["region_gone"] else 1
 	if not actor.is_inside_tree() or agent.get_parent() != actor \
-			or agent.get_navigation_map() != map or not NavigationServer3D.map_is_active(map) \
+			or agent.get_navigation_map() != map \
+			or NavigationServer3D.map_is_active(map) != fs["map_active"] \
 			or NavigationServer3D.map_get_regions(map).size() != want_regions \
 			or mesh.get_polygon_count() != want_polys \
 			or actor.global_position.distance_to(expected_pos) > 0.0001 \
@@ -1121,10 +1151,13 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 		# Measured on this build (Godot 4.7.2): every unlatched map/link
 		# mutation invalidates LAZILY — the forcing read re-queries
 		# anchored at the live position; no dead waypoint is served after
-		# the server sync lands (~2 physics frames for link toggles, ~3
-		# for region_set_transform — a same-turn forcing call inside the
-		# setter->sync window still serves the stale hop, and mutate steps
-		# therefore need wait>=1 before their forcing read).
+		# the server sync lands (the query edge is exactly 2 physics frames
+		# for link toggles and 3 for region_set_transform — pinned by the
+		# round-76 mut_win_* arms; inside the window a same-turn forcing
+		# call still serves — and pops — the stale hop). Separately, the fs
+		# mutation-honesty readback sees object-level truth from ~1 frame
+		# after the setter, so an arm whose LAST mutation must survive the
+		# gate needs >=1 elapsed frame before arm end.
 		# (a) link killed mid-path while the pop index points INTO the
 		# gate: two teleports walk idx to 3 so next serves the far
 		# endpoint (2.5,0,5.5); disable the link; the stale array still
@@ -1373,6 +1406,243 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 						"idx": 1, "next": fg, "final": fg, "dist": 1.5,
 						"path": [fg, fg],
 						"reachable": true, "reached": true, "finished": true}]}
+		# Round-76 sync-window arms. "wait" counts physics frames AFTER the
+		# mutate (and after the step's own tp); reads are cumulative across
+		# steps — [mutate@0, wait:1, wait:1] samples the forcing read at
+		# +0/+1/+2 frames. New mutate key: "map_active" ->
+		# NavigationServer3D.map_set_active(srv["map"], v).
+		# (a) link-toggle edge = 2 frames, pinned WITH the served-and-
+		# popped zombie: the tp+mutate+wait:0 step makes the first post-tp
+		# forcing read run on the pre-sync map — the pop index advances
+		# 2->3 ACROSS the killed gate so next is the dead far endpoint
+		# (2.5,0,5.5); +1f is still the stale serve (idx=3 next=le); +2f
+		# re-queries anchored at the live bank -> clamped, finished via the
+		# idx+pdd unreachable clause (same tuple as mut_link_kill step3).
+		"mut_win_link":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.0, 0, 0.9), "idx": 2, "next": Vector3(2.5, 0, 3.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 4.627094,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2.5, 0, 3.4), "mutate": {"link_enabled": false}, "wait": 0,
+						"peek_idx": 2,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 3, "next": Vector3(2.5, 0, 5.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 2.1,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 3,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 3, "next": Vector3(2.5, 0, 5.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 2.1,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 3,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2.5, 0, 4.0),
+						"final": Vector3(2.5, 0, 4.0), "dist": 2.1,
+						"path": [Vector3(2.5, 0, 3.4), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": true}]}
+		# (b) region-transform edge = 3 frames: stale at 0/1/2, re-queried
+		# at 3 — one frame DEEPER than the link toggle. The step-4 peek
+		# still shows the stale array at the edge frame (the map has
+		# synced but the agent re-queries only inside the forcing read) —
+		# the two-stage pin. Post tuple = mut_region_move's constants.
+		"mut_win_region":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"region_transform": Vector3(5, 0, 0)}, "wait": 0,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 1, "next": Vector3(2, 0, 1), "final": f,
+						"dist": 3.605551, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"peek_idx": 1, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 0, "next": Vector3(5, 0, 0.5), "final": Vector3(5, 0, 1.0),
+						"dist": 3.605551, "path": [Vector3(5, 0, 0.5), Vector3(5, 0, 1.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (c) map_set_active(false): no edge exists — the map leaves the
+		# iteration, iter never bumps, no dirty flag ever surfaces, and the
+		# committed tuple (reachable=true included) is served through
+		# arbitrary forcing calls with NO latch. Distinct mechanism from
+		# mut_latch_zombie: the latch is the agent's update early-returning
+		# while the server syncs; here the server never syncs.
+		"mut_map_off":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"map_active": false}, "wait": 0,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 10,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 5,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (d) pending dirty QUEUES under an inactive map and applies at the
+		# normal window edge on reactivation: kill the link while inactive
+		# (the object getter applies but the committed tuple is still served
+		# verbatim), reactivate, and at +2f post-reactivation the re-query
+		# clamps — reactivation re-arms the measured 2-frame window.
+		"mut_map_cycle":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"mutate": {"map_active": false}, "wait": 3,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"link_enabled": false}, "wait": 5,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"map_active": true}, "wait": 1,
+						"peek_idx": 1,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"wait": 1,
+						"idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.385165,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (e) same-value suppression via the M-witness: teleport to
+		# M=(1.5,0,0.5) — a bare teleport pops the index but never re-queries,
+		# so path[0] stays S. A same-value write leaves it there (suppressed);
+		# an effective write re-anchors path[0] at M (the contrast step).
+		"mut_same_link":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.5, 0, 0.5), "idx": 2, "next": Vector3(2.5, 0, 3.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.099020,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"link_enabled": true}, "wait": 5,
+						"peek_idx": 2,
+						"peek_path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"idx": 2, "next": Vector3(2.5, 0, 3.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 5.099020,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"link_enabled": false}, "wait": 5,
+						"idx": 2, "next": Vector3(2.5, 0, 4.0),
+						"final": Vector3(2.5, 0, 4.0), "dist": 5.099020,
+						"path": [Vector3(1.5, 0, 0.5), Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (f) same-value suppression on the region channel, two setters in
+		# one step: navigation_layers=1 AND transform=identity (the
+		# transform same-value dedup is the subtlest — a Transform3D value
+		# compare, not a bitmask); both must suppress for the tuple to stay
+		# anchored at S. Contrast: layers 1->2 empties the path.
+		"mut_same_region":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.5, 0, 0.5), "idx": 2, "next": f,
+						"final": f, "dist": 3.162278,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"region_layers": 1, "region_transform": Vector3(0, 0, 0)},
+						"wait": 5,
+						"peek_idx": 2, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 2, "next": f, "final": f,
+						"dist": 3.162278, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"region_layers": 2}, "wait": 5,
+						"idx": 0, "next": Vector3(1.5, 0, 0.5), "final": Vector3(0, 0, 0),
+						"dist": 3.162278, "path": [],
+						"reachable": false, "reached": false, "finished": false}]}
+		# (g) the agent channel dedups BEFORE its synchronous clear:
+		# same-value navigation_layers leaves the stored array intact
+		# same-turn (peek npath=3, not the effective-write []); the
+		# contrast write clears synchronously (peek=[] at wait:0, stale idx
+		# still readable) and the restore re-materializes anchored at M.
+		"mut_same_agent":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.5, 0, 0.5), "idx": 2, "next": f,
+						"final": f, "dist": 3.162278,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"agent_layers": 1}, "wait": 0,
+						"peek_idx": 2, "peek_path": [s, Vector3(2, 0, 1), f],
+						"idx": 2, "next": f, "final": f,
+						"dist": 3.162278, "path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"mutate": {"agent_layers": 2}, "wait": 0,
+						"peek_idx": 2, "peek_path": [],
+						"idx": 0, "next": Vector3(1.5, 0, 0.5), "final": Vector3(0, 0, 0),
+						"dist": 3.162278, "path": [],
+						"reachable": false, "reached": false, "finished": false},
+					{"mutate": {"agent_layers": 1}, "wait": 5,
+						"idx": 2, "next": f, "final": f,
+						"dist": 3.162278,
+						"path": [Vector3(1.5, 0, 0.5), Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
 	return {}
 
 func _read_state(agent: NavigationAgent3D, actor: Node3D) -> Dictionary:
@@ -1609,6 +1879,11 @@ func _apply_mutation(m: Dictionary, srv: Dictionary) -> void:
 		NavigationServer3D.link_set_navigation_layers(link, int(m["link_layers"]))
 	if m.has("agent_layers"):
 		srv["agent"].navigation_layers = int(m["agent_layers"])
+	# Round-76: map activity toggle goes last — deactivating the map stops
+	# its sync entirely, so a queued RID write in the same dict stays
+	# invisible to queries regardless of setter order.
+	if m.has("map_active"):
+		NavigationServer3D.map_set_active(srv["map"], bool(m["map_active"]))
 
 # Round-75: folds the authored arm flags plus every step's "mutate" dict
 # into the final expected server-side state, so the post-step gate reads
@@ -1629,7 +1904,8 @@ func _final_srv_state(cfg: Dictionary) -> Dictionary:
 		"region_xform": Transform3D.IDENTITY,
 		"region_gone": false,
 		"region_mut": false,
-		"any_mut": false}
+		"any_mut": false,
+		"map_active": true}
 	for step in cfg.get("steps", []):
 		var m: Dictionary = step.get("mutate", {})
 		if m.is_empty():
@@ -1659,6 +1935,8 @@ func _final_srv_state(cfg: Dictionary) -> Dictionary:
 			fs["link_layers"] = int(m["link_layers"])
 		if m.has("agent_layers"):
 			fs["agent_layers"] = int(m["agent_layers"])
+		if m.has("map_active"):
+			fs["map_active"] = bool(m["map_active"])
 	return fs
 
 # Asserts the pre-motion tuple on st (same key order as _run_pop_arm),
