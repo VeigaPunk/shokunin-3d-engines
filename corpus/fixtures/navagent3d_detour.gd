@@ -49,9 +49,35 @@
 #   is_navigation_finished = reached OR (unreachable AND idx == size-1 AND
 #     euclid(agent, clamped final) < pdd) — both sub-gates STRICT, latched;
 #     sitting on the final without the pop index reaching it does not finish.
+# Round-73 arms (off-mesh NavigationLink3D traversal gating, measured on this
+# build — Godot 4.7.2, same L-corridor plus an additive disconnected island
+# quad C x[2,3]z[5,6] for the bridge arms):
+#   authoring: both NavigationServer3D.link_create() ("server") and
+#     NavigationLink3D.new() ("node") join the agent's path query headlessly
+#     after the normal physics settle (link iteration_id 1).
+#   metadata: agent.path_metadata_flags bits 1/2/4 gate the companion arrays
+#     on get_current_navigation_result() — types/rids/owner_ids. At meta=0
+#     all three are EMPTY even though the path crosses the link (opaque);
+#     the LINK segment type (1) marks the waypoint index where the hop
+#     STARTS (segment path[i]->path[i+1]); rids[i] carries the link RID at
+#     that index (region RID elsewhere); owner_ids[i] carries a valid
+#     NavigationLink3D ObjectID only for node-authored links (server links
+#     give invalid 0s). Metadata changes NO path output.
+#   gates (each independently falsifiable — the arm fails if the flag did
+#     not take effect OR the path keeps the link): navigation_layers is a
+#     BITMASK intersection (link layers=2 vs agent layers=1 drops the link;
+#     agent layers=3 restores it); bidirectional=false traversed forward
+#     uses the link but approached from the exit side (start/end swapped)
+#     drops it; enabled=false drops it; travel_cost=10 prices the hop out of
+#     route selection. enter_cost is INERT on this build — 10 and 100 leave
+#     the link chosen (measured anomaly, pinned as the TRUE behavior).
+#   pop-through hazard: link endpoints are ordinary waypoints to the pdd
+#     pop loop — with pdd=4.0 on the bridge the agent pops the near endpoint
+#     and get_next_path_position returns the far endpoint across the void.
 # No agent motion, avoidance, baking, or rendering claim.
 extends SceneTree
 var owned: Array[RID] = []
+var owned_nodes: Array[Node] = []
 
 const DIST_TOL := 0.004
 const POS_TOL := 0.001
@@ -86,12 +112,21 @@ func _run() -> void:
 		spawn = Vector3(1, 0, 1)
 		target = Vector3(3, 0, 3)
 	else:
-		mesh.vertices = PackedVector3Array([
+		var verts := PackedVector3Array([
 			Vector3(0, 0, 0), Vector3(0, 0, 1), Vector3(2, 0, 1), Vector3(2, 0, 0),
 			Vector3(3, 0, 0), Vector3(3, 0, 1), Vector3(3, 0, 4), Vector3(2, 0, 4)])
+		if arm_cfg.get("island", false):
+			# Disconnected island quad C x[2,3]z[5,6]; the z(4,5) gap is the
+			# void. Verts must be complete before assignment — the property
+			# getter hands back an array append_array does not write through.
+			verts.append_array(PackedVector3Array([
+				Vector3(2, 0, 5), Vector3(2, 0, 6), Vector3(3, 0, 6), Vector3(3, 0, 5)]))
+		mesh.vertices = verts
 		mesh.add_polygon(PackedInt32Array([0, 1, 2, 3]))
 		mesh.add_polygon(PackedInt32Array([3, 2, 5, 4]))
 		mesh.add_polygon(PackedInt32Array([2, 7, 6, 5]))
+		if arm_cfg.get("island", false):
+			mesh.add_polygon(PackedInt32Array([8, 9, 10, 11]))
 	if arm != "":
 		spawn = arm_cfg["spawn"]
 		target = arm_cfg["target"]
@@ -99,6 +134,39 @@ func _run() -> void:
 	owned.append(region)
 	NavigationServer3D.region_set_map(region, map)
 	NavigationServer3D.region_set_navigation_mesh(region, mesh)
+	# Round-73 off-mesh link authoring (opt-in per arm; absent key = no link).
+	var link_rid := RID()
+	var link_node: NavigationLink3D = null
+	if arm_cfg.get("link", "") != "":
+		var la: Vector3 = arm_cfg["link_a"]
+		var lb: Vector3 = arm_cfg["link_b"]
+		if arm_cfg.get("rev", false):
+			var ltmp := la
+			la = lb
+			lb = ltmp
+		if arm_cfg["link"] == "server":
+			link_rid = NavigationServer3D.link_create()
+			owned.append(link_rid)
+			NavigationServer3D.link_set_map(link_rid, map)
+			NavigationServer3D.link_set_start_position(link_rid, la)
+			NavigationServer3D.link_set_end_position(link_rid, lb)
+			NavigationServer3D.link_set_bidirectional(link_rid, not arm_cfg.get("oneway", false))
+			NavigationServer3D.link_set_enabled(link_rid, not arm_cfg.get("disabled", false))
+			NavigationServer3D.link_set_navigation_layers(link_rid, int(arm_cfg.get("linklayers", 1)))
+			NavigationServer3D.link_set_enter_cost(link_rid, float(arm_cfg.get("entercost", 0.0)))
+			NavigationServer3D.link_set_travel_cost(link_rid, float(arm_cfg.get("travelcost", 1.0)))
+		else:
+			link_node = NavigationLink3D.new()
+			root.add_child(link_node)
+			owned_nodes.append(link_node)
+			link_node.set_navigation_map(map)
+			link_node.start_position = la
+			link_node.end_position = lb
+			link_node.bidirectional = not arm_cfg.get("oneway", false)
+			link_node.enabled = not arm_cfg.get("disabled", false)
+			link_node.navigation_layers = int(arm_cfg.get("linklayers", 1))
+			link_node.enter_cost = float(arm_cfg.get("entercost", 0.0))
+			link_node.travel_cost = float(arm_cfg.get("travelcost", 1.0))
 	var actor := Node3D.new()
 	actor.position = spawn
 	root.add_child(actor)
@@ -112,6 +180,8 @@ func _run() -> void:
 	if arm != "":
 		agent.path_desired_distance = arm_cfg["pdd"]
 		agent.target_desired_distance = arm_cfg["tdd"]
+		agent.path_metadata_flags = int(arm_cfg.get("meta", 0))
+		agent.navigation_layers = int(arm_cfg.get("agentlayers", 1))
 	agent.target_position = target
 	for i in range(30):
 		await physics_frame
@@ -142,14 +212,31 @@ func _run() -> void:
 	var expected_pos := spawn
 	if arm != "" and arm_cfg.has("tp"):
 		expected_pos = arm_cfg["tp"]
+	var want_polys := 1 if straight else (4 if arm_cfg.get("island", false) else 3)
 	if not actor.is_inside_tree() or agent.get_parent() != actor \
 			or agent.get_navigation_map() != map or not NavigationServer3D.map_is_active(map) \
 			or NavigationServer3D.map_get_regions(map).size() != 1 \
-			or mesh.get_polygon_count() != (1 if straight else 3) \
+			or mesh.get_polygon_count() != want_polys \
 			or actor.global_position.distance_to(expected_pos) > 0.0001 \
 			or agent.target_position.distance_to(target) > 0.0001:
 		return _fail(actor, "live navigation agent/map setup absent")
+	# Link-arm gate honesty: every authored link flag must read back applied,
+	# else a "gate drops the link" arm cannot falsify a no-op setter.
+	if arm_cfg.get("link", "") != "":
+		var lrid: RID = link_node.get_rid() if link_node != null else link_rid
+		if not lrid.is_valid() or NavigationServer3D.link_get_map(lrid) != map \
+				or NavigationServer3D.link_get_iteration_id(lrid) < 1 \
+				or int(NavigationServer3D.link_get_navigation_layers(lrid)) != int(arm_cfg.get("linklayers", 1)) \
+				or NavigationServer3D.link_is_bidirectional(lrid) != (not arm_cfg.get("oneway", false)) \
+				or NavigationServer3D.link_get_enabled(lrid) != (not arm_cfg.get("disabled", false)) \
+				or absf(NavigationServer3D.link_get_enter_cost(lrid) - float(arm_cfg.get("entercost", 0.0))) > 0.0001 \
+				or absf(NavigationServer3D.link_get_travel_cost(lrid) - float(arm_cfg.get("travelcost", 1.0))) > 0.0001 \
+				or int(agent.path_metadata_flags) != int(arm_cfg.get("meta", 0)) \
+				or int(agent.navigation_layers) != int(arm_cfg.get("agentlayers", 1)):
+			return _fail(actor, "authored link flags not in effect")
 	if arm != "":
+		if arm_cfg.get("island", false) or arm_cfg.get("link", "") != "":
+			return _run_link_arm(actor, agent, region, link_rid, link_node, arm, arm_cfg, st2)
 		return _run_pop_arm(actor, arm, arm_cfg, st, st2)
 	# Classify the engine measurement against the two authored candidates.
 	var semantic := "unknown"
@@ -219,6 +306,10 @@ func _run() -> void:
 
 func _cleanup(actor: Node3D) -> void:
 	actor.free()
+	for n in owned_nodes:
+		if is_instance_valid(n):
+			n.free()
+	owned_nodes.clear()
 	for rid in owned:
 		NavigationServer3D.free_rid(rid)
 	owned.clear()
@@ -404,6 +495,161 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 				"pre_reachable": true, "pre_reached": true, "pre_finished": true,
 				"idx": 1, "next": fg, "final": fg, "dist": 2.5,
 				"reachable": true, "reached": true, "finished": true}
+		# Round-73 off-mesh link arms. Extra keys: "island" (add the
+		# disconnected quad C), "link" ("server"|"node"), "link_a"/"link_b",
+		# "linklayers"/"agentlayers", "oneway", "rev", "disabled",
+		# "entercost"/"travelcost", "meta" (path_metadata_flags); expected
+		# companion arrays: "types" (exact PackedInt32 match, [] = empty),
+		# "nrids"/"rid_at" (link RID index; all others must be the region),
+		# "nowners"/"own_at"/"own_class" (valid ObjectID instance class).
+		# Shortcut geometry: link (1.5,0,0.5)->(2.5,0,3.0), path
+		# [S,ls,le,T] pathlen 4.192582; link dropped -> corridor
+		# [S,(2,0,1),T] pathlen 4.130649. Bridge geometry: island C, target
+		# T2=(2.5,0,5.5) euclid 5.385165; link (2.5,0,3.5)->(2.5,0,5.5) gives
+		# [S,(2,0,1),ls,le] pathlen 6.130649; no traversable link -> clamped
+		# [S,(2,0,1),(2.5,0,4.0)] pathlen 4.622520, reachable=false.
+		# (a) metadata: opaque at meta=0; per-bit companion arrays.
+		"link_shortcut":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "server", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"path": [s, Vector3(1.5, 0, 0.5), Vector3(2.5, 0, 3.0), f],
+				"idx": 1, "next": Vector3(1.5, 0, 0.5), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [], "nrids": 0, "nowners": 0}
+		"link_meta_types":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "server", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"meta": 1,
+				"path": [s, Vector3(1.5, 0, 0.5), Vector3(2.5, 0, 3.0), f],
+				"idx": 1, "next": Vector3(1.5, 0, 0.5), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [0, 1, 0, 0], "nrids": 0, "nowners": 0}
+		"link_meta_rids":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "server", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"meta": 2,
+				"path": [s, Vector3(1.5, 0, 0.5), Vector3(2.5, 0, 3.0), f],
+				"idx": 1, "next": Vector3(1.5, 0, 0.5), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [], "nrids": 4, "rid_at": 1, "nowners": 0}
+		"link_meta_owners":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "node", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"meta": 4,
+				"path": [s, Vector3(1.5, 0, 0.5), Vector3(2.5, 0, 3.0), f],
+				"idx": 1, "next": Vector3(1.5, 0, 0.5), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [], "nrids": 0, "nowners": 4,
+				"own_at": 1, "own_class": "NavigationLink3D"}
+		"link_meta":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "node", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"meta": 7,
+				"path": [s, Vector3(1.5, 0, 0.5), Vector3(2.5, 0, 3.0), f],
+				"idx": 1, "next": Vector3(1.5, 0, 0.5), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [0, 1, 0, 0], "nrids": 4, "rid_at": 1, "nowners": 4,
+				"own_at": 1, "own_class": "NavigationLink3D"}
+		# (b) traversal gates — each drops the link independently; meta=1
+		# exposes the absent LINK type so the types array pins it too.
+		"link_layers_off":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "server", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"linklayers": 2, "agentlayers": 1, "meta": 1,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [0, 0, 0]}
+		"link_layers_on":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "server", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"linklayers": 2, "agentlayers": 3, "meta": 1,
+				"path": [s, Vector3(1.5, 0, 0.5), Vector3(2.5, 0, 3.0), f],
+				"idx": 1, "next": Vector3(1.5, 0, 0.5), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [0, 1, 0, 0]}
+		"link_oneway_fwd":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"oneway": true, "meta": 1,
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [0, 0, 1, 0]}
+		"link_oneway_rev":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"oneway": true, "rev": true, "meta": 1,
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 4.0),
+				"dist": 5.385165,
+				"reachable": false, "reached": false, "finished": false,
+				"types": [0, 0, 0]}
+		"link_disabled":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"disabled": true, "meta": 1,
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 4.0),
+				"dist": 5.385165,
+				"reachable": false, "reached": false, "finished": false,
+				"types": [0, 0, 0]}
+		# (c) cost asymmetry: travel_cost=10 prices the hop out (corridor
+		# chosen); enter_cost=100 leaves the link chosen — inert on this
+		# build, pinned as the TRUE behavior (anomaly documented r72).
+		"link_travelcost":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "server", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"travelcost": 10.0, "meta": 1,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [0, 0, 0]}
+		"link_entercost":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"link": "server", "link_a": Vector3(1.5, 0, 0.5), "link_b": Vector3(2.5, 0, 3.0),
+				"entercost": 100.0, "meta": 1,
+				"path": [s, Vector3(1.5, 0, 0.5), Vector3(2.5, 0, 3.0), f],
+				"idx": 1, "next": Vector3(1.5, 0, 0.5), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"types": [0, 1, 0, 0]}
+		# (d) pop-through hazard + the void premise: the island is
+		# unreachable without a link (clamped final (2.5,0,4.0)); with the
+		# link, the pdd pop loop treats link endpoints as ordinary waypoints
+		# — pdd 2.0 pops to idx=2 so next is the link's near endpoint
+		# (2.5,0,3.5) (euclid(S)=3.605551 > 2.0 keeps it), while pdd 4.0 pops
+		# THROUGH it to idx=3 so next points across the void at the far
+		# endpoint (2.5,0,5.5) — still reachable=true, finished=false.
+		"link_gap":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 4.0),
+				"dist": 5.385165,
+				"reachable": false, "reached": false, "finished": false,
+				"types": []}
+		"link_pop_bank":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 2.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 2, "next": Vector3(2.5, 0, 3.5), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"types": []}
+		"link_pop_void":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 4.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 3, "next": Vector3(2.5, 0, 5.5), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"types": []}
 	return {}
 
 func _read_state(agent: NavigationAgent3D, actor: Node3D) -> Dictionary:
@@ -474,5 +720,94 @@ func _run_pop_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
 		print("PASS navagent3d_detour %s idx=%d next=%s final=%s dist=%.6f pathlen=%.6f reachable=%s reached=%s finished=%s"
 			% [arm_name, st2["idx"], _v3(st2["next"]), _v3(st2["final"]),
 			st2["dist"], st2["pathlen"], st2["reachable"], st2["reached"], st2["finished"]])
+	quit(0)
+	return true
+
+# Round-73 link arms: the same full observable tuple as _run_pop_arm (no
+# teleport arms here), plus the companion metadata arrays keyed off cfg.
+# types: exact match to get_path_types() ([] asserts the array is empty).
+# nrids + rid_at: rids array size, and that rid_at alone carries the link
+# RID (every other entry must be the region RID). nowners + own_at +
+# own_class: owner_ids size, and that own_at resolves to a live instance of
+# the authored class (node-authored links only; server links give 0s).
+func _run_link_arm(actor: Node3D, agent: NavigationAgent3D, region: RID,
+		link_rid: RID, link_node: NavigationLink3D, arm_name: String,
+		cfg: Dictionary, st2: Dictionary) -> bool:
+	var diag := ""
+	var want_path: Array = cfg["path"]
+	if st2["idx"] != cfg["idx"]:
+		diag = "idx=%d expected=%d" % [st2["idx"], cfg["idx"]]
+	elif st2["next"].distance_to(cfg["next"]) > POS_TOL:
+		diag = "next=%s expected=%s" % [_v3(st2["next"]), _v3(cfg["next"])]
+	elif st2["final"].distance_to(cfg["final"]) > POS_TOL:
+		diag = "final=%s expected=%s" % [_v3(st2["final"]), _v3(cfg["final"])]
+	elif absf(st2["dist"] - cfg["dist"]) > DIST_TOL:
+		diag = "dist=%.6f expected=%.6f" % [st2["dist"], cfg["dist"]]
+	elif st2["reachable"] != cfg["reachable"] or st2["reached"] != cfg["reached"] \
+			or st2["finished"] != cfg["finished"]:
+		diag = "flags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
+			st2["reachable"], st2["reached"], st2["finished"],
+			cfg["reachable"], cfg["reached"], cfg["finished"]]
+	elif st2["path"].size() != want_path.size():
+		diag = "npath=%d expected=%d path=%s" % [st2["path"].size(), want_path.size(), st2["path"]]
+	elif diag == "":
+		for i in range(want_path.size()):
+			if st2["path"][i].distance_to(want_path[i]) > POS_TOL:
+				diag = "path[%d]=%s expected=%s path=%s" % [i, _v3(st2["path"][i]), _v3(want_path[i]), st2["path"]]
+				break
+	var res: NavigationPathQueryResult3D = agent.get_current_navigation_result()
+	var types: PackedInt32Array = res.get_path_types()
+	var rids: Array = res.get_path_rids()
+	var owners: PackedInt64Array = res.get_path_owner_ids()
+	var eff_link: RID = link_node.get_rid() if link_node != null else link_rid
+	if diag == "" and cfg.has("types"):
+		var wt: Array = cfg["types"]
+		if types.size() != wt.size():
+			diag = "ntypes=%d expected=%d types=%s" % [types.size(), wt.size(), types]
+		else:
+			for i in range(wt.size()):
+				if int(types[i]) != int(wt[i]):
+					diag = "types[%d]=%d expected=%d types=%s" % [i, types[i], wt[i], types]
+					break
+	if diag == "" and cfg.has("nrids") and rids.size() != int(cfg["nrids"]):
+		diag = "nrids=%d expected=%d" % [rids.size(), cfg["nrids"]]
+	if diag == "" and cfg.has("rid_at"):
+		var ra: int = cfg["rid_at"]
+		if ra < 0 or ra >= rids.size() or rids[ra] != eff_link:
+			diag = "rids[%d] is not the authored link rid (size=%d)" % [ra, rids.size()]
+		else:
+			for i in range(rids.size()):
+				if i != ra and rids[i] != region:
+					diag = "rids[%d] is neither link nor region rid" % i
+					break
+	if diag == "" and cfg.has("nowners") and owners.size() != int(cfg["nowners"]):
+		diag = "nowners=%d expected=%d" % [owners.size(), cfg["nowners"]]
+	if diag == "" and cfg.has("own_at"):
+		var oa: int = cfg["own_at"]
+		if oa < 0 or oa >= owners.size():
+			diag = "own_at=%d out of range nowners=%d" % [oa, owners.size()]
+		else:
+			var inst := instance_from_id(owners[oa])
+			if not is_instance_valid(inst) or inst.get_class() != cfg["own_class"]:
+				diag = "owners[%d] is not a live %s" % [oa, cfg["own_class"]]
+	if diag != "":
+		return _fail(actor, arm_name + " " + diag)
+	var tparts := PackedStringArray()
+	for t in types:
+		tparts.append(str(t))
+	var tstr := "-"
+	if tparts.size() > 0:
+		tstr = ",".join(tparts)
+	var ostr := "-"
+	if cfg.has("own_at") and int(cfg["own_at"]) >= 0 and int(cfg["own_at"]) < owners.size():
+		var oi := instance_from_id(owners[int(cfg["own_at"])])
+		if is_instance_valid(oi):
+			ostr = "%s@%d" % [oi.get_class(), int(cfg["own_at"])]
+	_cleanup(actor)
+	print("PASS navagent3d_detour %s idx=%d next=%s final=%s dist=%.6f pathlen=%.6f reachable=%s reached=%s finished=%s link=%s meta=%d types=%s ridat=%d own=%s"
+		% [arm_name, st2["idx"], _v3(st2["next"]), _v3(st2["final"]),
+		st2["dist"], st2["pathlen"], st2["reachable"], st2["reached"], st2["finished"],
+		cfg.get("link", "none"), int(cfg.get("meta", 0)), tstr,
+		int(cfg.get("rid_at", -1)), ostr])
 	quit(0)
 	return true
