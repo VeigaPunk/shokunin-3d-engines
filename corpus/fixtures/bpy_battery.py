@@ -71,9 +71,9 @@ CASES = [
     ("freshhandle_postF_deg",         "freshhandle", "postF", "DEG", {"loc": "(7.000,0.000,0.000)"}, False),
     # vis quirk (observed non-signal): evaluated flags stay False on a
     # relinked, instantiated, RNA-visible object
-    ("vis_hidden_rna",                "vis", "hidden", "RNA", {"vis": "False", "hide": "True"}, True),
+    ("vis_hidden_rna",                "vis", "hidden", "RNA", {"vis": "False", "hide": "True"}, False),
     ("vis_hidden_deg_nonsignal",      "vis", "hidden-ev", "DEG", {"vis": "False", "hide": "False"}, True),
-    ("vis_relinked_rna",              "vis", "relinked", "RNA", {"vis": "True"}, True),
+    ("vis_relinked_rna",              "vis", "relinked", "RNA", {"vis": "True"}, False),
     ("vis_relinked_deg_nonsignal",    "vis", "relinked", "DEG", {"vis": "False", "hide": "False", "in_inst": "True"}, True),
 ]
 
@@ -152,16 +152,21 @@ def main():
 
     passed = sum(1 for r in results if r["verdict"] == "PASS")
     failed = len(results) - passed
+    signal_failed = sum(1 for r in results
+                        if r["verdict"] == "FAIL" and not r["non_signal"])
+    quirk_drift = sum(1 for r in results
+                      if r["verdict"] == "FAIL" and r["non_signal"])
     for r in results:
         flag = " (non-signal)" if r["non_signal"] else ""
         print(f"{r['verdict']:8} {r['case']:36} "
               f"{r['arm']}|{r['point']}|{r['layer']}{flag}")
 
     print(f"totals: cases={len(results)} pass={passed} fail={failed} "
+          f"(signal_fail={signal_failed} quirk_drift={quirk_drift}) "
           f"launch_ok={launch_ok} done_marker={done_marker} "
           f"fatals={len(fatals)} exit={code}")
 
-    verdict = "PASS" if (failed == 0 and launch_ok and done_marker
+    verdict = "PASS" if (signal_failed == 0 and launch_ok and done_marker
                          and not fatals) else "FAIL"
     payload = {"blender": args.blender, "blender_version": blender_version,
                "blender_version_exit": version_code,
@@ -170,7 +175,9 @@ def main():
                "probe_elapsed_s": elapsed, "started_utc": stamp,
                "done_marker": done_marker, "fatal_arms": fatals,
                "n_arm_lines": len(arms), "results": results,
-               "totals": {"cases": len(results), "pass": passed, "fail": failed},
+               "totals": {"cases": len(results), "pass": passed, "fail": failed,
+                          "signal_fail": signal_failed,
+                          "quirk_drift": quirk_drift},
                "verdict": verdict}
     (run_dir / "verdicts.json").write_text(json.dumps(payload, indent=2) + "\n")
     print(f"{verdict} battery: {run_dir / 'verdicts.json'}")

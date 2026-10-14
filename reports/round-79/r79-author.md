@@ -63,7 +63,7 @@ bpy analogue**.
 - `python3 corpus/fixtures/bpy_battery.py` → 37/37 PASS, exit 0,
   `PROBE_DONE` present, 0 fatal arms, ~0.6s wall.
 - Receipts: `corpus/live/runs/bpy-20261014T135140188222Z/verdicts.json`
-  + `probe.stdout.txt` (79 ARM lines parsed).
+  + `probe.stdout.txt` (78 ARM lines parsed).
 - Scout receipts (independent, same lattice): `corpus/live/r79-scout/
   runs/probe{1,2,3}.{stdout,stderr,exit,elapsed_ms}.txt`.
 
