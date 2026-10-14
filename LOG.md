@@ -1011,3 +1011,22 @@ corpus/knowledge/seed.md).
   freeze ae89c13 (64/64 + 176/176 + 31/31).
 - Verdict: ADMIT (Sol, wave-12). Bounded bpy 5.2.1 -b -P, CPython-embed
   3.14.7 (131072B), this host.
+
+## Round 82 — evalcat residual fold + parser-hazard pins (wave-13)
+
+- MOVE: 6 residual classes folded into arm_evalcat (catalogue 14->20
+  bare rows under violations=0) + hazard_checks block pinning the
+  parser's demonstrated resolutions as CONTRACT cells.
+- Measured: update_tag get_dup=1 get_fc=0 (tag!=eval); matrix_world/
+  libraries.load/instance_collection/batch_remove/evalget-stale all
+  held=stale deltas=0; evalget on out-of-graph ID returns ORIGINAL
+  (name-vs-behavior edge); batch_remove on STALE refs SIGSEGVs
+  (live-IDs guard landed).
+- Parser contract: forge-midstream absorbed, forge-last MASKS (the
+  genuine-cell invariant is the only guard); dup_flush physical
+  last-wins; binjunk = UnicodeDecodeError crash-not-FAIL; detach
+  EOF-hold = TIMEOUT branch with bytes captured.
+- Boundary: scene-swap is a bare eval event OUTSIDE the five —
+  deliberately not folded (would falsify); scene-removal
+  witness-degenerate. Recorded uncovered.
+- Verdict: ADMIT (Sol, wave-13). Bounded bpy 5.2.1 -b -P, this host.

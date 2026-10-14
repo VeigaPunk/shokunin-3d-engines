@@ -115,3 +115,13 @@ Sol `r79-adjudicator.md` (provisional): claim ADMIT-as-narrowed — split is wri
 | calibration | **unchanged** | insertion-only (+331/-3); prior 111 ARM lines byte-identical; r79 78-line prefix + r80 34-row block preserved in order; deterministic x2 |
 
 Sol `r81-adjudicator.md`: ADMIT — reorder topology + parse-survival confirmed on bpy; bounded-closure catalogue extended honestly. Verifier replay pending at write. Bounded: Blender 5.2.1 -b -P, embedded CPython 3.14.7 (PYTHONUNBUFFERED-inert), pipe capture, this host. Work commit `65b2f26`; report-last commit follows.
+
+## Round 82 verdict — 2026-11-01
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | evalcat bare catalogue 14->20 (update_tag discriminating witness + custom setter + libraries + instance + batch_remove + evalget-stale/freed/refused edges); parser-hazard surface now pinned both directions |
+| depth | **improved** | forge-last masking measured reachable (74/74 silent) -> independent genuine-cell invariant armed; detach EOF-hold under battery timeout characterized (FAIL not hang); batch_remove stale-ref SIGSEGV boundary mapped |
+| calibration | **unchanged** | insertion-only; prior 122 keys byte-identical; sha 6a98c570 deterministic x3; falsifier liveness re-verified by critic mutant |
+
+Sol `r82-adjudicator.md`: ADMIT — residual fold honest, hazard contract pinned, masking direction documented not hidden. Bounded: Blender 5.2.1, embedded CPython 3.14.7, -b -P, this host.
