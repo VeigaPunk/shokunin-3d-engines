@@ -596,11 +596,12 @@ def _ec_edge(point, d, held, invoked, edge, **kw):
          fc_fired=(d["fc"] > 0), edge=edge, **kw)
 
 
-def _ec_edge1(held, fresh, expected):
-    """Classify a bare-write row: stale + one tagged eval binds -> edge 1.
-    `held` is "stale" on every reachable path — flushed/na states mask to
-    FALSIFIED via the closed-set predicate in _ec_edge before this value
-    is emitted (all 11 edge=1 call sites measured held=stale)."""
+def _ec_edge1(fresh, expected):
+    """Classify a bare-write row's edge cell: one tagged eval binds the
+    write -> edge 1. Callers only reach this on held="stale" paths —
+    flushed/na states mask to FALSIFIED via the closed-set predicate in
+    _ec_edge before this value is emitted (all 16 call sites measured
+    held=stale)."""
     return "1" if fresh == expected else "unbound"
 
 
@@ -720,7 +721,7 @@ def _ec_driver():
     held = _ec_held(pre, post, d)
     fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
     _ec_edge("driver", d, held, None,
-             _ec_edge1(held, fresh, "(7.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(7.000,0.000,0.000)"),
              held_loc=post, fresh=fresh,
              rna_x="%.3f" % ob.location[0])
     C.view_layer.update()
@@ -737,7 +738,7 @@ def _ec_driver():
     held = _ec_held(pre, post, d)
     fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
     _ec_edge("driver_expr", d, held, None,
-             _ec_edge1(held, fresh, "(9.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(9.000,0.000,0.000)"),
              held_loc=post, fresh=fresh)
 
 
@@ -814,7 +815,7 @@ def _ec_keyframe():
     held2 = _ec_held(pre2, post2, d)
     fresh2 = _ec_loc(ob2, C.evaluated_depsgraph_get())
     _ec_edge("key_explicit", d, held2, None,
-             _ec_edge1(held2, fresh2, "(0.000,0.000,8.000)"),
+             _ec_edge1(fresh2, "(0.000,0.000,8.000)"),
              build=build, held_loc=post2, fresh=fresh2)
 
 
@@ -837,7 +838,7 @@ def _ec_con_rna():
     held = _ec_held(pre, post, d)
     fresh = _ec_mw(ob, C.evaluated_depsgraph_get())
     _ec_edge("con_rna", d, held, None,
-             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(3.000,0.000,0.000)"),
              held_mw=post, fresh=fresh, rna_n=len(ob.constraints))
     C.view_layer.update()
     emit("evalcat", "con_rna_wU", "DEG", held_mw=_ec_mw(ob, dg0),
@@ -988,7 +989,7 @@ def _ec_op_conadd():
     held = _ec_held(pre, post, d)
     fresh = _ec_mw(ob, C.evaluated_depsgraph_get())
     _ec_edge("conadd_target", d, held, None,
-             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(3.000,0.000,0.000)"),
              held_mw=post, fresh=fresh)
 
 
@@ -1052,7 +1053,7 @@ def _ec_x_frame_current():
     fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
     d2 = _ec_since(h1)
     _ec_edge("ext_frame_current", d, held, None,
-             _ec_edge1(held, fresh, "(0.000,4.000,0.000)"),
+             _ec_edge1(fresh, "(0.000,4.000,0.000)"),
              frame=int(scn.frame_current), held_loc=post, fresh_loc=fresh,
              get_dup=d2["post"], get_fc=d2["fc"])
 
@@ -1074,7 +1075,7 @@ def _ec_x_hier_link():
     held = _ec_held(pre, post, d)
     fresh = _ec_names(C.evaluated_depsgraph_get())
     _ec_edge("ext_hier_link", d, held, None,
-             _ec_edge1(held, fresh, "n|o"),
+             _ec_edge1(fresh, "n|o"),
              held_names=post, fresh_names=fresh,
              rna_child=str(col2.name in
                            [c.name for c in scn.collection.children]),
@@ -1095,7 +1096,7 @@ def _ec_x_data_swap():
     held = _ec_held(pre, post, d)
     fresh = _ec_verts(ob, C.evaluated_depsgraph_get())
     _ec_edge("ext_data_swap", d, held, None,
-             _ec_edge1(held, fresh, "verts16:xmax1.000"),
+             _ec_edge1(fresh, "verts16:xmax1.000"),
              held_mesh=post, fresh_mesh=fresh,
              rna_verts=len(ob.data.vertices))
 
@@ -1121,7 +1122,7 @@ def _ec_x_parent_write():
     held = _ec_held(pre, post, d)
     fresh = _ec_mw(ob, C.evaluated_depsgraph_get())
     _ec_edge("ext_parent_write", d, held, None,
-             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(3.000,0.000,0.000)"),
              held_mw=post, fresh_mw=fresh,
              rna_parent=str(ob.parent.name), rna_mw_w0=rna_mw_w0)
 
@@ -1145,7 +1146,7 @@ def _ec_x_obj_remove():
     held = _ec_held(pre, post, d)
     fresh = _ec_names(C.evaluated_depsgraph_get())
     _ec_edge("ext_obj_remove", d, held, None,
-             _ec_edge1(held, fresh, "keep"),
+             _ec_edge1(fresh, "keep"),
              held_names=post, fresh_names=fresh,
              rna_objs="|".join(sorted(o.name for o in D.objects)))
 
@@ -1226,7 +1227,7 @@ def _ec_x2_update_tag():
     fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
     d2 = _ec_since(h1)
     _ec_edge("ext2_update_tag_obj", d, held, None,
-             _ec_edge1(held, fresh, "(5.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(5.000,0.000,0.000)"),
              held_loc=post, fresh_loc=fresh,
              get_dup=d2["post"], get_fc=d2["fc"])
 
@@ -1249,7 +1250,7 @@ def _ec_x2_custom_matrix_world():
     fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
     d2 = _ec_since(h1)
     _ec_edge("ext2_custom_matrix_world", d, held, None,
-             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(3.000,0.000,0.000)"),
              held_loc=post, fresh_loc=fresh, rna_loc=rna_loc,
              get_dup=d2["post"], get_fc=d2["fc"])
 
@@ -1283,7 +1284,7 @@ def _ec_x2_libraries_load():
     fresh_names = _ec_names(C.evaluated_depsgraph_get())
     d2 = _ec_since(h1)
     _ec_edge("ext2_libraries_load", d, held, None,
-             _ec_edge1(held, fresh, "(4.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(4.000,0.000,0.000)"),
              held_loc=post, fresh_loc=fresh,
              pre_names=pre_names, held_names=held_names,
              fresh_names=fresh_names,
@@ -1321,7 +1322,7 @@ def _ec_x2_instance_empty():
     fresh_all = _ec_all_names(C.evaluated_depsgraph_get())
     d2 = _ec_since(h1)
     _ec_edge("ext2_instance_empty", d, held, None,
-             _ec_edge1(held, fresh, "(2.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(2.000,0.000,0.000)"),
              held_loc=post, fresh_loc=fresh,
              held_inst_pre=held_inst_pre, held_inst_post=held_inst_post,
              fresh_inst=fresh_inst,
@@ -1339,7 +1340,7 @@ def _ec_x2_instance_refused():
     TypeError, the collection assignment is then a no-op write."""
     _ec_reset()
     col = D.collections.new("ic2")
-    ob, dg0 = _ec_settle()
+    ob, _ = _ec_settle()
     h0 = _ec_snap()
     # The enum rejection ALSO prints a C-level "reports | ERROR" line to
     # fd1 with an uptime timestamp -- it bypasses the (buffered) print()
@@ -1413,7 +1414,7 @@ def _ec_x2_batch_remove():
     fresh_names = _ec_names(C.evaluated_depsgraph_get())
     d2 = _ec_since(h1)
     _ec_edge("ext2_batch_remove", d, held, None,
-             _ec_edge1(held, fresh, "(5.000,0.000,0.000)"),
+             _ec_edge1(fresh, "(5.000,0.000,0.000)"),
              held_loc=post, fresh_loc=fresh,
              ret_type=type(ret).__name__,
              pre_names=pre_names, held_names=held_names,
@@ -1462,7 +1463,7 @@ def _ec_x2_evalget_unlinked():
     fresh_ctl = _ec_loc(ctl, C.evaluated_depsgraph_get())
     d2 = _ec_since(h1)
     _ec_edge("ext2_evalget_unlinked", d, held, None,
-             _ec_edge1(held, fresh_ctl, "(7.000,0.000,0.000)"),
+             _ec_edge1(fresh_ctl, "(7.000,0.000,0.000)"),
              held_loc=post_ctl, fresh_loc=fresh_ctl,
              og_in_dg=og_in_dg, ctl_in_dg=ctl_in_dg,
              og_same_id=og_same, og_ev_loc=og_loc, og_ev_name=og_name,

@@ -465,8 +465,8 @@ def main():
 
     # ---- r82: parser-hazard CONTRACT pins (xconnector X6) --------------
     # Each cell documents the DEMONSTRATED resolution of a residual hazard
-    # through the tracked capture/parse path (run_process :281-292,
-    # parse_arms :295-304). These are contract pins on measured behavior,
+    # through the tracked capture/parse path (run_process :358-369,
+    # parse_arms :372-381). These are contract pins on measured behavior,
     # never safety claims ("the demonstrated hazard resolves as X").
     CLOSED = ("evalcat", "closed", "EDGE")
     DUPK = ("hazard", "dup_flush", "PARSE")
