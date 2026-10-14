@@ -798,3 +798,51 @@ corpus/knowledge/seed.md).
 - Measured: server-side mutations gated twice — setter→server-sync (~2–3 frames; same-turn forcing call serves stale/dead-link data — bounded zombie window, NOT a universal bar) then sync→first-forcing-call (stored array stale until next forcing getter; pure readers stay stale indefinitely). Agent `navigation_layers` write = synchronous exception (same-turn clear). **Latched zombie**: `finished` early-return precedes the dirty check — a finished agent serves its pre-mutation path through region transform AND region delete until any `target_position` re-assignment unlatches. Re-mutations rematerialize without retargeting. Empty-path tuple pinned.
 - Corrections absorbed: "never SERVED" scoped to post-sync (critic+reviewer); pmd operand corrected to leg-SEGMENT in r74 lesson/header; `--runs` relative-path trap now in the runner docstring (`cefc821`).
 - Per-axis verdicts (Sol `reports/round-75/r75-adjudicator.md`): **ADMIT** — depth **improved locally** (two-stage gate + latched zombie measured), coverage **improved locally** (11 arms, 145→156), calibration **unchanged**. Bounded: 4.7.2 headless, single map/region, teleport-only; sync timing measured-not-cased. Work commit `6498973` (+`cefc821`); report-last follows.
+
+## Round 76 — devin host — coverage: the setter→server-sync WINDOW pinned as tracked CASES
+
+- Declared (dispatch brief): pin the same-turn setter→server-sync
+  window — mutate + forcing read at wait=0/1/2, map_set_active(false)
+  reachability, same-value-mutation suppression; 156 rows + 4 probes
+  + Node 31/31 stable. Claim: frame-measurable — same-tick forcing
+  call serves pre-mutation, wait>=1 serves post-sync, exact frame
+  count a stable constant.
+- Wave `shokunin-train-20261014-w7`: 8-seat devin leaf set
+  reports/round-76/r76-{scout,author,critic,reviewer,simplifier,
+  scribe,baseline,boundary}.md; sole tracked writer = author;
+  committed mid-round `3ab09fd` (navagent3d_detour.gd +290/−6,
+  run_battery.py +14/−0 → 163 rows; `map_active` mutate key +
+  fs-folded gate). Frozen baseline cb6bf7b → 156/156 + probes +
+  Node 31/31 verbatim.
+- Author reports/round-76/r76-author.md: 7 new CASES —
+  mut_win_link (link edge 2f; wait:0 serves AND pops idx 2→3 across
+  the killed gate — dead endpoint next=(2.5,0,5.5)),
+  mut_win_region (region edge 3f, stale 0/1/2), mut_map_off
+  (permanent-stale: iter never bumps, reachable=true served through
+  +15f, no latch), mut_map_cycle (queued write flushes at +2f
+  post-reactivation), mut_same_{link,region,agent} (same-value
+  suppression via M-witness; agent dedups before its synchronous
+  clear). Battery 163/163 + 4 probes + Node 31/31.
+- Result — claim CONFIRMED in substance, FALSIFIED as written
+  twice: "wait>=1 serves post-sync" is still stale at +1f on both
+  classes (true edges link=2, region=3), and no single constant
+  exists — per-class {link:2, region:3, free_rid:2, map_off:∞,
+  agent:0} and callsite-scoped (physics-callback writes one tick
+  shallower, critic bb_physmut). Four independent derivations
+  converge (author, critic, boundary 54/54+24/24 resamples, scribe
+  own-geometry 65-run bisect) + r75-boundary precedent. Same-value
+  suppression confirmed on all probed setters (target_position
+  carve-out: r74). Scribe independent replay: 7/7 arms verbatim,
+  full battery 163/163 + 4 probes + seeds_unchanged, 156 prior rows
+  byte-identical vs frozen baseline, Node 31/31.
+- Integration: simplifier's twice-deferred `_check_tuple` extraction
+  applied post-verifier as `8a67f71` (4 copies → shared predicate;
+  demonstrated byte-identical 78/78 + 19/19 mutants; full 163/163
+  battery re-verified on the consolidated file).
+- Non-author verifier reports/round-76/r76-verifier.md: AGREE 5/5 —
+  163/163 + 4 probes + Node 31/31 on committed 3ab09fd.
+- Per-axis verdicts (Sol reports/round-76/r76-adjudicator.md): ADMIT —
+  coverage improved locally (the window is now case-pinned per-class,
+  156→163), depth improved locally (permanent-stale regime distinct
+  from the latch mechanism; callsite qualifier), calibration unchanged.
+  Work commit `3ab09fd` + hygiene `8a67f71`; report-last follows.

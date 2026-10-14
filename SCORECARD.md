@@ -57,3 +57,13 @@ Non-author `reports/round-74/r74-verifier.md`: **AGREE on all six claims** — 1
 | calibration | **unchanged** | additive arms only; engine sync timing measured not edited. |
 
 Non-author `reports/round-75/r75-verifier.md`: **AGREE 5/5** — 156/156 + 4 probes + Node 31/31 on committed HEAD, 0 mismatches over 156×12 fields vs author and 145 shared r74 rows, byte-exact committed-blob replays (5/11 mut arms sampled incl. both falsification arms), Node 31/31 `seeds_unchanged`. Sol `r75-adjudicator.md` reproduced `mut_latch_zombie`/`mut_link_kill`/`mut_region_move` verbatim on committed `cefc821`. Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf this host, headless, single map/region, teleport-only; sync latency ~2–3 frames measured-not-cased; multi-agent/node-link unexercised. Work commit `6498973` (+`cefc821`); report-last commit follows verifier landing.
+
+## Round 76 verdict — 2026-10-14
+
+| axis | Sol verdict | evidence |
+|---|---|---|
+| coverage | **improved locally** | Setter→server-sync window pinned as 7 tracked CASES (156→163): per-class edges {link:2, region:3, map_off:∞, agent:0}, map reactivation, same-value suppression on 3 channels. Prior 156 rows byte-identical. |
+| depth | **improved locally** | "wait≥1" falsified per-class (still stale at +1f); permanent-stale `map_off` regime distinguished from the finished-latch mechanism (server never syncs vs agent early-return); callsite qualifier measured (physics-callback writes one tick shallower); M-witness suppression proof on 8 setters with target_position carve-out. |
+| calibration | **unchanged** | additive CASES + one `map_active` mutate key; gate/readback semantics unchanged; warranted `_check_tuple` consolidation applied (byte-identical 78/78 + 19/19 mutants, battery re-verified 163/163). |
+
+Sol `r76-adjudicator.md`: four-way convergence on constants (author, critic, boundary 54/54+24/24 + 96 cross-process, scribe own-geometry). Non-author `r76-verifier.md`: **AGREE 5/5** on `3ab09fd` — 163/163 + 4 probes + Node 31/31, 156 prior rows unchanged. Bounded: 4.7.2.stable headless 60tps, single map/region, coroutine/deferred write context. Work `3ab09fd` + hygiene `8a67f71`; report-last follows.
