@@ -69,6 +69,57 @@
 #                is. A raw server RID carries no instance id, so the
 #                monitor is the server-level area_set_monitor_callback
 #                (a node Area3D's body_entered cannot resolve it)
+#   script_size_gate parent arm (round 86): the deferred process-context
+#                direct-space-state fetch is released or refused by how much
+#                work the script forces at startup, not by the fetch
+#                position — and on this host that is a ~100-line STOCHASTIC
+#                BAND (~475-575 lines), not a boundary (r86 boundary §1, 6
+#                reps per point). One GENERATED probe source at two sizes in
+#                the same threaded project: the 25-line body is refused
+#                (deterministic, far below the band) and the 1025-line body
+#                is granted (deterministic, far above it); the same minimal
+#                body in an unthreaded project is granted, because the gate
+#                does not exist without run_on_separate_thread. Every child
+#                is corroborated by the engine's own refusal-line count in
+#                its log, never by the child's self-report alone.
+#                The fourth child is this fixture's own bare fetch at the
+#                same position: it is granted, and the r86 boundary seat
+#                showed 16 real-token shrinks down to 725 lines never flip
+#                it. So this is a LATENT fragility, not a live defect — the
+#                file would have to lose ~500 lines of real tokens to reach
+#                the band — and the arm exists to make that trip loud
+#                instead of silent.
+#   deferred_hang parent arm (round 86): an unguarded deref of the refused
+#                fetch inside the deferred _run coroutine aborts that
+#                coroutine before quit(); the SceneTree is then left with
+#                no exit condition and spins until the spawn bound kills
+#                it (rc 137 = 128+SIGKILL through /bin/sh, no
+#                CHILD_RESULT line at all). rc is the only detector: a
+#                SIGKILLed process emits no at-exit leak report, so the
+#                leak scan can never see the zombie RIDs (r86 boundary
+#                §3.1). The identical body under Dummy+threaded is the
+#                contrast: the silent floor grants every fetch, so it
+#                exits 0 and can never witness the hang class. Bounded by
+#                `timeout -s KILL` at 8 s.
+#   backend_tier  parent arm (round 86): one tier sweep spawned under
+#                {GodotPhysics, Jolt, Dummy} generated projects. The area
+#                gravity/damping override INVERTS — GodotPhysics honours
+#                it, Jolt silently ignores it (the body keeps the global
+#                constant while the area parameter reads back 20.0); the
+#                shape-query `margin` is the mirror split (inert on
+#                GodotPhysics, honoured by Jolt); the separation ray
+#                differs only in solver constants.
+#   dummy_floor   parent arm (round 86): the Dummy silent floor as a
+#                class. Every create returns RID(0), every read comes back
+#                Nil / 0.0 / empty, one shape type is a WRONG constant, and
+#                the two calls that are loud refusals on a real backend
+#                (space_get_direct_state(RID()) and free_rid(RID())) are
+#                silent no-ops. Pinned as an 11-token signature tuple plus
+#                the real-backend refusal count, so "silent floor" can
+#                never be read as "refusal". The Dummy child is armed for
+#                the floor ONLY — the r86 boundary seat's 34-call sweep
+#                found 0 errors and no loud refusal anywhere under Dummy,
+#                so a Dummy child can never witness a refusal class.
 #
 # Reproduce one arm:
 #   godot --headless --path <scratch> --script res://phys3d_events.gd -- --arm=isect
@@ -76,6 +127,22 @@ extends SceneTree
 
 const SETTLE := 4
 const WALL_FAR := Vector3(0, 0, -30)
+# r86 size-gate ladder. The r86 boundary seat measured the deferred
+# process-context fetch as a ~100-line STOCHASTIC BAND, not a boundary:
+# deterministically refused below ~475 lines of one-statement-per-line
+# padding, deterministically granted above ~575, with a race inside (6 reps
+# per point). 0 padding (25 lines) sits far below the band and 1000 padding
+# (1025 lines) far above it, so both ends of this cell are on the
+# deterministic side of the race rather than inside it. (This arm pins the
+# release/refuse OUTCOME, not the boundary seat's `pf` observable: the
+# generated probe prints `pf` after its own await, so the two readings are
+# not the same measurement.)
+const SIZE_PAD := 1000
+# r86 hang arm: a healthy child of this size exits in ~0.5 s, so 8 s is a
+# 16x margin on the abort, and 137 is what `/bin/sh` reports for the
+# `timeout -s KILL` kill (128 + SIGKILL).
+const HANG_BOUND_S := 8
+const HANG_RC := 137
 
 var owned: Array[RID] = []
 var owned_nodes: Array[Node] = []
@@ -182,11 +249,21 @@ func _exit_ok(marker: String) -> void:
 # "Space state is inaccessible" ERROR lines a threaded child emits on
 # its proc-context dss witness; every other ERROR: is a defect, as is
 # any SCRIPT ERROR/Parse Error or ObjectDB-leak WARNING (r84 reviewer
-# F1). Returns {code, verdicts, last, serr} on spawn, or {err} where the
-# caller fails with `err` verbatim (identical fail text to the unfolded
+# F1). Returns {code, verdicts, last, serr, errs} on spawn, or {err} where
+# the caller fails with `err` verbatim (identical fail text to the unfolded
 # arms — their receipts stay byte-identical).
+#
+# r86: `script_res` and `bound_s` are additive (defaulted to the r83-r85
+# behaviour, so every existing call site and receipt is unchanged).
+# `script_res` lets an arm spawn a GENERATED probe instead of this fixture
+# (the size-gate arm cannot measure the fixture's own size with the
+# fixture), and `bound_s` lets the hang arm bound its spin short of the
+# 30 s that a healthy child never needs. `errs` is the list of the lines
+# the scan below rejected, so an arm can pin an expected-witness class
+# (a refusal count, an abort line) instead of only a boolean.
 func _spawn_child(dirname: String, project_body: String, arm: String,
-		allow_inaccessible: bool) -> Dictionary:
+		allow_inaccessible: bool, script_res := "res://phys3d_events.gd",
+		bound_s := 30) -> Dictionary:
 	var dir := ProjectSettings.globalize_path("res://" + dirname)
 	var mk := DirAccess.make_dir_recursive_absolute(dir)
 	if mk != OK:
@@ -196,21 +273,21 @@ func _spawn_child(dirname: String, project_body: String, arm: String,
 		return {"err": "%s cannot write child project" % arm}
 	pf.store_string(project_body)
 	pf.close()
-	var selfpath := ProjectSettings.globalize_path("res://phys3d_events.gd")
+	var selfpath := ProjectSettings.globalize_path(script_res)
 	var logpath := dir.path_join("child.log")
 	# `timeout -s KILL` bounds the child: without it a hung child
 	# survives the battery's kill of the direct /bin/sh parent and is
 	# orphaned (r83 reviewer F2). 30 s covers the ~2 s healthy run.
-	var cmd := ("timeout -s KILL 30 \"%s\" --headless --path \"%s\""
+	var cmd := ("timeout -s KILL %d \"%s\" --headless --path \"%s\""
 			+ " --script \"%s\" -- --child --arm=%s"
 			+ " > \"%s\" 2>&1") % [
-			OS.get_executable_path(), dir, selfpath, arm, logpath]
+			bound_s, OS.get_executable_path(), dir, selfpath, arm, logpath]
 	# r84 critic: child.log is a never-unlinked single slot -- a stale
 	# log from a prior run would forge a verdict map, so remove it
 	# before spawn (missing-after-spawn stays a named failure).
 	DirAccess.remove_absolute(logpath)
 	var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
-	var res := {"code": code, "verdicts": {}, "last": "", "serr": false}
+	var res := {"code": code, "verdicts": {}, "last": "", "serr": false, "errs": []}
 	var lf := FileAccess.open(logpath, FileAccess.READ)
 	if lf == null:
 		return {"err": "%s child log missing" % arm}
@@ -223,14 +300,71 @@ func _spawn_child(dirname: String, project_body: String, arm: String,
 				res["verdicts"][kv[0]] = kv[1]
 		elif "SCRIPT ERROR" in line or "Parse Error" in line:
 			res["serr"] = true
+			res["errs"].append(line)
 		elif ("ObjectDB" in line and "leaked" in line):
 			res["serr"] = true
+			res["errs"].append(line)
 		elif line.begins_with("ERROR:") and (
 				not allow_inaccessible
 				or "Space state is inaccessible" not in line):
 			res["serr"] = true
+			res["errs"].append(line)
 	lf.close()
 	return res
+
+
+# r86: the size-gate and hang arms need a probe whose SOURCE is generated —
+# the gate is a property of the script's own size, so the child source
+# cannot be this fixture. Writing the probe and then delegating keeps the
+# project generation, the bounded spawn, the stale-log unlink and the error
+# scan single-sourced in _spawn_child (the r84 simplifier's V2 rule).
+func _spawn_probe(dirname: String, project_body: String, script_name: String,
+		script_body: String, arm: String, allow_inaccessible: bool,
+		bound_s := 30) -> Dictionary:
+	var dir := ProjectSettings.globalize_path("res://" + dirname)
+	var mk := DirAccess.make_dir_recursive_absolute(dir)
+	if mk != OK:
+		return {"err": "%s cannot make %s err=%d" % [arm, dirname, mk]}
+	var sf := FileAccess.open(dir.path_join(script_name), FileAccess.WRITE)
+	if sf == null:
+		return {"err": "%s cannot write child probe" % arm}
+	sf.store_string(script_body)
+	sf.close()
+	return _spawn_child(dirname, project_body, arm, allow_inaccessible,
+			dir.path_join(script_name), bound_s)
+
+
+# The generated probe: the deferred process-context fetch at the same
+# position (call_deferred from _initialize) at two sizes. `--arm=guarded`
+# null-checks the handle and names the outcome; `--arm=deref` dereferences
+# it unguarded, which is the hang class whenever the fetch was refused.
+# Padding is real file-scope statements, never comments or blank lines: the
+# r86 size ladder measured the gate on compile work, not on line or byte
+# count (2 026 blank lines and 256 KB of comments never released the fetch).
+func _size_probe_body(pad: int) -> String:
+	var pad_txt := str(pad)
+	var body := "# r86 generated size probe: pad=" + pad_txt + " statements\n"
+	body += "extends SceneTree\n\n\nfunc _initialize() -> void:\n"
+	body += "\tcall_deferred(\"_run\")\n\n\n"
+	for i in range(pad):
+		body += "var v%d := %d\n" % [i, i]
+	body += "\nfunc _run() -> void:\n"
+	body += "\tvar mode := \"guarded\"\n"
+	body += "\tfor a in OS.get_cmdline_user_args():\n"
+	body += "\t\tif a.begins_with(\"--arm=\"):\n"
+	body += "\t\t\tmode = a.substr(6)\n"
+	body += "\tvar d = root.get_world_3d().direct_space_state\n"
+	body += "\tvar refused := d == null\n"
+	body += "\tawait physics_frame\n"
+	body += "\tif mode == \"deref\":\n"
+	body += "\t\tprints(\"CHILD_NOTE sz_deref pad=" + pad_txt + " null=%s\" % [str(refused)])\n"
+	body += "\t\tprints(\"CHILD_RESULT sz_abort=%s\" % d.get_class())\n"
+	body += "\t\tquit(0)\n"
+	body += "\t\treturn\n"
+	body += "\tprints(\"CHILD_NOTE sz_fetch pad=" + pad_txt + " pf=%d\" % [Engine.get_physics_frames()])\n"
+	body += "\tprints(\"CHILD_RESULT sz_fetch=%s\" % (\"refused\" if refused else \"granted\"))\n"
+	body += "\tquit(0)\n"
+	return body
 
 
 # The physics_engine hint gates child arms that need a named backend:
@@ -320,6 +454,18 @@ func _run() -> void:
 				await _child_dummy()
 			"threaded_edge":
 				await _child_threaded()
+			"size_probe":
+				await _child_size()
+			"tier_plain":
+				await _child_tier("plain")
+			"tier_jolt":
+				await _child_tier("jolt")
+			"tier_dummy":
+				await _child_tier("dummy")
+			"floor_dummy":
+				await _child_floor("dummy")
+			"floor_real":
+				await _child_floor("real")
 			var bad:
 				prints("CHILD_RESULT child_arm=unknown arm='%s'" % bad)
 				quit(2)
@@ -902,6 +1048,234 @@ func _run() -> void:
 						% [str(exit_ok), s_p0, s_p1, str(srv_log)])
 			_exit_ok("PASS phys3d_events srv_phase_delta srv_proc_delta=2 srv_phys_delta=1")
 
+		"script_size_gate":
+			# size-gate cell (r86): the deferred process-context fetch is
+			# released or refused by how much work the script forces at
+			# startup, NOT by the fetch position — and on this host that is
+			# a ~100-line STOCHASTIC BAND (~475-575 lines), not a boundary
+			# (r86 boundary §1, 6 reps per point: deterministic refusal
+			# below, deterministic grant above, a race inside). One
+			# generated source at two sizes in the same threaded project
+			# is the discriminating pair: the same `_run` body is refused
+			# at 25 lines and granted at 1025, and both ends sit far
+			# outside the band. The unthreaded child is the control — the
+			# minimal body is granted without the threading flag, so the
+			# gate needs the flag AND the small script. The fourth child
+			# is this fixture itself (bare fetch, same position): it is
+			# granted, which is the LATENT fragility this arm makes loud —
+			# the r86 boundary seat shrank the fixture 16 times to 725
+			# lines without flipping it, so the file would have to lose
+			# ~500 lines of real tokens to reach the band.
+			#
+			# Witness discipline: every child here is a self-report, so
+			# each is corroborated by the engine's own lines in its log —
+			# exactly one refusal for the refused child, none for the three
+			# granted ones — and the carve-out is NOT used, so an extra
+			# refusal at any callsite fails the arm instead of hiding.
+			var thr_proj := "[application]\n\nconfig/name=\"SzThr\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/run_on_separate_thread=true\n"
+			var plain_proj := "[application]\n\nconfig/name=\"SzPlain\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n"
+			var min_body := _size_probe_body(0)
+			var min_thr := _spawn_probe("szminproj", thr_proj, "szprobe.gd",
+					min_body, "guarded", false)
+			if min_thr.has("err"):
+				return _fail(min_thr["err"])
+			var min_plain := _spawn_probe("szplainproj", plain_proj, "szprobe.gd",
+					min_body, "guarded", false)
+			if min_plain.has("err"):
+				return _fail(min_plain["err"])
+			var pad_thr := _spawn_probe("szpadproj", thr_proj, "szprobe.gd",
+					_size_probe_body(SIZE_PAD), "guarded", false)
+			if pad_thr.has("err"):
+				return _fail(pad_thr["err"])
+			var fixture_thr := _spawn_child("szfxproj", thr_proj, "size_probe", false)
+			if fixture_thr.has("err"):
+				return _fail(fixture_thr["err"])
+			var probes := [
+				["min_thr", min_thr, "sz_fetch", "refused", 1,
+						"ERROR: Space state is inaccessible"],
+				["min_plain", min_plain, "sz_fetch", "granted", 0, ""],
+				["pad_thr", pad_thr, "sz_fetch", "granted", 0, ""],
+				["fixture_thr", fixture_thr, "sp_fetch", "granted", 0, ""],
+			]
+			for spec in probes:
+				var spawn: Dictionary = spec[1]
+				var errs: Array = spawn["errs"]
+				var verdicts: Dictionary = spawn["verdicts"]
+				var ok: bool = spawn["code"] == 0 and verdicts.size() == 1 \
+						and verdicts.get(spec[2]) == spec[3] \
+						and errs.size() == spec[4]
+				if ok and spec[4] == 1:
+					ok = str(errs[0]).begins_with(spec[5])
+				if not ok:
+					return _fail("script_size_gate %s drift exit=%d v=%s errs=%s"
+							% [spec[0], spawn["code"], str(verdicts), str(errs)])
+			_exit_ok("PASS phys3d_events script_size_gate min_thr=refused min_plain=granted pad_thr=granted fixture_thr=granted child_exit=0")
+
+		"deferred_hang":
+			# hang-class cell (r86): an unguarded deref of the refused
+			# fetch inside the deferred `_run` coroutine aborts the
+			# coroutine before quit(), the SceneTree keeps running with
+			# no exit condition, and the spawn bound kills it — rc 137
+			# through /bin/sh, no CHILD_RESULT line at all. rc is the only
+			# detector: a SIGKILLed process emits no at-exit report, so
+			# the leak scan never runs and the zombie RIDs stay invisible
+			# (r86 boundary §3.1). The witness is engine-level and
+			# two-sided — the refusal that caused the abort AND the abort
+			# line, both in the child log, plus the process-level rc —
+			# never the killed child's own report, which cannot exist.
+			# The Dummy+threaded child is the contrast and the class
+			# boundary: the silent floor grants every fetch, so the
+			# IDENTICAL body dereferences a real handle, prints its class
+			# and exits 0 — the hang is reachable only where a refusal is,
+			# never under Dummy.
+			var hang_thr := "[application]\n\nconfig/name=\"HangThr\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/run_on_separate_thread=true\n"
+			var hang_dummy := "[application]\n\nconfig/name=\"HangDummy\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n3d/run_on_separate_thread=true\n"
+			var hang_body := _size_probe_body(0)
+			var hung := _spawn_probe("hangproj", hang_thr, "szprobe.gd",
+					hang_body, "deref", false, HANG_BOUND_S)
+			if hung.has("err"):
+				return _fail(hung["err"])
+			var floor_ok := _spawn_probe("hangdummyproj", hang_dummy, "szprobe.gd",
+					hang_body, "deref", false)
+			if floor_ok.has("err"):
+				return _fail(floor_ok["err"])
+			var aborted := false
+			var refused := false
+			for line in hung["errs"]:
+				if "SCRIPT ERROR" in line:
+					aborted = true
+				if str(line).begins_with("ERROR: Space state is inaccessible"):
+					refused = true
+			if hung["code"] != HANG_RC or not hung["verdicts"].is_empty() \
+					or not aborted or not refused or hung["errs"].size() != 2:
+				return _fail("deferred_hang drift exit=%d expected=%d marker=%s abort=%s refusal=%s errs=%s"
+						% [hung["code"], HANG_RC, str(hung["verdicts"]),
+						str(aborted), str(refused), str(hung["errs"])])
+			if floor_ok["code"] != 0 or not floor_ok["errs"].is_empty() \
+					or floor_ok["verdicts"] != {"sz_abort": "PhysicsDirectSpaceState3DDummy"}:
+				return _fail("deferred_hang dummy-floor drift exit=%d errs=%s v=%s"
+						% [floor_ok["code"], str(floor_ok["errs"]),
+						str(floor_ok["verdicts"])])
+			_exit_ok("PASS phys3d_events deferred_hang threaded_rc=137 abort=true no_marker=true dummy_rc=0 floor_no_hang=true child_exit=0")
+
+		"backend_tier":
+			# backend tier matrix (r86): the SAME tier sweep under the
+			# three generated projects, so a class difference can never
+			# be a code difference. Area gravity/damping overrides are
+			# the new inverter — GodotPhysics honours them (the body
+			# reads (0,20,0) / damp 2.0), Jolt silently ignores them
+			# while the area parameter itself reads back 20.0 (the write
+			# lands, the effect does not), and Dummy is the silent floor.
+			# The shape-query margin splits the other way: inert on
+			# GodotPhysics, honoured by Jolt, empty under Dummy. The
+			# separation ray keeps the edge and differs only in solver
+			# constants. Gated on both engine hints — absent means an
+			# honest BLOCKED row, never a fabricated split.
+			if not _engine_hint_has("Jolt Physics"):
+				_cleanup_nodes()
+				_cleanup_rids()
+				print("BLOCKED phys3d_events backend_tier jolt_absent=true")
+				quit(1)
+				return
+			if not _engine_hint_has("Dummy"):
+				_cleanup_nodes()
+				_cleanup_rids()
+				print("BLOCKED phys3d_events backend_tier dummy_absent=true")
+				quit(1)
+				return
+			var tier_plain := _spawn_child("tierplainproj",
+					"[application]\n\nconfig/name=\"TierPlain\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n",
+					"tier_plain", false)
+			if tier_plain.has("err"):
+				return _fail(tier_plain["err"])
+			var tier_jolt := _spawn_child("tierjoltproj",
+					"[application]\n\nconfig/name=\"TierJolt\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Jolt Physics\"\n",
+					"tier_jolt", false)
+			if tier_jolt.has("err"):
+				return _fail(tier_jolt["err"])
+			var tier_dummy := _spawn_child("tierdummyproj",
+					"[application]\n\nconfig/name=\"TierDummy\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n",
+					"tier_dummy", false)
+			if tier_dummy.has("err"):
+				return _fail(tier_dummy["err"])
+			var expect_plain := {
+				"plain_backend": "DEFAULT",
+				"plain_dss_class": "GodotPhysicsDirectSpaceState3D",
+				"plain_area_override": "honors",
+				"plain_margin": "inert",
+				"plain_sepray": "same-signature",
+			}
+			var expect_jolt := {
+				"jolt_backend": "Jolt Physics",
+				"jolt_dss_class": "JoltPhysicsDirectSpaceState3D",
+				"jolt_area_override": "ignores",
+				"jolt_margin": "binds",
+				"jolt_sepray": "differs-constants",
+			}
+			var expect_dummy := {
+				"dummy_backend": "Dummy",
+				"dummy_dss_class": "PhysicsDirectSpaceState3DDummy",
+				"dummy_area_override": "floor",
+				"dummy_margin": "empty",
+				"dummy_sepray": "floor",
+			}
+			for probe in [[tier_plain, expect_plain, "plain"],
+					[tier_jolt, expect_jolt, "jolt"],
+					[tier_dummy, expect_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("backend_tier %s drift exit=%d serr=%s v=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"])])
+			_exit_ok("PASS phys3d_events backend_tier plain=honors jolt=ignores dummy=floor margin=inert,binds,empty sepray=same,differs,floor child_exit=0")
+
+		"dummy_floor":
+			# silent-floor cell (r86): the Dummy backend as a class, not a
+			# failure. The dummy child pins the 11-token floor signature —
+			# creates come back RID(0), reads come back Nil / 0.0 /
+			# empty, a box shape reports type 2, and a direct state comes
+			# back for ANY argument including RID(0) — and produces zero
+			# rejected lines. The real-backend child runs the IDENTICAL
+			# body and produces exactly two loud refusals on the same two
+			# calls, so the floor can never be read as a refusal: the
+			# Dummy backend answers where a real backend errors.
+			if not _engine_hint_has("Dummy"):
+				_cleanup_nodes()
+				_cleanup_rids()
+				print("BLOCKED phys3d_events dummy_floor dummy_absent=true")
+				quit(1)
+				return
+			var floor_dummy := _spawn_child("floordummyproj",
+					"[application]\n\nconfig/name=\"FloorDummy\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n3d/physics_engine=\"Dummy\"\n",
+					"floor_dummy", false)
+			if floor_dummy.has("err"):
+				return _fail(floor_dummy["err"])
+			var floor_real := _spawn_child("floorrealproj",
+					"[application]\n\nconfig/name=\"FloorReal\"\n\n[physics]\n\ncommon/physics_ticks_per_second=60\n",
+					"floor_real", false)
+			if floor_real.has("err"):
+				return _fail(floor_real["err"])
+			if floor_dummy["code"] != 0 \
+					or floor_dummy["verdicts"] != {"dummy_backend": "Dummy",
+							"dummy_floor": "silent-floor"} \
+					or not floor_dummy["errs"].is_empty():
+				return _fail("dummy_floor dummy drift exit=%d v=%s errs=%s"
+						% [floor_dummy["code"], str(floor_dummy["verdicts"]),
+						str(floor_dummy["errs"])])
+			var real_errs: Array = floor_real["errs"]
+			if floor_real["code"] != 0 \
+					or floor_real["verdicts"] != {"real_backend": "DEFAULT",
+							"real_floor": "real-values"} \
+					or real_errs.size() != 2 \
+					or not str(real_errs[0]).begins_with(
+							"ERROR: Parameter \"space\" is null.") \
+					or not str(real_errs[1]).begins_with("ERROR: Invalid ID."):
+				return _fail("dummy_floor real-backend refusal drift exit=%d v=%s errs=%s"
+						% [floor_real["code"], str(floor_real["verdicts"]),
+						str(real_errs)])
+			_exit_ok("PASS phys3d_events dummy_floor dummy=silent-floor dummy_errs=0 real=real-values real_errs=2 child_exit=0")
+
 		_:
 			return _fail("unknown arm " + arm)
 
@@ -958,6 +1332,19 @@ func _child_threaded() -> void:
 			% [str(pp_edge0), str(proc_dss_refused), str(srv_ok)])
 	_cleanup_nodes()
 	_cleanup_rids()
+	quit(0)
+
+
+# --child --arm=size_probe body (r86): this fixture's OWN bare deferred
+# fetch, nothing else. The generated pair in the parent arm measures the
+# gate; this child is the fixture's own witness, so a fixture that shrank
+# below the boundary fails the arm loudly instead of silently refusing the
+# fetch everywhere under threading (latent fixture fragility).
+func _child_size() -> void:
+	var d = root.get_world_3d().direct_space_state
+	prints("CHILD_NOTE sp pf=%d null=%s" % [Engine.get_physics_frames(),
+			str(d == null)])
+	prints("CHILD_RESULT sp_fetch=%s" % ("refused" if d == null else "granted"))
 	quit(0)
 
 
@@ -1257,6 +1644,227 @@ func _child_split(prefix: String) -> void:
 		elif fired:
 			cls = "inverts"
 	prints("CHILD_RESULT %s_static_nopair=%s" % [prefix, cls])
+	_cleanup_nodes()
+	_cleanup_rids()
+	quit(0)
+
+
+# --- r86: the backend tier sweep and the Dummy floor signature -------------
+# Both bodies are spawned under more than one generated project, so a class
+# difference can never be a code difference. Every read is Variant-typed and
+# null-checked: an unguarded error inside the deferred _run coroutine is the
+# hang class (the r86 deferred_hang arm), never a failure.
+
+
+# The three-way backend gate. Exactly one member of the ClassDB trio exists
+# per generated project on this build (measured r86: DEFAULT -> godot only,
+# Jolt -> jolt only, Dummy -> dummy only). `_child_split` keeps its own
+# frozen two-way expression: its receipts are pinned and it never runs under
+# DEFAULT, so this is a different predicate, not a duplicate of it.
+func _backend_name() -> String:
+	if ClassDB.class_exists("PhysicsServer3DDummy"):
+		return "Dummy"
+	if ClassDB.class_exists("JoltPhysicsServer3D") \
+			and not ClassDB.class_exists("GodotPhysicsServer3D"):
+		return "Jolt Physics"
+	if ClassDB.class_exists("GodotPhysicsServer3D"):
+		return "DEFAULT"
+	return "unexpected"
+
+
+# --child --arm=tier_plain / tier_jolt / tier_dummy body (r86): the tier
+# sweep. (a) area gravity + linear-damping override on a gravity_scale=1.0
+# rigid body — the new inverter (GodotPhysics honours, Jolt ignores while
+# the area parameter reads back, Dummy is the floor); (b) the shape-query
+# `margin` — the mirror split (inert on GodotPhysics, honoured by Jolt,
+# empty under Dummy); (c) the separation ray — the edge holds, the solver
+# constants differ, Dummy has no data at all.
+func _child_tier(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	prints("CHILD_RESULT %s_backend=%s" % [prefix, _backend_name()])
+	dss = root.get_world_3d().direct_space_state
+	if dss == null:
+		# a non-threaded child grants this at _run; a refusal here would
+		# read every arm blind, so retry bounded and then bail named
+		for i in range(8):
+			await physics_frame
+			dss = root.get_world_3d().direct_space_state
+			if dss != null:
+				break
+	if dss == null:
+		prints("CHILD_NOTE %s dss_null=true" % prefix)
+		_cleanup_nodes()
+		_cleanup_rids()
+		quit(1)
+		return
+	prints("CHILD_RESULT %s_dss_class=%s" % [prefix, dss.get_class()])
+
+	# (a) area override, measured on the body's own direct state
+	var ashape := PhysicsServer3D.box_shape_create()
+	PhysicsServer3D.shape_set_data(ashape, Vector3(40.0, 40.0, 40.0))
+	var area := PhysicsServer3D.area_create()
+	PhysicsServer3D.area_add_shape(area, ashape)
+	PhysicsServer3D.area_set_collision_layer(area, 1)
+	PhysicsServer3D.area_set_collision_mask(area, 1)
+	PhysicsServer3D.area_set_space(area, wspace)
+	PhysicsServer3D.area_set_transform(area, Transform3D(Basis(), Vector3.ZERO))
+	owned.append_array([area, ashape])
+	var rig := _mk_body(Vector3.ZERO, PhysicsServer3D.BODY_MODE_RIGID)
+	await _frames(3)
+	var b0 = PhysicsServer3D.body_get_direct_state(rig)
+	var base_g := Vector3.ZERO
+	var base_d := -1.0
+	if b0 != null:
+		base_g = b0.get_total_gravity()
+		base_d = b0.get_total_linear_damp()
+	PhysicsServer3D.area_set_param(area,
+			PhysicsServer3D.AREA_PARAM_GRAVITY_OVERRIDE_MODE, 3)
+	PhysicsServer3D.area_set_param(area, PhysicsServer3D.AREA_PARAM_GRAVITY, 20.0)
+	PhysicsServer3D.area_set_param(area, PhysicsServer3D.AREA_PARAM_GRAVITY_VECTOR,
+			Vector3(0, 1, 0))
+	PhysicsServer3D.area_set_param(area,
+			PhysicsServer3D.AREA_PARAM_LINEAR_DAMP_OVERRIDE_MODE, 3)
+	PhysicsServer3D.area_set_param(area, PhysicsServer3D.AREA_PARAM_LINEAR_DAMP, 2.0)
+	await _frames(2)
+	var b1 = PhysicsServer3D.body_get_direct_state(rig)
+	var ov_g := Vector3.ZERO
+	var ov_d := -1.0
+	if b1 != null:
+		ov_g = b1.get_total_gravity()
+		ov_d = b1.get_total_linear_damp()
+	var area_g = PhysicsServer3D.area_get_param(area,
+			PhysicsServer3D.AREA_PARAM_GRAVITY)
+	prints("CHILD_NOTE %s_area base=%s/%.6f override=%s/%.6f area_readback=%s" % [
+			prefix, str(base_g), base_d, str(ov_g), ov_d, str(area_g)])
+	var cls := "unexpected"
+	if ov_g.is_equal_approx(Vector3(0, 20, 0)) and absf(ov_d - 2.0) < 0.0001:
+		cls = "honors"
+	elif base_g.is_equal_approx(Vector3(0, -9.8, 0)) \
+			and absf(base_d - 0.1) < 0.0001 \
+			and ov_g.is_equal_approx(base_g) and absf(ov_d - base_d) < 0.0001 \
+			and area_g != null and absf(float(area_g) - 20.0) < 0.0001:
+		cls = "ignores"
+	elif ov_g.is_equal_approx(Vector3.ZERO) and absf(ov_d) < 0.0001 \
+			and area_g == null:
+		cls = "floor"
+	prints("CHILD_RESULT %s_area_override=%s" % [prefix, cls])
+
+	# (b) shape-query margin on the `cast` arm's geometry (wall face z=-2)
+	var wall := _mk_body(Vector3(0, 0, -3))
+	await _frames(SETTLE)
+	var casts := []
+	for m in [0.0, 0.04, 0.5]:
+		var s := SphereShape3D.new()
+		s.radius = 0.5
+		var p := PhysicsShapeQueryParameters3D.new()
+		p.shape = s
+		p.transform = Transform3D(Basis(), Vector3.ZERO)
+		p.motion = Vector3(0, 0, -10)
+		p.collision_mask = 1
+		p.collide_with_bodies = true
+		p.margin = m
+		casts.append(dss.cast_motion(p))
+	prints("CHILD_NOTE %s_margin m0=%s m004=%s m05=%s" % [
+			prefix, str(casts[0]), str(casts[1]), str(casts[2])])
+	cls = "unexpected"
+	if casts[0].size() == 0 and casts[1].size() == 0 and casts[2].size() == 0:
+		cls = "empty"
+	elif casts[0].size() >= 2 and casts[1].size() >= 2 and casts[2].size() >= 2:
+		var same01 := absf(casts[0][0] - casts[1][0]) < 0.0001
+		var same12 := absf(casts[1][0] - casts[2][0]) < 0.0001
+		if same01 and same12:
+			cls = "inert"
+		elif not same01 and not same12 and casts[0][0] > casts[1][0] \
+				and casts[1][0] > casts[2][0]:
+			cls = "binds"
+	prints("CHILD_RESULT %s_margin=%s" % [prefix, cls])
+
+	# (c) separation ray: the data form and the solver constants
+	var sep: RID = PhysicsServer3D.separation_ray_shape_create()
+	PhysicsServer3D.shape_set_data(sep, {"length": 2.0, "slide_on_slope": false})
+	owned.append(sep)
+	var sep_data = PhysicsServer3D.shape_get_data(sep)
+	var sep_type := PhysicsServer3D.shape_get_type(sep)
+	var sr := PhysicsShapeQueryParameters3D.new()
+	sr.shape_rid = sep
+	sr.transform = Transform3D(Basis(), Vector3.ZERO)
+	sr.motion = Vector3(0, 0, -10)
+	sr.collision_mask = 1
+	sr.collide_with_bodies = true
+	var sep_cast := dss.cast_motion(sr)
+	prints("CHILD_NOTE %s_sepray data=%s type=%d cast=%s" % [
+			prefix, str(sep_data), sep_type, str(sep_cast)])
+	cls = "unexpected"
+	if sep_data == null:
+		cls = "floor"
+	elif sep_cast.size() >= 2:
+		if absf(sep_cast[0] - 0.197265625) < 0.0001:
+			cls = "same-signature"
+		elif absf(sep_cast[0] - 0.1998291015625) < 0.0001:
+			cls = "differs-constants"
+	prints("CHILD_RESULT %s_sepray=%s" % [prefix, cls])
+	_cleanup_nodes()
+	_cleanup_rids()
+	quit(0)
+
+
+# --child --arm=floor_dummy / floor_real body (r86): the Dummy silent floor
+# as an 11-token signature, with the identical body under a real backend as
+# the refusal contrast. Tokens are printed, never inferred. Two calls in
+# here are loud refusals on a real backend and silent no-ops under Dummy —
+# that pair is the whole class distinction, so "silent floor" can never be
+# read as "refusal".
+func _child_floor(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	prints("CHILD_RESULT %s_backend=%s" % [prefix, _backend_name()])
+	var shape: RID = PhysicsServer3D.box_shape_create()
+	PhysicsServer3D.shape_set_data(shape, Vector3(1.0, 1.0, 1.0))
+	var shape_data = PhysicsServer3D.shape_get_data(shape)
+	var shape_type := PhysicsServer3D.shape_get_type(shape)
+	var fresh: RID = PhysicsServer3D.space_create()
+	var space_param = PhysicsServer3D.space_get_param(fresh,
+			PhysicsServer3D.SPACE_PARAM_SOLVER_ITERATIONS)
+	var dss_rid0 = PhysicsServer3D.space_get_direct_state(RID())
+	var rig := _mk_body(Vector3(0, 5, 0), PhysicsServer3D.BODY_MODE_RIGID)
+	var area: RID = PhysicsServer3D.area_create()
+	PhysicsServer3D.area_set_space(area, wspace)
+	PhysicsServer3D.area_add_shape(area, shape)
+	owned.append_array([shape, fresh, area])
+	await _frames(2)
+	var b_state = PhysicsServer3D.body_get_state(rig,
+			PhysicsServer3D.BODY_STATE_TRANSFORM)
+	var b_param = PhysicsServer3D.body_get_param(rig,
+			PhysicsServer3D.BODY_PARAM_GRAVITY_SCALE)
+	var b_count := PhysicsServer3D.body_get_shape_count(rig)
+	var b_shape = PhysicsServer3D.body_get_shape(rig, 0)
+	var a_param = PhysicsServer3D.area_get_param(area,
+			PhysicsServer3D.AREA_PARAM_GRAVITY)
+	# the two loud refusals on a real backend, silent no-ops here
+	PhysicsServer3D.free_rid(RID())
+	var tokens := PackedStringArray([
+		"rid0" if str(shape) == "RID(0)" else "rid",
+		"nil" if shape_data == null else "v3",
+		str(shape_type),
+		"rid0" if str(fresh) == "RID(0)" else "rid",
+		"nil" if space_param == null else "%.1f" % float(space_param),
+		"dummy" if dss_rid0 != null else "nil",
+		"nil" if b_state == null else "xform",
+		"nil" if b_param == null else "value",
+		str(b_count),
+		"rid0" if str(b_shape) == "RID(0)" else "rid",
+		"nil" if a_param == null else "value",
+	])
+	prints("CHILD_NOTE %s_floor tokens=%s" % [prefix, str(tokens)])
+	var floor_sig := PackedStringArray(["rid0", "nil", "2", "rid0", "0.0",
+			"dummy", "nil", "nil", "0", "rid0", "nil"])
+	var real_sig := PackedStringArray(["rid", "v3", "3", "rid", "16.0",
+			"nil", "xform", "value", "1", "rid", "value"])
+	var cls := "unexpected"
+	if tokens == floor_sig:
+		cls = "silent-floor"
+	elif tokens == real_sig:
+		cls = "real-values"
+	prints("CHILD_RESULT %s_floor=%s" % [prefix, cls])
 	_cleanup_nodes()
 	_cleanup_rids()
 	quit(0)

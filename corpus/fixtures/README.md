@@ -2,7 +2,7 @@
 
 Bounded Godot 4.7.2 `--headless` fixtures for 3D mechanics. The original
 six classes each have a positive and a discriminating negative control; later
-rounds extend the battery to 191 registered cases (145 ordinary and 46
+rounds extend the battery to 195 registered cases (149 ordinary and 46
 negative controls). A negative control must demonstrate a live setup before attributing
 an absent or changed effect to its arrangement. These finite headless checks
 do not establish rendered output or behavior in other engines.
@@ -623,6 +623,64 @@ live server class (a silent fallback would print
 `jolt_backend=unexpected` and fail). Any child-side `ERROR:` line is a
 defect — there is no expected-witness error class under Jolt. Bounded
 to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
+
+## PhysicsServer3D size gate, deferred-hang class, backend tier, Dummy floor (round 86)
+
+`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only phys3d_events_script_size_gate,phys3d_events_deferred_hang,phys3d_events_backend_tier,phys3d_events_dummy_floor`
+pins four further classes on the r83–r85 lattice.
+
+- `script_size_gate` — the deferred process-context direct-space-state
+  fetch is released or refused by how much work the script forces at
+  startup, not by the fetch position, and on this host that is a
+  ~100-line **stochastic band** (~475–575 lines), not a boundary (see
+  the r86 boundary report; 6 reps per point, deterministic refusal below
+  the band, deterministic grant above, a race inside). The arm generates
+  one probe source at two sizes (`_size_probe_body`, spawned through
+  `_spawn_probe`) and runs the same `_run` body in the same
+  `3d/run_on_separate_thread=true` project: it is refused at 25 lines and
+  granted at 1025, both far outside the band, while the minimal body in
+  an unthreaded project is granted — the gate does not exist without the
+  threading flag. Every child is corroborated by the engine's own
+  refusal-line count in its log (exactly one for the refused child, none
+  for the three granted ones), never by the child's self-report alone,
+  and the `allow_inaccessible` carve-out is deliberately not used. A
+  fourth child is this fixture itself (`--child --arm=size_probe`); its
+  bare fetch is granted, and the boundary seat shrank the fixture 16
+  times to 725 lines without flipping it — a latent fragility, not a
+  live defect.
+- `deferred_hang` — an unguarded deref of the refused fetch inside the
+  deferred `_run` coroutine aborts it before `quit()`, the `SceneTree`
+  is left with no exit condition, and the `timeout -s KILL 8` bound
+  kills the child: exit **137** (128+SIGKILL through `/bin/sh`) and
+  **no** `CHILD_RESULT` line at all. `rc` is the only detector — a
+  SIGKILLed process emits no at-exit report, so the leak scan never runs
+  and its zombie RIDs stay invisible. The witness is engine-level and
+  two-sided: the refusal that caused the abort *and* the abort line, both
+  in `hangproj/child.log`, never the killed child's own report. The
+  identical body under Dummy+threaded exits 0 and prints the Dummy
+  space-state class — the silent floor grants every fetch, so the hang is
+  reachable only where a refusal is. A red row here is a *process*
+  failure, not a physics verdict: do not read a 137 as a physics result.
+- `backend_tier` — one sweep under the three generated projects. The
+  area gravity/damping override INVERTS: GodotPhysics honours it (the
+  body reads `(0,20,0)` / damp `2.0`), Jolt silently ignores it while
+  the area parameter itself reads back `20.0` (the write lands, the
+  effect does not), and Dummy is the floor. The shape-query `margin`
+  splits the other way (inert on GodotPhysics, honoured by Jolt, empty
+  under Dummy), and the separation ray keeps the edge on different
+  solver constants. Gated on both engine hints; absent means `BLOCKED`,
+  never a fabricated split.
+- `dummy_floor` — the Dummy backend as a class, not a failure. The
+  dummy child pins an 11-token floor signature (creates return
+  `RID(0)`, reads return `Nil` / `0.0` / empty, a box shape reports
+  type `2`, and a direct state comes back for any argument including
+  `RID(0)`) and produces zero rejected lines. The identical body on a
+  real backend emits exactly two loud refusals on the same two calls
+  (`space_get_direct_state(RID())` and `free_rid(RID())`), so the floor
+  answers where a real backend errors — "silent floor" can never be
+  read as "refusal".
+
+Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
 
 ## Determinism rules for new cases
 

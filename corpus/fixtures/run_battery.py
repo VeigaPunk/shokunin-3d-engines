@@ -446,6 +446,14 @@ CASES = [
      "PASS phys3d_events dummy_refused backend=Dummy isect=unexpected cast=unexpected btm=unexpected contact_stale=unexpected static_nopair=unexpected child_exit=0"),
     ("phys3d_events_srv_phase_delta", "phys3d_events.gd", ["--arm=srv_phase_delta"], 0,
      "PASS phys3d_events srv_phase_delta srv_proc_delta=2 srv_phys_delta=1"),
+    ("phys3d_events_script_size_gate", "phys3d_events.gd", ["--arm=script_size_gate"], 0,
+     "PASS phys3d_events script_size_gate min_thr=refused min_plain=granted pad_thr=granted fixture_thr=granted child_exit=0"),
+    ("phys3d_events_deferred_hang", "phys3d_events.gd", ["--arm=deferred_hang"], 0,
+     "PASS phys3d_events deferred_hang threaded_rc=137 abort=true no_marker=true dummy_rc=0 floor_no_hang=true child_exit=0"),
+    ("phys3d_events_backend_tier", "phys3d_events.gd", ["--arm=backend_tier"], 0,
+     "PASS phys3d_events backend_tier plain=honors jolt=ignores dummy=floor margin=inert,binds,empty sepray=same,differs,floor child_exit=0"),
+    ("phys3d_events_dummy_floor", "phys3d_events.gd", ["--arm=dummy_floor"], 0,
+     "PASS phys3d_events dummy_floor dummy=silent-floor dummy_errs=0 real=real-values real_errs=2 child_exit=0"),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored
