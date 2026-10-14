@@ -80,9 +80,10 @@
 # default 5; the r71-r73 surface was stationary or single-teleport):
 #   path storage: the stored path array is NOT unconditionally frozen.
 #     Locomotion leaves it untouched while the agent stays within
-#     path_max_distance (default 5.0, STRICT >) of the CURRENT next
-#     waypoint path[navigation_path_index] — teleports inside that radius
-#     (on-mesh, off-mesh into the void, or off the map edge) never re-query.
+#     path_max_distance (default 5.0, breaches at exact equality) of the
+#     CURRENT LEG SEGMENT path[idx-1]->path[idx] — teleports whose
+#     distance to that segment stays under pmd never re-query
+#     (on-mesh, off-mesh into the void, or off the map edge alike).
 #     Beyond it the next update re-queries the map and the new path[0] is
 #     the navmesh-surface clamp of the LIVE position (agent at (10,0,10)
 #     re-anchors to (3,0,4); at (2.5,0,6.x) to the B edge (2.5,0,4.0)).

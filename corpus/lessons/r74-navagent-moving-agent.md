@@ -46,12 +46,15 @@ and the finished-latch whole-update freeze.
 
 - `target_position` assignment — synchronous clear + lazy re-materialize
   (any value, no dedup). CASES-pinned.
-- `euclid(agent, path[idx]) >= path_max_distance` at update time —
-  equality breaches (scribe-measured). CASES-pinned (`mv_pmd_*`).
+- `segment_distance(agent, path[idx-1]→path[idx]) >= path_max_distance`
+  at update time — the operand is the current leg SEGMENT, not the
+  waypoint (boundary-measured); equality breaches (scribe-measured).
+  CASES-pinned (`mv_pmd_*`).
 - Map data changes (`region_set_transform`, region `navigation_layers`)
-  and agent `navigation_layers` — lazy invalidation, EMPTY path +
-  `final=(0,0,0)` possible (critic `fw_mapedit`/`fw_layermask`/`fw_al_mid`)
-  — measured, NOT CASES-pinned.
+  and agent `navigation_layers` — lazy invalidation; EMPTY path +
+  `final=(0,0,0)` on total severance (critic `fw_mapedit`/`fw_layermask`);
+  clamped partial when a mainland stays on-mask. Measured; CASES-pinned
+  in r75 (`mut_*`).
 - `is_navigation_finished` latch — GATES OFF the whole update incl. the
   pmd re-query (author `mv_latch`, scribe `mz_steps` s7, simplifier
   10.6 receipt). CASES-pinned.

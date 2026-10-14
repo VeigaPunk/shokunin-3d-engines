@@ -12,6 +12,11 @@ Exit contract per case (authored in each fixture's header comment):
   Error, any unexpected ERROR: line, or an ObjectDB leak warning -> FAIL
 
 Battery exit code is 0 only when every case passes.
+
+Pass an ABSOLUTE --runs path. The tree-timeout witness probe verifies the
+child's /proc cmdline verbatim, which is absolute — a relative --runs makes
+that probe deterministically FAIL (witness never matches) while every other
+case still passes. Measured twice across rounds (r73-reviewer, r75-author).
 """
 import argparse
 import hashlib
