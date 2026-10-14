@@ -74,7 +74,61 @@
 #   pop-through hazard: link endpoints are ordinary waypoints to the pdd
 #     pop loop — with pdd=4.0 on the bridge the agent pops the near endpoint
 #     and get_next_path_position returns the far endpoint across the void.
-# No agent motion, avoidance, baking, or rendering claim.
+# Round-74 motion arms (moving-agent semantics, measured on this build —
+# Godot 4.7.2; "tp" = scripted global_position teleport, "set_target" =
+# target_position re-assignment, "wait" = physics frames before reading,
+# default 5; the r71-r73 surface was stationary or single-teleport):
+#   path storage: the stored path array is NOT unconditionally frozen.
+#     Locomotion leaves it untouched while the agent stays within
+#     path_max_distance (default 5.0, STRICT >) of the CURRENT next
+#     waypoint path[navigation_path_index] — teleports inside that radius
+#     (on-mesh, off-mesh into the void, or off the map edge) never re-query.
+#     Beyond it the next update re-queries the map and the new path[0] is
+#     the navmesh-surface clamp of the LIVE position (agent at (10,0,10)
+#     re-anchors to (3,0,4); at (2.5,0,6.x) to the B edge (2.5,0,4.0)).
+#     The boundary was bisected: euclid(agent, path[1]) 4.995 stays frozen,
+#     5.0001 re-queries, and it tracks a written path_max_distance exactly
+#     (pmd 10/6 keep 5.52 frozen; pmd 5.5/2 re-query). Once
+#     is_navigation_finished latches the update loop early-returns: the
+#     pmd re-query is gated OFF too — a latched agent at 10.6+ from
+#     path[1] keeps its stale path.
+#   pop index: monotone non-decreasing strict-< Euclidean vs the STORED
+#     path, driven by the LIVE position at call time — a wait=0 read
+#     immediately after a teleport already shows the re-pop (no frame
+#     needed); teleporting back toward the start never un-pops.
+#   latch: is_target_reached/is_navigation_finished stay latched through
+#     arbitrary motion including off-mesh; the measured unlatch is ANY
+#     target_position re-assignment (same value too — no value dedup),
+#     which also resets the pop index to 0 and synchronously clears the
+#     stored path (get_current_navigation_path is [] until the next
+#     getter-forced update).
+#   re-anchor: set_target re-queries the map from the agent's LIVE
+#     position — same-value assignment included — so path[0] is the live
+#     position (on-mesh) or its navmesh clamp (off-mesh). Bank-side: at
+#     (2.5,0,3.9) re-assigning the island target yields
+#     [(2.5,0,3.9),(2.5,0,3.5),(2.5,0,5.5)] with the link and
+#     [(2.5,0,3.9),(2.5,0,4.0)] without (unreachable -> finished=true via
+#     the idx+pdd clause). "Live" pins down one level finer: the query
+#     is LAZY — it materializes inside the first forcing call after the
+#     assignment, anchored at the position live at THAT call, not at
+#     assignment time. mv_reanchor_lazy (set_target + teleport in one
+#     step, no read between) anchors at the post-teleport (2.6,0,2.0);
+#     mv_reanchor_force (a read between assignment and teleport) anchors
+#     at the read-time (1.5,0,0.5) and that path stays frozen through the
+#     follow-up move.
+#   pop index (cont.): the advance is SEQUENTIAL — it cannot skip a
+#     waypoint. mv_popskip teleports adjacent to the final (euclid 0.707
+#     < tdd) while idx=1: the index stays 1 and next still returns the
+#     unconsumed waypoint BEHIND the agent, while the raw-euclid
+#     reached/finished flags fire anyway (flags decoupled from idx).
+#   getter laziness: none of the observed state moves without a getter —
+#     get_current_navigation_path does NOT force an update (it returns []
+#     until the first get_next_path_position call), while
+#     get_next_path_position forces the once-per-frame update
+#     synchronously. _read_state therefore always sees the post-update
+#     tuple, matching r72/r73.
+# No self-propelled locomotion, avoidance, baking, or rendering claim —
+# motion here is authored teleports plus target re-assignment.
 extends SceneTree
 var owned: Array[RID] = []
 var owned_nodes: Array[Node] = []
@@ -182,6 +236,8 @@ func _run() -> void:
 		agent.target_desired_distance = arm_cfg["tdd"]
 		agent.path_metadata_flags = int(arm_cfg.get("meta", 0))
 		agent.navigation_layers = int(arm_cfg.get("agentlayers", 1))
+		if arm_cfg.has("pmd"):
+			agent.path_max_distance = float(arm_cfg["pmd"])
 	agent.target_position = target
 	for i in range(30):
 		await physics_frame
@@ -200,9 +256,13 @@ func _run() -> void:
 	# state for non-teleport arms); st2 is the state asserted against cfg.
 	var st := {}
 	var st2 := {}
+	var states: Array = []
 	if arm != "":
 		st = _read_state(agent, actor)
-		if arm_cfg.has("tp"):
+		if arm_cfg.has("steps"):
+			states = await _run_steps(arm_cfg["steps"], agent, actor)
+			st2 = states[states.size() - 1]
+		elif arm_cfg.has("tp"):
 			actor.global_position = arm_cfg["tp"]
 			for i in range(5):
 				await physics_frame
@@ -210,15 +270,23 @@ func _run() -> void:
 		else:
 			st2 = st
 	var expected_pos := spawn
-	if arm != "" and arm_cfg.has("tp"):
-		expected_pos = arm_cfg["tp"]
+	var expected_target := target
+	if arm != "":
+		if arm_cfg.has("tp"):
+			expected_pos = arm_cfg["tp"]
+		if arm_cfg.has("steps"):
+			for step in arm_cfg["steps"]:
+				if step.has("tp"):
+					expected_pos = step["tp"]
+				if step.has("set_target"):
+					expected_target = step["set_target"]
 	var want_polys := 1 if straight else (4 if arm_cfg.get("island", false) else 3)
 	if not actor.is_inside_tree() or agent.get_parent() != actor \
 			or agent.get_navigation_map() != map or not NavigationServer3D.map_is_active(map) \
 			or NavigationServer3D.map_get_regions(map).size() != 1 \
 			or mesh.get_polygon_count() != want_polys \
 			or actor.global_position.distance_to(expected_pos) > 0.0001 \
-			or agent.target_position.distance_to(target) > 0.0001:
+			or agent.target_position.distance_to(expected_target) > 0.0001:
 		return _fail(actor, "live navigation agent/map setup absent")
 	# Link-arm gate honesty: every authored link flag must read back applied,
 	# else a "gate drops the link" arm cannot falsify a no-op setter.
@@ -235,6 +303,8 @@ func _run() -> void:
 				or int(agent.navigation_layers) != int(arm_cfg.get("agentlayers", 1)):
 			return _fail(actor, "authored link flags not in effect")
 	if arm != "":
+		if arm_cfg.has("steps"):
+			return _run_motion_arm(actor, arm, arm_cfg, st, states)
 		if arm_cfg.get("island", false) or arm_cfg.get("link", "") != "":
 			return _run_link_arm(actor, agent, region, link_rid, link_node, arm, arm_cfg, st2)
 		return _run_pop_arm(actor, arm, arm_cfg, st, st2)
@@ -650,6 +720,339 @@ func _arm_cfg(arm_name: String) -> Dictionary:
 				"dist": 5.385165,
 				"reachable": true, "reached": false, "finished": false,
 				"types": []}
+		# Round-74 motion arms. Extra keys: "steps" (ordered moves; each a
+		# dict with optional "tp"/"set_target"/"wait" plus the expected
+		# post-move tuple: idx/next/final/dist/reachable/reached/finished
+		# and the complete stored "path" array), "pmd" (optional authored
+		# path_max_distance). The base tuple pins the PRE-motion state; each
+		# step pins its own full tuple — a stored path element that moved
+		# without an authored re-query is a named per-step failure.
+		# (a)+(b)+(c): stepwise teleports along the corridor — path frozen
+		# at every step; idx advances on live position; reached/finished
+		# fire when the agent arrives inside tdd.
+		"mv_walk":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.0, 0, 0.5), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": f, "dist": 3.354102,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(1.8, 0, 0.9), "idx": 2, "next": f,
+						"final": f, "dist": 2.692582,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2.5, 0, 3.0), "idx": 2, "next": f,
+						"final": f, "dist": 0.5,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": true, "finished": true}]}
+		# (a) live call-time: wait=0 read immediately after the teleport
+		# already shows the re-pop — no physics frame needed; a second
+		# read after 5 frames is byte-identical.
+		"mv_live":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.8, 0, 0.9), "wait": 0, "idx": 2, "next": f,
+						"final": f, "dist": 2.692582,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(1.8, 0, 0.9), "idx": 2, "next": f,
+						"final": f, "dist": 2.692582,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (b) monotone pop: forward teleport pops idx to 2; teleporting back
+		# to the spawn never un-pops — next still returns the final point.
+		"mv_popback":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.8, 0, 0.9), "idx": 2, "next": f,
+						"final": f, "dist": 2.692582,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": s, "idx": 2, "next": f,
+						"final": f, "dist": 3.605551,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (b) strict-< boundary under motion: euclid==pdd does not pop;
+		# 0.01 closer does.
+		"mv_popstrict":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2, 0, 0), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": f, "dist": 3.535534,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2, 0, 0.01), "idx": 2, "next": f,
+						"final": f, "dist": 3.525635,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (a) off-mesh within pmd: standing in the void (2.5,0,4.5) — no
+		# polygon beneath, dist-to-path[1] 3.54 < 5 — the path stays frozen
+		# and distance/reached stay live (euclid==tdd: strict, not reached).
+		"mv_void":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.5, 0, 4.5), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": f, "dist": 1.0,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (a) pmd re-query boundary: euclid(agent, path[1]) 4.995 < 5.0
+		# stays frozen; 5.025 > 5.0 re-queries and re-anchors the origin at
+		# the B-edge clamp (2.5,0,4.0) — idx resets to 0.
+		"mv_pmd_edge":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.5, 0, 5.97), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": f, "dist": 2.47,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2.5, 0, 6.0), "idx": 0, "next": Vector3(2.5, 0, 4.0),
+						"final": f, "dist": 2.5,
+						"path": [Vector3(2.5, 0, 4.0), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (a)+(d) off-map re-anchor: a 13.4-unit teleport past every polygon
+		# re-queries and clamps the origin to (3,0,4); teleporting back to
+		# the corridor does NOT restore the old path — the re-anchor has no
+		# undo.
+		"mv_pmd_offmesh":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(10, 0, 10), "idx": 0, "next": Vector3(3, 0, 4),
+						"final": f, "dist": 9.924717,
+						"path": [Vector3(3, 0, 4), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(1.0, 0, 0.5), "idx": 0, "next": Vector3(3, 0, 4),
+						"final": f, "dist": 3.354102,
+						"path": [Vector3(3, 0, 4), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (a) the re-query gate tracks authored path_max_distance: pmd=2.0
+		# makes the same (2.5,0,5.5) teleport (dist-to-path[1] 4.53) breach.
+		"mv_pmd2":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0, "pmd": 2.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.5, 0, 5.5), "idx": 0, "next": Vector3(2.5, 0, 4.0),
+						"final": f, "dist": 2.0,
+						"path": [Vector3(2.5, 0, 4.0), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (c) latch under motion: reached/finished fire at spawn and stay
+		# latched after two teleports — the second leaves the agent 10.63
+		# from path[1] (> pmd 5) yet NO re-query fires: the finished latch
+		# early-returns the whole update loop (path and idx untouched).
+		"mv_latch":
+			return {"spawn": fg, "target": tg, "pdd": 1.0, "tdd": 1.6,
+				"path": [fg, fg],
+				"idx": 1, "next": fg, "final": fg, "dist": 1.5,
+				"reachable": true, "reached": true, "finished": true,
+				"steps": [
+					{"tp": s, "idx": 1, "next": fg,
+						"final": fg, "dist": 2.5,
+						"path": [fg, fg],
+						"reachable": true, "reached": true, "finished": true},
+					{"tp": Vector3(10, 0, 10), "idx": 1, "next": fg,
+						"final": fg, "dist": 11.800424,
+						"path": [fg, fg],
+						"reachable": true, "reached": true, "finished": true}]}
+		# (c)+(d) measured unlatch: same latch, then a same-value
+		# target_position re-assignment unlatches reached/finished, resets
+		# idx to 0 and re-anchors the path at the live-position clamp
+		# (3,0,4) — no same-value dedup.
+		"mv_unlatch":
+			return {"spawn": fg, "target": tg, "pdd": 1.0, "tdd": 1.6,
+				"path": [fg, fg],
+				"idx": 1, "next": fg, "final": fg, "dist": 1.5,
+				"reachable": true, "reached": true, "finished": true,
+				"steps": [
+					{"tp": Vector3(10, 0, 10), "idx": 1, "next": fg,
+						"final": fg, "dist": 11.800424,
+						"path": [fg, fg],
+						"reachable": true, "reached": true, "finished": true},
+					{"set_target": tg, "idx": 0, "next": Vector3(3, 0, 4),
+						"final": fg, "dist": 11.800424,
+						"path": [Vector3(3, 0, 4), fg],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (d) re-anchor to a NEW target mid-path: the re-query starts at the
+		# live position (1.5,0,0.5), not at the original path origin S.
+		"mv_reanchor":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.5, 0, 0.5), "idx": 2, "next": f,
+						"final": f, "dist": 3.162278,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"set_target": Vector3(0.5, 0, 0.5), "idx": 1,
+						"next": Vector3(0.5, 0, 0.5),
+						"final": Vector3(0.5, 0, 0.5), "dist": 1.0,
+						"path": [Vector3(1.5, 0, 0.5), Vector3(0.5, 0, 0.5)],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (d) same-value re-assignment still re-queries from the live
+		# position: path[0] moves S -> (1.5,0,0.5) on an unchanged target.
+		"mv_reanchor_same":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.5, 0, 0.5), "idx": 2, "next": f,
+						"final": f, "dist": 3.162278,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"set_target": td, "idx": 2, "next": f,
+						"final": f, "dist": 3.162278,
+						"path": [Vector3(1.5, 0, 0.5), Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (d) bank-side re-anchor with the link live: at (2.5,0,3.9) on the
+		# void edge, re-assigning T2 anchors the new query at the live
+		# position and still routes through the link behind the agent —
+		# new path [(2.5,0,3.9),(2.5,0,3.5),(2.5,0,5.5)], pop lands on the
+		# far endpoint across the void.
+		"mv_reanchor_bank":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.5, 0, 3.9), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 5.5), "dist": 1.6,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"set_target": Vector3(2.5, 0, 5.5), "idx": 2,
+						"next": Vector3(2.5, 0, 5.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 1.6,
+						"path": [Vector3(2.5, 0, 3.9), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (d) bank-side re-anchor without the link: the same re-assignment
+		# clamps the new query to the B edge — [(2.5,0,3.9),(2.5,0,4.0)],
+		# unreachable, and the idx+pdd clause fires finished=true standing
+		# 0.1 from the clamped final.
+		"mv_reanchor_void":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 4.0),
+				"dist": 5.385165,
+				"reachable": false, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.5, 0, 3.9), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": Vector3(2.5, 0, 4.0), "dist": 1.6,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": false},
+					{"set_target": Vector3(2.5, 0, 5.5), "idx": 1,
+						"next": Vector3(2.5, 0, 4.0),
+						"final": Vector3(2.5, 0, 4.0), "dist": 1.6,
+						"path": [Vector3(2.5, 0, 3.9), Vector3(2.5, 0, 4.0)],
+						"reachable": false, "reached": false, "finished": true}]}
+		# (b) sequential pop cannot skip: a teleport adjacent to the final
+		# (euclid 0.707 < tdd) with idx=1 does NOT jump the index — next
+		# still returns the unconsumed waypoint behind the agent — while
+		# the raw-euclid flags reached/finished fire anyway (decoupled
+		# from the sequential idx).
+		"mv_popskip":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.4, 0, 2.8), "idx": 1, "next": Vector3(2, 0, 1),
+						"final": f, "dist": 0.707107,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": true, "finished": true}]}
+		# (d) lazy materialization: set_target then teleport with NO read
+		# between — the path query anchors at the position live at the
+		# first forcing call (the post-teleport (2.6,0,2.0)), not at the
+		# assignment-time position.
+		"mv_reanchor_lazy":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.5, 0, 0.5), "idx": 2, "next": f,
+						"final": f, "dist": 3.162278,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"set_target": Vector3(2.9, 0, 3.9), "tp": Vector3(2.6, 0, 2.0),
+						"idx": 1, "next": Vector3(2.9, 0, 3.9),
+						"final": Vector3(2.9, 0, 3.9), "dist": 1.923539,
+						"path": [Vector3(2.6, 0, 2.0), Vector3(2.9, 0, 3.9)],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (d) materialization-time contrast: identical assignment+move, but
+		# a read forces the update while the agent still sits at
+		# (1.5,0,0.5) — the path anchors THERE and stays frozen through
+		# the follow-up teleport (dist to path[2] 1.92 < pmd).
+		"mv_reanchor_force":
+			return {"spawn": s, "target": td, "pdd": 1.0, "tdd": 1.0,
+				"path": [s, Vector3(2, 0, 1), f],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": f, "dist": 3.605551,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(1.5, 0, 0.5), "idx": 2, "next": f,
+						"final": f, "dist": 3.162278,
+						"path": [s, Vector3(2, 0, 1), f],
+						"reachable": true, "reached": false, "finished": false},
+					{"set_target": Vector3(2.9, 0, 3.9), "idx": 2,
+						"next": Vector3(2.9, 0, 3.9),
+						"final": Vector3(2.9, 0, 3.9), "dist": 3.676955,
+						"path": [Vector3(1.5, 0, 0.5), Vector3(2, 0, 1), Vector3(2.9, 0, 3.9)],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2.6, 0, 2.0), "idx": 2,
+						"next": Vector3(2.9, 0, 3.9),
+						"final": Vector3(2.9, 0, 3.9), "dist": 1.923539,
+						"path": [Vector3(1.5, 0, 0.5), Vector3(2, 0, 1), Vector3(2.9, 0, 3.9)],
+						"reachable": true, "reached": false, "finished": false}]}
+		# (a)+(b) across the link: the pop index walks through link
+		# endpoints as ordinary waypoints on live position — idx 1->2->3 —
+		# and the stored path stays frozen even mid-hop over the void
+		# (agent off every polygon, still within pmd of path[idx]).
+		"mv_bridge_walk":
+			return {"spawn": s, "target": Vector3(2.5, 0, 5.5), "pdd": 1.0, "tdd": 1.0,
+				"island": true,
+				"link": "server", "link_a": Vector3(2.5, 0, 3.5), "link_b": Vector3(2.5, 0, 5.5),
+				"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+				"idx": 1, "next": Vector3(2, 0, 1), "final": Vector3(2.5, 0, 5.5),
+				"dist": 5.385165,
+				"reachable": true, "reached": false, "finished": false,
+				"steps": [
+					{"tp": Vector3(2.0, 0, 0.9), "idx": 2, "next": Vector3(2.5, 0, 3.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 4.627094,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2.5, 0, 3.4), "idx": 3, "next": Vector3(2.5, 0, 5.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 2.1,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": false, "finished": false},
+					{"tp": Vector3(2.5, 0, 5.4), "idx": 3, "next": Vector3(2.5, 0, 5.5),
+						"final": Vector3(2.5, 0, 5.5), "dist": 0.1,
+						"path": [s, Vector3(2, 0, 1), Vector3(2.5, 0, 3.5), Vector3(2.5, 0, 5.5)],
+						"reachable": true, "reached": true, "finished": true}]}
 	return {}
 
 func _read_state(agent: NavigationAgent3D, actor: Node3D) -> Dictionary:
@@ -809,5 +1212,98 @@ func _run_link_arm(actor: Node3D, agent: NavigationAgent3D, region: RID,
 		st2["dist"], st2["pathlen"], st2["reachable"], st2["reached"], st2["finished"],
 		cfg.get("link", "none"), int(cfg.get("meta", 0)), tstr,
 		int(cfg.get("rid_at", -1)), ostr])
+	quit(0)
+	return true
+
+# Round-74 motion arms: execute the authored "steps" in order and return
+# the post-step observable tuples. A step may teleport the actor ("tp"),
+# re-assign the agent's target ("set_target"), or both — a combined step
+# applies set_target FIRST then tp, so the query materializes inside the
+# post-teleport read (the lazy-anchor edge: the path pins to the position
+# live at the first forcing call, not at assignment). "wait" physics
+# frames elapse before the read (default 5; 0 reads live call-time).
+func _run_steps(steps: Array, agent: NavigationAgent3D, actor: Node3D) -> Array:
+	var out: Array = []
+	for step in steps:
+		if step.has("set_target"):
+			agent.target_position = step["set_target"]
+		if step.has("tp"):
+			actor.global_position = step["tp"]
+		for i in range(int(step.get("wait", 5))):
+			await physics_frame
+		out.append(_read_state(agent, actor))
+	return out
+
+# Asserts the pre-motion tuple on st (same key order as _run_pop_arm),
+# then each step's full authored tuple including the complete stored path
+# array — the per-step path pin is the frozen-path falsification edge: a
+# path element that moved without an authored re-query fails the step.
+func _run_motion_arm(actor: Node3D, arm_name: String, cfg: Dictionary,
+		st: Dictionary, states: Array) -> bool:
+	var diag := ""
+	var want_path: Array = cfg["path"]
+	if st["idx"] != cfg["idx"]:
+		diag = "idx=%d expected=%d" % [st["idx"], cfg["idx"]]
+	elif st["next"].distance_to(cfg["next"]) > POS_TOL:
+		diag = "next=%s expected=%s" % [_v3(st["next"]), _v3(cfg["next"])]
+	elif st["final"].distance_to(cfg["final"]) > POS_TOL:
+		diag = "final=%s expected=%s" % [_v3(st["final"]), _v3(cfg["final"])]
+	elif absf(st["dist"] - cfg["dist"]) > DIST_TOL:
+		diag = "dist=%.6f expected=%.6f" % [st["dist"], cfg["dist"]]
+	elif st["reachable"] != cfg["reachable"] or st["reached"] != cfg["reached"] \
+			or st["finished"] != cfg["finished"]:
+		diag = "flags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
+			st["reachable"], st["reached"], st["finished"],
+			cfg["reachable"], cfg["reached"], cfg["finished"]]
+	elif st["path"].size() != want_path.size():
+		diag = "npath=%d expected=%d path=%s" % [st["path"].size(), want_path.size(), st["path"]]
+	elif diag == "":
+		for i in range(want_path.size()):
+			if st["path"][i].distance_to(want_path[i]) > POS_TOL:
+				diag = "path[%d]=%s expected=%s path=%s" % [i, _v3(st["path"][i]), _v3(want_path[i]), st["path"]]
+				break
+	if diag == "":
+		var epos: Vector3 = cfg["spawn"]
+		for i in range(states.size()):
+			var st_i: Dictionary = states[i]
+			var es: Dictionary = cfg["steps"][i]
+			if es.has("tp"):
+				epos = es["tp"]
+			var esp: Array = es["path"]
+			if st_i["pos"].distance_to(epos) > 0.0001:
+				diag = "step%d pos=%s expected=%s" % [i, _v3(st_i["pos"]), _v3(epos)]
+			elif st_i["idx"] != es["idx"]:
+				diag = "step%d idx=%d expected=%d" % [i, st_i["idx"], es["idx"]]
+			elif st_i["next"].distance_to(es["next"]) > POS_TOL:
+				diag = "step%d next=%s expected=%s" % [i, _v3(st_i["next"]), _v3(es["next"])]
+			elif st_i["final"].distance_to(es["final"]) > POS_TOL:
+				diag = "step%d final=%s expected=%s" % [i, _v3(st_i["final"]), _v3(es["final"])]
+			elif absf(st_i["dist"] - es["dist"]) > DIST_TOL:
+				diag = "step%d dist=%.6f expected=%.6f" % [i, st_i["dist"], es["dist"]]
+			elif st_i["reachable"] != es["reachable"] or st_i["reached"] != es["reached"] \
+					or st_i["finished"] != es["finished"]:
+				diag = "step%d flags reachable=%s reached=%s finished=%s expected=%s,%s,%s" % [
+					i, st_i["reachable"], st_i["reached"], st_i["finished"],
+					es["reachable"], es["reached"], es["finished"]]
+			elif st_i["path"].size() != esp.size():
+				diag = "step%d npath=%d expected=%d path=%s" % [i, st_i["path"].size(), esp.size(), st_i["path"]]
+			else:
+				for j in range(esp.size()):
+					if st_i["path"][j].distance_to(esp[j]) > POS_TOL:
+						diag = "step%d path[%d]=%s expected=%s path=%s" % [
+							i, j, _v3(st_i["path"][j]), _v3(esp[j]), st_i["path"]]
+						break
+			if diag != "":
+				break
+	if diag != "":
+		return _fail(actor, arm_name + " " + diag)
+	var idxs := PackedStringArray()
+	for si in states:
+		idxs.append(str(si["idx"]))
+	var stf: Dictionary = states[states.size() - 1]
+	_cleanup(actor)
+	print("PASS navagent3d_detour %s steps=%d idxs=%s next=%s final=%s dist=%.6f pathlen=%.6f reachable=%s reached=%s finished=%s"
+		% [arm_name, states.size(), ",".join(idxs), _v3(stf["next"]), _v3(stf["final"]),
+		stf["dist"], stf["pathlen"], stf["reachable"], stf["reached"], stf["finished"]])
 	quit(0)
 	return true
