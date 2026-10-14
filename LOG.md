@@ -895,3 +895,47 @@ corpus/knowledge/seed.md).
 - Per-axis verdicts (Sol `reports/round-77/r77-adjudicator.md`): ADMIT.
   Work `35dfbe2` + hygiene `565318c`/`5e02b25`/`a5ae849`; report-last
   follows.
+
+## Round 78 — devin host — depth: map_set_active(false) permanence bounded to a measured +1200f (no late flush, queued write survives); callsite pair pinned as sample-base shift (bound 2 vs 1, same sync drain)
+
+- Declared (dispatch brief): ladder the inactive-map wait
+  {20,60,120,300}f on the link-kill-under-mapoff arm — falsifiable
+  claim permanent-stale, a late flush (map_iter bump, tuple change) at
+  any rung falsifies and becomes the bound; plus pin the r76-critic
+  `_physics_process` callsite finding as tracked CASES — same
+  link-kill from {coroutine-resume, _physics_process} contexts with
+  edge-shift receipts; all 173 prior rows + probes + Node byte-stable.
+- Wave `shokunin-train-20261014-w9`: leaf set
+  `reports/round-78/r78-{baseline,boundary,critic,reviewer,scout,
+  scribe}.md` landed; author report + verifier + simplifier seats
+  died to free-model rate limits (3 respawn attempts). The author's
+  committed diff was verified post-land by the critic (all 3 arms
+  byte-verbatim, merged 176/176) and the operator's own battery replay
+  (176/176 on efcf33c).
+- Work commit `efcf33c`: navagent3d_detour.gd +243 —
+  `mut_mapoff_ladder` (bound=5, groups=2 sizes=5,1; per-rung
+  map_iter/link_iter falsifier pins + iter_watch canary), callsite
+  pair `mut_ctx_resume` bound=2 / `mut_ctx_phys` bound=1 (PhysMutator
+  drains inside the firing tick), `_read_srv` map_iter pin; CASES +3
+  rows insertion-only.
+- Measured: permanence through +1200f (boundary, zero map_changed
+  emissions — bound extended 80x over r76's +15f); reactivation edge
+  on+2 wait-length-independent; mid-wait force stamps the object iter
+  without publishing and halves the post-on edge; setter order inert
+  under inactivity (4-seat convergence).
+- Critic correction absorbed: the callsite bound 2-vs-1 pair is a
+  SAMPLE-BASE artifact — both writes apply in the same per-tick sync
+  drain; header + PhysMutator comments rephrased to the same-drain /
+  sample-base semantics (was "applies at +1" / "one queue-stage
+  deeper" reading as absolute latency).
+- Scribe: permanence confirmed on own harness (56 receipts, fresh-rung
+  ≡ cumulative under inactivity — no sync phase to race); run-1
+  battery flakes (3 moving-agent rows under wave load) re-passed 3/3
+  standalone — recorded as load jitter.
+- Non-author verification: verifier seat never survived rate limits;
+  operator adjudicator replay on `efcf33c` = 176/176 + all 3 new arms
+  byte-verbatim + spot-runs on separate scratch. Bounded: Godot 4.7.2,
+  60tps, this host; +1200f is a measured bound not "never"; callsite
+  constants are context-specific.
+- Per-axis verdicts (Sol `reports/round-78/r78-adjudicator.md`):
+  ADMIT. Report-last commit follows.

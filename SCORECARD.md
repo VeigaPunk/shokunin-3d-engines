@@ -77,3 +77,13 @@ Sol `r76-adjudicator.md`: four-way convergence on constants (author, critic, bou
 | calibration | **unchanged** | +20/−0 additive CASES; 163 prior rows byte-stable vs independent r76 verifier receipt; Node 31/31; seeds_unchanged; bare-dict mutation order unchanged. |
 
 Sol `r77-adjudicator.md`: declared claim ADMIT — mechanism is dead-write voiding not emergence (critic correction absorbed); force-update serve edge is per-class (link jitter / region deterministic −1f) with only deterministic samples pinned. Non-author `r77-verifier.md`: **AGREE 6/6** on `35dfbe2` — 173/173 + 31/31 + jitter reproduced 6/10 vs 4/10. Bounded: Godot 4.7.2, 60tps; w1 jitter is host phase-dependent; verdict groups hide non-serve state (truth digests = open frontier). Work `35dfbe2` + hygiene `565318c`/`5e02b25`/`a5ae849`; report-last follows.
+
+## Round 78 verdict — 2026-10-14
+
+| axis | Sol verdict | evidence |
+|---|---|---|
+| depth | **improved locally** | map-off permanence extended to a measured +1200f bound (80x over r76) with the falsifier wired in-fixture (per-rung map_iter/link_iter pins, iter_watch canary); reactivation edge on+2 wait-independent; callsite pair resolved to sample-base semantics (critic: same sync drain for both writes) — kills the r76 "−1 tick" misreading. |
+| coverage | **improved locally** | +3 tracked CASES (mut_mapoff_ladder / mut_ctx_resume / mut_ctx_phys) insertion-only; `_read_srv` gained the `map_iter` falsifier pin the scout/reviewer flagged. |
+| calibration | **unchanged** | additive CASES + comment precision only; 173 prior rows + 4 probes + Node 31/31 byte-stable (critic merged-battery + operator replay 176/176). |
+
+Sol `r78-adjudicator.md`: permanence claim CONFIRMED as a bounded measured regime (+1200f, falsifier armed); callsite finding corrected to sample-base. Non-author: verifier seat lost to rate limits (3 respawns); operator adjudicator replay on `efcf33c` = 176/176 + arms byte-verbatim; critic verified the merged diff 176/176 independently. Bounded: Godot 4.7.2 / 60tps / this host; permanence = bounded regime; callsite constants context-specific. Work commit `efcf33c`; report-last commit follows.
