@@ -939,3 +939,34 @@ corpus/knowledge/seed.md).
   constants are context-specific.
 - Per-axis verdicts (Sol `reports/round-78/r78-adjudicator.md`):
   ADMIT. Report-last commit follows.
+
+## Round 79 — 2026-10-14 (wave shokunin-train-20261101-w10, runtime expansion)
+
+- Declared move (coverage/new-runtime): first-contact Blender 5.2.1 LTS
+  headless bpy — claim "direct RNA writes synchronous, depsgraph reads
+  lag by one evaluation" (Godot getter-vs-serve two-layer analogue).
+- Scout landed the entire measured lattice before the rate-limit
+  massacre killed the other 25 wave-10 seats: `blender -b -P` viable
+  (4 runs, exit 0, stderr byte-empty, ~0.4s); written RNA synchronous;
+  derived RNA (matrix_world) lags at w0 — the split is write-through
+  vs evaluation-gated, NOT RNA-vs-depsgraph; evaluated_depsgraph_get()
+  IS the eval event (fresh always fresh; shared graph is_same=True —
+  one get flushes held handles); NO implicit drain between statements
+  (draincheck 3x stale — unlike Godot's per-tick serve); held-handle
+  staleness unbounded (map_off-analogue, not 2f/3f); membership via
+  object_instances propagates held-stale/fresh-immediate; evaluated
+  visible_get()/hide_get() = non-signal (pinned as quirk).
+- Operator substitution: author seat dead; operator promoted scout's
+  probes verbatim + membership/draincheck/shared arms into tracked
+  corpus/fixtures/bpy_sync_probe.py, wrote sibling runner
+  corpus/fixtures/bpy_battery.py (37 pinned cases; run_battery.py
+  untouched → 176 prior rows byte-stable by construction).
+- Own replay: 37/37 PASS (bpy-20261014T135140188222Z), ~0.6s wall,
+  PROBE_DONE, 0 fatals.
+- Remaining seats (critic/boundary/scribe/simplifier/reviewer/verifier)
+  pending free-pool reset; falsification/deletion flags land post-reset
+  if warranted — round stays open for seat review before the next
+  claim layer builds on it.
+- Verdict: provisional ADMIT (claim half-confirmed/half-narrowed —
+  honest narrowed semantics recorded); bounded to Blender 5.2.1 headless
+  `blender -b -P`, this host.

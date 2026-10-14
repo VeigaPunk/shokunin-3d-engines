@@ -87,3 +87,13 @@ Sol `r77-adjudicator.md`: declared claim ADMIT — mechanism is dead-write voidi
 | calibration | **unchanged** | additive CASES + comment precision only; 173 prior rows + 4 probes + Node 31/31 byte-stable (critic merged-battery + operator replay 176/176). |
 
 Sol `r78-adjudicator.md`: permanence claim CONFIRMED as a bounded measured regime (+1200f, falsifier armed); callsite finding corrected to sample-base. Non-author: verifier seat lost to rate limits (3 respawns); operator adjudicator replay on `efcf33c` = 176/176 + arms byte-verbatim; critic verified the merged diff 176/176 independently. Bounded: Godot 4.7.2 / 60tps / this host; permanence = bounded regime; callsite constants context-specific. Work commit `efcf33c`; report-last commit follows.
+
+## Round 79 verdict — 2026-10-14
+
+| axis | Sol verdict | evidence |
+|---|---|---|
+| coverage | **improved locally** | first NEW runtime in lane history: Blender 5.2.1 bpy headless under measurement — 9-arm probe + 37-case pinned battery (`bpy_battery.py`); full two-layer lattice measured (write-through vs evaluation-gated, shared-graph flush, absent drain, membership edge, non-signal quirk) |
+| depth | **improved locally** | the r76–r78 two-layer Godot model now has a cross-runtime twin: bpy held-handle staleness = unbounded (map_off-analogue), drain absent (vs per-tick serve) — the generalization boundary itself is mapped |
+| calibration | **unchanged** | new sibling runner only; `run_battery.py` untouched, all 176 prior rows byte-stable by construction |
+
+Sol `r79-adjudicator.md` (provisional): claim ADMIT-as-narrowed — split is write-through vs evaluation-gated not RNA-vs-depsgraph. Author = operator-substituted (free-pool massacre); scout lattice reproduced 37/37 on the tracked fixture. Verifier pending post-reset. Bounded: Blender 5.2.1 LTS, `blender -b -P`, this host. Work commit follows.
