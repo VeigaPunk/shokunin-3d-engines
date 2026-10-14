@@ -1344,8 +1344,16 @@ def _ec_x2_instance_refused():
     # The enum rejection ALSO prints a C-level "reports | ERROR" line to
     # fd1 with an uptime timestamp -- it bypasses the (buffered) print()
     # path and would jitter the receipt's raw stdout, so the two
-    # assignments run under a bounded fd1->devnull redirect. Python emit()
-    # bytes are buffered and unaffected; fd1 is restored in finally.
+    # assignments run under a bounded fd1->devnull redirect. The C stdio
+    # buffer is flushed FIRST so already-pending C bytes (the startup
+    # banner) land on fd1 before the redirect can swallow them. Python
+    # emit() bytes are buffered and unaffected; fd1 is restored in
+    # finally.
+    try:
+        import ctypes
+        ctypes.CDLL("libc.so.6").fflush(None)   # land pending C stdout bytes
+    except Exception:
+        pass
     _fd1 = os.dup(1)
     try:
         _dn = os.open(os.devnull, os.O_WRONLY)
