@@ -14,9 +14,12 @@ simplifier, scribe, boundary + named non-author verifier (`r74-verifier.md`).
 geometry + simplifier 18/18 load-bearing)
 
 1. **Stored path frozen under motion** — CONFIRMED, sharpened: freeze is
-   conditional on `euclid(agent, path[idx]) < path_max_distance` STRICT
-   (scribe's true-equality datapoint: 5.000000 == pmd re-queries — strict
-   `<` confirmed, not `<=`); breach re-queries lazily from live pos,
+   conditional on `segment_distance(agent, path[idx-1]→path[idx]) <
+   path_max_distance` — boundary corrected the operand: distance to the
+   CURRENT LEG SEGMENT, not the waypoint (mid-void 1.0-from-both-endpoints
+   stays frozen at pmd 0.8); breach is INCLUSIVE at exact equality
+   (scribe's 5.000000 datapoint re-queries); breach re-queries lazily
+   from live pos,
    idx→0, no undo on return; pmd authored value respected (pmd=2, pmd
    offmesh). Finished latch gates even the re-query off.
 2. **Pop follows live position** — CONFIRMED: monotone sequential strict-`<`
