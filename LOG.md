@@ -967,6 +967,7 @@ corpus/knowledge/seed.md).
   pending free-pool reset; falsification/deletion flags land post-reset
   if warranted — round stays open for seat review before the next
   claim layer builds on it.
-- Verdict: provisional ADMIT (claim half-confirmed/half-narrowed —
-  honest narrowed semantics recorded); bounded to Blender 5.2.1 headless
-  `blender -b -P`, this host.
+- Verdict: ADMIT-as-narrowed — write-through vs evaluation-gated; no
+  implicit drain. Verifier AGREE 4/4 (byte-identical x3); critic corrections
+  folded 9afcdc2 (quirk_drift split). Bounded Blender 5.2.1 `blender -b -P`,
+  this host. (Sol final, wave-10)
