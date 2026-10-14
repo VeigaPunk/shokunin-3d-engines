@@ -846,3 +846,52 @@ corpus/knowledge/seed.md).
   156→163), depth improved locally (permanent-stale regime distinct
   from the latch mechanism; callsite qualifier), calibration unchanged.
   Work commit `3ab09fd` + hygiene `8a67f71`; report-last follows.
+
+## Round 77 — devin host — depth: mutation apply-order + map_force_update reach + wait-ladder verdict groups
+
+- Declared (author dispatch brief; retroactive record): measure whether
+  `_apply_mutation`'s fixed application order is bypassable — explicit
+  `mutate` arrays of sub-dicts; measure `map_force_update` reach on the
+  getter and serve edges; emit wait-ladder verdict-groups derived from
+  observed tuple signatures (bound + group sizes per RID class).
+  Preserve all 163 prior cases + probes + Node suites.
+- Wave `shokunin-train-20261014-w8`: leaf set
+  `reports/round-77/r77-{author,baseline,boundary,critic,reviewer,scout,
+  scribe,simplifier,verifier}.md`, disjoint scratch `corpus/live/r77-*/`.
+- Author `reports/round-77/r77-author.md`: `navagent3d_detour.gd`
+  +501/−33 — `_mut_list`/`_apply_mutation` array fan-out, `srv_get`/
+  `ladder` schema keys, `_tuple_sig` canonicalizer, `map_force` key;
+  `run_battery.py` +20/−0 (10 new CASES). Battery 173/173 + 4 probes +
+  Node 31/31; 163 prior rows byte-stable.
+- Measured (convergent across scout/boundary/critic/verifier):
+  apply-order load-bearing ONLY through RID lifecycle — doomed-RID
+  voiding both directions (`mut_ord_xform_renew` unmoved `(0,0,0)` vs
+  `mut_ord_renew_xform` moved `(5,0,0)`; verifier own-geometry probe);
+  all 6 perms of {Rdel,Rrec,Rx03} → THREE outcome classes incl.
+  region-gone (Rrec→Rdel frees the new RID); 2f empty-path interlude
+  before recreate lands at f4; order sensitivity pairwise
+  (RID-rebinding + same-field last-wins); +1 flush coupling order-inert;
+  surviving-object pairs inert; `_physics_process` callsite = same
+  partition −1 tick. map_force_update: getter edge collapses same-turn
+  (region iter stamp stays w1); serve edge per-class — link JITTERED
+  {w1 ~15-20%,w2} (critic ~5/30, verifier 6/10), region DETERMINISTIC
+  3f→2f (9/9); arm pins w0+w3 only, skips jittered w1 (caught flaking
+  inside official battery). Ladder: link bound=2 groups [2,2]; region
+  bound=3 groups [3,2] — r76 edges re-derived from data; groups are
+  serve-surface only (omk masking witness: identical served tuple,
+  nreg=1 vs 0).
+- Critic corrections absorbed: "emergent seam" → dead-write voiding;
+  fixture comment "SERVE edge does not collapse" falsified for region
+  (deterministic 3f→2f) — corrected post-verifier `565318c` +
+  mark-vs-phase mechanism line `5e02b25` + 4th stale-site fix and two
+  simplifier-proven deletions `a5ae849` (dead link_layers srv_get
+  branch, st2 dead store — 3rd flag).
+- Integration: work commit `35dfbe2` (boundary byte-verified landed diff
+  173/173); hygiene `565318c` per-class comment fix.
+- Non-author `reports/round-77/r77-verifier.md`: **AGREE 6/6** on
+  `35dfbe2` — independent geometry probe both doomed-RID directions,
+  force jitter 6/10-vs-4/10 reproduced, ladder re-derived, 173/173 +
+  31/31 Node, prior-163 0-mismatch vs r76 verifier receipt.
+- Per-axis verdicts (Sol `reports/round-77/r77-adjudicator.md`): ADMIT.
+  Work `35dfbe2` + hygiene `565318c`/`5e02b25`/`a5ae849`; report-last
+  follows.

@@ -67,3 +67,13 @@ Non-author `reports/round-75/r75-verifier.md`: **AGREE 5/5** — 156/156 + 4 pro
 | calibration | **unchanged** | additive CASES + one `map_active` mutate key; gate/readback semantics unchanged; warranted `_check_tuple` consolidation applied (byte-identical 78/78 + 19/19 mutants, battery re-verified 163/163). |
 
 Sol `r76-adjudicator.md`: four-way convergence on constants (author, critic, boundary 54/54+24/24 + 96 cross-process, scribe own-geometry). Non-author `r76-verifier.md`: **AGREE 5/5** on `3ab09fd` — 163/163 + 4 probes + Node 31/31, 156 prior rows unchanged. Bounded: 4.7.2.stable headless 60tps, single map/region, coroutine/deferred write context. Work `3ab09fd` + hygiene `8a67f71`; report-last follows.
+
+## Round 77 verdict — 2026-10-14
+
+| axis | Sol verdict | evidence |
+|---|---|---|
+| depth | **improved locally** | Apply-order mechanism pinned: load-bearing only through RID lifecycle (doomed-RID voiding, verifier own-geometry both directions; boundary all-6-perms → 3 outcome classes + 2f empty interlude); map_force_update reach split — getter edge collapses same-turn; serve edge = mark-vs-phase race: prior forcing read marks dirty → next sync phase publishes early (link jittered {1,2} ~15-20%; region −1f deterministic; single-read-per-rung sees no collapse); jittered cell honestly skipped not pinned. |
+| coverage | **improved locally** | `mutate` array schema + `_tuple_sig`/`ladder`/`srv_get` receipt keys; 10 new CASES (mut_ord_*×6, mut_force_*×2, mut_ladder_*×2); verdict-groups re-derive r76 edges from data (link [2,2] bound 2; region [3,2] bound 3). |
+| calibration | **unchanged** | +20/−0 additive CASES; 163 prior rows byte-stable vs independent r76 verifier receipt; Node 31/31; seeds_unchanged; bare-dict mutation order unchanged. |
+
+Sol `r77-adjudicator.md`: declared claim ADMIT — mechanism is dead-write voiding not emergence (critic correction absorbed); force-update serve edge is per-class (link jitter / region deterministic −1f) with only deterministic samples pinned. Non-author `r77-verifier.md`: **AGREE 6/6** on `35dfbe2` — 173/173 + 31/31 + jitter reproduced 6/10 vs 4/10. Bounded: Godot 4.7.2, 60tps; w1 jitter is host phase-dependent; verdict groups hide non-serve state (truth digests = open frontier). Work `35dfbe2` + hygiene `565318c`/`5e02b25`/`a5ae849`; report-last follows.
