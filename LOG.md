@@ -1082,3 +1082,27 @@ corpus/knowledge/seed.md).
   (186 prior rows byte-identical prefix sha c0c3fcbb).
 - Verdict: ADMIT-corr (Sol, wave-15). Bounded: Godot
   4.7.2.stable.arch_linux.ed1daf0bf, GodotPhysics3D/Jolt, this host.
+
+## Round 85 — Jolt×threaded + Dummy control + server-write tier
+
+- MOVE: three cells on the generated-project child harness:
+  jolt_threaded (Jolt + run_on_separate_thread=true),
+  dummy_refused (Dummy must read unexpected, not a known Jolt class),
+  srv_phase_delta (PhysicsServer3D write path, zero node ctor).
+  Cases 188 -> 191. _child_split(prefix) shared sweep;
+  _spawn_child single-sources 4 spawn sites; bounded dss retry;
+  allow_inaccessible on exactly the two threaded arms.
+- RECOVERY: first author died mid-landing (rate limit) with a
+  parse-broken diff; boundary caught v1 DOA; deepseek completion seat
+  landed f230443. Wave-B all deepseek-flash.
+- VERIFIED: 191/191 x4 executions identical tuple sha; prior 188 rows
+  identical positions + stdout/stderr byte-identical; threading
+  invariance at map+constant; backend-determinism real (other backend
+  same-signature x5 vs Dummy unexpected x5); mutations 6/6 load-bearing.
+- FOLDS (4e6fbe3): LEAKED_OBJECTDB singular; falsified counts 11/12
+  + 10/10; stale enumeration; README 191/145.
+- RECORDED: jt_threaded is child self-report (real ablation still
+  caught); dummy_class NOTE key misnamed (rename deferred); jolt_threaded
+  child.log not byte-stable — map is the witness; >=8/12 never <11.
+- Seats: author(completion) + boundary + critic + reviewer + simplifier
+  + verifier + baseline + scribe all landed. ADMIT-corr.

@@ -144,3 +144,5 @@ Sol `r83-adjudicator.md`: ADMIT-corr — lattice confirmed with backend scope ho
 | calibration | **improved** | child dispatch total (silent wrong-body default removed); classifier totality (zero-evidence elif closed); stale-log forge path unlinked; ObjectDB leak arm mirrored into parent scans; insertion-only +617/-6, 188/188, prior 186 normalized prefix c0c3fcbb unchanged |
 
 Sol `r84-adjudicator.md`: ADMIT-corr — Jolt pinning with live witness, write-phase cell landed, child-path totality hardened. Verifier AGREE 15/15 on `01f7d4f`; baseline zero-drift `c4b2fa2`->`01f7d4f`. Bounded: Godot 4.7.2, GodotPhysics3D/Jolt pair, this host. Work `01f7d4f` + folds `a56f683`.
+
+| r85 | game-dev-3d | backend x threading | ADMIT-corr | f230443 + 4e6fbe3 |
