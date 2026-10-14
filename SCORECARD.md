@@ -37,3 +37,13 @@ Non-author `reports/round-72/r72-verifier.md`: **AGREE all five claims** — 112
 | calibration | **unchanged** | thresholds untouched; equality edges measured strict per gate; no bounds changed. |
 
 Non-author `reports/round-73/r73-verifier.md`: **AGREE all five claims** — 127/127 + 4 probes + seeds on committed `b41fb33`, 112×12 prior 0-mismatch, 15/15 verbatim CASES replay, Node 31/31. Bounded: Godot 4.7.2 headless, stationary agent, this geometry family; enter_cost inertness measured-not-explained; metadata flags verified on installed binary only. Work commit `b41fb33`; report-last commit follows.
+
+## Round 74 verdict — 2026-10-14
+
+| axis | Sol verdict | evidence |
+|---|---|---|
+| depth | **improved locally** | lazy-update model measured: forcing-getter set vs pure readers; stored path frozen strictly under pmd (5.000000==pmd re-queries); pop = live-pos sequential strict-`<`; latch survives all motion, released by ANY target_position assignment (same-value too); lazy materialization anchored at first forcing call. |
+| coverage | **improved locally** | 18 `mv_*` arms + `steps`/`pmd` machinery; pmd gate, bank-side re-anchor (on-mesh verbatim vs off-mesh clamp), pop-through-link-under-motion, bridge walk. 145/145, 4/4 probes, Node 31/31. |
+| calibration | **unchanged** | no threshold/gate edits; engine-internal comparators pinned empirically. |
+
+Non-author `reports/round-74/r74-verifier.md`: **AGREE on all six claims** — 145/145 + 4/4 probes + Node 31/31 on committed state, pmd boundary recomputed independently (4.9951 frozen / 5.0249 re-query), 6/6 byte-exact spot checks, prior 127 rows byte-preserved. Sol `r74-adjudicator.md` reproduced committed-state arms byte-exact. Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf this host; teleport-motion only; single map/region; engine-internal pmd comparator pinned empirically. No cross-build/internals inference. Work commit `fc9915e`; report-last commit follows.
