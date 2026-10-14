@@ -38,6 +38,7 @@ Companion runner: corpus/fixtures/bpy_battery.py pins the measured lattice.
 """
 
 import bpy
+import time
 import traceback
 
 D = bpy.data
@@ -413,9 +414,625 @@ def arm_vis_quirk():
                                   .object_instances if not i.is_instance)))
 
 
+# ============================================================ r80: evalcat
+# Round-80 arm: folds the frontier eval-event catalogue (reports/frontier/
+# fa-bpy-evalcat.md, probes in corpus/live/frontier-bpyeval/) into pinned
+# per-mutation-class edge rows. Same build: Blender 5.2.1 LTS headless.
+#
+# Claim under test (round-80 declared move): the eval-event set
+#   {evaluated_depsgraph_get, view_layer.update, frame_set, dg.update,
+#    bpy.ops}
+# is enumerable and CLOSED -- falsified if any probed mutation class
+# flushes a held depsgraph handle without one of those events firing.
+# _ec_edge() enforces this mechanically per row: a bare (invoked=None)
+# row whose held read moved OR which fired any watched handler ran an
+# eval event outside the set -> edge forced to FALSIFIED and counted in
+# the closing `closed` row's violations=N.
+#
+# Row schema (all under arm name "evalcat"):
+#   ARM evalcat | <point> | EDGE | held=<flushed|stale|na> invoked=<e|none>
+#        dpre=N dpost=N dfcp=N dfc=N dund=N dup_fired=<b> fc_fired=<b>
+#        edge=<label> [per-class witnesses]
+#   edge=0        the action is itself an eval event (bpy.ops / explicit)
+#   edge=1        bare write: held stale at write+0, one tagged eval binds
+#   edge=frame    inert through tagged evals; binds only at frame_set
+#   edge=cond     enumerated event is conditional: clean graph fires nil
+#   edge=absent   no eval event on this axis at all (wall-time drain)
+#   edge=FALSIFIED closed-set violation (auto-computed, never caller-set)
+#
+# Handler snapshot per row: dpre/dpost = depsgraph_update_pre/post,
+# dfcp/dfc = frame_change_pre/post, dund = undo_post. Per frontier,
+# msgbus and undo_post are dead surfaces under `-b -P` -- dund is
+# emitted for the receipt but is never a pinned witness.
+
+EVALCAT_LOG = {"pre": [], "post": [], "fcp": [], "fc": [], "und": []}
+EVALCAT_VIOLATIONS = [0]
+EVALCAT_EVENTS = ("evaluated_depsgraph_get", "view_layer.update",
+                  "frame_set", "dg.update", "bpy.ops")
+
+
+def _ec_mk(key):
+    def h(*a):
+        EVALCAT_LOG[key].append(len(a))
+    return h
+
+
+def _ec_register():
+    """read_factory_settings clears non-persistent handlers: reinstall the
+    watched lists and zero counts once per sub-probe (frontier convention)."""
+    for lst in (bpy.app.handlers.depsgraph_update_pre,
+                bpy.app.handlers.depsgraph_update_post,
+                bpy.app.handlers.frame_change_pre,
+                bpy.app.handlers.frame_change_post,
+                bpy.app.handlers.undo_post):
+        for h in list(lst):
+            lst.remove(h)
+    bpy.app.handlers.depsgraph_update_pre.append(_ec_mk("pre"))
+    bpy.app.handlers.depsgraph_update_post.append(_ec_mk("post"))
+    bpy.app.handlers.frame_change_pre.append(_ec_mk("fcp"))
+    bpy.app.handlers.frame_change_post.append(_ec_mk("fc"))
+    bpy.app.handlers.undo_post.append(_ec_mk("und"))
+    for k in EVALCAT_LOG:
+        EVALCAT_LOG[k].clear()
+
+
+def _ec_reset():
+    bpy.ops.wm.read_factory_settings(use_empty=True)
+    _ec_register()
+
+
+def _ec_snap():
+    return {k: len(v) for k, v in EVALCAT_LOG.items()}
+
+
+def _ec_since(h0):
+    h1 = _ec_snap()
+    return {k: h1[k] - h0[k] for k in h1}
+
+
+def _ec_tri(name="m"):
+    me = D.meshes.new(name)
+    me.from_pydata([(0, 0, 0), (1, 0, 0), (0, 1, 0)], [], [(0, 1, 2)])
+    return me
+
+
+def _ec_grid(n=4):
+    me = D.meshes.new("g")
+    vs, fs = [], []
+    for y in range(n):
+        for x in range(n):
+            vs.append((x / (n - 1), y / (n - 1), 0.0))
+    for y in range(n - 1):
+        for x in range(n - 1):
+            i = y * n + x
+            fs.append((i, i + 1, i + 1 + n, i + n))
+    me.from_pydata(vs, [], fs)
+    return me
+
+
+def _ec_settle(me=None):
+    """Fresh object linked in view layer + baseline eval; (ob, held dg0)."""
+    ob = D.objects.new("o", me or _ec_tri())
+    C.scene.collection.objects.link(ob)
+    C.view_layer.update()
+    return ob, C.evaluated_depsgraph_get()
+
+
+def _ec_activate(ob):
+    C.view_layer.objects.active = ob
+    for o in C.scene.objects:
+        o.select_set(o == ob)
+
+
+def _ec_loc(ob, dg):
+    try:
+        return v3(ob.evaluated_get(dg).location)
+    except Exception as e:
+        return "ERR:" + type(e).__name__
+
+
+def _ec_mw(ob, dg):
+    try:
+        return v3(ob.evaluated_get(dg).matrix_world.translation)
+    except Exception as e:
+        return "ERR:" + type(e).__name__
+
+
+def _ec_verts(ob, dg):
+    """Single-token evaluated-mesh witness (a space would break kv parse)."""
+    try:
+        ev = ob.evaluated_get(dg)
+        me = ev.to_mesh()
+        n = len(me.vertices)
+        mx = max((v.co.x for v in me.vertices), default=-1.0)
+        ev.to_mesh_clear()
+        return "verts%d:xmax%.3f" % (n, mx)
+    except Exception as e:
+        return "ERR:" + type(e).__name__
+
+
+def _ec_names(dg):
+    try:
+        return "|".join(sorted(i.object.name for i in dg.object_instances
+                               if not i.is_instance))
+    except Exception as e:
+        return "ERR:" + type(e).__name__
+
+
+def _ec_opret(r):
+    try:
+        return "|".join(sorted(r))
+    except Exception:
+        return str(r)
+
+
+def _ec_held(pre, post, d):
+    """Held-handle observation across one action window:
+    moved -> flushed; unmoved but a watched eval/frame handler fired ->
+    na (evaluated, this witness can't discriminate); unmoved + silent ->
+    stale. Bare writes MUST come back stale; ops must not."""
+    if post != pre:
+        return "flushed"
+    if d["post"] or d["fcp"] or d["fc"]:
+        return "na"
+    return "stale"
+
+
+def _ec_edge(point, d, held, invoked, edge, **kw):
+    """Emit one per-class edge row and enforce the closed-set rule.
+    invoked = enumerated event deliberately run for this row (one of
+    EVALCAT_EVENTS) or None for bare mutations / non-event axes."""
+    if invoked is None and (held == "flushed" or d["pre"] or d["post"]
+                            or d["fcp"] or d["fc"] or d["und"]):
+        edge = "FALSIFIED"
+        EVALCAT_VIOLATIONS[0] += 1
+    emit("evalcat", point, "EDGE", held=held, invoked=(invoked or "none"),
+         dpre=d["pre"], dpost=d["post"], dfcp=d["fcp"], dfc=d["fc"],
+         dund=d["und"], dup_fired=(d["post"] > 0),
+         fc_fired=(d["fc"] > 0), edge=edge, **kw)
+
+
+def _ec_edge1(held, fresh, expected):
+    """Classify a bare-write row: stale + one tagged eval binds -> edge 1."""
+    if held == "stale":
+        return "1" if fresh == expected else "unbound"
+    return "0" if held == "flushed" else "na"   # flush -> FALSIFIED below
+
+
+def _ec_op_edge(held):
+    """Classify a bpy.ops row: auto-eval proven by held flush, or by a
+    depsgraph_update fire when the witness can't discriminate (na)."""
+    return "0" if held in ("flushed", "na") else "stale"
+
+
+# ------------------------------------------- evalcat sub-probe: event axis
+def _ec_events():
+    """The five enumerated events + bare-write control, one scene: which
+    handler family each fires and whether a held handle flushes."""
+    _ec_reset()
+    scn = C.scene
+    ob, dg0 = _ec_settle()
+
+    # bare RNA write -- the control: no event invoked, must not flush
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    ob.location = (1.0, 0.0, 0.0)
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("rna_write", d, held, None,
+             "1" if held == "stale" else held, held_loc=post)
+
+    # event 1: evaluated_depsgraph_get on a dirty graph (tagged path)
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    dg1 = C.evaluated_depsgraph_get()
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("ev_get", d, held, "evaluated_depsgraph_get",
+             "0" if held == "flushed" else "noeval",
+             held_loc=post, same_obj=(dg1 == dg0))
+
+    # ...but the get is CONDITIONAL: on a clean graph it fires nothing
+    h0 = _ec_snap()
+    _ = C.evaluated_depsgraph_get()
+    d = _ec_since(h0)
+    quiet = not (d["pre"] or d["post"] or d["fcp"] or d["fc"])
+    _ec_edge("ev_getclean", d, "na", "evaluated_depsgraph_get",
+             "cond" if quiet else "uncond")
+
+    # event 2: view_layer.update on a dirty graph (tagged path)
+    ob.location = (2.0, 0.0, 0.0)
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    C.view_layer.update()
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("ev_vlupdate", d, held, "view_layer.update",
+             "0" if held == "flushed" else "noeval", held_loc=post)
+
+    # ...also conditional: clean updates fire nothing
+    h0 = _ec_snap()
+    C.view_layer.update()
+    C.view_layer.update()
+    d = _ec_since(h0)
+    quiet = not (d["pre"] or d["post"] or d["fcp"] or d["fc"])
+    _ec_edge("ev_vlclean", d, "na", "view_layer.update",
+             "cond" if quiet else "uncond")
+
+    # event 3: frame_set(+1) -- frame path: fires fc, bypasses dup
+    ob.location = (3.0, 0.0, 0.0)
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    scn.frame_set(scn.frame_current + 1)
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("ev_frameset", d, held, "frame_set",
+             "0" if held == "flushed" else "noeval",
+             held_loc=post, frame=scn.frame_current)
+
+    # event 3b: frame_set to the SAME frame still evals (r79 cell closed)
+    ob.location = (4.0, 0.0, 0.0)
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    scn.frame_set(scn.frame_current)
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("ev_framesame", d, held, "frame_set",
+             "0" if held == "flushed" else "noeval",
+             held_loc=post, frame=scn.frame_current)
+
+    # event 4: Depsgraph.update() on the held handle itself
+    ob.location = (5.0, 0.0, 0.0)
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    dg0.update()
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("ev_dgupdate", d, held, "dg.update",
+             "0" if held == "flushed" else "noeval", held_loc=post)
+
+
+# --------------------------------------------- evalcat sub-probe: drivers
+def _ec_driver():
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    fc = ob.driver_add("location", 0)                # driver RNA writes
+    if isinstance(fc, (list, tuple)):
+        fc = fc[0]
+    drv = fc.driver
+    drv.type = 'SCRIPTED'
+    drv.expression = "7.0"
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
+    _ec_edge("driver", d, held, None,
+             _ec_edge1(held, fresh, "(7.000,0.000,0.000)"),
+             held_loc=post, fresh=fresh,
+             rna_x="%.3f" % ob.location[0])
+    C.view_layer.update()
+    emit("evalcat", "driver_wU", "DEG", held=_ec_loc(ob, dg0),
+         rna_x="%.3f" % ob.location[0])
+
+    # editing the driver expression itself is the same edge=1 class
+    dg1 = C.evaluated_depsgraph_get()
+    pre = _ec_loc(ob, dg1)
+    h0 = _ec_snap()
+    drv.expression = "9.0"
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg1)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_loc(ob, C.evaluated_depsgraph_get())
+    _ec_edge("driver_expr", d, held, None,
+             _ec_edge1(held, fresh, "(9.000,0.000,0.000)"),
+             held_loc=post, fresh=fresh)
+
+
+# -------------------------------------------- evalcat sub-probe: keyframes
+def _ec_keyframe():
+    """keyframe_insert leaves no graph-visible tag: inert through tagged
+    evals, binds only at frame_set -> edge=frame. Contrast: an explicit
+    layered action build DOES tag -> edge=1."""
+    _ec_reset()
+    scn = C.scene
+    ob, dg0 = _ec_settle()
+    scn.frame_set(1)
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    ob.location = (0.0, 4.0, 0.0)
+    r = ob.keyframe_insert("location", index=1, frame=1)
+    ob.location = (0.0, 0.0, 0.0)                    # base; anim should drive
+    d = _ec_since(h0)
+    post = _ec_loc(ob, dg0)
+    held = _ec_held(pre, post, d)
+    emit("evalcat", "keyframe_ins", "DEG", ret=str(r), held=post)
+
+    ob.hide_viewport = False                         # guaranteed pending tag
+    hU = _ec_snap()
+    C.view_layer.update()
+    dU = _ec_since(hU)
+    tagged = _ec_loc(ob, C.evaluated_depsgraph_get())
+    emit("evalcat", "keyframe_wU", "DEG", upd_dup=dU["post"],
+         held=_ec_loc(ob, dg0), fresh=tagged)
+
+    scn.frame_set(2)
+    f2 = _ec_loc(ob, C.evaluated_depsgraph_get())
+    scn.frame_set(1)
+    f1 = _ec_loc(ob, C.evaluated_depsgraph_get())
+    emit("evalcat", "keyframe_f", "DEG", f2=f2, f1=f1,
+         rna_y="%.3f" % ob.location[1])
+    if held == "stale":
+        edge = ("1" if tagged == "(0.000,4.000,0.000)"
+                else "frame" if f1 == "(0.000,4.000,0.000)" else "unbound")
+    else:
+        edge = "0" if held == "flushed" else "na"
+    _ec_edge("keyframe", d, held, None, edge, ret=str(r),
+             tagged_fresh=tagged, f1=f1, rna_y="%.3f" % ob.location[1])
+
+    # explicit layered action build: DOES raise the relations tag -> edge=1
+    ob2 = D.objects.new("o2", _ec_tri("m2"))
+    scn.collection.objects.link(ob2)
+    C.view_layer.update()
+    dg2 = C.evaluated_depsgraph_get()
+    ad2 = ob2.animation_data_create()
+    pre2 = _ec_loc(ob2, dg2)
+    h0 = _ec_snap()
+    build = "?"
+    try:
+        act2 = D.actions.new("a2")
+        try:
+            slot = act2.slots.new(ob2.id_type, "o2")
+            layer = act2.layers.new("L")
+            strip = layer.strips.new(type='KEYFRAME')
+            cbag = strip.channelbags.new(slot=slot)
+            fc2 = cbag.fcurves.new("location", index=2)
+        except Exception:
+            fc2 = act2.fcurves.new("location", index=2)
+            slot = None
+        fc2.keyframe_points.insert(1, 8.0)
+        ad2.action = act2
+        if slot is not None:
+            ad2.action_slot = slot
+        build = "layered" if slot is not None else "legacy"
+    except Exception as e:
+        build = "ERR:" + type(e).__name__ + ":" + str(e)[:50]
+    d = _ec_since(h0)
+    post2 = _ec_loc(ob2, dg2)
+    held2 = _ec_held(pre2, post2, d)
+    fresh2 = _ec_loc(ob2, C.evaluated_depsgraph_get())
+    _ec_edge("key_explicit", d, held2, None,
+             _ec_edge1(held2, fresh2, "(0.000,0.000,8.000)"),
+             build=build, held_loc=post2, fresh=fresh2)
+
+
+# --------------------------------- evalcat sub-probe: constraint via RNA
+def _ec_con_rna():
+    _ec_reset()
+    scn = C.scene
+    tgt = D.objects.new("tgt", _ec_tri("tm"))
+    scn.collection.objects.link(tgt)
+    tgt.location = (3.0, 0.0, 0.0)
+    ob, dg0 = _ec_settle()                           # settle AFTER tgt exists
+    C.view_layer.update()
+    dg0 = C.evaluated_depsgraph_get()
+    pre = _ec_mw(ob, dg0)
+    h0 = _ec_snap()
+    con = ob.constraints.new('COPY_LOCATION')
+    con.target = tgt
+    d = _ec_since(h0)
+    post = _ec_mw(ob, dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_mw(ob, C.evaluated_depsgraph_get())
+    _ec_edge("con_rna", d, held, None,
+             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             held_mw=post, fresh=fresh, rna_n=len(ob.constraints))
+    C.view_layer.update()
+    emit("evalcat", "con_rna_wU", "DEG", held_mw=_ec_mw(ob, dg0),
+         rna_mw=v3(ob.matrix_world.translation))
+
+
+# ---------------------------------------- evalcat sub-probe: bpy.ops edges
+def _ec_op_apply():
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    _ec_activate(ob)
+    ob.location = (5.0, 0.0, 0.0)                    # RNA write pre-op
+    pre = _ec_verts(ob, dg0)
+    h0 = _ec_snap()
+    try:
+        with C.temp_override(object=ob, active_object=ob,
+                             selected_objects=[ob],
+                             selected_editable_objects=[ob]):
+            r = bpy.ops.object.transform_apply(location=True,
+                                               rotation=False, scale=False)
+        ret = _ec_opret(r)
+    except Exception as e:
+        ret = "ERR:" + type(e).__name__ + ":" + str(e)[:60]
+    d = _ec_since(h0)
+    post = _ec_verts(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("op_apply", d, held, "bpy.ops", _ec_op_edge(held),
+             ret=ret, held_mesh=post, held_loc=_ec_loc(ob, dg0),
+             rna_loc=v3(ob.location))
+
+
+def _ec_op_add():
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    pre = _ec_names(dg0)
+    h0 = _ec_snap()
+    try:
+        r = bpy.ops.mesh.primitive_cube_add(size=2.0, location=(0, 0, 3.0))
+        ret = _ec_opret(r)
+    except Exception as e:
+        ret = "ERR:" + type(e).__name__ + ":" + str(e)[:60]
+    d = _ec_since(h0)
+    post = _ec_names(dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("op_add", d, held, "bpy.ops", _ec_op_edge(held),
+             ret=ret, held_names=post, rna_n=len(D.objects))
+    emit("evalcat", "op_add_fresh", "DEG",
+         names=_ec_names(C.evaluated_depsgraph_get()))
+
+
+def _ec_op_modapply():
+    _ec_reset()
+    ob, dg0 = _ec_settle(_ec_grid())
+    _ec_activate(ob)
+    mod = ob.modifiers.new("subd", 'SUBSURF')        # RNA write, stays stale
+    mod.subdivision_type = 'SIMPLE'
+    mod.levels = 1
+    pre = _ec_verts(ob, dg0)
+    emit("evalcat", "op_modapply_w0", "DEG", held=pre,
+         rna_verts=len(ob.data.vertices))
+    h0 = _ec_snap()
+    try:
+        with C.temp_override(object=ob, active_object=ob,
+                             selected_objects=[ob]):
+            r = bpy.ops.object.modifier_apply(modifier="subd")
+        ret = _ec_opret(r)
+    except Exception as e:
+        ret = "ERR:" + type(e).__name__ + ":" + str(e)[:60]
+    d = _ec_since(h0)
+    post = _ec_verts(ob, dg0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("op_modapply", d, held, "bpy.ops", _ec_op_edge(held),
+             ret=ret, held_mesh=post, rna_verts=len(ob.data.vertices),
+             rna_mods=len(ob.modifiers))
+
+
+def _ec_op_modes():
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    _ec_activate(ob)
+    ob.location = (5.0, 0.0, 0.0)
+    pre = _ec_loc(ob, dg0)
+    try:
+        with C.temp_override(object=ob, active_object=ob,
+                             selected_objects=[ob]):
+            h0 = _ec_snap()
+            r1 = bpy.ops.object.mode_set(mode='EDIT')
+            d1 = _ec_since(h0)
+            post1 = _ec_loc(ob, dg0)
+            held1 = _ec_held(pre, post1, d1)
+            _ec_edge("op_mode_edit", d1, held1, "bpy.ops",
+                     _ec_op_edge(held1), ret=_ec_opret(r1), held_loc=post1)
+
+            h0 = _ec_snap()
+            r2 = bpy.ops.object.mode_set(mode='OBJECT')
+            d2 = _ec_since(h0)
+            post2 = _ec_loc(ob, dg0)
+            held2 = _ec_held(post1, post2, d2)
+            _ec_edge("op_mode_object", d2, held2, "bpy.ops",
+                     _ec_op_edge(held2), ret=_ec_opret(r2), held_loc=post2)
+
+            h0 = _ec_snap()
+            r3 = bpy.ops.object.location_clear()
+            d3 = _ec_since(h0)
+            post3 = _ec_loc(ob, dg0)
+            held3 = _ec_held(post2, post3, d3)
+            _ec_edge("op_locclear", d3, held3, "bpy.ops",
+                     _ec_op_edge(held3), ret=_ec_opret(r3), held_loc=post3,
+                     rna_loc=v3(ob.location))
+    except Exception as e:
+        emit("evalcat", "op_modes", "ERR",
+             err=type(e).__name__ + ":" + str(e)[:80])
+
+
+def _ec_op_conadd():
+    _ec_reset()
+    scn = C.scene
+    tgt = D.objects.new("tgt", _ec_tri("tm"))
+    scn.collection.objects.link(tgt)
+    tgt.location = (3.0, 0.0, 0.0)
+    ob, dg0 = _ec_settle()
+    C.view_layer.update()
+    dg0 = C.evaluated_depsgraph_get()
+    _ec_activate(ob)
+    pre = _ec_mw(ob, dg0)
+    h0 = _ec_snap()
+    try:
+        with C.temp_override(object=ob, active_object=ob,
+                             selected_objects=[ob]):
+            r = bpy.ops.object.constraint_add(type='COPY_LOCATION')
+        ret = _ec_opret(r)
+    except Exception as e:
+        ret = "ERR:" + type(e).__name__ + ":" + str(e)[:60]
+    d = _ec_since(h0)
+    post = _ec_mw(ob, dg0)
+    held = _ec_held(pre, post, d)   # constraint inert w/o target: undiscriminating
+    _ec_edge("op_conadd", d, held, "bpy.ops", _ec_op_edge(held),
+             ret=ret, held_mw=post, rna_n=len(ob.constraints))
+
+    # the RNA target write after the op is still a bare edge=1 write:
+    # the op's auto-eval does not leave the graph permanently live
+    pre = _ec_mw(ob, dg0)
+    h0 = _ec_snap()
+    con = ob.constraints[-1]
+    con.target = tgt
+    d = _ec_since(h0)
+    post = _ec_mw(ob, dg0)
+    held = _ec_held(pre, post, d)
+    fresh = _ec_mw(ob, C.evaluated_depsgraph_get())
+    _ec_edge("conadd_target", d, held, None,
+             _ec_edge1(held, fresh, "(3.000,0.000,0.000)"),
+             held_mw=post, fresh=fresh)
+
+
+# --------------------------------------- evalcat sub-probe: wall-time axis
+def _ec_walltime():
+    """No wall-time drain under -b -P: sleeps + context re-touch never
+    flush a held handle (frontier closed this axis at 0.5/2.0/1.0s)."""
+    _ec_reset()
+    ob, dg0 = _ec_settle()
+    ob.location = (6.0, 0.0, 0.0)
+    pre = _ec_loc(ob, dg0)
+    h0 = _ec_snap()
+    for i, dt in enumerate((0.5, 2.0, 1.0)):
+        t0 = time.monotonic()
+        time.sleep(dt)
+        emit("evalcat", "walltime_s%d" % i, "DEG", dt=dt,
+             held=_ec_loc(ob, dg0), slept="%.2f" % (time.monotonic() - t0))
+    _ = C.scene.frame_current
+    _ = bpy.context.view_layer
+    post = _ec_loc(ob, dg0)
+    d = _ec_since(h0)
+    held = _ec_held(pre, post, d)
+    _ec_edge("walltime", d, held, None,
+             "absent" if held == "stale" else held, held_loc=post)
+    emit("evalcat", "walltime_fresh", "DEG",
+         loc=_ec_loc(ob, C.evaluated_depsgraph_get()))
+
+
+# --------------------------------------------------------- arm: evalcat
+def arm_evalcat():
+    """One arm, per-class edge rows: every sub-probe gets a fresh factory
+    scene + handler reinstall. A FALSIFIED edge row (or a nonzero
+    `closed` violations count) is the claim's refutation surface."""
+    for sp in (_ec_events, _ec_driver, _ec_keyframe, _ec_con_rna,
+               _ec_op_apply, _ec_op_add, _ec_op_modapply, _ec_op_modes,
+               _ec_op_conadd, _ec_walltime):
+        try:
+            sp()
+        except Exception:
+            emit("evalcat", sp.__name__, "FATAL",
+                 err=traceback.format_exc()[:300].replace("\n", " | "))
+    emit("evalcat", "closed", "EDGE",
+         violations=EVALCAT_VIOLATIONS[0],
+         events="|".join(EVALCAT_EVENTS))
+
+
 for f in (arm_transform, arm_hide, arm_modifier, arm_collection,
           arm_membership, arm_draincheck, arm_shared, arm_fresh_handle,
-          arm_vis_quirk):
+          arm_vis_quirk, arm_evalcat):
     try:
         f()
     except Exception:

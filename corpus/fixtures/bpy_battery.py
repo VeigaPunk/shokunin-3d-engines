@@ -10,6 +10,9 @@ pinned key=value assignments. A case FAILs if the line is missing or any
 pinned key disagrees. `non_signal=True` rows pin the measured
 evaluated-visibility quirk for determinism -- they are observations, never
 staleness witnesses (see fixture docstring).
+
+r80 adds the evalcat cases: per-mutation-class EDGE rows pinning the
+frontier eval-event catalogue, incl. the closed-set `violations=0` row.
 """
 
 import argparse
@@ -75,6 +78,117 @@ CASES = [
     ("vis_hidden_deg_nonsignal",      "vis", "hidden-ev", "DEG", {"vis": "False", "hide": "False"}, True),
     ("vis_relinked_rna",              "vis", "relinked", "RNA", {"vis": "True"}, False),
     ("vis_relinked_deg_nonsignal",    "vis", "relinked", "DEG", {"vis": "False", "hide": "False", "in_inst": "True"}, True),
+    # ---------------- r80 evalcat: per-mutation-class edge rows ----------
+    # Claim: the eval-event set {get, vl.update, frame_set, dg.update,
+    # bpy.ops} is enumerable and CLOSED. EDGE rows carry held= state,
+    # invoked= event (or none for bare mutations), per-handler deltas
+    # (dpre/dpost/dfcp/dfc/dund) and the classified edge= label. Any
+    # bare (invoked=none) row that flushes held or fires a watched
+    # handler is auto-emitted edge=FALSIFIED -> the pins below FAIL.
+    # Frontier-measured edge table (fa-bpy-evalcat.md) pinned verbatim;
+    # op eval counts pinned as dup_fired (>=1), never exact (x1/x2 varies).
+    # bare RNA write: no event, held stale -> edge=1
+    ("evalcat_rna_write_edge1",       "evalcat", "rna_write", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "1",
+      "held_loc": "(0.000,0.000,0.000)"}, False),
+    # event rows: tagged path fires dup, frame path fires fc only
+    ("evalcat_ev_get_flush",          "evalcat", "ev_get", "EDGE",
+     {"held": "flushed", "invoked": "evaluated_depsgraph_get",
+      "dup_fired": "True", "fc_fired": "False", "edge": "0",
+      "held_loc": "(1.000,0.000,0.000)", "same_obj": "True"}, False),
+    ("evalcat_ev_getclean_cond",      "evalcat", "ev_getclean", "EDGE",
+     {"held": "na", "dpre": "0", "dpost": "0", "dfcp": "0", "dfc": "0",
+      "edge": "cond"}, False),
+    ("evalcat_ev_vlupdate_flush",     "evalcat", "ev_vlupdate", "EDGE",
+     {"held": "flushed", "invoked": "view_layer.update",
+      "dup_fired": "True", "fc_fired": "False", "edge": "0",
+      "held_loc": "(2.000,0.000,0.000)"}, False),
+    ("evalcat_ev_vlclean_cond",       "evalcat", "ev_vlclean", "EDGE",
+     {"held": "na", "dpost": "0", "dfc": "0", "edge": "cond"}, False),
+    ("evalcat_ev_frameset_flush",     "evalcat", "ev_frameset", "EDGE",
+     {"held": "flushed", "invoked": "frame_set", "dup_fired": "False",
+      "fc_fired": "True", "dpost": "0", "edge": "0",
+      "held_loc": "(3.000,0.000,0.000)", "frame": "2"}, False),
+    # frame_set to the SAME frame still evals (closes r79 unknown (c))
+    ("evalcat_ev_framesame_flush",    "evalcat", "ev_framesame", "EDGE",
+     {"held": "flushed", "invoked": "frame_set", "dup_fired": "False",
+      "fc_fired": "True", "dpost": "0", "edge": "0",
+      "held_loc": "(4.000,0.000,0.000)", "frame": "2"}, False),
+    ("evalcat_ev_dgupdate_flush",     "evalcat", "ev_dgupdate", "EDGE",
+     {"held": "flushed", "invoked": "dg.update", "dup_fired": "True",
+      "fc_fired": "False", "edge": "0",
+      "held_loc": "(5.000,0.000,0.000)"}, False),
+    # driver writes: edge=1, one tagged eval binds + RNA copyback
+    ("evalcat_driver_edge1",          "evalcat", "driver", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_loc": "(0.000,0.000,0.000)", "fresh": "(7.000,0.000,0.000)",
+      "rna_x": "7.000"}, False),
+    ("evalcat_driver_wU_copyback",    "evalcat", "driver_wU", "DEG",
+     {"held": "(7.000,0.000,0.000)", "rna_x": "7.000"}, False),
+    ("evalcat_driver_expr_edge1",     "evalcat", "driver_expr", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_loc": "(7.000,0.000,0.000)", "fresh": "(9.000,0.000,0.000)"}, False),
+    # keyframe_insert: inert through a tagged eval, binds only at frame_set
+    ("evalcat_keyframe_edge_frame",   "evalcat", "keyframe", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "frame",
+      "ret": "True", "tagged_fresh": "(0.000,0.000,0.000)",
+      "f1": "(0.000,4.000,0.000)", "rna_y": "4.000"}, False),
+    ("evalcat_keyframe_wU_inert",     "evalcat", "keyframe_wU", "DEG",
+     {"upd_dup": "1", "held": "(0.000,0.000,0.000)",
+      "fresh": "(0.000,0.000,0.000)"}, False),
+    # explicit layered action build DOES tag -> edge=1 (differentiator)
+    ("evalcat_key_explicit_edge1",    "evalcat", "key_explicit", "EDGE",
+     {"held": "stale", "invoked": "none", "edge": "1", "build": "layered",
+      "held_loc": "(0.000,0.000,0.000)", "fresh": "(0.000,0.000,8.000)"}, False),
+    # constraint RNA add: edge=1
+    ("evalcat_con_rna_edge1",         "evalcat", "con_rna", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_mw": "(0.000,0.000,0.000)", "fresh": "(3.000,0.000,0.000)",
+      "rna_n": "1"}, False),
+    ("evalcat_con_rna_wU_copyback",   "evalcat", "con_rna_wU", "DEG",
+     {"held_mw": "(3.000,0.000,0.000)", "rna_mw": "(3.000,0.000,0.000)"}, False),
+    # bpy.ops mutations: every op is itself an eval event -> edge=0
+    ("evalcat_op_apply_edge0",        "evalcat", "op_apply", "EDGE",
+     {"held": "flushed", "invoked": "bpy.ops", "dup_fired": "True",
+      "edge": "0", "ret": "FINISHED", "held_mesh": "verts3:xmax6.000",
+      "held_loc": "(0.000,0.000,0.000)", "rna_loc": "(0.000,0.000,0.000)"}, False),
+    ("evalcat_op_add_edge0",          "evalcat", "op_add", "EDGE",
+     {"held": "flushed", "invoked": "bpy.ops", "dup_fired": "True",
+      "edge": "0", "ret": "FINISHED", "held_names": "Cube|o",
+      "rna_n": "2"}, False),
+    ("evalcat_op_modapply_edge0",     "evalcat", "op_modapply", "EDGE",
+     {"held": "flushed", "invoked": "bpy.ops", "dup_fired": "True",
+      "edge": "0", "ret": "FINISHED", "held_mesh": "verts49:xmax1.000",
+      "rna_verts": "49", "rna_mods": "0"}, False),
+    ("evalcat_op_mode_edit_edge0",    "evalcat", "op_mode_edit", "EDGE",
+     {"held": "flushed", "invoked": "bpy.ops", "dup_fired": "True",
+      "edge": "0", "ret": "FINISHED", "held_loc": "(5.000,0.000,0.000)"}, False),
+    ("evalcat_op_mode_object_edge0",  "evalcat", "op_mode_object", "EDGE",
+     {"held": "na", "invoked": "bpy.ops", "dup_fired": "True",
+      "edge": "0", "ret": "FINISHED", "held_loc": "(5.000,0.000,0.000)"}, False),
+    ("evalcat_op_locclear_edge0",     "evalcat", "op_locclear", "EDGE",
+     {"held": "flushed", "invoked": "bpy.ops", "dup_fired": "True",
+      "edge": "0", "ret": "FINISHED", "held_loc": "(0.000,0.000,0.000)",
+      "rna_loc": "(0.000,0.000,0.000)"}, False),
+    # constraint_add: constraint inert w/o target -> held=na, dup is the eval witness
+    ("evalcat_op_conadd_edge0",       "evalcat", "op_conadd", "EDGE",
+     {"held": "na", "invoked": "bpy.ops", "dup_fired": "True",
+      "edge": "0", "ret": "FINISHED", "rna_n": "1"}, False),
+    # RNA write after an op still needs its own eval -> edge=1
+    ("evalcat_conadd_target_edge1",   "evalcat", "conadd_target", "EDGE",
+     {"held": "stale", "invoked": "none", "dpost": "0", "edge": "1",
+      "held_mw": "(0.000,0.000,0.000)", "fresh": "(3.000,0.000,0.000)"}, False),
+    # wall-time axis: sleeps + context re-touch never flush -> edge=absent
+    ("evalcat_walltime_absent",       "evalcat", "walltime", "EDGE",
+     {"held": "stale", "invoked": "none", "dpre": "0", "dpost": "0",
+      "dfcp": "0", "dfc": "0", "edge": "absent",
+      "held_loc": "(0.000,0.000,0.000)"}, False),
+    ("evalcat_walltime_fresh",        "evalcat", "walltime_fresh", "DEG",
+     {"loc": "(6.000,0.000,0.000)"}, False),
+    # closure: zero falsified rows across every probed mutation class
+    ("evalcat_closed_set",            "evalcat", "closed", "EDGE",
+     {"violations": "0"}, False),
 ]
 
 ARM_LINE = re.compile(r"^ARM (\S+) \| (\S+) \| (\S+) \| (.*)$")
