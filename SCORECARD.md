@@ -47,3 +47,13 @@ Non-author `reports/round-73/r73-verifier.md`: **AGREE all five claims** — 127
 | calibration | **unchanged** | no threshold/gate edits; engine-internal comparators pinned empirically. |
 
 Non-author `reports/round-74/r74-verifier.md`: **AGREE on all six claims** — 145/145 + 4/4 probes + Node 31/31 on committed state, pmd boundary recomputed independently (4.9951 frozen / 5.0249 re-query), 6/6 byte-exact spot checks, prior 127 rows byte-preserved. Sol `r74-adjudicator.md` reproduced committed-state arms byte-exact. Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf this host; teleport-motion only; single map/region; engine-internal pmd comparator pinned empirically. No cross-build/internals inference. Work commit `fc9915e`; report-last commit follows.
+
+## Round 75 verdict — 2026-10-14
+
+| axis | Sol verdict | evidence |
+|---|---|---|
+| depth | **improved locally** | Two-stage mutation gate measured: setter→server-sync (~2–3 frames) + sync→first-forcing-call; same-turn pre-sync serving is a real bounded zombie window; pure readers serve stale data indefinitely; agent `navigation_layers` = synchronous exception; **finished-latch zombie pinned** — early-return gates off invalidation, dead route served through region move AND delete until target re-assign. |
+| coverage | **improved locally** | 11 `mut_*` arms across link (kill/drop/layers/revive), agent layers, region (layers/move/off/renew), latch-zombie classes; 145→156, 4/4 probes, Node 31/31. |
+| calibration | **unchanged** | additive arms only; engine sync timing measured not edited. |
+
+Non-author `reports/round-75/r75-verifier.md`: **AGREE 5/5** — 156/156 + 4 probes + Node 31/31 on committed HEAD, 0 mismatches over 156×12 fields vs author and 145 shared r74 rows, byte-exact committed-blob replays (5/11 mut arms sampled incl. both falsification arms), Node 31/31 `seeds_unchanged`. Sol `r75-adjudicator.md` reproduced `mut_latch_zombie`/`mut_link_kill`/`mut_region_move` verbatim on committed `cefc821`. Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf this host, headless, single map/region, teleport-only; sync latency ~2–3 frames measured-not-cased; multi-agent/node-link unexercised. Work commit `6498973` (+`cefc821`); report-last commit follows verifier landing.

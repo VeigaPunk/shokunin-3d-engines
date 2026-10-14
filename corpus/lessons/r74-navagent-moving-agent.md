@@ -52,9 +52,9 @@ and the finished-latch whole-update freeze.
   CASES-pinned (`mv_pmd_*`).
 - Map data changes (`region_set_transform`, region `navigation_layers`)
   and agent `navigation_layers` — lazy invalidation; EMPTY path +
-  `final=(0,0,0)` on total severance (critic `fw_mapedit`/`fw_layermask`);
-  clamped partial when a mainland stays on-mask. Measured; CASES-pinned
-  in r75 (`mut_*`).
+  `final=(0,0,0)` on total severance (critic `fw_layermask`); clamped
+  partial when a mainland stays on-mask (critic `fw_mapedit`). Measured;
+  CASES-pinned in r75 (`mut_*`).
 - `is_navigation_finished` latch — GATES OFF the whole update incl. the
   pmd re-query (author `mv_latch`, scribe `mz_steps` s7, simplifier
   10.6 receipt). CASES-pinned.
