@@ -49,8 +49,9 @@ const ARM_CASES := {
 # heap state. A 504-run matrix (corpus/live/r90-repair/mx.csv, every
 # endpoint case x 3 backends x 12 reps) shows the mechanism present on
 # every exposed gp+jolt cell (the teardown loop re-frees the case's freed
-# RID) and the crash realized on 10 of those 20 tags inside the 12-rep
-# window; Dummy never realizes it (its free_rid is inert).
+# RID) and the crash realized on 9 of those 20 tags inside the 12-rep
+# matrix window (the 10th, freeb@gp, realized on the simplifier lane
+# outside the matrix); Dummy never realizes it (its free_rid is inert).
 # sweep/rid/api quit() in _initialize and never reach the teardown loop;
 # freeb_world/detachb/twopin_* free nothing.
 # BIMODAL maps each exposed tag -> [n_pre, full_msz]: cells emit
