@@ -1201,3 +1201,25 @@ corpus/knowledge/seed.md).
 - Seats: author(ds), baseline, verifier(swe-2), critic(ds), boundary+
   simplifier+scribe(ds/zfl, scribe lost); fold+adj swe-2. ADMIT-corr.
   Commit c16f6ba.
+
+## round 92 — RemoteTransform3D / anim×body / scheduler timing (ADMIT-corr)
+
+- 23 new CASES rows (235->258): RemoteTransform3D propagation
+  (remote/local modes), AnimationPlayer x physics-body, SceneTree/
+  Engine timing probes.
+- VERIFIER FAILED pre-fold: r92_timing_steps leaked the pre-write
+  delta (0.016667 vs 0.166667) when a physics callback batched into
+  the same Main::iteration. Fold re-anchored E0/E1/E2 to the
+  iteration boundary + 3 settled ticks each idle-sealed — count-
+  independent predicates, scheduler-proof.
+- LAWS: set_notify_transform(false) freezes propagation on all 3
+  backends (flag = registration, frame boundary = delivery schedule);
+  local-mode propagation is synchronous at the write; time_scale=-1
+  splits GP (time-reversed, closed-form) vs Jolt (freeze).
+- FOLDS: timing re-anchor; idlemode envelope widened to measured
+  legal set x[0,3] y[1.8,2.0005]; SP1-5 dead-code deletions; author
+  arithmetic corrected 369->123/pass x3.
+- Seats: author/baseline/boundary/critic/verifier(FAILED->fold)/
+  simplifier/scribe/verifier2 VERIFIED (4212 delta samples 0 off-pin,
+  600/600 envelope, fresh starved-mode hits 172) + post-fold
+  baseline-r2 + adj orchestrator. ADMIT-corr. dd32c3c + 75739bc.

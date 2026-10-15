@@ -210,3 +210,4 @@ Non-author `reports/round-89/r89-verifier.md`: **AGREE all five assigned checks*
 Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dummy, this host; Jolt teardown SIGABRT class, `slept=` sampler fragility, Jolt wake-on-joint-make and the `apply_impulse`/`apply_force` zero call-site README overclaim (C4) recorded not folded; HELD-OUT: none this lane. Work `c16f6ba` (+ record `93d01fb`).
 
 | r89 | game-dev-3d | body-state phase lattice + joint family | ADMIT-corr | c16f6ba + 93d01fb |
+| r92 | improved | improved | improved | RemoteTransform3D/anim-x-body/scheduler timing (23 rows, 235->258); verifier FAILED pre-fold -> fold re-anchored timing to iteration boundary + settled ticks; idlemode envelope = legal set; VERIFIED on folded bytes (4212 samples 0 off-pin) |
