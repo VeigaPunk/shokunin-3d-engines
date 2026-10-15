@@ -2,7 +2,7 @@
 
 Bounded Godot 4.7.2 `--headless` fixtures for 3D mechanics. The original
 six classes each have a positive and a discriminating negative control; later
-rounds extend the battery to 195 registered cases (149 ordinary and 46
+rounds extend the battery to 217 registered cases (171 ordinary and 46
 negative controls). A negative control must demonstrate a live setup before attributing
 an absent or changed effect to its arrangement. These finite headless checks
 do not establish rendered output or behavior in other engines.
@@ -17,9 +17,9 @@ and Godot's `.godot/` import cache is created inside the scratch copy only.
 
 ```
 # From the repository root (Godot 4.7.2 at /usr/bin/godot):
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only raycast3d_hit,raycast3d_miss
+python3 corpus/fixtures/run_battery.py
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --only raycast3d_hit,raycast3d_miss
 # Optional overrides: append --godot /path/to/godot --runs /path/to/receipts
 ```
 
@@ -82,7 +82,7 @@ actor), `pickup_orb3d.gd` (`Area3D` trigger with the `collected` chain).
 
 ## Optional identified-descendant timeout (round 5)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout`
+`python3 corpus/fixtures/run_battery.py --probe-tree-timeout`
 adds one uncounted real Godot Node3D pair using `timeout_tree3d.gd`. Clean
 exit 0 passes. The hold-open arm spawns `timeout_descendant.py` and writes
 a PID/PGID witness file only in scratch, then prints the same marker. At 3s
@@ -98,7 +98,7 @@ witness fails the probe. Raw paired state is in ignored
 
 ## Optional stdout/stderr attribution (round 4)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-stream-attribution`
+`python3 corpus/fixtures/run_battery.py --probe-stream-attribution`
 adds an uncounted pair using the same `stream_attribution3d.gd` script. Both
 set up a Node3D, exit 0 and print exactly `STREAM_3D_STDOUT: spatial node ready`
 on stdout. Only `--emit-stderr` also prints `STREAM_3D_STDERR` on stderr;
@@ -108,7 +108,7 @@ rerun the command. Default twelve cases remain unchanged.
 
 ## Optional direct-child signal classification (round 3)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-crash-exit`
+`python3 corpus/fixtures/run_battery.py --probe-crash-exit`
 adds a **separate, uncounted** pair using `crash_exit3d.gd`. Both arms set up
 a Node3D and print the exact `CRASH_EXIT_3D: spatial node ready` line. The
 normal arm `quit(1)` passes the existing classifier when expecting exit 1;
@@ -122,7 +122,7 @@ guarantee. The twelve default cases are unchanged.
 
 ## Slope floor-angle classification (round 15)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only slope3d_floor,slope3d_steep`
+`python3 corpus/fixtures/run_battery.py --only slope3d_floor,slope3d_steep`
 executes `slope3d_angle.gd` in grounded mode. One intact box slab is tilted
 30° or 60° around Z; `floor_max_angle=45°`, up direction +Y. Drive is pinned
 vertically downward until contact (at most 30 physics ticks). The contact
@@ -137,7 +137,7 @@ is stored on first contact, not re-read in the same frame as the flags.
 
 ## PackedScene instance-local transforms (round 17)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_instances,scene3d_instances_wrong_local`
+`python3 corpus/fixtures/run_battery.py --only scene3d_instances,scene3d_instances_wrong_local`
 packs a reusable Node3D with an owned MeshInstance3D/BoxMesh child at local
 (1,2,-3), instantiates twice, and checks world (11,2,-3) versus (-9,2,2)
 after parents at (10,0,0) and (-10,0,5). The negative changes only the second
@@ -148,7 +148,7 @@ serialization or rendered pixels.
 
 ## Authored text-scene round-trip (round 18)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_disk,scene3d_disk_wrong_local`
+`python3 corpus/fixtures/run_battery.py --only scene3d_disk,scene3d_disk_wrong_local`
 packs an owned Node3D/MeshInstance3D subtree and saves it as a scratch
 `generated-scene3d.tscn`, then loads/instances the file and checks the local
 (1,2,-3) and world (11,2,2) child transform against literal expectations.
@@ -161,7 +161,7 @@ file validation.
 
 ## PackedScene mesh resource locality (round 20)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_resource_local,scene3d_resource_shared`
+`python3 corpus/fixtures/run_battery.py --only scene3d_resource_local,scene3d_resource_shared`
 packs one Node3D/MeshInstance3D/BoxMesh scene and instantiates two clones.
 With `resource_local_to_scene=true`, actual mesh object identities differ and
 changing first mesh size X from 1 to 2 leaves second/source X=1. With the
@@ -173,7 +173,7 @@ rendering, material identity, disk scene persistence or other engines.
 
 ## Saved-scene BoxMesh resource locality (round 21)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only scene3d_resource_disk_local,scene3d_resource_disk_shared`
+`python3 corpus/fixtures/run_battery.py --only scene3d_resource_disk_local,scene3d_resource_disk_shared`
 saves an owned BoxMesh scene as scratch `generated-resource3d.tscn`, loads it
 with cache ignored, and instantiates three copies. With scene-local true, the
 saved file contains `resource_local_to_scene = true`; first/second/loaded
@@ -185,7 +185,7 @@ build, not arbitrary saved-scene compatibility or GPU rendering.
 
 ## Orthographic Camera3D depth-invariant pixels (round 23)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside`
+`python3 corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside`
 uses a headless 800×600 SubViewport and `Camera3D.PROJECTION_ORTHOGONAL`,
 vertical size 8, near 1, far 10. The authored pixel scale is 600/8=75 per
 world unit: world (2,1,-4) and (2,1,-8) both project to (550,225) while
@@ -196,7 +196,7 @@ not a rendered image or GPU culling proof.
 
 ## Orthographic near-plane gate (round 24)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near`
+`python3 corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near`
 adds a near-negative (2,1,-0.5) to the r23 orthographic scene. Its geometric
 camera-forward depth is +0.5 (in front of the origin, but less than near=1),
 and numerical projection still equals the two valid depths' (550,225).
@@ -207,7 +207,7 @@ remain in-frustum; no near-boundary precision or rendered pixels proven.
 
 ## Orthographic far-plane gate (round 25)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near,camera3d_ortho_far`
+`python3 corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near,camera3d_ortho_far`
 adds a far-negative world (2,1,-12) to the same r23/r24 orthographic setup:
 forward depth12 exceeds far10 but projected screen stays (550,225), matching
 in-frustum depth4/8. Godot 4.7.2 returns `is_position_in_frustum=false` and
@@ -217,7 +217,7 @@ exact near/far boundary precision, rendered pixels or GPU culling.
 
 ## Gravity-driven vertical jump versus displaced floor (round 26)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor`
+`python3 corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor`
 starts a one-unit CharacterBody3D at y=1 touching a one-unit floor centered y=0 (top y=0.5),
 sets one +6 vertical impulse, subtracts 12/60 from vertical velocity and calls
 `move_and_slide` once after each physics-frame signal for 60 explicit calls.
@@ -242,7 +242,7 @@ sampled precondition, not proof of grounded state before the probing move.
 
 ## Downhill travel with explicit floor-stop policy (round 28)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only slope3d_travel,slope3d_travel_level`
+`python3 corpus/fixtures/run_battery.py --only slope3d_travel,slope3d_travel_level`
 uses a wide static 30° box slope or intact level box, a unit CharacterBody3D
 and 60 explicit frame-paced downward-gravity `move_and_slide` calls. **The
 nondefault `floor_stop_on_slope=false` is required** on this Godot build:
@@ -266,7 +266,7 @@ behavior predicates, not a general slope-sensitivity guarantee.
 
 ## Explicit sampled 3D animation evaluation (round 30)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only animation3d_keys,animation3d_keys_still`
+`python3 corpus/fixtures/run_battery.py --only animation3d_keys,animation3d_keys_still`
 instantiates a live `Node3D` target and `AnimationPlayer` with one linear
 `TYPE_POSITION_3D` track. `play`, then `seek(0.5,true)` and `seek(1.0,true)`
 sample target positions X=2/X=4 from keys X=0→4; an intact constant-key
@@ -276,7 +276,7 @@ not prove timed playback, animation blending, rendering or sprites.
 
 ## Physics-frame 3D animation playback (round 31)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only animation3d_playback,animation3d_playback_still`
+`python3 corpus/fixtures/run_battery.py --only animation3d_playback,animation3d_playback_still`
 starts a two-second `AnimationPlayer` position track in physics callback mode
 and calls `play` once. After 30 and 60 awaited physics frames, without `seek`
 or direct target position assignment, the live actor is at X≈0.967 and
@@ -289,7 +289,7 @@ frame-order guarantee.
 
 ## Two-animation 3D position cross-fade (round 32)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only animation3d_blend,animation3d_blend_cut`
+`python3 corpus/fixtures/run_battery.py --only animation3d_blend,animation3d_blend_cut`
 uses two live constant-key `AnimationPlayer` tracks (X0 and X4) on the same
 `Node3D`. After four warmup physics frames of `from`, `play("to", 0.5)`
 transitions to `to`; 15 awaited frames later X≈1.931 is strictly between
@@ -300,7 +300,7 @@ engine-specific cross-fade schedule, not a universal blend curve or pixels.
 
 ## Procedural ArrayMesh triangle (round 33)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_array,mesh3d_array_shifted`
+`python3 corpus/fixtures/run_battery.py --only mesh3d_array,mesh3d_array_shifted`
 constructs a live `ArrayMesh` triangle with vertices (0,0,0), (2,0,0),
 (0,3,0) and attaches it to `MeshInstance3D`. Godot returns an AABB of size
 (2,3,0.00001) for the planar surface: the tiny Z thickness is observed
@@ -312,7 +312,7 @@ visibility or collision meshes.
 
 ## Indexed ArrayMesh topology readback (round 34)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_indexed,mesh3d_indexed_reversed`
+`python3 corpus/fixtures/run_battery.py --only mesh3d_indexed,mesh3d_indexed_reversed`
 constructs one four-vertex, two-triangle indexed XY quad. The forward
 index array [0,1,2,0,2,3] returns cross-product Z+6 for both triangles;
 paired reversed [0,2,1,0,3,2] returns Z-6 while vertices and AABB remain
@@ -323,7 +323,7 @@ vertex-normal generation, or collision geometry.
 
 ## Mesh-derived static physics collision (round 35)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_trimesh_hit,mesh3d_trimesh_outside`
+`python3 corpus/fixtures/run_battery.py --only mesh3d_trimesh_hit,mesh3d_trimesh_outside`
 builds a triangle `ArrayMesh`, converts it via `create_trimesh_shape()`, and
 attaches the generated `ConcavePolygonShape3D` to a live `StaticBody3D`.
 `backface_collision=true` on that shape and `hit_back_faces=true` on both
@@ -337,7 +337,7 @@ backface semantics, moving body contacts, mesh rendering or GPU behavior.
 
 ## Two-face mesh-derived static collision (round 36)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only mesh3d_faces_hit,mesh3d_faces_reordered`
+`python3 corpus/fixtures/run_battery.py --only mesh3d_faces_hit,mesh3d_faces_reordered`
 converts an indexed four-vertex/two-triangle XY quad into one generated
 `ConcavePolygonShape3D` on a live static collider with explicit two-sided
 policy. After four physics ticks, separate interior rays at (1.5,0.5) and
@@ -349,7 +349,7 @@ face ordering across engine builds, GPU winding, or rendered pixels.
 
 ## Headless Skeleton3D rest and pose data (round 38)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only skeleton3d_pose,skeleton3d_rest_only`
+`python3 corpus/fixtures/run_battery.py --only skeleton3d_pose,skeleton3d_rest_only`
 builds a live two-bone `Skeleton3D`: Root local rest(1,0,0), child Tip local
 rest(0,2,0), with measured child global **rest** origin(1,2,0). Setting
 Tip local pose position(0,3,0) reports pose/global-pose origin(0,3,0);
@@ -361,7 +361,7 @@ does not establish skinning, deformed vertices, pixels or GPU behavior.
 
 ## Child pose composition under parent rotation (round 39)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only skeleton3d_rotation,skeleton3d_unrotated`
+`python3 corpus/fixtures/run_battery.py --only skeleton3d_rotation,skeleton3d_unrotated`
 sets a live two-bone `Skeleton3D` Root pose to +90° about Z with Tip local
 pose origin(0,3,0). Tip global **pose** then reads origin(-3,0,0), basis
 X(0,1,0)/Y(-1,0,0). With an intact identity Root pose, Tip global pose
@@ -372,7 +372,7 @@ This pose hierarchy data is not a skinned vertex or rendered movement.
 
 ## Live BoneAttachment3D follower (round 40)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only skeleton3d_attachment,skeleton3d_attachment_unrotated`
+`python3 corpus/fixtures/run_battery.py --only skeleton3d_attachment,skeleton3d_attachment_unrotated`
 attaches a `BoneAttachment3D` bound to Tip on a two-bone `Skeleton3D`,
 with a marker `Node3D` at attachment-local (1,0,0). After setting Tip pose
 (0,3,0) and Root pose +90° about Z, the attached marker's live global
@@ -384,7 +384,7 @@ skinned mesh deformation, pixels or GPU evidence.
 
 ## Sphere ShapeCast3D swept query (round 41)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only shapecast3d_sphere,shapecast3d_sphere_offset`
+`python3 corpus/fixtures/run_battery.py --only shapecast3d_sphere,shapecast3d_sphere_offset`
 creates a live radius-0.5 `ShapeCast3D` starting at z4 and sweeping -6Z
 toward a static 2×2×2 box. The centered cast hits the box front at z1 with
 +Z normal, one collider, approximate safe/unsafe fractions 0.414062/0.417969;
@@ -396,7 +396,7 @@ movement, tunneling prevention, pixels or GPU behavior.
 
 ## Grazing finite-radius sphere versus ray (round 42)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only shapecast3d_graze,shapecast3d_graze_small`
+`python3 corpus/fixtures/run_battery.py --only shapecast3d_graze,shapecast3d_graze_small`
 aims from (1.25,0,4) along -6Z at a box with X half-width1. The
 same-centerline ray misses. A radius0.5 ShapeCast3D hits the box edge at
 (1,0,1) with measured oblique normal≈(0.509856,0,0.86026) and safe≈0.425781;
@@ -407,7 +407,7 @@ movement, tunneling proof or rendered pixels.
 
 ## Baked Curve3D path geometry (round 43)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only curve3d_path,curve3d_path_straight`
+`python3 corpus/fixtures/run_battery.py --only curve3d_path,curve3d_path_straight`
 attaches a three-point `Curve3D` to live `Path3D`. Middle point (2,2,1)
 has in/out tangent handles (-0.5,0,-0.25)/(0.5,0,0.25), giving measured
 baked length≈6.072724, quarter point≈(0.917559,1.118591,0.45878),
@@ -418,7 +418,7 @@ navigation agent, collision, rendered line or pixel output.
 
 ## Live PathFollow3D on baked curve (round 44)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only pathfollow3d_curve,pathfollow3d_curve_straight`
+`python3 corpus/fixtures/run_battery.py --only pathfollow3d_curve,pathfollow3d_curve_straight`
 attaches a `PathFollow3D` and offset marker Node3D to the r43-style
 three-point curve. With `ROTATION_NONE`, progress at quarter/three-quarter
 baked length moves the live bent follower to≈(0.917532,1.118620,0.458766)
@@ -430,7 +430,7 @@ this is not timed navigation, rendered motion, or collision.
 
 ## Frame-paced PathFollow3D progress (round 45)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only pathfollow3d_paced,pathfollow3d_paced_stationary`
+`python3 corpus/fixtures/run_battery.py --only pathfollow3d_paced,pathfollow3d_paced_stationary`
 advances a live follower on the bent r43-style path with 60 explicit
 `await physics_frame` calls and `progress += 3/60` each call. After 30
 increments the follower is≈(0.906026,1.105767,0.453013); after 60 it is
@@ -441,7 +441,7 @@ an AnimationPlayer/NavigationAgent controller; no pixels or GPU output.
 
 ## Physics-callback PathFollow3D driver (round 46)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only pathfollow3d_callback,pathfollow3d_callback_stationary`
+`python3 corpus/fixtures/run_battery.py --only pathfollow3d_callback,pathfollow3d_callback_stationary`
 attaches `pathfollow3d_driver.gd` to a live Node3D. Its actual
 `_physics_process(delta)` advances follower progress by `SPEED*delta` for
 60 callbacks, records positions at callback 30/60 and sums delta≈1.000
@@ -453,7 +453,7 @@ headless scene-tree transform, not autonomous navigation or rendered motion.
 
 ## RemoteTransform3D target propagation (round 47)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only remote3d_transform,remote3d_transform_unbound`
+`python3 corpus/fixtures/run_battery.py --only remote3d_transform,remote3d_transform_unbound`
 creates separate live source `RemoteTransform3D` and target `Node3D` under
 one stage. Binding `../Target` and then setting source position(2,1,-3)
 and Z rotation90° propagates matching target global origin/basis after
@@ -475,7 +475,7 @@ and two private controls, not network replication or rendered motion.
 
 ## Live NavigationAgent3D next-path query (round 49)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_next,navagent3d_next_alternate`
+`python3 corpus/fixtures/run_battery.py --only navagent3d_next,navagent3d_next_alternate`
 builds a live planar NavigationServer3D map/region with one polygon, then
 attaches `NavigationAgent3D` to an actor at (1,0,1), assigns map and target.
 After map sync, calling `get_next_path_position()` **first** initializes
@@ -487,7 +487,7 @@ agent-driven movement, avoidance, baked navigation mesh or pixels.
 
 ## Scripted NavigationAgent3D-guided actor movement (round 50)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_follow,navagent3d_follow_stationary`
+`python3 corpus/fixtures/run_battery.py --only navagent3d_follow,navagent3d_follow_stationary`
 attaches `navfollow3d_driver.gd` (live Node3D `_physics_process(delta)`)
 and NavigationAgent3D to an actor starting(1,0,1) on a flat 4×4 authored
 map. Each callback reads `get_next_path_position()`; speed2 driver uses
@@ -500,7 +500,7 @@ no avoidance, baking, collision or rendered pixels.
 
 ## In-flight NavigationAgent3D retarget (round 51)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_retarget,navagent3d_retarget_fixed`
+`python3 corpus/fixtures/run_battery.py --only navagent3d_retarget,navagent3d_retarget_fixed`
 uses a live `navretarget3d_driver.gd` callback script under an attached
 NavigationAgent3D on a flat authored 4×4 map. Both arms begin toward(3,0,3)
 at speed2. After 35 callbacks, actor≈(1.730676,0,1.730676), one arm changes
@@ -522,7 +522,7 @@ is limited to this scripted flat-map follow, not general navigation.
 
 ## Orthographic adjacent near-plane samples (round 54)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside`
+`python3 corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside`
 uses the same near=1, far=10 orthographic camera and world lateral (2,1)
 for two samples. At forward depth 1.01, the point is in-frustum; at 0.99,
 it is out-of-frustum while depth4/8 remain accepted and depth0.5 remains
@@ -532,7 +532,7 @@ does not establish the exact threshold at 1.0, rasterization or GPU culling.
 
 ## Orthographic adjacent far-plane samples (round 55)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_far_boundary_inside,camera3d_ortho_far_boundary_outside`
+`python3 corpus/fixtures/run_battery.py --only camera3d_ortho_far_boundary_inside,camera3d_ortho_far_boundary_outside`
 uses the same near=1, far=10 orthographic camera and world lateral (2,1).
 At forward depth 9.99, the point is in-frustum; at 10.01 it is
 out-of-frustum while depth4/8 remain accepted and depth12 remains rejected.
@@ -542,7 +542,7 @@ culling.
 
 ## Orthographic exact near-plane sample (round 56)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_exact,camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside`
+`python3 corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_exact,camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside`
 measures `is_position_in_frustum` and `is_position_behind` at forward depth
 exactly 1.0 against camera near=1.0. The 1.01 and 0.99 controls stay on
 opposite sides; all three project to (550,225). This is one Godot 4.7.2
@@ -551,7 +551,7 @@ rendered pixels, or GPU culling.
 
 ## Orthographic exact far-plane sample (round 57)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_far_boundary_exact,camera3d_ortho_far_boundary_inside,camera3d_ortho_far_boundary_outside`
+`python3 corpus/fixtures/run_battery.py --only camera3d_ortho_far_boundary_exact,camera3d_ortho_far_boundary_inside,camera3d_ortho_far_boundary_outside`
 measures `is_position_in_frustum` and `is_position_behind` at forward depth
 exactly 10.0 against camera far=10.0. The 9.99 and 10.01 controls remain
 on opposite sides; all three project to (550,225). This is one Godot 4.7.2
@@ -560,7 +560,7 @@ pixels or GPU culling.
 
 ## PhysicsServer3D two-tier lattice (round 83)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only phys3d_events_isect,phys3d_events_cast,phys3d_events_btm,phys3d_events_pp_queries,phys3d_events_contact_stale,phys3d_events_contact_sig,phys3d_events_sync_cb,phys3d_events_srv_area_cb,phys3d_events_static_nopair,phys3d_events_threaded_edge`
+`python3 corpus/fixtures/run_battery.py --only phys3d_events_isect,phys3d_events_cast,phys3d_events_btm,phys3d_events_pp_queries,phys3d_events_contact_stale,phys3d_events_contact_sig,phys3d_events_sync_cb,phys3d_events_srv_area_cb,phys3d_events_static_nopair,phys3d_events_threaded_edge`
 measures the split inside PhysicsServer3D between query APIs and generated
 events on GodotPhysics3D (`physics_engine=DEFAULT`, 60 tps). Query calls —
 `intersect_shape`, `cast_motion`, `body_test_motion`, `intersect_ray` — answer
@@ -598,7 +598,7 @@ constants, and `static_nopair` inverts (above).
 
 ## PhysicsServer3D backend split + write-phase delta (round 84)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only phys3d_events_phase_delta,phys3d_events_jolt_edge`
+`python3 corpus/fixtures/run_battery.py --only phys3d_events_phase_delta,phys3d_events_jolt_edge`
 pins two r83 corrections as first-class cells. `phase_delta` issues the
 same rigid-node teleport into the same settled `Area3D` twice — once
 from the process phase (`await process_frame` continuation) and once
@@ -626,7 +626,7 @@ to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
 
 ## PhysicsServer3D size gate, deferred-hang class, backend tier, Dummy floor (round 86)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only phys3d_events_script_size_gate,phys3d_events_deferred_hang,phys3d_events_backend_tier,phys3d_events_dummy_floor`
+`python3 corpus/fixtures/run_battery.py --only phys3d_events_script_size_gate,phys3d_events_deferred_hang,phys3d_events_backend_tier,phys3d_events_dummy_floor`
 pins four further classes on the r83–r85 lattice.
 
 - `script_size_gate` — the deferred process-context direct-space-state
@@ -688,7 +688,7 @@ Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
 
 ## PhysicsServer3D body tier: held-handle identity, acquisition vs use, step-stamped getters, write-loss race, body-tier split, freed-space crash (round 87)
 
-`python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only phys3d_events_body_handle,phys3d_events_acq_use,phys3d_events_step_stamp,phys3d_events_write_loss,phys3d_events_body_tier,phys3d_events_freed_space`
+`python3 corpus/fixtures/run_battery.py --only phys3d_events_body_handle,phys3d_events_acq_use,phys3d_events_step_stamp,phys3d_events_write_loss,phys3d_events_body_tier,phys3d_events_freed_space`
 pins six further classes on the `PhysicsDirectBodyState3D` tier
 (`body_get_direct_state`). Every arm is a generated-project child; the
 three backend-split arms are gated on both engine hints (`BLOCKED`, never
@@ -921,6 +921,124 @@ floor (the in-place contact control) and reaches the wall only through motion.
   (`rc` 134 inside `free_rid(space)`; `space→body→shape` 2/2 vs
   `shape→body→space` and `body→shape→space` 2/2 clean), which is why the
   `inactive_space` child registers its private space last.
+
+Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
+
+## PhysicsDirectBodyState3D phase order, the _integrate_forces interior rules, the joint family, cross-space handles, the sleeping body (round 89)
+
+`python3 corpus/fixtures/run_battery.py --only phys3d_events_if_phase,phys3d_events_if_write,phys3d_events_joint_pin,phys3d_events_joint_param,phys3d_events_joint_solver,phys3d_events_cross_space,phys3d_events_sleep_state`
+pins seven further classes on the body-state tier. Every arm is a
+generated-project child (GodotPhysics / Jolt / Dummy); the backend-split arms
+are gated on both engine hints (`BLOCKED`, never a fabricated split), every
+child verdict dict is compared **whole**, and every engine-line claim is
+counted in the raw child log. The contact geometry is the r89-scout's probe
+shape reused verbatim (a slab whose top face is `y=-0.5` and a ball r=0.5
+dropped from `y=0.2`), so the arm's numbers are directly comparable with the
+scout's receipts.
+
+- `if_phase` — the **intra-tick phase lattice**. The same tick is sampled at
+  `_integrate_forces` (IF), `_physics_process` (E) and `_process` (F) through
+  one body handle, every row stamped with `pf` and `seq`, so the order is read
+  off the rows: `IF → E → F` inside one tick, `IF(pf=k) == E(pf=k)` (a
+  **pre-step** view), `F(pf=k) == IF(pf=k+1)`, and the current step's contact
+  record is readable only at F or at the next tick's IF/E — never inside IF
+  (`if_cc_first=0` / `f_cc_first=1`, first contact at `pf=13` on both real
+  backends). The record's `impulse` is **one solve late on GodotPhysics**
+  (first record exactly `0.0000`, the impact `2.1022` in the following record,
+  steady state `0.1633 = m·g·dt`) while **Jolt's holds its own step's**
+  (`2.1022` in the first record), and `get_contact_local_velocity_at_position`
+  is the current pre-solve relative velocity on both (`2.1022`). Every
+  out-of-range contact index is a typed refusal — one engine
+  `is out of bounds` line per getter call (12 counted, the 11 getters plus the
+  default read), `cc` unchanged, `rc=0`. Dummy never fires IF at all.
+- `if_write` — the **`_integrate_forces` interior rules**, one member per
+  fresh free-falling ball, each read same-turn through the same handle, at the
+  next tick (`rel1`) and two ticks later. Immediate: `set_linear_velocity`,
+  `set_angular_velocity`, `set_transform`, `apply_central_impulse` /
+  `apply_torque_impulse`. **Deferred one step**:
+  `apply_central_force` / `apply_torque` (invisible same-turn,
+  `+0.1861` at `rel2`), `set_constant_force` (`(0,7,0)` reads back, acts from
+  the next step). `set_sleep_state(true)` is honored now — GodotPhysics keeps
+  the velocity (`kept`), Jolt zeroes it (`zeroed`). A re-entrant
+  `integrate_forces()` silently **double-integrates** (`-0.8137` vs the
+  `-0.6517` control). `body_set_space(RID())` detaches and freezes the body
+  (Jolt then names the missing physics space at teardown — counted). **No
+  member is refused** on either real backend: the engine's in/out-phase
+  refusal line is counted as a witnessed zero. Dummy never fires IF, so every
+  member is `nowrite`.
+- `joint_pin` — the pin constraint as a **witness**, one variant per fresh
+  A/B pair in its own patch of space (two variants sharing coordinates collide
+  with each other — measured). A default pin is **soft**: it settles at
+  `0.8900` under a 1 g load, not at 0. Softness 0 **freezes** the body at its
+  initial `1.0000` offset with exactly zero velocity; softness 1 closes it
+  (`0.0000`); an impulse clamp of `0.01` (below the `0.1633` support impulse)
+  **binds** and the body sags (`1.0043`, `lv -0.0396`). `nomake` is the
+  falsification control (the joint exists, is never made, the body falls:
+  `1.2110`, `lv -1.9421`) and `joint_make_generic_6dof` is compared against
+  it: on Jolt the two traces are **identical** (a silent no-op that still
+  reports `type 4`) while GodotPhysics constrains (`0.8900`). Jolt drops every
+  pin parameter write (`0.3000,1.0000,0.0000` in all four variants) and its
+  default `joint_is_disabled_collisions_between_bodies` is `false` where
+  GodotPhysics is `true`.
+- `joint_param` — the **per-parameter round-trip table**, each joint type
+  written `0.5` at every index and read straight back. GodotPhysics honors the
+  table except the slider, whose getter is **write-opaque** (`hon=-`, one
+  wrong-type guard line per call, 22 counted). Jolt **silently drops** a
+  per-type subset: pin `0,1,2`; hinge `0,3,4,5`; cone `2,3,4`; g6dof
+  `2,4,13,14,15`; slider all but `0,1`. Flags round-trip `2/2` (hinge) and
+  `6/6` (g6dof) on Jolt, `3/6` for g6dof on GodotPhysics. An unmade joint
+  reads `type 5` and solver priority `1` on both real backends. Dummy drops
+  every write and reports `type 0` for every make.
+- `joint_solver` — `joint_set_solver_priority` and the joint **RID
+  lifecycle**. Default `1`; `set 32` is honored on GodotPhysics (`get_after
+  = 32`, and the constraint visibly changes: gap `0.8900 → 0.6473`, `lv
+  +11.6509` — the scout's climb) and **ignored on Jolt** (`get_after=1`, the
+  trace is the control's). `joint_clear` releases from the very next step
+  (gap unchanged in the clearing tick, `lv -0.1633` next), `type` then reads
+  `5`, a double clear is a silent no-op and the RID is **reusable**
+  (`remade_type=0`). A `free_rid`'d joint answers three members with a typed
+  null-parameter refusal (`rc=0`): two `Parameter "joint" is null.` lines and
+  a make guard whose parameter name is **backend-specific** — `prev_joint` on
+  GodotPhysics, `old_joint` on Jolt — both counted from the raw log.
+  **Contrast with the freed-space family: a freed joint never crashes.**
+- `cross_space` — **cross-space handle validity**. A second `World3D` (a
+  `SubViewport` carrying an explicitly constructed world) and a raw
+  `space_create()` + `space_set_active(true)` space are both serviceable from
+  the main world's physics tick: every handle is non-nil, `a_ne_b=true`, each
+  body's `get_space_state()` **is** its own space's direct state and not the
+  other's (`ident_a/ident_b=true`, `cross_ident=false`), and the
+  discriminating query is a ray whose hit height names the space
+  (`-0.5000` in A, `-10.5000` in B, `1.0000` at the raw wall). The box-size
+  convention is pinned: server `shape_set_data((1,1,1))` is **half extents**
+  (ray hit `y=1.0000`) while a `BoxShape3D.size=(1,1,1)` is the **full size**
+  (ray hit `y=0.5000`). One measured backend split, pinned as values: a
+  server body placed in a non-main space is stepped on GodotPhysics but **not
+  on Jolt when no node lives in that world** (the raw space's ball stays at
+  `y=2.0000`), while the same body moves once a node shares the world (world
+  B's server ball and node both fall on Jolt). The scout's Jolt `bsfroma`
+  receipt shows the same frozen raw body.
+- `sleep_state` — the **sleeping-body direct state**, one cell per process in
+  one 13-child parallel batch (a natural sleep takes ~40 wall-clock physics
+  ticks, so a serial sweep would not fit the 20 s per-case bound). A slept
+  body's handle answers every read and the **fetch never wakes it**
+  (`awake_ticks=0`), the contact buffer is **retained and stale** (`cc=1`,
+  support impulse `0.1633`, `lv` frozen) and the IF callback **stops on the
+  sleep tick** (`42` calls at `slept=41`, still `42` six ticks later). Direct
+  writes **do** wake it and take effect (velocity `0,0,2` and transform
+  `+1 m` both land, `hdl_sleep=false`, the body moves/falls). The splits:
+  `set_sleep_state(false)` re-sleeps at the next tick on GodotPhysics
+  (`next_srv=true`) while Jolt stays **awake-but-frozen** (`false`), and
+  moving the floor wakes the ball on GodotPhysics (`srv_sleep=false`, it
+  falls to `-0.0670`, `cc` clears) but **not on Jolt** (`srv_sleep=true`,
+  frozen at `y=-0.0110` with its stale `cc=1`). The state-sync callback never
+  fires while asleep (`ss_count=0`). Dummy never sleeps (`slept=never`,
+  `cc=0`, IF never fires).
+
+The r89 arm also carries the **r88-sentinel S3 remediation**: `_child_prepare`
+now refuses a `dirname` that is empty or contains `..` / a path separator
+(fail-closed, named error), so a spec can no longer write a child project
+outside the scratch subtree — measured with a scratch-only probe (four unsafe
+spellings refused, a plain name still prepared, no directory created outside).
 
 Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
 

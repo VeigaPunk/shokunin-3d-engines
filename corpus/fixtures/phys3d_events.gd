@@ -246,6 +246,75 @@
 #                empties with rc=0. The children are spawned in ONE parallel
 #                batch (the per-case 20 s bound), each still wrapped in
 #                `timeout -s KILL` and the batch itself fail-closed.
+#   if_phase     parent arm (round 89): the intra-tick PHASE LATTICE at the
+#                contact surface, rebuilt in-fixture. The same tick is sampled
+#                at _integrate_forces (IF), _physics_process (E) and _process
+#                (F) through one body handle with `pf` + `seq` stamps, so the
+#                order is read off the rows: IF is a PRE-step view (IF(pf=k) ==
+#                E(pf=k) == F(pf=k-1)), the CURRENT step's contact record is
+#                readable only at F or at the next tick's IF/E (never inside
+#                IF), and the record's `impulse` is one solve late on
+#                GodotPhysics while Jolt's holds its own step's impulse. Every
+#                out-of-range contact index is a typed refusal (one engine
+#                line per call, counted from the raw log), never a crash.
+#   if_write     parent arm (round 89): the _integrate_forces INTERIOR rules,
+#                one member per fresh free-falling ball. Velocity / angular
+#                velocity / transform / impulse writes are immediate; force /
+#                torque / constant-force writes are DEFERRED one step;
+#                set_sleep_state(true) is honored now but GodotPhysics keeps
+#                the velocity while Jolt zeroes it; a re-entrant
+#                integrate_forces() silently double-integrates;
+#                body_set_space(RID()) detaches and freezes the body (Jolt's
+#                teardown then names the missing physics space, counted). No
+#                member is refused — the in/out-phase refusal line is counted
+#                as a witnessed zero.
+#   joint_pin    parent arm (round 89): the pin constraint as a WITNESS — soft
+#                by default, frozen at softness 0 with exactly zero velocity,
+#                rigid at softness 1, sagging when the impulse clamp drops
+#                below the support impulse — with the `nomake` control proving
+#                the witness measures the joint, and
+#                `joint_make_generic_6dof` compared against that control (on
+#                Jolt the traces are identical: a silent no-op that still
+#                reports type 4). Jolt drops every pin parameter write.
+#   joint_param  parent arm (round 89): the per-parameter ROUND-TRIP table per
+#                joint type: Jolt silently drops a per-type subset of
+#                solver-tuning writes (pin 0-2; hinge 0,3,4,5; cone 2,3,4;
+#                g6dof 2,4,13,14,15; slider but 0,1) while honoring
+#                limits/motors, GodotPhysics honors the table except the
+#                slider, whose getter is write-opaque and emits one wrong-type
+#                guard per call (counted). Dummy drops everything.
+#   joint_solver parent arm (round 89): joint_set_solver_priority (default 1,
+#                `set 32` honored on GodotPhysics with a large behavioural
+#                change, ignored on Jolt) and the joint RID lifecycle —
+#                joint_clear releases from the very next step, a double clear
+#                is a silent no-op, the RID is REUSABLE, and a free_rid'd
+#                joint answers with a typed null-parameter refusal whose make
+#                guard name is backend-specific (`prev_joint` vs `old_joint`).
+#                Contrast with the freed-SPACE family: a freed JOINT never
+#                crashes.
+#   cross_space  parent arm (round 89): cross-space handle validity — a second
+#                World3D (a SubViewport carrying its own world) and a raw
+#                active server space both answer from the main world's physics
+#                tick, each handle resolves to its OWN space, and each space
+#                answers its own rays at its own height. The box-size
+#                convention is pinned: server shape_set_data takes HALF
+#                extents, a BoxShape3D.size is the FULL size. One measured
+#                backend split: a server body in a non-main space is stepped
+#                on GodotPhysics but not on Jolt unless a node shares the
+#                world (the raw space's ball stays frozen there).
+#   sleep_state  parent arm (round 89): the sleeping-body direct state as ONE
+#                cell per process in a parallel batch (13 children). A slept
+#                body's handle answers every read and the fetch never wakes
+#                it; the handle's CONTACT VIEW reads the pre-sleep snapshot
+#                (cc=1, support impulse 0.1633, frozen lv — a stale READ on
+#                the held state object, nothing asserted about the backend's
+#                internal buffer) and the IF callback stops on the sleep
+#                tick; velocity and transform writes land, wake the body
+#                and take effect; set_sleep_state(false) re-sleeps at the next
+#                tick on GodotPhysics while Jolt stays awake-but-frozen;
+#                moving the floor wakes the ball on GodotPhysics and not on
+#                Jolt (frozen at y=-0.0110 with the same stale read); and the
+#                state-sync callback never fires while asleep.
 #
 # Reproduce one arm:
 #   godot --headless --path <scratch> --script res://phys3d_events.gd -- --arm=isect
@@ -460,6 +529,28 @@ func _spawn_child(dirname: String, project_body: String, arm: String,
 # prepare -> OS.execute -> scan composition it always was, byte-identical.
 func _child_prepare(dirname: String, project_body: String, arm: String,
 		script_res := "res://phys3d_events.gd", bound_s := 30) -> Dictionary:
+	# r89 (r88-sentinel S3 remediation, fail-closed): `dirname` is a spec field
+	# and `globalize_path("res://" + dirname)` passes `..` and absolute
+	# segments through unchanged, so an unsanitized spec could write
+	# project.godot OUTSIDE the scratch subtree (the sentinel measured
+	# `dirname="../escapeprobe"` landing a real project one level up). Every
+	# r83-r88 call site passes a plain single-segment name (moplainproj,
+	# fmplainpt, ...), so refusing empty / `..` / a path separator changes no
+	# existing child and a bad spec fails named instead of escaping.
+	if dirname.is_empty() or ".." in dirname or "/" in dirname \
+			or "\\" in dirname or ":" in dirname:
+		return {"err": "%s rejected dirname '%s' (unsafe: empty, '..', or a path segment)"
+				% [arm, dirname]}
+	# Whitelist continuation: shell metacharacters ($, `, {, }, ", ',
+	# whitespace, ;, |, &, <, >, ~) are refused outright — the name is
+	# interpolated into paths and log lines, so only [A-Za-z0-9_-] is safe.
+	for i in dirname.length():
+		var c := dirname.unicode_at(i)
+		var ok := (c >= 0x30 and c <= 0x39) or (c >= 0x41 and c <= 0x5A) \
+				or (c >= 0x61 and c <= 0x7A) or c == 0x5F or c == 0x2D
+		if not ok:
+			return {"err": "%s rejected dirname '%s' (unsafe: char U+%04X)"
+					% [arm, dirname, c]}
 	var dir := ProjectSettings.globalize_path("res://" + dirname)
 	var mk := DirAccess.make_dir_recursive_absolute(dir)
 	if mk != OK:
@@ -671,6 +762,46 @@ func _log_count(logpath: String, token: String) -> int:
 	return n
 
 
+# r89 C5: the if_phase ordering claim pinned off the child-side seq counter
+# gains a position witness — PHASEMK lines are printed inside each callback
+# in real time (IF on the physics thread, E/F on the main thread), so the
+# merged log's FILE ORDER is scheduler-mediated, not child arithmetic. For
+# every pf where all three markers appear, IF must precede E precede F.
+# Returns "true"/"false"/"absent" mirroring _phase_seq_order.
+func _log_phase_order(logpath: String) -> String:
+	var lf := FileAccess.open(logpath, FileAccess.READ)
+	if lf == null:
+		return "absent"
+	var first_pos := {}
+	var n := 0
+	while not lf.eof_reached():
+		var line := lf.get_line()
+		if line.begins_with("PHASEMK "):
+			n += 1
+			var parts := line.split(" ")
+			if parts.size() == 3:
+				var key := "%s|%s" % [parts[2], parts[1]]
+				if not first_pos.has(key):
+					first_pos[key] = n
+	lf.close()
+	if n == 0:
+		return "absent"
+	var pfs := {}
+	for key in first_pos:
+		pfs[key.split("|")[0]] = true
+	var seen := 0
+	for pf in pfs:
+		var i: int = first_pos.get("%s|IF" % pf, -1)
+		var e: int = first_pos.get("%s|E" % pf, -1)
+		var f: int = first_pos.get("%s|F" % pf, -1)
+		if i < 0 or e < 0 or f < 0:
+			continue
+		seen += 1
+		if not (i < e and e < f):
+			return "false"
+	return "true" if seen > 0 else "absent"
+
+
 # r88 C6: counts `token<a>/<b>` lines whose two ids are equal — the
 # parent-side identity witness for fetch_gate's held-handle bypass conjunct.
 func _log_idpair_equal_count(logpath: String, token: String) -> int:
@@ -856,6 +987,9 @@ func _run() -> void:
 		if arm_any.begins_with("fm_"):
 			await _child_freed_method(arm_any)
 			return
+		if arm_any.begins_with("sl_"):
+			await _child_sleep(arm_any)
+			return
 		match _argval("--arm=", ""):
 			"jolt_edge":
 				await _child_jolt()
@@ -955,6 +1089,18 @@ func _run() -> void:
 				await _child_geom_split("gs_jolt")
 			"fd_dummy":
 				await _child_freed_dummy("fd_dummy")
+			"ip_plain", "ip_jolt", "ip_dummy":
+				await _child_if_phase(arm_any)
+			"jp_plain", "jp_jolt", "jp_dummy":
+				await _child_joint_pin(arm_any)
+			"jq_plain", "jq_jolt", "jq_dummy":
+				await _child_joint_param(arm_any)
+			"iw_plain", "iw_jolt", "iw_dummy":
+				await _child_if_write(arm_any)
+			"cx_plain", "cx_jolt", "cx_dummy":
+				await _child_cross_space(arm_any)
+			"js_plain", "js_jolt", "js_dummy":
+				await _child_joint_solver(arm_any)
 			var bad:
 				_quit_clean(2, "CHILD_RESULT child_arm=unknown arm='%s'" % bad)
 		return
@@ -2920,6 +3066,1044 @@ func _run() -> void:
 						% [jolt_crash, jolt_dead])
 			_exit_ok("PASS phys3d_events freed_space_methods gp=crash6@post_fetch jolt=crash-or-dead@post_fetch dummy=empty child_exit=0")
 
+		"if_phase":
+			# r89: the intra-tick phase lattice at the contact surface — the
+			# scout's §0/§1.3 cells. IF is a PRE-step view (IF(pf=k) == E(pf=k)
+			# == F(pf=k-1)); the current step's record is readable at F or at
+			# the next tick's IF, never inside IF; the record's `impulse` is
+			# one solve late on GodotPhysics and same-step on Jolt; and every
+			# out-of-range contact index is a typed refusal, counted per call
+			# in the raw child log (never a crash).
+			if _gate("Jolt Physics", "if_phase", "jolt"): return
+			if _gate("Dummy", "if_phase", "dummy"): return
+			var ip_allow := ["is out of bounds"]
+			var ip_plain := _spawn_child("ipplainproj",
+					_project_body("IpPlain", "", false), "ip_plain", false,
+					"res://phys3d_events.gd", 30, ip_allow)
+			if ip_plain.has("err"):
+				return _fail(ip_plain["err"])
+			var ip_jolt := _spawn_child("ipjoltproj",
+					_project_body("IpJolt", "Jolt Physics", false),
+					"ip_jolt", false, "res://phys3d_events.gd", 30, ip_allow)
+			if ip_jolt.has("err"):
+				return _fail(ip_jolt["err"])
+			var ip_dummy := _spawn_child("ipdummyproj",
+					_project_body("IpDummy", "Dummy", false), "ip_dummy",
+					false, "res://phys3d_events.gd", 30, ip_allow)
+			if ip_dummy.has("err"):
+				return _fail(ip_dummy["err"])
+			var expect_ip_plain := {
+				"ip_plain_backend": "DEFAULT",
+				"ip_plain_if_fires": "24",
+				"ip_plain_cc_max": "1",
+				"ip_plain_first_pf": "13",
+				"ip_plain_if_eq_e": "true",
+				"ip_plain_f_eq_next_if": "true",
+				"ip_plain_seq_order": "true",
+				"ip_plain_if_cc_first": "0",
+				"ip_plain_e_cc_first": "0",
+				"ip_plain_f_cc_first": "1",
+				"ip_plain_if_cc_next": "1",
+				"ip_plain_imp_first": "zero",
+				"ip_plain_imp_first_mag": "0.0000",
+				"ip_plain_imp_next_mag": "2.1022",
+				"ip_plain_lvloc_first_mag": "2.1022",
+				"ip_plain_oob_calls": "11",
+				"ip_plain_oob_shape": "-1",
+				"ip_plain_cc_after": "1",
+			}
+			var expect_ip_jolt := {
+				"ip_jolt_backend": "Jolt Physics",
+				"ip_jolt_if_fires": "24",
+				"ip_jolt_cc_max": "1",
+				"ip_jolt_first_pf": "13",
+				"ip_jolt_if_eq_e": "true",
+				"ip_jolt_f_eq_next_if": "true",
+				"ip_jolt_seq_order": "true",
+				"ip_jolt_if_cc_first": "0",
+				"ip_jolt_e_cc_first": "0",
+				"ip_jolt_f_cc_first": "1",
+				"ip_jolt_if_cc_next": "1",
+				"ip_jolt_imp_first": "real",
+				"ip_jolt_imp_first_mag": "2.1022",
+				"ip_jolt_imp_next_mag": "0.1633",
+				"ip_jolt_lvloc_first_mag": "2.1022",
+				"ip_jolt_oob_calls": "11",
+				"ip_jolt_oob_shape": "0",
+				"ip_jolt_cc_after": "1",
+			}
+			var expect_ip_dummy := {
+				"ip_dummy_backend": "Dummy",
+				"ip_dummy_if_fires": "0",
+				"ip_dummy_cc_max": "0",
+				"ip_dummy_first_pf": "-1",
+				"ip_dummy_if_eq_e": "absent",
+				"ip_dummy_f_eq_next_if": "absent",
+				"ip_dummy_seq_order": "absent",
+				"ip_dummy_if_cc_first": "-1",
+				"ip_dummy_e_cc_first": "-1",
+				"ip_dummy_f_cc_first": "-1",
+				"ip_dummy_if_cc_next": "-1",
+				"ip_dummy_imp_first": "absent",
+				"ip_dummy_imp_first_mag": "0.0000",
+				"ip_dummy_imp_next_mag": "0.0000",
+				"ip_dummy_lvloc_first_mag": "0.0000",
+				"ip_dummy_oob_calls": "0",
+				"ip_dummy_oob_shape": "absent",
+				"ip_dummy_cc_after": "-1",
+			}
+			for probe in [[ip_plain, expect_ip_plain, "plain"],
+					[ip_jolt, expect_ip_jolt, "jolt"],
+					[ip_dummy, expect_ip_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("if_phase %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# the out-of-range refusal is a LOG witness: one engine ERROR per
+			# getter call, so a silently-default read can never mint the count.
+			# The count is the 11 getters + the one extra read that pins the
+			# out-of-range `get_contact_local_shape` default (-1 on
+			# GodotPhysics, 0 on Jolt — the r87 body_tier split re-bound here).
+			for dirname in ["ipplainproj", "ipjoltproj"]:
+				var logp := ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname)
+				if _log_count(logp, "is out of bounds") \
+						!= PHASE_GETTERS.size() + 1:
+					return _fail("if_phase %s oob lines=%d expected=%d"
+							% [dirname, _log_count(logp, "is out of bounds"),
+							PHASE_GETTERS.size() + 1])
+			# r89 C5: the seq token is child-assigned; the PHASEMK file
+			# position is not. The raw-log order must corroborate the
+			# pinned seq_order on both real backends.
+			for probe in [["ipplainproj", "true"], ["ipjoltproj", "true"],
+					["ipdummyproj", "absent"]]:
+				var ph := _log_phase_order(ProjectSettings.globalize_path(
+						"res://%s/child.log" % probe[0]))
+				if ph != probe[1]:
+					return _fail("if_phase %s log_seq=%s expected=%s"
+							% [probe[0], ph, probe[1]])
+			_exit_ok("PASS phys3d_events if_phase gp=lag jolt=same if_eq_e=true child_exit=0")
+
+		"joint_pin":
+			# r89: the pin constraint as a witness — soft by default, frozen at
+			# softness 0, rigid at softness 1, sagging under a binding impulse
+			# clamp, and the `nomake` control proving the witness measures the
+			# joint. `joint_make_generic_6dof` is compared against the control:
+			# on Jolt it is a silent no-op (the traces are identical).
+			if _gate("Jolt Physics", "joint_pin", "jolt"): return
+			if _gate("Dummy", "joint_pin", "dummy"): return
+			var jp_plain := _spawn_child("jpplainproj",
+					_project_body("JpPlain", "", false), "jp_plain", false)
+			if jp_plain.has("err"):
+				return _fail(jp_plain["err"])
+			var jp_jolt := _spawn_child("jpjoltproj",
+					_project_body("JpJolt", "Jolt Physics", false),
+					"jp_jolt", false)
+			if jp_jolt.has("err"):
+				return _fail(jp_jolt["err"])
+			var jp_dummy := _spawn_child("jpdummyproj",
+					_project_body("JpDummy", "Dummy", false), "jp_dummy", false)
+			if jp_dummy.has("err"):
+				return _fail(jp_dummy["err"])
+			var expect_jp_plain := {
+				"jp_plain_backend": "DEFAULT",
+				"jp_plain_pin_gap": "0.8885,0.8900",
+				"jp_plain_pin_lv": "-0.0000",
+				"jp_plain_pin_type": "0",
+				"jp_plain_soft0_gap": "1.0000,1.0000",
+				"jp_plain_soft0_lv": "0.0000",
+				"jp_plain_soft0_type": "0",
+				"jp_plain_soft1_gap": "0.0000,0.0000",
+				"jp_plain_soft1_lv": "0.0000",
+				"jp_plain_soft1_type": "0",
+				"jp_plain_clamp2_gap": "1.0006,1.0043",
+				"jp_plain_clamp2_lv": "-0.0396",
+				"jp_plain_clamp2_type": "0",
+				"jp_plain_nomake_gap": "1.0272,1.2110",
+				"jp_plain_nomake_lv": "-1.9421",
+				"jp_plain_nomake_type": "5",
+				"jp_plain_g6dof_gap": "0.8869,0.8900",
+				"jp_plain_g6dof_lv": "0.0000",
+				"jp_plain_g6dof_type": "4",
+				"jp_plain_pin_rb": "0.3000,1.0000,0.0000",
+				"jp_plain_soft0_rb": "0.0000,1.0000,0.0000",
+				"jp_plain_soft1_rb": "1.0000,1.0000,0.0000",
+				"jp_plain_clamp2_rb": "0.3000,1.0000,0.0100",
+				"jp_plain_coll_default": "true",
+				"jp_plain_g6dof_eq_nomake": "false",
+			}
+			var expect_jp_jolt := {
+				"jp_jolt_backend": "Jolt Physics",
+				"jp_jolt_pin_gap": "0.3153,0.2032",
+				"jp_jolt_pin_lv": "0.0000",
+				"jp_jolt_pin_type": "0",
+				"jp_jolt_soft0_gap": "0.3153,0.2032",
+				"jp_jolt_soft0_lv": "0.0000",
+				"jp_jolt_soft0_type": "0",
+				"jp_jolt_soft1_gap": "0.3153,0.2032",
+				"jp_jolt_soft1_lv": "0.0000",
+				"jp_jolt_soft1_type": "0",
+				"jp_jolt_clamp2_gap": "0.3153,0.2032",
+				"jp_jolt_clamp2_lv": "0.0000",
+				"jp_jolt_clamp2_type": "0",
+				"jp_jolt_nomake_gap": "1.0272,1.2110",
+				"jp_jolt_nomake_lv": "-1.9421",
+				"jp_jolt_nomake_type": "5",
+				"jp_jolt_g6dof_gap": "1.0272,1.2110",
+				"jp_jolt_g6dof_lv": "-1.9421",
+				"jp_jolt_g6dof_type": "4",
+				"jp_jolt_pin_rb": "0.3000,1.0000,0.0000",
+				"jp_jolt_soft0_rb": "0.3000,1.0000,0.0000",
+				"jp_jolt_soft1_rb": "0.3000,1.0000,0.0000",
+				"jp_jolt_clamp2_rb": "0.3000,1.0000,0.0000",
+				"jp_jolt_coll_default": "false",
+				"jp_jolt_g6dof_eq_nomake": "true",
+			}
+			var expect_jp_dummy := {
+				"jp_dummy_backend": "Dummy",
+				"jp_dummy_pin_gap": "0.0000,0.0000",
+				"jp_dummy_pin_lv": "0.0000",
+				"jp_dummy_pin_type": "0",
+				"jp_dummy_soft0_gap": "0.0000,0.0000",
+				"jp_dummy_soft0_lv": "0.0000",
+				"jp_dummy_soft0_type": "0",
+				"jp_dummy_soft1_gap": "0.0000,0.0000",
+				"jp_dummy_soft1_lv": "0.0000",
+				"jp_dummy_soft1_type": "0",
+				"jp_dummy_clamp2_gap": "0.0000,0.0000",
+				"jp_dummy_clamp2_lv": "0.0000",
+				"jp_dummy_clamp2_type": "0",
+				"jp_dummy_nomake_gap": "0.0000,0.0000",
+				"jp_dummy_nomake_lv": "0.0000",
+				"jp_dummy_nomake_type": "0",
+				"jp_dummy_g6dof_gap": "0.0000,0.0000",
+				"jp_dummy_g6dof_lv": "0.0000",
+				"jp_dummy_g6dof_type": "0",
+				"jp_dummy_pin_rb": "0.0000,0.0000,0.0000",
+				"jp_dummy_soft0_rb": "0.0000,0.0000,0.0000",
+				"jp_dummy_soft1_rb": "0.0000,0.0000,0.0000",
+				"jp_dummy_clamp2_rb": "0.0000,0.0000,0.0000",
+				"jp_dummy_coll_default": "false",
+				"jp_dummy_g6dof_eq_nomake": "true",
+			}
+			for probe in [[jp_plain, expect_jp_plain, "plain"],
+					[jp_jolt, expect_jp_jolt, "jolt"],
+					[jp_dummy, expect_jp_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("joint_pin %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# the Jolt drops are not silent: exactly 3 "not supported when
+			# using Jolt Physics" WARNINGs (2x pin bias, 1x impulse clamp);
+			# GP and Dummy emit none.
+			if _log_count(ProjectSettings.globalize_path(
+					"res://jpjoltproj/child.log"),
+					"not supported when using Jolt Physics") != 3:
+				return _fail("joint_pin jolt warnings drift")
+			for dirname in ["jpplainproj", "jpdummyproj"]:
+				if _log_count(ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname),
+						"not supported when using Jolt Physics") != 0:
+					return _fail("joint_pin %s unexpected jolt warning"
+							% dirname)
+			_exit_ok("PASS phys3d_events joint_pin gp=soft jolt=dropped dummy=flat child_exit=0")
+
+		"joint_param":
+			# r89: the per-parameter round-trip table per backend. Jolt
+			# silently drops a per-type subset of solver-tuning writes while
+			# honoring limits/motors; GodotPhysics honors the table except the
+			# slider, whose getter is write-opaque (one wrong-type guard line
+			# per call, counted from the raw log by the parent).
+			if _gate("Jolt Physics", "joint_param", "jolt"): return
+			if _gate("Dummy", "joint_param", "dummy"): return
+			var jq_allow := ["Condition \"joint->get_type() != JOINT_TYPE_CONE_TWIST\""]
+			var jq_plain := _spawn_child("jqplainproj",
+					_project_body("JqPlain", "", false), "jq_plain", false,
+					"res://phys3d_events.gd", 30, jq_allow)
+			if jq_plain.has("err"):
+				return _fail(jq_plain["err"])
+			var jq_jolt := _spawn_child("jqjoltproj",
+					_project_body("JqJolt", "Jolt Physics", false),
+					"jq_jolt", false, "res://phys3d_events.gd", 30, jq_allow)
+			if jq_jolt.has("err"):
+				return _fail(jq_jolt["err"])
+			var jq_dummy := _spawn_child("jqdummyproj",
+					_project_body("JqDummy", "Dummy", false), "jq_dummy", false,
+					"res://phys3d_events.gd", 30, jq_allow)
+			if jq_dummy.has("err"):
+				return _fail(jq_dummy["err"])
+			var expect_jq_plain := {
+				"jq_plain_backend": "DEFAULT",
+				"jq_plain_pin_type": "0",
+				"jq_plain_pin_hon": "0,1,2",
+				"jq_plain_pin_drop": "-",
+				"jq_plain_hinge_type": "1",
+				"jq_plain_hinge_hon": "0,1,2,3,4,5,6,7",
+				"jq_plain_hinge_drop": "-",
+				"jq_plain_slider_type": "2",
+				"jq_plain_slider_hon": "-",
+				"jq_plain_slider_drop": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+				"jq_plain_cone_type": "3",
+				"jq_plain_cone_hon": "0,1,2,3,4",
+				"jq_plain_cone_drop": "-",
+				"jq_plain_g6dof_type": "4",
+				"jq_plain_g6dof_hon": "0,1,2,3,4,10,11,12,13,14,15,16,17",
+				"jq_plain_g6dof_drop": "5,6,7,8,9,18,19,20,21",
+				"jq_plain_hinge_flags": "2/2",
+				"jq_plain_g6dof_flags": "3/6",
+				"jq_plain_unmade_type": "5",
+				"jq_plain_unmade_solver": "1",
+				"jq_plain_coll_default": "true",
+			}
+			var expect_jq_jolt := {
+				"jq_jolt_backend": "Jolt Physics",
+				"jq_jolt_pin_type": "0",
+				"jq_jolt_pin_hon": "-",
+				"jq_jolt_pin_drop": "0,1,2",
+				"jq_jolt_hinge_type": "1",
+				"jq_jolt_hinge_hon": "1,2,6,7",
+				"jq_jolt_hinge_drop": "0,3,4,5",
+				"jq_jolt_slider_type": "2",
+				"jq_jolt_slider_hon": "0,1",
+				"jq_jolt_slider_drop": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+				"jq_jolt_cone_type": "3",
+				"jq_jolt_cone_hon": "0,1",
+				"jq_jolt_cone_drop": "2,3,4",
+				"jq_jolt_g6dof_type": "4",
+				"jq_jolt_g6dof_hon": "0,1,3,5,6,7,8,9,10,11,12,16,17,18,19,20,21",
+				"jq_jolt_g6dof_drop": "2,4,13,14,15",
+				"jq_jolt_hinge_flags": "2/2",
+				"jq_jolt_g6dof_flags": "6/6",
+				"jq_jolt_unmade_type": "5",
+				"jq_jolt_unmade_solver": "1",
+				"jq_jolt_coll_default": "false",
+			}
+			var expect_jq_dummy := {
+				"jq_dummy_backend": "Dummy",
+				"jq_dummy_pin_type": "0",
+				"jq_dummy_pin_hon": "-",
+				"jq_dummy_pin_drop": "0,1,2",
+				"jq_dummy_hinge_type": "0",
+				"jq_dummy_hinge_hon": "-",
+				"jq_dummy_hinge_drop": "0,1,2,3,4,5,6,7",
+				"jq_dummy_slider_type": "0",
+				"jq_dummy_slider_hon": "-",
+				"jq_dummy_slider_drop": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+				"jq_dummy_cone_type": "0",
+				"jq_dummy_cone_hon": "-",
+				"jq_dummy_cone_drop": "0,1,2,3,4",
+				"jq_dummy_g6dof_type": "0",
+				"jq_dummy_g6dof_hon": "-",
+				"jq_dummy_g6dof_drop": "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+				"jq_dummy_hinge_flags": "0/2",
+				"jq_dummy_g6dof_flags": "0/6",
+				"jq_dummy_unmade_type": "0",
+				"jq_dummy_unmade_solver": "0",
+				"jq_dummy_coll_default": "false",
+			}
+			for probe in [[jq_plain, expect_jq_plain, "plain"],
+					[jq_jolt, expect_jq_jolt, "jolt"],
+					[jq_dummy, expect_jq_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("joint_param %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# the slider getter's wrong-type guard is the write-opacity
+			# witness: GodotPhysics prints one per call, Jolt and Dummy none.
+			var jq_guard := _log_count(ProjectSettings.globalize_path(
+					"res://jqplainproj/child.log"),
+					"Condition \"joint->get_type() != JOINT_TYPE_CONE_TWIST\"")
+			if jq_guard != JP_TYPES["slider"]:
+				return _fail("joint_param plain slider guards=%d expected=%d"
+						% [jq_guard, JP_TYPES["slider"]])
+			for dirname in ["jqjoltproj", "jqdummyproj"]:
+				if _log_count(ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname),
+						"Condition \"joint->get_type() != JOINT_TYPE_CONE_TWIST\"") != 0:
+					return _fail("joint_param %s unexpected slider guard"
+							% dirname)
+			# the Jolt drop list is not silent either: the engine emits one
+			# "<param> ... not supported when using Jolt Physics" WARNING per
+			# refused write — 33 "is" + 2 "are" (slider angular limits) = 35,
+			# matching the pinned drop rows exactly. Counted like the slider
+			# guard so a drop-without-warning drift fails.
+			var jq_jolt_warn := _log_count(ProjectSettings.globalize_path(
+					"res://jqjoltproj/child.log"),
+					"not supported when using Jolt Physics")
+			if jq_jolt_warn != 35:
+				return _fail("joint_param jolt warnings=%d expected=35"
+						% jq_jolt_warn)
+			for dirname in ["jqplainproj", "jqdummyproj"]:
+				if _log_count(ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname),
+						"not supported when using Jolt Physics") != 0:
+					return _fail("joint_param %s unexpected jolt warning"
+							% dirname)
+			_exit_ok("PASS phys3d_events joint_param gp=sliderblind jolt=drops dummy=drops child_exit=0")
+
+		"sleep_state":
+			# r89: the sleeping-body direct state, ONE cell per process in one
+			# parallel batch (a natural sleep takes ~40 wall-clock physics
+			# ticks, so a serial sweep of 13 cells would not fit the per-case
+			# bound). Each child still carries its own `timeout -s KILL`; the
+			# batch deadline is the fail-closed net on top.
+			if _gate("Jolt Physics", "sleep_state", "jolt"): return
+			if _gate("Dummy", "sleep_state", "dummy"): return
+			var sl_specs := []
+			for cell in SLEEP_CELLS:
+				sl_specs.append({
+					"dirname": "sl%splain" % cell,
+					"arm": "sl_%s_plain" % cell,
+					"project_body": _project_body("Sl%sPlain" % cell.capitalize(),
+							"", false),
+					"bound_s": 20,
+				})
+				sl_specs.append({
+					"dirname": "sl%sjolt" % cell,
+					"arm": "sl_%s_jolt" % cell,
+					"project_body": _project_body("Sl%sJolt" % cell.capitalize(),
+							"Jolt Physics", false),
+					"bound_s": 20,
+				})
+			sl_specs.append({
+				"dirname": "sldummy", "arm": "sl_dummy",
+				"project_body": _project_body("SlDummy", "Dummy", false),
+				"bound_s": 20,
+			})
+			var sl_batch := _spawn_batch(sl_specs)
+			# Measured per cell (the r89-scout's §5 lattice, re-bound here):
+			# the fetch and every read leave the body asleep and the held
+			# state object's contact view reads the pre-sleep snapshot (cc=1,
+			# the support impulse 0.1633, lv frozen — a stale READ, not a
+			# claim about the backend's internal buffer); the IF
+			# callback stops on the sleep tick (42 calls at slept=41 and still
+			# 42 six ticks later); a velocity or transform write lands, wakes
+			# the body and takes effect; `set_sleep_state(false)` re-sleeps at
+			# the next tick on GodotPhysics while Jolt stays awake-but-frozen;
+			# moving the floor wakes the ball on GodotPhysics and not on Jolt
+			# (frozen at y=-0.0110 with the same stale read); and the state-sync
+			# callback never fires while asleep.
+			var sl_want := {
+				"sl_reads_plain": {
+					"sl_reads_plain_backend": "DEFAULT",
+					"sl_reads_plain_slept": "41",
+					"sl_reads_plain_if_calls": "42",
+					"sl_reads_plain_cc": "1",
+					"sl_reads_plain_imp": "0.1633",
+					"sl_reads_plain_lv": "0.0000,-0.0000,0.0000",
+					"sl_reads_plain_hdl_sleep": "true",
+					"sl_reads_plain_awake_ticks": "0",
+					"sl_reads_plain_if_calls_after": "42",
+				},
+				"sl_reads_jolt": {
+					"sl_reads_jolt_backend": "Jolt Physics",
+					"sl_reads_jolt_slept": "41",
+					"sl_reads_jolt_if_calls": "42",
+					"sl_reads_jolt_cc": "1",
+					"sl_reads_jolt_imp": "0.1633",
+					"sl_reads_jolt_lv": "0.0000,0.0000,0.0000",
+					"sl_reads_jolt_hdl_sleep": "true",
+					"sl_reads_jolt_awake_ticks": "0",
+					"sl_reads_jolt_if_calls_after": "42",
+				},
+				"sl_wake_plain": {
+					"sl_wake_plain_backend": "DEFAULT",
+					"sl_wake_plain_slept": "41",
+					"sl_wake_plain_if_calls": "42",
+					"sl_wake_plain_same_lv": "0.0000,0.0000,2.0000",
+					"sl_wake_plain_same_hdl": "false",
+					"sl_wake_plain_srv_sleep": "false",
+					"sl_wake_plain_moved": "true",
+				},
+				"sl_wake_jolt": {
+					"sl_wake_jolt_backend": "Jolt Physics",
+					"sl_wake_jolt_slept": "41",
+					"sl_wake_jolt_if_calls": "42",
+					"sl_wake_jolt_same_lv": "0.0000,0.0000,2.0000",
+					"sl_wake_jolt_same_hdl": "false",
+					"sl_wake_jolt_srv_sleep": "false",
+					"sl_wake_jolt_moved": "true",
+				},
+				"sl_xform_plain": {
+					"sl_xform_plain_backend": "DEFAULT",
+					"sl_xform_plain_slept": "41",
+					"sl_xform_plain_if_calls": "42",
+					"sl_xform_plain_same_tr": "0.0000,0.9900,0.0000",
+					"sl_xform_plain_same_hdl": "false",
+					"sl_xform_plain_srv_sleep": "false",
+					"sl_xform_plain_fell": "true",
+				},
+				"sl_xform_jolt": {
+					"sl_xform_jolt_backend": "Jolt Physics",
+					"sl_xform_jolt_slept": "41",
+					"sl_xform_jolt_if_calls": "42",
+					"sl_xform_jolt_same_tr": "0.0000,0.9890,0.0000",
+					"sl_xform_jolt_same_hdl": "false",
+					"sl_xform_jolt_srv_sleep": "false",
+					"sl_xform_jolt_fell": "true",
+				},
+				"sl_toggle_plain": {
+					"sl_toggle_plain_backend": "DEFAULT",
+					"sl_toggle_plain_slept": "41",
+					"sl_toggle_plain_if_calls": "42",
+					"sl_toggle_plain_same_hdl": "false",
+					"sl_toggle_plain_same_srv": "false",
+					"sl_toggle_plain_next_srv": "true",
+					"sl_toggle_plain_frozen": "true",
+				},
+				"sl_toggle_jolt": {
+					"sl_toggle_jolt_backend": "Jolt Physics",
+					"sl_toggle_jolt_slept": "41",
+					"sl_toggle_jolt_if_calls": "42",
+					"sl_toggle_jolt_same_hdl": "false",
+					"sl_toggle_jolt_same_srv": "false",
+					"sl_toggle_jolt_next_srv": "false",
+					"sl_toggle_jolt_frozen": "true",
+				},
+				"sl_floor_plain": {
+					"sl_floor_plain_backend": "DEFAULT",
+					"sl_floor_plain_slept": "41",
+					"sl_floor_plain_if_calls": "42",
+					"sl_floor_plain_srv_sleep": "false",
+					"sl_floor_plain_ball_tr": "0.0000,-0.0670,0.0000",
+					"sl_floor_plain_cc": "0",
+				},
+				"sl_floor_jolt": {
+					"sl_floor_jolt_backend": "Jolt Physics",
+					"sl_floor_jolt_slept": "41",
+					"sl_floor_jolt_if_calls": "42",
+					"sl_floor_jolt_srv_sleep": "true",
+					"sl_floor_jolt_ball_tr": "0.0000,-0.0110,0.0000",
+					"sl_floor_jolt_cc": "1",
+				},
+				"sl_sync_plain": {
+					"sl_sync_plain_backend": "DEFAULT",
+					"sl_sync_plain_slept": "41",
+					"sl_sync_plain_if_calls": "42",
+					"sl_sync_plain_ss_count": "0",
+					"sl_sync_plain_srv_sleep": "true",
+				},
+				"sl_sync_jolt": {
+					"sl_sync_jolt_backend": "Jolt Physics",
+					"sl_sync_jolt_slept": "41",
+					"sl_sync_jolt_if_calls": "42",
+					"sl_sync_jolt_ss_count": "0",
+					"sl_sync_jolt_srv_sleep": "true",
+				},
+				"sl_dummy": {
+					"sl_dummy_backend": "Dummy",
+					"sl_dummy_slept": "never",
+					"sl_dummy_cc": "0",
+					"sl_dummy_if_fires": "0",
+				},
+			}
+			var sl_bad := []
+			for i in range(sl_specs.size()):
+				var sl_arm: String = sl_specs[i]["arm"]
+				var res: Dictionary = sl_batch[i]
+				if res.has("err") or res.get("batch_timeout", false):
+					sl_bad.append("%s err=%s timeout=%s" % [sl_arm,
+							str(res.get("err")), str(res.get("batch_timeout"))])
+					continue
+				if not sl_want.has(sl_arm):
+					sl_bad.append("%s no sl_want cell (unasserted row)" % sl_arm)
+					continue
+				if res["code"] != 0 or res["serr"] \
+						or res["verdicts"] != sl_want[sl_arm]:
+					sl_bad.append("%s exit=%d serr=%s v=%s errs=%s" % [sl_arm,
+							res["code"], str(res["serr"]),
+							str(res["verdicts"]), str(res["errs"])])
+			if not sl_bad.is_empty():
+				return _fail("sleep_state drift %s" % str(sl_bad))
+			_exit_ok("PASS phys3d_events sleep_state stale_buf=retained writes=wake toggle=gp_resleeps,jolt_frozen floor=gp_wakes,jolt_not child_exit=0")
+
+		"if_write":
+			# r89: the _integrate_forces interior rules. Immediate members
+			# (velocity, angular velocity, transform, impulses) are visible in
+			# the same turn through the same handle and persist; force, torque
+			# and constant-force members are deferred one step; the sleep write
+			# is honored now but the two backends split on the velocity; a
+			# re-entrant integrate_forces() silently double-integrates; and
+			# body_set_space(RID()) detaches and freezes the body. No member is
+			# refused on either real backend — the parent counts the engine's
+			# in/out-phase refusal line in the raw log, so "legal" is a
+			# witnessed zero, never an assumption.
+			if _gate("Jolt Physics", "if_write", "jolt"): return
+			if _gate("Dummy", "if_write", "dummy"): return
+			# the detach member's teardown witness on Jolt: the node's inertia
+			# read after body_set_space(RID()) fails loudly because the body
+			# has no physics space (the engine's own line, counted by the
+			# parent, never a fabricated claim)
+			var iw_allow := ["without a physics space is not supported"]
+			var iw_plain := _spawn_child("iwplainproj",
+					_project_body("IwPlain", "", false), "iw_plain", false,
+					"res://phys3d_events.gd", 30, iw_allow)
+			if iw_plain.has("err"):
+				return _fail(iw_plain["err"])
+			var iw_jolt := _spawn_child("iwjoltproj",
+					_project_body("IwJolt", "Jolt Physics", false),
+					"iw_jolt", false, "res://phys3d_events.gd", 30, iw_allow)
+			if iw_jolt.has("err"):
+				return _fail(iw_jolt["err"])
+			var iw_dummy := _spawn_child("iwdummyproj",
+					_project_body("IwDummy", "Dummy", false), "iw_dummy", false,
+					"res://phys3d_events.gd", 30, iw_allow)
+			if iw_dummy.has("err"):
+				return _fail(iw_dummy["err"])
+			var expect_iw_plain := {
+				"iw_plain_backend": "DEFAULT",
+				"iw_plain_baseline_same": "0.0000,-0.6517,0.0000",
+				"iw_plain_baseline_rel1": "0.0000,-0.6517,0.0000",
+				"iw_plain_baseline_rel2": "0.0000,-0.8139,0.0000",
+				"iw_plain_baseline_class": "control",
+				"iw_plain_linvel_same": "1.0000,2.0000,3.0000",
+				"iw_plain_linvel_rel1": "1.0000,2.0000,3.0000",
+				"iw_plain_linvel_rel2": "0.9983,1.8333,2.9950",
+				"iw_plain_linvel_class": "now",
+				"iw_plain_angvel_same": "0.5000,1.0000,1.5000",
+				"iw_plain_angvel_rel1": "0.5000,1.0000,1.5000",
+				"iw_plain_angvel_rel2": "0.4992,0.9983,1.4975",
+				"iw_plain_angvel_class": "now",
+				"iw_plain_xform_same": "0.0000,8.0000,0.0000",
+				"iw_plain_xform_rel1": "0.0000,8.0000,0.0000",
+				"iw_plain_xform_rel2": "0.0000,7.9864,0.0000",
+				"iw_plain_xform_class": "now",
+				"iw_plain_cimpulse_same": "0.0000,2.3483,0.0000",
+				"iw_plain_cimpulse_rel1": "0.0000,2.3483,0.0000",
+				"iw_plain_cimpulse_rel2": "0.0000,2.1811,0.0000",
+				"iw_plain_cimpulse_class": "now",
+				"iw_plain_timpulse_same": "0.0000,0.0000,30.0000",
+				"iw_plain_timpulse_rel1": "0.0000,0.0000,30.0000",
+				"iw_plain_timpulse_rel2": "0.0000,0.0000,29.9500",
+				"iw_plain_timpulse_class": "now",
+				"iw_plain_cforce_same": "0.0000,-0.6517,0.0000",
+				"iw_plain_cforce_rel1": "0.0000,-0.6517,0.0000",
+				"iw_plain_cforce_rel2": "0.0000,0.1861,0.0000",
+				"iw_plain_cforce_class": "deferred",
+				"iw_plain_torque_same": "0.0000,0.0000,0.0000",
+				"iw_plain_torque_rel1": "0.0000,0.0000,0.0000",
+				"iw_plain_torque_rel2": "0.0000,0.0000,10.0000",
+				"iw_plain_torque_class": "deferred",
+				"iw_plain_setcforce_same": "0.0000,7.0000,0.0000",
+				"iw_plain_setcforce_rel1": "0.0000,-0.6517,0.0000",
+				"iw_plain_setcforce_rel2": "0.0000,-0.6973,0.0000",
+				"iw_plain_setcforce_class": "deferred",
+				"iw_plain_sleep_same": "true",
+				"iw_plain_sleep_rel1": "true/0.0000,-0.6517,0.0000",
+				"iw_plain_sleep_rel2": "true/0.0000,-0.6517,0.0000",
+				"iw_plain_sleep_class": "kept",
+				"iw_plain_reentrant_same": "0.0000,-0.8137,0.0000",
+				"iw_plain_reentrant_rel1": "0.0000,-0.8137,0.0000",
+				"iw_plain_reentrant_rel2": "0.0000,-0.9757,0.0000",
+				"iw_plain_reentrant_class": "double",
+				"iw_plain_detach_same": "RID(0)",
+				"iw_plain_detach_rel1": "RID(0)",
+				"iw_plain_detach_rel2": "RID(0)",
+				"iw_plain_detach_class": "frozen",
+			}
+			var expect_iw_jolt := {
+				"iw_jolt_backend": "Jolt Physics",
+				"iw_jolt_baseline_same": "0.0000,-0.6517,0.0000",
+				"iw_jolt_baseline_rel1": "0.0000,-0.6517,0.0000",
+				"iw_jolt_baseline_rel2": "0.0000,-0.8139,0.0000",
+				"iw_jolt_baseline_class": "control",
+				"iw_jolt_linvel_same": "1.0000,2.0000,3.0000",
+				"iw_jolt_linvel_rel1": "1.0000,2.0000,3.0000",
+				"iw_jolt_linvel_rel2": "0.9983,1.8333,2.9950",
+				"iw_jolt_linvel_class": "now",
+				"iw_jolt_angvel_same": "0.5000,1.0000,1.5000",
+				"iw_jolt_angvel_rel1": "0.5000,1.0000,1.5000",
+				"iw_jolt_angvel_rel2": "0.4992,0.9983,1.4975",
+				"iw_jolt_angvel_class": "now",
+				"iw_jolt_xform_same": "0.0000,8.0000,0.0000",
+				"iw_jolt_xform_rel1": "0.0000,8.0000,0.0000",
+				"iw_jolt_xform_rel2": "0.0000,7.9864,0.0000",
+				"iw_jolt_xform_class": "now",
+				"iw_jolt_cimpulse_same": "0.0000,2.3483,0.0000",
+				"iw_jolt_cimpulse_rel1": "0.0000,2.3483,0.0000",
+				"iw_jolt_cimpulse_rel2": "0.0000,2.1811,0.0000",
+				"iw_jolt_cimpulse_class": "now",
+				"iw_jolt_timpulse_same": "0.0000,0.0000,30.0000",
+				"iw_jolt_timpulse_rel1": "0.0000,0.0000,30.0000",
+				"iw_jolt_timpulse_rel2": "0.0000,0.0000,29.9500",
+				"iw_jolt_timpulse_class": "now",
+				"iw_jolt_cforce_same": "0.0000,-0.6517,0.0000",
+				"iw_jolt_cforce_rel1": "0.0000,-0.6517,0.0000",
+				"iw_jolt_cforce_rel2": "0.0000,0.1861,0.0000",
+				"iw_jolt_cforce_class": "deferred",
+				"iw_jolt_torque_same": "0.0000,0.0000,0.0000",
+				"iw_jolt_torque_rel1": "0.0000,0.0000,0.0000",
+				"iw_jolt_torque_rel2": "0.0000,0.0000,10.0000",
+				"iw_jolt_torque_class": "deferred",
+				"iw_jolt_setcforce_same": "0.0000,7.0000,0.0000",
+				"iw_jolt_setcforce_rel1": "0.0000,-0.6517,0.0000",
+				"iw_jolt_setcforce_rel2": "0.0000,-0.6973,0.0000",
+				"iw_jolt_setcforce_class": "deferred",
+				"iw_jolt_sleep_same": "true",
+				"iw_jolt_sleep_rel1": "true/0.0000,0.0000,0.0000",
+				"iw_jolt_sleep_rel2": "true/0.0000,0.0000,0.0000",
+				"iw_jolt_sleep_class": "zeroed",
+				"iw_jolt_reentrant_same": "0.0000,-0.8139,0.0000",
+				"iw_jolt_reentrant_rel1": "0.0000,-0.8139,0.0000",
+				"iw_jolt_reentrant_rel2": "0.0000,-0.9759,0.0000",
+				"iw_jolt_reentrant_class": "double",
+				"iw_jolt_detach_same": "RID(0)",
+				"iw_jolt_detach_rel1": "RID(0)",
+				"iw_jolt_detach_rel2": "RID(0)",
+				"iw_jolt_detach_class": "frozen",
+			}
+			var expect_iw_dummy := {
+				"iw_dummy_backend": "Dummy",
+				"iw_dummy_baseline_same": "-",
+				"iw_dummy_baseline_rel1": "-",
+				"iw_dummy_baseline_rel2": "-",
+				"iw_dummy_baseline_class": "nowrite",
+				"iw_dummy_linvel_same": "-",
+				"iw_dummy_linvel_rel1": "-",
+				"iw_dummy_linvel_rel2": "-",
+				"iw_dummy_linvel_class": "nowrite",
+				"iw_dummy_angvel_same": "-",
+				"iw_dummy_angvel_rel1": "-",
+				"iw_dummy_angvel_rel2": "-",
+				"iw_dummy_angvel_class": "nowrite",
+				"iw_dummy_xform_same": "-",
+				"iw_dummy_xform_rel1": "-",
+				"iw_dummy_xform_rel2": "-",
+				"iw_dummy_xform_class": "nowrite",
+				"iw_dummy_cimpulse_same": "-",
+				"iw_dummy_cimpulse_rel1": "-",
+				"iw_dummy_cimpulse_rel2": "-",
+				"iw_dummy_cimpulse_class": "nowrite",
+				"iw_dummy_timpulse_same": "-",
+				"iw_dummy_timpulse_rel1": "-",
+				"iw_dummy_timpulse_rel2": "-",
+				"iw_dummy_timpulse_class": "nowrite",
+				"iw_dummy_cforce_same": "-",
+				"iw_dummy_cforce_rel1": "-",
+				"iw_dummy_cforce_rel2": "-",
+				"iw_dummy_cforce_class": "nowrite",
+				"iw_dummy_torque_same": "-",
+				"iw_dummy_torque_rel1": "-",
+				"iw_dummy_torque_rel2": "-",
+				"iw_dummy_torque_class": "nowrite",
+				"iw_dummy_setcforce_same": "-",
+				"iw_dummy_setcforce_rel1": "-",
+				"iw_dummy_setcforce_rel2": "-",
+				"iw_dummy_setcforce_class": "nowrite",
+				"iw_dummy_sleep_same": "-",
+				"iw_dummy_sleep_rel1": "-",
+				"iw_dummy_sleep_rel2": "-",
+				"iw_dummy_sleep_class": "nowrite",
+				"iw_dummy_reentrant_same": "-",
+				"iw_dummy_reentrant_rel1": "-",
+				"iw_dummy_reentrant_rel2": "-",
+				"iw_dummy_reentrant_class": "nowrite",
+				"iw_dummy_detach_same": "-",
+				"iw_dummy_detach_rel1": "-",
+				"iw_dummy_detach_rel2": "-",
+				"iw_dummy_detach_class": "nowrite",
+			}
+			for probe in [[iw_plain, expect_iw_plain, "plain"],
+					[iw_jolt, expect_iw_jolt, "jolt"],
+					[iw_dummy, expect_iw_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("if_write %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# "no member is refused" is a witnessed zero: the engine's own
+			# in/out-phase refusal line is counted in each raw child log, and
+			# the Jolt detach teardown witness is counted where it belongs
+			# (one on Jolt, none on GodotPhysics and Dummy).
+			for dirname in ["iwplainproj", "iwjoltproj", "iwdummyproj"]:
+				if _log_count(ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname),
+						"Function blocked during in/out phase") != 0:
+					return _fail("if_write %s in/out-phase refusal present"
+							% dirname)
+			if _log_count(ProjectSettings.globalize_path(
+					"res://iwjoltproj/child.log"),
+					"without a physics space is not supported") != 1:
+				return _fail("if_write jolt detach witness=%d expected=1"
+						% _log_count(ProjectSettings.globalize_path(
+						"res://iwjoltproj/child.log"),
+						"without a physics space is not supported"))
+			for dirname in ["iwplainproj", "iwdummyproj"]:
+				if _log_count(ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname),
+						"without a physics space is not supported") != 0:
+					return _fail("if_write %s unexpected detach witness"
+							% dirname)
+			_exit_ok("PASS phys3d_events if_write immediate=vel,xform,impulse deferred=force,torque sleep=kept,jolt_zeroed child_exit=0")
+
+		"cross_space":
+			# r89: cross-space handle validity. A second World3D (a
+			# SubViewport carrying its own World3D) and a raw active server
+			# space are both serviceable from the main world's physics tick,
+			# each handle resolves to its OWN space (and not the other's), and
+			# the discriminating query is a ray whose hit height names the
+			# space. The last cell pins the server-vs-node box convention: half
+			# extents vs full size. One measured backend split is pinned as
+			# values, never as a claim of universality: a server body placed in
+			# a non-main space is stepped on GodotPhysics but NOT on Jolt when
+			# no node lives in that world (the raw space's ball stays at y=2
+			# on Jolt), while the same body DOES move once a node shares the
+			# world (world B's ball and node both fall on Jolt) — the scout's
+			# Jolt `bsfroma` receipt shows the same frozen raw body.
+			if _gate("Jolt Physics", "cross_space", "jolt"): return
+			if _gate("Dummy", "cross_space", "dummy"): return
+			var cx_plain := _spawn_child("cxplainproj",
+					_project_body("CxPlain", "", false), "cx_plain", false)
+			if cx_plain.has("err"):
+				return _fail(cx_plain["err"])
+			var cx_jolt := _spawn_child("cxjoltproj",
+					_project_body("CxJolt", "Jolt Physics", false),
+					"cx_jolt", false)
+			if cx_jolt.has("err"):
+				return _fail(cx_jolt["err"])
+			var cx_dummy := _spawn_child("cxdummyproj",
+					_project_body("CxDummy", "Dummy", false), "cx_dummy", false)
+			if cx_dummy.has("err"):
+				return _fail(cx_dummy["err"])
+			var expect_cx_plain := {
+				"cx_plain_backend": "DEFAULT",
+				"cx_plain_dss_a": "GodotPhysicsDirectSpaceState3D",
+				"cx_plain_dss_b": "GodotPhysicsDirectSpaceState3D",
+				"cx_plain_fetch_b": "GodotPhysicsDirectSpaceState3D",
+				"cx_plain_bds_a": "GodotPhysicsDirectBodyState3D",
+				"cx_plain_bds_b": "GodotPhysicsDirectBodyState3D",
+				"cx_plain_a_ne_b": "true",
+				"cx_plain_b_bound": "true",
+				"cx_plain_b_find": "true",
+				"cx_plain_ident_a": "true",
+				"cx_plain_ident_b": "true",
+				"cx_plain_cross_ident": "false",
+				"cx_plain_ray_a": "hit=-0.5000",
+				"cx_plain_ray_b": "hit=-10.5000",
+				"cx_plain_ray_fetch_b": "hit=-10.5000",
+				"cx_plain_fall_a": "1.6328",
+				"cx_plain_fall_b": "-8.2838",
+				"cx_plain_node_b_fall": "-8.2838",
+				"cx_plain_raw_fetch": "GodotPhysicsDirectSpaceState3D",
+				"cx_plain_raw_bds": "GodotPhysicsDirectBodyState3D",
+				"cx_plain_raw_ident": "true",
+				"cx_plain_raw_ray": "hit=1.0000",
+				"cx_plain_raw_moves": "1.7160",
+				"cx_plain_srv_box": "hit=1.0000",
+				"cx_plain_node_box": "hit=0.5000",
+			}
+			var expect_cx_jolt := {
+				"cx_jolt_backend": "Jolt Physics",
+				"cx_jolt_dss_a": "JoltPhysicsDirectSpaceState3D",
+				"cx_jolt_dss_b": "JoltPhysicsDirectSpaceState3D",
+				"cx_jolt_fetch_b": "JoltPhysicsDirectSpaceState3D",
+				"cx_jolt_bds_a": "JoltPhysicsDirectBodyState3D",
+				"cx_jolt_bds_b": "JoltPhysicsDirectBodyState3D",
+				"cx_jolt_a_ne_b": "true",
+				"cx_jolt_b_bound": "true",
+				"cx_jolt_b_find": "true",
+				"cx_jolt_ident_a": "true",
+				"cx_jolt_ident_b": "true",
+				"cx_jolt_cross_ident": "false",
+				"cx_jolt_ray_a": "hit=-0.5000",
+				"cx_jolt_ray_b": "hit=-10.5000",
+				"cx_jolt_ray_fetch_b": "hit=-10.5000",
+				"cx_jolt_fall_a": "1.6328",
+				"cx_jolt_fall_b": "-8.2407",
+				"cx_jolt_node_b_fall": "-8.2892",
+				"cx_jolt_raw_fetch": "JoltPhysicsDirectSpaceState3D",
+				"cx_jolt_raw_bds": "JoltPhysicsDirectBodyState3D",
+				"cx_jolt_raw_ident": "true",
+				"cx_jolt_raw_ray": "hit=1.0000",
+				"cx_jolt_raw_moves": "2.0000",
+				"cx_jolt_srv_box": "hit=1.0000",
+				"cx_jolt_node_box": "hit=0.5000",
+			}
+			var expect_cx_dummy := {
+				"cx_dummy_backend": "Dummy",
+				"cx_dummy_dss_a": "PhysicsDirectSpaceState3DDummy",
+				"cx_dummy_dss_b": "PhysicsDirectSpaceState3DDummy",
+				"cx_dummy_fetch_b": "PhysicsDirectSpaceState3DDummy",
+				"cx_dummy_bds_a": "PhysicsDirectBodyState3DDummy",
+				"cx_dummy_bds_b": "PhysicsDirectBodyState3DDummy",
+				"cx_dummy_a_ne_b": "false",
+				"cx_dummy_b_bound": "true",
+				"cx_dummy_b_find": "true",
+				"cx_dummy_ident_a": "true",
+				"cx_dummy_ident_b": "true",
+				"cx_dummy_cross_ident": "true",
+				"cx_dummy_ray_a": "miss",
+				"cx_dummy_ray_b": "miss",
+				"cx_dummy_ray_fetch_b": "miss",
+				"cx_dummy_fall_a": "0.0000",
+				"cx_dummy_fall_b": "0.0000",
+				"cx_dummy_node_b_fall": "-8.0000",
+				"cx_dummy_raw_fetch": "PhysicsDirectSpaceState3DDummy",
+				"cx_dummy_raw_bds": "PhysicsDirectBodyState3DDummy",
+				"cx_dummy_raw_ident": "true",
+				"cx_dummy_raw_ray": "miss",
+				"cx_dummy_raw_moves": "0.0000",
+				"cx_dummy_srv_box": "miss",
+				"cx_dummy_node_box": "miss",
+			}
+			for probe in [[cx_plain, expect_cx_plain, "plain"],
+					[cx_jolt, expect_cx_jolt, "jolt"],
+					[cx_dummy, expect_cx_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("cross_space %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			_exit_ok("PASS phys3d_events cross_space two_world=answers raw=answers ident=per_space box=half,full jolt_raw=frozen child_exit=0")
+
+		"joint_solver":
+			# r89: the solver-priority write and the joint RID lifecycle.
+			# `prio` is a control-vs-write pair in separate patches;
+			# `clear` releases mid-run and re-makes on the same RID; `freed`
+			# is three members on a free_rid'd joint — a typed null-parameter
+			# refusal, a silent clear, and a make whose guard name is
+			# backend-specific and counted from the raw log. Contrast with the
+			# freed-SPACE family (r87/r88): a freed JOINT never crashes.
+			if _gate("Jolt Physics", "joint_solver", "jolt"): return
+			if _gate("Dummy", "joint_solver", "dummy"): return
+			# the freed-joint witness class: the two member calls name the
+			# `joint` parameter, the make call names it backend-specifically
+			# (`prev_joint` on GodotPhysics, `old_joint` on Jolt) — each token
+			# is counted in the raw log by the parent
+			var js_allow := ["Parameter \"joint\" is null",
+					"Parameter \"prev_joint\" is null",
+					"Parameter \"old_joint\" is null"]
+			var js_plain := _spawn_child("jsplainproj",
+					_project_body("JsPlain", "", false), "js_plain", false,
+					"res://phys3d_events.gd", 30, js_allow)
+			if js_plain.has("err"):
+				return _fail(js_plain["err"])
+			var js_jolt := _spawn_child("jsjoltproj",
+					_project_body("JsJolt", "Jolt Physics", false),
+					"js_jolt", false, "res://phys3d_events.gd", 30, js_allow)
+			if js_jolt.has("err"):
+				return _fail(js_jolt["err"])
+			var js_dummy := _spawn_child("jsdummyproj",
+					_project_body("JsDummy", "Dummy", false), "js_dummy",
+					false, "res://phys3d_events.gd", 30, js_allow)
+			if js_dummy.has("err"):
+				return _fail(js_dummy["err"])
+			var expect_js_plain := {
+				"js_plain_backend": "DEFAULT",
+				"js_plain_prio_before": "1",
+				"js_plain_prio_after": "32",
+				"js_plain_ctl_gap": "0.8900",
+				"js_plain_pri_gap": "0.6473",
+				"js_plain_ctl_lv": "-0.0000",
+				"js_plain_pri_lv": "11.6509",
+				"js_plain_prio_effect": "jump",
+				"js_plain_clear_gap_before": "0.8899",
+				"js_plain_clear_lv_before": "-0.0000",
+				"js_plain_clear_type_after": "5",
+				"js_plain_clear_gap_same": "0.8899",
+				"js_plain_clear_lv_next": "-0.1633",
+				"js_plain_clear_gap_end": "0.9876",
+				"js_plain_double_clear": "ok",
+				"js_plain_remade_type": "0",
+				"js_plain_freed_type": "0",
+				"js_plain_freed_clear": "ok",
+				"js_plain_freed_make": "ok",
+			}
+			var expect_js_jolt := {
+				"js_jolt_backend": "Jolt Physics",
+				"js_jolt_prio_before": "1",
+				"js_jolt_prio_after": "1",
+				"js_jolt_ctl_gap": "0.2032",
+				"js_jolt_pri_gap": "0.2032",
+				"js_jolt_ctl_lv": "0.0000",
+				"js_jolt_pri_lv": "0.0000",
+				"js_jolt_prio_effect": "none",
+				"js_jolt_clear_gap_before": "0.2472",
+				"js_jolt_clear_lv_before": "0.0000",
+				"js_jolt_clear_type_after": "5",
+				"js_jolt_clear_gap_same": "0.2472",
+				"js_jolt_clear_lv_next": "-0.1633",
+				"js_jolt_clear_gap_end": "0.8556",
+				"js_jolt_double_clear": "ok",
+				"js_jolt_remade_type": "0",
+				"js_jolt_freed_type": "0",
+				"js_jolt_freed_clear": "ok",
+				"js_jolt_freed_make": "ok",
+			}
+			var expect_js_dummy := {
+				"js_dummy_backend": "Dummy",
+				"js_dummy_prio_before": "0",
+				"js_dummy_prio_after": "0",
+				"js_dummy_ctl_gap": "0.0000",
+				"js_dummy_pri_gap": "0.0000",
+				"js_dummy_ctl_lv": "0.0000",
+				"js_dummy_pri_lv": "0.0000",
+				"js_dummy_prio_effect": "none",
+				"js_dummy_clear_gap_before": "0.0000",
+				"js_dummy_clear_lv_before": "0.0000",
+				"js_dummy_clear_type_after": "0",
+				"js_dummy_clear_gap_same": "0.0000",
+				"js_dummy_clear_lv_next": "0.0000",
+				"js_dummy_clear_gap_end": "0.0000",
+				"js_dummy_double_clear": "ok",
+				"js_dummy_remade_type": "0",
+				"js_dummy_freed_type": "0",
+				"js_dummy_freed_clear": "ok",
+				"js_dummy_freed_make": "ok",
+			}
+			for probe in [[js_plain, expect_js_plain, "plain"],
+					[js_jolt, expect_js_jolt, "jolt"],
+					[js_dummy, expect_js_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("joint_solver %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# the freed-joint refusal is a LOG witness: the two member calls
+			# print the null-parameter line, and the make call's guard names a
+			# DIFFERENT parameter per backend (GP `prev_joint`, Jolt
+			# `old_joint`) — so a silently-nil call can never pass as a refusal
+			# and the per-backend name is pinned where it belongs.
+			for probe in [["jsplainproj", "prev_joint", "old_joint"],
+					["jsjoltproj", "old_joint", "prev_joint"]]:
+				var logp := ProjectSettings.globalize_path(
+						"res://%s/child.log" % probe[0])
+				if _log_count(logp, "Parameter \"joint\" is null.") != 2 \
+						or _log_count(logp, probe[1]) != 1 \
+						or _log_count(logp, probe[2]) != 0:
+					return _fail("joint_solver %s freed witnesses null=%d %s=%d %s=%d"
+							% [probe[0],
+							_log_count(logp, "Parameter \"joint\" is null."),
+							probe[1], _log_count(logp, probe[1]),
+							probe[2], _log_count(logp, probe[2])])
+			if _log_count(ProjectSettings.globalize_path(
+					"res://jsdummyproj/child.log"),
+					"Parameter \"joint\" is null.") != 0:
+				return _fail("joint_solver dummy unexpected freed refusal")
+			# the Jolt "ignored" write is not silent either: the engine emits
+			# exactly one "Joint solver priority is not supported when using
+			# Jolt Physics" WARNING per refused set; GP and Dummy emit none.
+			if _log_count(ProjectSettings.globalize_path(
+					"res://jsjoltproj/child.log"),
+					"not supported when using Jolt Physics") != 1:
+				return _fail("joint_solver jolt warnings drift")
+			for dirname in ["jsplainproj", "jsdummyproj"]:
+				if _log_count(ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname),
+						"not supported when using Jolt Physics") != 0:
+					return _fail("joint_solver %s unexpected jolt warning"
+							% dirname)
+			_exit_ok("PASS phys3d_events joint_solver prio=honored,ignored clear=immediate reuse=true freed=refusal child_exit=0")
+
 		_:
 			return _fail("unknown arm " + arm)
 
@@ -4817,6 +6001,941 @@ func _child_freed_method(arm: String) -> void:
 	_quit_clean()
 
 
+# --- r89: the phase / write / sleep / joint / cross-space arms ---------------
+# Shared child helpers. Every r89 child is a generated-project process: the
+# laws are backend-scoped and position-determined inside a live tree, and the
+# _integrate_forces-capable body must be a NODE (RigidBody3D._integrate_forces
+# is a CollisionObject3D callback), never a raw server RID. The contact
+# geometry is the r89-scout's probe shape reused verbatim: a floor slab whose
+# top face is y=-0.5 and a ball r=0.5 dropped from y=0.2, so the first contact
+# lands around step 13 and the same numbers can be compared against the
+# scout's receipts.
+class IFRB extends RigidBody3D:
+	var probe
+	func _integrate_forces(st: PhysicsDirectBodyState3D) -> void:
+		probe.on_if(st)
+
+
+class IFWatch extends Node:
+	var probe
+	func _physics_process(_d: float) -> void:
+		probe.on_e()
+	func _process(_d: float) -> void:
+		probe.on_f()
+
+
+const PHASE_GETTERS := ["lp", "ln", "imp", "ls", "lv", "col", "cp", "cid",
+		"cob", "csh", "cv"]
+const IW_WRITE_TICK := 4
+const IW_MEMBERS := ["baseline", "linvel", "angvel", "xform", "cimpulse",
+		"timpulse", "cforce", "torque", "setcforce", "sleep", "reentrant",
+		"detach"]
+const JP_VARIANTS := ["pin", "soft0", "soft1", "clamp2", "nomake", "g6dof"]
+const JP_TICKS := 12
+const JP_TYPES := {"pin": 3, "hinge": 8, "slider": 22, "cone": 5, "g6dof": 22}
+const SLEEP_CELLS := ["reads", "wake", "xform", "toggle", "floor", "sync"]
+const SLEEP_BOUND := 240
+
+var ip_ball: IFRB = null
+var ip_bds: Variant = null
+var ip_seq := 0
+var ip_if := 0
+var ip_record := false
+var ip_if_rows := []
+var ip_e_rows := []
+var ip_f_rows := []
+var iw_member := ""
+var iw_wrote := false
+var iw_same := "-"
+var iw_ball_rid := RID()
+var sl_ball: IFRB = null
+var sl_ball_rid := RID()
+var sl_floor := RID()
+var sl_ss := 0
+
+
+func _v4s(v: Vector3) -> String:
+	return "%.4f,%.4f,%.4f" % [v.x, v.y, v.z]
+
+
+# The joint getters answer float32 (0.3 reads back 0.30000001192093), so the
+# table is formatted rather than stringified: the same write and the same
+# default must compare equal across backends.
+func _f4(v: Variant) -> String:
+	if v is float:
+		return "%.4f" % v
+	return str(v)
+
+
+func _iw_write(st: Variant, m: String) -> void:
+	match m:
+		"baseline":
+			# the no-write control: its same-turn readback IS the free-fall
+			# velocity at the write tick, which the force members compare to
+			iw_same = _v4s(st.get_linear_velocity())
+		"linvel":
+			st.set_linear_velocity(Vector3(1, 2, 3))
+			iw_same = _v4s(st.get_linear_velocity())
+		"angvel":
+			st.set_angular_velocity(Vector3(0.5, 1, 1.5))
+			iw_same = _v4s(st.get_angular_velocity())
+		"xform":
+			st.set_transform(Transform3D(Basis(), Vector3(0, 8, 0)))
+			iw_same = _v4s(st.get_transform().origin)
+		"cimpulse":
+			st.apply_central_impulse(Vector3(0, 3, 0))
+			iw_same = _v4s(st.get_linear_velocity())
+		"timpulse":
+			st.apply_torque_impulse(Vector3(0, 0, 3))
+			iw_same = _v4s(st.get_angular_velocity())
+		"cforce":
+			st.apply_central_force(Vector3(0, 60, 0))
+			iw_same = _v4s(st.get_linear_velocity())
+		"torque":
+			st.apply_torque(Vector3(0, 0, 60))
+			iw_same = _v4s(st.get_angular_velocity())
+		"setcforce":
+			st.set_constant_force(Vector3(0, 7, 0))
+			iw_same = _v4s(st.get_constant_force())
+		"sleep":
+			st.set_sleep_state(true)
+			iw_same = str(st.is_sleeping())
+		"reentrant":
+			st.integrate_forces()
+			iw_same = _v4s(st.get_linear_velocity())
+		"detach":
+			PhysicsServer3D.body_set_space(iw_ball_rid, RID())
+			iw_same = str(PhysicsServer3D.body_get_space(iw_ball_rid))
+		_:
+			iw_same = "none"
+
+
+# The server-side read each member's verdict turns on: the angular velocity for
+# the torque family, the transform for the teleport, the sleep state plus the
+# velocity it kept or zeroed, the space for the detach, and the linear velocity
+# for everything else.
+func _iw_srv(m: String) -> String:
+	var v: Variant
+	match m:
+		"angvel", "timpulse", "torque":
+			v = PhysicsServer3D.body_get_state(iw_ball_rid,
+					PhysicsServer3D.BODY_STATE_ANGULAR_VELOCITY)
+			return _v4s(v) if v is Vector3 else "nil"
+		"xform":
+			v = PhysicsServer3D.body_get_state(iw_ball_rid,
+					PhysicsServer3D.BODY_STATE_TRANSFORM)
+			return _v4s(v.origin) if v is Transform3D else "nil"
+		"sleep":
+			v = PhysicsServer3D.body_get_state(iw_ball_rid,
+					PhysicsServer3D.BODY_STATE_SLEEPING)
+			var lv: Variant = PhysicsServer3D.body_get_state(iw_ball_rid,
+					PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY)
+			return "%s/%s" % ["nil" if v == null else str(v),
+					(_v4s(lv) if lv is Vector3 else "nil")]
+		"detach":
+			return str(PhysicsServer3D.body_get_space(iw_ball_rid))
+		_:
+			v = PhysicsServer3D.body_get_state(iw_ball_rid,
+					PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY)
+			return _v4s(v) if v is Vector3 else "nil"
+
+
+func _iw_y(s: String) -> float:
+	var parts := s.split("/")[0].split(",")
+	return float(parts[1]) if parts.size() >= 2 else 0.0
+
+
+func _iw_z(s: String) -> float:
+	var parts := s.split("/")[0].split(",")
+	return float(parts[2]) if parts.size() >= 3 else 0.0
+
+
+# --child --arm=iw_plain / iw_jolt / iw_dummy (r89): the _integrate_forces
+# interior rules, one member per fresh free-falling ball so no member can
+# contaminate another. Each member writes at its 4th IF call and is then read
+# three ways: the same-turn readback through the SAME handle inside IF, the
+# server read at the next physics tick (rel=1) and two ticks later (rel=2/3).
+# Velocity / angular-velocity / transform / impulse writes are immediate;
+# force / torque / constant-force writes are DEFERRED one step (invisible
+# same-turn, effective from the next step); `set_sleep_state(true)` is honored
+# now but GodotPhysics keeps the velocity while Jolt zeroes it; a re-entrant
+# `integrate_forces()` silently double-integrates; and `body_set_space(RID())`
+# detaches the body, freezing it at its last state. No member is refused —
+# the parent counts the engine's in/out-phase refusal line in the raw log.
+func _child_if_write(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	var out := {}
+	var base_same := "-"
+	var base1 := "-"
+	var base2 := "-"
+	var iw_never := false
+	for m in IW_MEMBERS:
+		if iw_never:
+			out[m + "_class"] = "nowrite"
+			continue
+		var ball := IFRB.new()
+		ball.probe = self
+		var col := CollisionShape3D.new()
+		var sp := SphereShape3D.new()
+		sp.radius = 0.5
+		col.shape = sp
+		ball.add_child(col)
+		ball.position = Vector3(0, 3, 0)
+		ball.can_sleep = true
+		root.add_child(ball)
+		owned_nodes.append(ball)
+		iw_ball_rid = ball.get_rid()
+		iw_member = m
+		iw_wrote = false
+		ip_if = 0
+		iw_same = "-"
+		var i := 0
+		while i < 30 and not iw_wrote:
+			await physics_frame
+			i += 1
+		if not iw_wrote:
+			# The Dummy floor: `_integrate_forces` never fires, so no member
+			# can be written. The remaining members are recorded as the same
+			# floor class instead of re-waiting the 30-frame bound 11 more
+			# times — measured, that wait alone was 6.6 s of this arm's 10.9 s
+			# case elapsed against the 20 s per-case bound. The emitted dict is
+			# unchanged (every member is `nowrite`, every readback `-`).
+			iw_never = true
+			out[m + "_class"] = "nowrite"
+			iw_member = ""
+			ball.free()
+			continue
+		var s1 := _iw_srv(m)
+		await physics_frame
+		var s2 := _iw_srv(m)
+		await physics_frame
+		var s3 := _iw_srv(m)
+		if m == "baseline":
+			base_same = iw_same
+			base1 = s1
+			base2 = s2
+		var cls := "other"
+		match m:
+			"baseline":
+				cls = "control"
+			"linvel":
+				cls = "now" if iw_same == "1.0000,2.0000,3.0000" and s1 == iw_same else "other"
+			"angvel":
+				cls = "now" if iw_same == "0.5000,1.0000,1.5000" and s1 == iw_same else "other"
+			"xform":
+				cls = "now" if iw_same == "0.0000,8.0000,0.0000" and s1 == iw_same else "other"
+			"cimpulse":
+				cls = "now" if _iw_y(s1) > 2.0 else "other"
+			"timpulse":
+				cls = "now" if iw_same == "0.0000,0.0000,30.0000" \
+						and _iw_z(s1) > 29.0 else "other"
+			"cforce":
+				cls = "deferred" if iw_same == base_same \
+						and _iw_y(s2) > 0.1 else "other"
+			"torque":
+				cls = "deferred" if iw_same == "0.0000,0.0000,0.0000" \
+						and _iw_z(s2) > 1.0 else "other"
+			"setcforce":
+				cls = "deferred" if iw_same == "0.0000,7.0000,0.0000" \
+						and _iw_y(s2) > _iw_y(base2) + 0.05 else "other"
+			"sleep":
+				var sparts := s1.split("/")
+				if iw_same == "true" and sparts[0] == "true":
+					var lvy := 0.0
+					if sparts.size() > 1:
+						var c := sparts[1].split(",")
+						lvy = float(c[1]) if c.size() >= 2 else 0.0
+					cls = "kept" if absf(lvy) > 0.1 else "zeroed"
+			"reentrant":
+				cls = "double" if absf(_iw_y(s1) - _iw_y(base1)) > 0.05 else "other"
+			"detach":
+				cls = "frozen" if s1 == "RID(0)" and s2 == s3 else "other"
+		out[m + "_same"] = iw_same
+		out[m + "_rel1"] = s1
+		out[m + "_rel2"] = s2
+		out[m + "_class"] = cls
+		iw_member = ""
+		ball.free()
+	_note(prefix, "base_same=%s base1=%s base2=%s" % [base_same, base1, base2])
+	_note(prefix, "classes=%s" % str(out))
+	_emit(prefix, "backend", str(_backend_name()))
+	for m in IW_MEMBERS:
+		_emit(prefix, m + "_same", str(out.get(m + "_same", "-")))
+		_emit(prefix, m + "_rel1", str(out.get(m + "_rel1", "-")))
+		_emit(prefix, m + "_rel2", str(out.get(m + "_rel2", "-")))
+		_emit(prefix, m + "_class", str(out.get(m + "_class", "-")))
+	_quit_clean()
+
+
+# --child --arm=cx_plain / cx_jolt / cx_dummy (r89): cross-space handle
+# validity plus the server-vs-node box-size convention. THREE worlds in one
+# process: A = the SceneTree root world, B = a SubViewport's own World3D, and a
+# RAW server space created with space_create() + space_set_active(true). Each
+# world carries a slab at a different height and a ball, and each discriminating
+# query is a RAY whose hit height says WHICH space answered — so a handle that
+# silently resolved to the other world could not pass. The last cell pins the
+# two box conventions: `PhysicsServer3D.shape_set_data` takes HALF-extents
+# (a (1,1,1) box's top face is y=1) while a `BoxShape3D.size` is the FULL size
+# (its top face is y=0.5).
+func _child_cross_space(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	# world A: slab top -0.5, a rigid ball at y=2 (rests at y=0)
+	var floor_a := _mk_body(Vector3(0, -1, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(10, 0.5, 10))
+	var ball_a := _mk_body(Vector3(0, 2, 0), PhysicsServer3D.BODY_MODE_RIGID,
+			Vector3(0.5, 0.5, 0.5))
+	# world B: a SubViewport carrying an explicitly created World3D (the
+	# scout's shape: `vp.world_3d = World3D.new()`), slab top -10.5, ball at
+	# y=-8. `Viewport.own_world_3d` alone leaves `world_3d` null until the
+	# viewport is drawn, which is why the world is constructed here.
+	var vp := SubViewport.new()
+	var world_b := World3D.new()
+	vp.world_3d = world_b
+	root.add_child(vp)
+	owned_nodes.append(vp)
+	await _frames(2)
+	var space_b := world_b.space
+	var floor_b := _mk_body(Vector3(0, -11, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(10, 0.5, 10))
+	PhysicsServer3D.body_set_space(floor_b, space_b)
+	var ball_b := _mk_body(Vector3(0, -8, 0), PhysicsServer3D.BODY_MODE_RIGID,
+			Vector3(0.5, 0.5, 0.5))
+	PhysicsServer3D.body_set_space(ball_b, space_b)
+	# a raw active server space with its own wall (top y=1) and ball. The
+	# bodies are created BEFORE the space so that `owned`'s free order (the
+	# append order) releases them first: freeing a space that still holds a
+	# live body aborts Jolt inside free_rid (the r88 teardown-order rule,
+	# re-measured here — this arm's first form crashed 134/134 in
+	# _cleanup_rids).
+	var wall_raw := _mk_body(Vector3(0, 0, -3))
+	var ball_raw := _mk_body(Vector3(0, 2, 0), PhysicsServer3D.BODY_MODE_RIGID,
+			Vector3(0.5, 0.5, 0.5))
+	var raw_space := PhysicsServer3D.space_create()
+	PhysicsServer3D.space_set_active(raw_space, true)
+	PhysicsServer3D.body_set_space(wall_raw, raw_space)
+	PhysicsServer3D.body_set_space(ball_raw, raw_space)
+	owned.append(raw_space)
+	# and a NODE body inside world B, so "a server body in a non-main space is
+	# not stepped" (measured on Jolt) can be told apart from "the second world
+	# is not stepped" (the scout's node-in-viewport cell, which falls on both)
+	var node_b := IFRB.new()
+	node_b.probe = self
+	var nbcol := CollisionShape3D.new()
+	var nbsp := SphereShape3D.new()
+	nbsp.radius = 0.5
+	nbcol.shape = nbsp
+	node_b.add_child(nbcol)
+	node_b.position = Vector3(0, -8, 0)
+	vp.add_child(node_b)
+	await _frames(12)
+	var dss_a: Variant = root.get_world_3d().direct_space_state
+	var dss_b: Variant = world_b.direct_space_state
+	var fetch_b: Variant = PhysicsServer3D.space_get_direct_state(space_b)
+	var bds_a: Variant = PhysicsServer3D.body_get_direct_state(ball_a)
+	var bds_b: Variant = PhysicsServer3D.body_get_direct_state(ball_b)
+	var bds_raw: Variant = PhysicsServer3D.body_get_direct_state(ball_raw)
+	var raw_dss: Variant = PhysicsServer3D.space_get_direct_state(raw_space)
+	var ident_a := "absent"
+	var ident_b := "absent"
+	var cross := "absent"
+	if bds_a != null and dss_a != null:
+		ident_a = str(bds_a.get_space_state() == dss_a)
+		ident_b = str(bds_b.get_space_state() == dss_b)
+		cross = str(bds_a.get_space_state() == dss_b)
+	var raw_ident := "absent"
+	if bds_raw != null and raw_dss != null:
+		raw_ident = str(bds_raw.get_space_state() == raw_dss)
+	# rays: same query shape, one per space, at x=3 so the slab (not the ball)
+	# answers
+	var ray_a := _cx_ray(dss_a, Vector3(3, 5, 0))
+	var ray_b := _cx_ray(dss_b, Vector3(3, -5, 0))
+	var ray_fetch_b := _cx_ray(fetch_b, Vector3(3, -5, 0))
+	var ray_raw := _cx_ray(raw_dss, Vector3(0, 5, -3))
+	# box-size convention: server half-extents vs node full size
+	var sh := PhysicsServer3D.box_shape_create()
+	PhysicsServer3D.shape_set_data(sh, Vector3(1, 1, 1))
+	var sb := PhysicsServer3D.body_create()
+	PhysicsServer3D.body_set_mode(sb, PhysicsServer3D.BODY_MODE_STATIC)
+	PhysicsServer3D.body_add_shape(sb, sh)
+	PhysicsServer3D.body_set_space(sb, wspace)
+	PhysicsServer3D.body_set_state(sb,
+			PhysicsServer3D.BODY_STATE_TRANSFORM, Transform3D(Basis(), Vector3(0, 0, 8)))
+	owned.append(sb)
+	owned.append(sh)
+	var nb_node := StaticBody3D.new()
+	var ncol := CollisionShape3D.new()
+	var nbox := BoxShape3D.new()
+	nbox.size = Vector3(1, 1, 1)
+	ncol.shape = nbox
+	nb_node.add_child(ncol)
+	nb_node.position = Vector3(0, 0, -8)
+	root.add_child(nb_node)
+	owned_nodes.append(nb_node)
+	await _frames(2)
+	var srv_box := _cx_ray(dss_a, Vector3(0, 5, 8))
+	var node_box := _cx_ray(dss_a, Vector3(0, 5, -8))
+	_note(prefix, "A=%s B=%s raw=%s rays=%s,%s,%s,%s box=%s,%s" % [
+			_cx_cls(dss_a), _cx_cls(dss_b), _cx_cls(raw_dss), ray_a, ray_b,
+			ray_fetch_b, ray_raw, srv_box, node_box])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "dss_a", _cx_cls(dss_a))
+	_emit(prefix, "dss_b", _cx_cls(dss_b))
+	_emit(prefix, "fetch_b", _cx_cls(fetch_b))
+	_emit(prefix, "bds_a", _cx_cls(bds_a))
+	_emit(prefix, "bds_b", _cx_cls(bds_b))
+	_emit(prefix, "a_ne_b", str(dss_a != dss_b))
+	# r89 C7: the B-space witness requires the viewport to actually BIND the
+	# constructed world — an orphan World3D whose assignment did not take
+	# would still answer dss_b and fake the cross-space split. The readback
+	# proves the set; find_world_3d proves the viewport resolves to it.
+	_emit(prefix, "b_bound", str(vp.world_3d == world_b))
+	_emit(prefix, "b_find", str(vp.find_world_3d() == world_b))
+	_emit(prefix, "ident_a", ident_a)
+	_emit(prefix, "ident_b", ident_b)
+	_emit(prefix, "cross_ident", cross)
+	_emit(prefix, "ray_a", ray_a)
+	_emit(prefix, "ray_b", ray_b)
+	_emit(prefix, "ray_fetch_b", ray_fetch_b)
+	_emit(prefix, "fall_a", "%.4f" % _body_pos(ball_a).y)
+	_emit(prefix, "fall_b", "%.4f" % _body_pos(ball_b).y)
+	_emit(prefix, "node_b_fall", "%.4f" % node_b.position.y)
+	_emit(prefix, "raw_fetch", _cx_cls(raw_dss))
+	_emit(prefix, "raw_bds", _cx_cls(bds_raw))
+	_emit(prefix, "raw_ident", raw_ident)
+	_emit(prefix, "raw_ray", ray_raw)
+	_emit(prefix, "raw_moves", "%.4f" % _body_pos(ball_raw).y)
+	_emit(prefix, "srv_box", srv_box)
+	_emit(prefix, "node_box", node_box)
+	# teardown order (the r88 rule): the bodies living in a non-main space are
+	# released BEFORE that space, and the raw space last of all. `owned`'s
+	# append order cannot express this for world B (its space belongs to the
+	# viewport node, which _cleanup_nodes releases first), so both space-bound
+	# families are freed here explicitly.
+	for r in [floor_b, ball_b, wall_raw, ball_raw]:
+		PhysicsServer3D.free_rid(r)
+		owned.erase(r)
+	PhysicsServer3D.free_rid(raw_space)
+	owned.erase(raw_space)
+	_quit_clean()
+
+
+func _cx_cls(v: Variant) -> String:
+	if v == null:
+		return "nil"
+	return str(v.get_class())
+
+
+# A downward ray whose hit height is the space's signature. `dss` is untyped:
+# the Dummy backend hands out its own class and answers typed-empty.
+func _cx_ray(dss: Variant, from: Vector3) -> String:
+	if dss == null:
+		return "nil"
+	var q := PhysicsRayQueryParameters3D.create(from, from + Vector3(0, -60, 0))
+	q.collision_mask = 1
+	var h: Variant = dss.intersect_ray(q)
+	if h is Dictionary:
+		if h.is_empty():
+			return "miss"
+		return "hit=%.4f" % h["position"].y
+	return "not_dict"
+
+
+# --child --arm=js_plain / js_jolt / js_dummy (r89): the solver-priority write
+# and the joint RID lifecycle. `prio` samples a pin witness with and without
+# `joint_set_solver_priority(j, 32)` written mid-run (GodotPhysics honors the
+# write and the constraint visibly changes; Jolt's getter returns the default
+# and the trace is the control's). `clear` releases the constraint mid-run
+# (the body falls from the very next step, the type reads 5, a double clear is
+# a silent no-op, and the RID is REUSABLE). `freed` calls three members on a
+# `free_rid`'d joint: the typed null-parameter refusal, the silent clear, and
+# the make call whose guard name is backend-specific — the parent counts the
+# guard token in the raw log. Contrast with the r87/r88 freed-SPACE family:
+# a freed JOINT never crashes.
+func _child_joint_solver(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	# prio: a control pair and a priority pair in separate patches
+	var ctl_a := _mk_body(Vector3(0, 3, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(0.4, 0.4, 0.4))
+	var ctl_b := _mk_sphere_body(Vector3(0, 2, 0),
+			PhysicsServer3D.BODY_MODE_RIGID, 0.5)
+	var ctl_j := PhysicsServer3D.joint_create()
+	_joint_make(ctl_j, "pin", ctl_a, ctl_b)
+	var pri_a := _mk_body(Vector3(20, 3, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(0.4, 0.4, 0.4))
+	var pri_b := _mk_sphere_body(Vector3(20, 2, 0),
+			PhysicsServer3D.BODY_MODE_RIGID, 0.5)
+	var pri_j := PhysicsServer3D.joint_create()
+	_joint_make(pri_j, "pin", pri_a, pri_b)
+	var prio_before := str(PhysicsServer3D.joint_get_solver_priority(pri_j))
+	var prio_after := "unset"
+	for i in range(JP_TICKS):
+		await physics_frame
+		if i == 5:
+			PhysicsServer3D.joint_set_solver_priority(pri_j, 32)
+			prio_after = str(PhysicsServer3D.joint_get_solver_priority(pri_j))
+	var ctl_gap := _body_pos(ctl_a).distance_to(_body_pos(ctl_b))
+	var pri_gap := _body_pos(pri_a).distance_to(_body_pos(pri_b))
+	var ctl_lv := _body_lv_y(ctl_b)
+	var pri_lv := _body_lv_y(pri_b)
+	PhysicsServer3D.free_rid(ctl_j)
+	PhysicsServer3D.free_rid(pri_j)
+	# clear: release mid-run, then re-make on the SAME RID
+	var cl_a := _mk_body(Vector3(40, 3, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(0.4, 0.4, 0.4))
+	var cl_b := _mk_sphere_body(Vector3(40, 2, 0),
+			PhysicsServer3D.BODY_MODE_RIGID, 0.5)
+	var cl_j := PhysicsServer3D.joint_create()
+	_joint_make(cl_j, "pin", cl_a, cl_b)
+	var cl_gap_before := "unset"
+	var cl_lv_before := "unset"
+	var cl_type_after := "unset"
+	var cl_gap_same := "unset"
+	var cl_lv_next := "unset"
+	var cl_gap_end := "unset"
+	for i in range(JP_TICKS + 2):
+		await physics_frame
+		if i == 5:
+			cl_gap_before = "%.4f" % _body_pos(cl_a).distance_to(_body_pos(cl_b))
+			cl_lv_before = "%.4f" % _body_lv_y(cl_b)
+			PhysicsServer3D.joint_clear(cl_j)
+			cl_type_after = str(PhysicsServer3D.joint_get_type(cl_j))
+			cl_gap_same = "%.4f" % _body_pos(cl_a).distance_to(_body_pos(cl_b))
+		elif i == 6:
+			cl_lv_next = "%.4f" % _body_lv_y(cl_b)
+		elif i == JP_TICKS + 1:
+			cl_gap_end = "%.4f" % _body_pos(cl_a).distance_to(_body_pos(cl_b))
+	PhysicsServer3D.joint_clear(cl_j)
+	var double_clear := "ok"
+	_joint_make(cl_j, "pin", cl_a, cl_b)
+	var remade_type := str(PhysicsServer3D.joint_get_type(cl_j))
+	PhysicsServer3D.free_rid(cl_j)
+	# freed: three members on a freed joint RID, one call each
+	var fr_j := PhysicsServer3D.joint_create()
+	PhysicsServer3D.free_rid(fr_j)
+	var freed_type := str(PhysicsServer3D.joint_get_type(fr_j))
+	PhysicsServer3D.joint_clear(fr_j)
+	var freed_clear := "ok"
+	_joint_make(fr_j, "pin", ctl_a, ctl_b)
+	var freed_make := "ok"
+	_note(prefix, "prio=%s/%s gap=%s,%s lv=%s,%s clear=%s/%s/%s/%s/%s remade=%s freed=%s/%s/%s" % [
+			prio_before, prio_after, "%.4f" % ctl_gap, "%.4f" % pri_gap,
+			"%.4f" % ctl_lv, "%.4f" % pri_lv, cl_gap_before, cl_lv_before,
+			cl_type_after, cl_lv_next, cl_gap_end, remade_type, freed_type,
+			freed_clear, freed_make])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "prio_before", prio_before)
+	_emit(prefix, "prio_after", prio_after)
+	_emit(prefix, "ctl_gap", "%.4f" % ctl_gap)
+	_emit(prefix, "pri_gap", "%.4f" % pri_gap)
+	_emit(prefix, "ctl_lv", "%.4f" % ctl_lv)
+	_emit(prefix, "pri_lv", "%.4f" % pri_lv)
+	_emit(prefix, "prio_effect", "jump" if absf(pri_lv - ctl_lv) > 1.0
+			or absf(pri_gap - ctl_gap) > 0.05 else "none")
+	_emit(prefix, "clear_gap_before", cl_gap_before)
+	_emit(prefix, "clear_lv_before", cl_lv_before)
+	_emit(prefix, "clear_type_after", cl_type_after)
+	_emit(prefix, "clear_gap_same", cl_gap_same)
+	_emit(prefix, "clear_lv_next", cl_lv_next)
+	_emit(prefix, "clear_gap_end", cl_gap_end)
+	_emit(prefix, "double_clear", double_clear)
+	_emit(prefix, "remade_type", remade_type)
+	_emit(prefix, "freed_type", freed_type)
+	_emit(prefix, "freed_clear", freed_clear)
+	_emit(prefix, "freed_make", freed_make)
+	_quit_clean()
+
+
+# --child --arm=sl_<cell>_<backend> / sl_dummy (r89): the sleeping-body direct
+# state, ONE cell per process in one parallel batch (a sleep takes ~40 ticks of
+# wall-clock physics, so a serial sweep would not fit the per-case bound). The
+# geometry is the scout's: a sphere r=0.5 dropped from y=0.2 onto a slab whose
+# top is y=-0.5, contacts opted in, can_sleep=true, and the body is allowed to
+# fall asleep naturally. Cells: `reads` (a fetch plus every read while asleep,
+# and the IF callback stopping on the sleep tick), `wake`/`xform` (a direct
+# write lands, wakes the body and takes effect), `toggle` (set_sleep_state
+# false: GodotPhysics re-sleeps at the next tick, Jolt stays awake-but-frozen),
+# `floor` (teleporting the floor wakes the ball on GodotPhysics and not on
+# Jolt), `sync` (the state-sync callback does not fire while asleep).
+func _sl_on_ss(_st: PhysicsDirectBodyState3D) -> void:
+	sl_ss += 1
+
+
+func _sl_cc() -> int:
+	var st: Variant = PhysicsServer3D.body_get_direct_state(sl_ball_rid)
+	if st == null:
+		return -1
+	return st.get_contact_count()
+
+
+func _sl_srv_sleep() -> String:
+	var v: Variant = PhysicsServer3D.body_get_state(
+			sl_ball_rid, PhysicsServer3D.BODY_STATE_SLEEPING)
+	return "nil" if v == null else str(v)
+
+
+func _child_sleep(arm: String) -> void:
+	var parts := arm.split("_")
+	var cell: String = parts[1] if parts.size() > 1 else "reads"
+	wspace = root.get_world_3d().space
+	sl_floor = _mk_body(Vector3(0, -1, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(10, 0.5, 10))
+	sl_ball = IFRB.new()
+	sl_ball.probe = self
+	var col := CollisionShape3D.new()
+	var sp := SphereShape3D.new()
+	sp.radius = 0.5
+	col.shape = sp
+	sl_ball.add_child(col)
+	sl_ball.position = Vector3(0, 0.2, 0)
+	sl_ball.can_sleep = true
+	sl_ball.max_contacts_reported = 8
+	root.add_child(sl_ball)
+	owned_nodes.append(sl_ball)
+	sl_ball_rid = sl_ball.get_rid()
+	_emit(arm, "backend", str(_backend_name()))
+	var slept := -1
+	var null_seen := 0
+	for i in range(SLEEP_BOUND):
+		await physics_frame
+		if i < 6:
+			continue
+		var v: Variant = PhysicsServer3D.body_get_state(
+				sl_ball_rid, PhysicsServer3D.BODY_STATE_SLEEPING)
+		if v == true:
+			slept = i
+			break
+		if v == null:
+			null_seen += 1
+			if null_seen >= 30:
+				break
+	if slept < 0:
+		# the Dummy floor: the body never sleeps, the handle answers false,
+		# and the contact buffer never fills — a floor, never a hazard
+		_emit(arm, "slept", "never")
+		_emit(arm, "cc", "%d" % [_sl_cc()])
+		_emit(arm, "if_fires", "%d" % [ip_if])
+		_quit_clean()
+		return
+	var st: Variant = PhysicsServer3D.body_get_direct_state(sl_ball_rid)
+	_emit(arm, "slept", "%d" % [slept])
+	_emit(arm, "if_calls", "%d" % [ip_if])
+	if st == null:
+		_emit(arm, "handle", "nil")
+		_quit_clean()
+		return
+	match cell:
+		"reads":
+			var cc0: int = st.get_contact_count()
+			var imp0 := Vector3.ZERO
+			var lv0: Vector3 = st.get_linear_velocity()
+			if cc0 > 0:
+				imp0 = st.get_contact_impulse(0)
+			var hdl0: Variant = st.is_sleeping()
+			# the fetch itself plus every read must leave it asleep
+			var awake := 0
+			for i in range(6):
+				await physics_frame
+				if _sl_srv_sleep() != "true":
+					awake += 1
+			_emit(arm, "cc", "%d" % [cc0])
+			_emit(arm, "imp", "%.4f" % imp0.length())
+			_emit(arm, "lv", _v4s(lv0))
+			_emit(arm, "hdl_sleep", "nil" if hdl0 == null else str(hdl0))
+			_emit(arm, "awake_ticks", "%d" % [awake])
+			_emit(arm, "if_calls_after", "%d" % [ip_if])
+		"wake":
+			var tr0 := _v4s(st.get_transform().origin)
+			st.set_linear_velocity(Vector3(0, 0, 2))
+			_emit(arm, "same_lv", _v4s(st.get_linear_velocity()))
+			_emit(arm, "same_hdl", str(st.is_sleeping()))
+			for i in range(6):
+				await physics_frame
+			var tr1 := _v4s(_body_pos(sl_ball_rid))
+			_emit(arm, "srv_sleep", _sl_srv_sleep())
+			_emit(arm, "moved", "true" if tr1 != tr0 else "false")
+		"xform":
+			var p: Vector3 = st.get_transform().origin
+			st.set_transform(Transform3D(Basis(), p + Vector3(0, 1, 0)))
+			_emit(arm, "same_tr", _v4s(st.get_transform().origin))
+			_emit(arm, "same_hdl", str(st.is_sleeping()))
+			for i in range(6):
+				await physics_frame
+			_emit(arm, "srv_sleep", _sl_srv_sleep())
+			_emit(arm, "fell", "true" if _body_pos(sl_ball_rid).y < p.y + 0.99
+					else "false")
+		"toggle":
+			st.set_sleep_state(false)
+			_emit(arm, "same_hdl", str(st.is_sleeping()))
+			_emit(arm, "same_srv", _sl_srv_sleep())
+			var tr0 := _v4s(st.get_transform().origin)
+			var lv0 := _v4s(st.get_linear_velocity())
+			await physics_frame
+			_emit(arm, "next_srv", _sl_srv_sleep())
+			for i in range(8):
+				await physics_frame
+			_emit(arm, "frozen", "true" if _v4s(_body_pos(sl_ball_rid)) == tr0
+					and _v4s(st.get_linear_velocity()) == lv0 else "false")
+		"floor":
+			PhysicsServer3D.body_set_state(sl_floor,
+					PhysicsServer3D.BODY_STATE_TRANSFORM,
+					Transform3D(Basis(), Vector3(0, -20, 0)))
+			for i in range(6):
+				await physics_frame
+			_emit(arm, "srv_sleep", _sl_srv_sleep())
+			_emit(arm, "ball_tr", _v4s(_body_pos(sl_ball_rid)))
+			_emit(arm, "cc", "%d" % [_sl_cc()])
+		"sync":
+			PhysicsServer3D.body_set_state_sync_callback(sl_ball_rid,
+					Callable(self, "_sl_on_ss"))
+			for i in range(6):
+				await physics_frame
+			_emit(arm, "ss_count", "%d" % [sl_ss])
+			_emit(arm, "srv_sleep", _sl_srv_sleep())
+	_quit_clean()
+
+
+# One getter call per callee frame (the r88 lesson): an out-of-range index
+# prints one engine ERROR and returns a typed default, and a script error would
+# abort only this callee, never the deferred child coroutine.
+func _phase_get(st: Variant, which: String, i: int) -> Variant:
+	match which:
+		"lp": return st.get_contact_local_position(i)
+		"ln": return st.get_contact_local_normal(i)
+		"imp": return st.get_contact_impulse(i)
+		"ls": return st.get_contact_local_shape(i)
+		"lv": return st.get_contact_local_velocity_at_position(i)
+		"col": return st.get_contact_collider(i)
+		"cp": return st.get_contact_collider_position(i)
+		"cid": return st.get_contact_collider_id(i)
+		"cob": return st.get_contact_collider_object(i)
+		"csh": return st.get_contact_collider_shape(i)
+		"cv": return st.get_contact_collider_velocity_at_position(i)
+	return null
+
+
+func _phase_row(st: Variant) -> Dictionary:
+	var pf := Engine.get_physics_frames()
+	if st == null:
+		return {"pf": pf, "seq": ip_seq, "cc": -1, "tr": "nil", "lv": "nil",
+				"imp": "nil", "imp_v": Vector3.ZERO, "lvloc": "nil",
+				"lvloc_v": Vector3.ZERO}
+	var cc: int = st.get_contact_count()
+	var imp := Vector3.ZERO
+	var lvloc := Vector3.ZERO
+	var imp_s := "nil"
+	var lvloc_s := "nil"
+	if cc > 0:
+		imp = st.get_contact_impulse(0)
+		lvloc = st.get_contact_local_velocity_at_position(0)
+		imp_s = _v4s(imp)
+		lvloc_s = _v4s(lvloc)
+	return {"pf": pf, "seq": ip_seq, "cc": cc,
+			"tr": _v4s(st.get_transform().origin),
+			"lv": _v4s(st.get_linear_velocity()),
+			"imp": imp_s, "imp_v": imp, "lvloc": lvloc_s, "lvloc_v": lvloc}
+
+
+# The callbacks every r89 child's probe role shares. `ip_record` selects the
+# phase lattice (if_phase); `iw_member` selects the IF interior-write cell
+# (if_write); the sleep child only counts IF firings (the callback stopping on
+# the sleep tick is one of its claims), so it needs no branch here.
+func on_if(st: PhysicsDirectBodyState3D) -> void:
+	ip_seq += 1
+	ip_if += 1
+	if ip_record:
+		# PHASEMK: a real-time marker so the merged child.log carries the
+		# engine's own emission order — the seq counter is child-assigned,
+		# the file position is not.
+		print("PHASEMK IF %d" % Engine.get_physics_frames())
+		ip_if_rows.append(_phase_row(st))
+		return
+	if iw_member != "" and not iw_wrote and ip_if == IW_WRITE_TICK:
+		iw_wrote = true
+		_iw_write(st, iw_member)
+
+
+func on_e() -> void:
+	ip_seq += 1
+	if ip_bds == null and ip_ball != null:
+		ip_bds = PhysicsServer3D.body_get_direct_state(ip_ball.get_rid())
+	if ip_record:
+		print("PHASEMK E %d" % Engine.get_physics_frames())
+		ip_e_rows.append(_phase_row(ip_bds))
+
+
+func on_f() -> void:
+	ip_seq += 1
+	if ip_record:
+		print("PHASEMK F %d" % Engine.get_physics_frames())
+		ip_f_rows.append(_phase_row(ip_bds))
+
+
+func _phase_at(rows: Array, pf: int) -> Dictionary:
+	for r in rows:
+		if r["pf"] == pf:
+			return r
+	return {}
+
+
+func _phase_same(a: Dictionary, b: Dictionary) -> bool:
+	return a["cc"] == b["cc"] and a["tr"] == b["tr"] and a["lv"] == b["lv"] \
+			and a["imp"] == b["imp"] and a["lvloc"] == b["lvloc"]
+
+
+# IF(pf=k) == E(pf=k): the pre-step view (the same state left by step k-1).
+func _phase_pairs_equal(a: Array, b: Array) -> String:
+	var pairs := 0
+	for r in a:
+		var o := _phase_at(b, r["pf"])
+		if o.is_empty():
+			continue
+		pairs += 1
+		if not _phase_same(r, o):
+			return "false"
+	return "true" if pairs > 0 else "absent"
+
+
+# F(pf=k) == IF(pf=k+1): the idle frame sees the record the step just wrote,
+# which is the record the next tick's IF reports.
+func _phase_next_equal(f_rows: Array, if_rows: Array) -> String:
+	var pairs := 0
+	for r in f_rows:
+		var o := _phase_at(if_rows, int(r["pf"]) + 1)
+		if o.is_empty():
+			continue
+		pairs += 1
+		if not _phase_same(r, o):
+			return "false"
+	return "true" if pairs > 0 else "absent"
+
+
+# IF -> E -> F inside one tick, read off the monotonic seq counter.
+func _phase_seq_order() -> String:
+	var seen := 0
+	for r in ip_if_rows:
+		var e := _phase_at(ip_e_rows, r["pf"])
+		var f := _phase_at(ip_f_rows, r["pf"])
+		if e.is_empty() or f.is_empty():
+			continue
+		seen += 1
+		if not (int(r["seq"]) < int(e["seq"]) and int(e["seq"]) < int(f["seq"])):
+			return "false"
+	return "true" if seen > 0 else "absent"
+
+
+# --child --arm=ip_plain / ip_jolt / ip_dummy (r89): the intra-tick phase
+# lattice at the contact surface. The SAME tick is sampled at
+# _integrate_forces (IF), _physics_process (E) and _process (F) through one
+# body handle, every row stamped with `pf` (Engine.get_physics_frames) and
+# `seq` (a counter bumped at the top of every callback), so the order is read
+# off the rows instead of inferred. The lattice: IF is a PRE-step view — the
+# rows at pf=k equal E's at pf=k and equal F's at pf=k+1 — so the CURRENT
+# step's contact record is readable only at F(pf=k) or at the next tick's
+# IF/E, never inside IF. The record's `impulse` field is one solve late on
+# GodotPhysics (the first in-contact record reads exactly zero; the impact
+# impulse appears in the following record) while Jolt's holds its own step's
+# impulse; the contact-local velocity is the current pre-solve relative
+# velocity on both. Never "GodotPhysics is always zero": r87's body_tier read
+# the first in-contact step only, and this arm pins the lag as the mechanism.
+func _child_if_phase(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	var floor_node := StaticBody3D.new()
+	var fcol := CollisionShape3D.new()
+	var fbox := BoxShape3D.new()
+	fbox.size = Vector3(20, 1, 20)
+	fcol.shape = fbox
+	floor_node.add_child(fcol)
+	floor_node.position = Vector3(0, -1, 0)
+	root.add_child(floor_node)
+	owned_nodes.append(floor_node)
+	ip_ball = IFRB.new()
+	ip_ball.probe = self
+	var bcol := CollisionShape3D.new()
+	var bsp := SphereShape3D.new()
+	bsp.radius = 0.5
+	bcol.shape = bsp
+	ip_ball.add_child(bcol)
+	ip_ball.position = Vector3(0, 0.2, 0)
+	ip_ball.max_contacts_reported = 8
+	ip_ball.can_sleep = false
+	root.add_child(ip_ball)
+	owned_nodes.append(ip_ball)
+	var w := IFWatch.new()
+	w.probe = self
+	root.add_child(w)
+	owned_nodes.append(w)
+	ip_record = true
+	# 24 ticks cover the drop (first contact ~step 13), the first in-contact
+	# record at F and the two records after it on every backend.
+	await _frames(24)
+	ip_record = false
+	var rid := ip_ball.get_rid()
+	var st: Variant = PhysicsServer3D.body_get_direct_state(rid)
+	# index-bounds cell: every getter outside [0, cc) is a typed refusal, not
+	# a crash — the parent counts the engine's own line per call in the raw log
+	var cc_now := 0
+	var cc_after := -1
+	var oob_calls := 0
+	var oob_shape := "absent"
+	if st != null:
+		cc_now = st.get_contact_count()
+		if cc_now > 0:
+			for which in PHASE_GETTERS:
+				_phase_get(st, which, cc_now)
+				oob_calls += 1
+			cc_after = st.get_contact_count()
+			oob_shape = str(st.get_contact_local_shape(cc_now))
+	var first := -1
+	for r in ip_f_rows:
+		if r["cc"] > 0:
+			first = r["pf"]
+			break
+	var first_f := _phase_at(ip_f_rows, first)
+	var first_if := _phase_at(ip_if_rows, first)
+	var first_e := _phase_at(ip_e_rows, first)
+	var next_if := _phase_at(ip_if_rows, first + 1)
+	var next_f := _phase_at(ip_f_rows, first + 1)
+	var if_eq_e := _phase_pairs_equal(ip_if_rows, ip_e_rows)
+	var f_eq_next := _phase_next_equal(ip_f_rows, ip_if_rows)
+	var seq_ok := _phase_seq_order()
+	var cc_max := 0
+	for r in ip_e_rows:
+		cc_max = maxi(cc_max, int(r["cc"]))
+	var imp_first := "absent"
+	var imp_first_mag := "0.0000"
+	var imp_next_mag := "0.0000"
+	var lvloc_mag := "0.0000"
+	if not first_f.is_empty():
+		var m: Vector3 = first_f["imp_v"]
+		imp_first = "zero" if m.length() < 0.000001 else "real"
+		imp_first_mag = "%.4f" % m.length()
+		lvloc_mag = "%.4f" % (first_f["lvloc_v"] as Vector3).length()
+	if not next_f.is_empty():
+		imp_next_mag = "%.4f" % (next_f["imp_v"] as Vector3).length()
+	_note(prefix, "first=%d if_rows=%d e_rows=%d f_rows=%d if_eq_e=%s f_eq_next=%s seq=%s idx=%d/%s cc_after=%d cc_max=%d" % [
+			first, ip_if_rows.size(), ip_e_rows.size(), ip_f_rows.size(),
+			if_eq_e, f_eq_next, seq_ok, oob_calls, oob_shape, cc_after, cc_max])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "if_fires", "%d" % [ip_if])
+	_emit(prefix, "cc_max", "%d" % [cc_max])
+	_emit(prefix, "first_pf", "%d" % [first])
+	_emit(prefix, "if_eq_e", if_eq_e)
+	_emit(prefix, "f_eq_next_if", f_eq_next)
+	_emit(prefix, "seq_order", seq_ok)
+	_emit(prefix, "if_cc_first", "%d" % (first_if["cc"] if not first_if.is_empty() else -1))
+	_emit(prefix, "e_cc_first", "%d" % (first_e["cc"] if not first_e.is_empty() else -1))
+	_emit(prefix, "f_cc_first", "%d" % (first_f["cc"] if not first_f.is_empty() else -1))
+	_emit(prefix, "if_cc_next", "%d" % (next_if["cc"] if not next_if.is_empty() else -1))
+	_emit(prefix, "imp_first", imp_first)
+	_emit(prefix, "imp_first_mag", imp_first_mag)
+	_emit(prefix, "imp_next_mag", imp_next_mag)
+	_emit(prefix, "lvloc_first_mag", lvloc_mag)
+	_emit(prefix, "oob_calls", "%d" % [oob_calls])
+	_emit(prefix, "oob_shape", oob_shape)
+	_emit(prefix, "cc_after", "%d" % [cc_after])
+	_quit_clean()
+
+
 # --child --arm=fd_dummy (r88): the Dummy freed-space floor in ONE child —
 # the silent backend never crashes, so all six methods run in one process.
 # The world space is freed once; every subsequent call answers typed-empty
@@ -4840,4 +6959,233 @@ func _child_freed_dummy(prefix: String) -> void:
 		_emit(prefix, m + "_post", _fmt_read(sp))
 		if sp != null:
 			_emit(prefix, m + "_ret", _fmt_read(_call_read(sp, m)))
+	_quit_clean()
+
+
+# --- r89: the joint family (shared child helpers) ---------------------------
+# The scout's constraint geometry: a STATIC anchor A at (0,3,0) and a dynamic
+# body B at (0,2,0) in free space (no floor), so gravity and the joint are the
+# only actors and the witness is the anchor gap |B.pos - A.pos|. The shapes are
+# small (half 0.2) so the two bodies never touch and the collision-default
+# split is not confounded by a contact.
+func _body_pos(rid: RID) -> Vector3:
+	var v: Variant = PhysicsServer3D.body_get_state(
+			rid, PhysicsServer3D.BODY_STATE_TRANSFORM)
+	return v.origin if v is Transform3D else Vector3.ZERO
+
+
+func _body_lv_y(rid: RID) -> float:
+	var v: Variant = PhysicsServer3D.body_get_state(
+			rid, PhysicsServer3D.BODY_STATE_LINEAR_VELOCITY)
+	return v.y if v is Vector3 else 0.0
+
+
+# The scout's witness body B is a sphere r=0.5 (mass 1) — a box B has a
+# different inertia tensor and a different convergence, so the sphere is kept
+# to make this arm's numbers comparable with the scout's receipts.
+func _mk_sphere_body(pos: Vector3, mode := PhysicsServer3D.BODY_MODE_STATIC,
+		radius := 0.5) -> RID:
+	var shape := PhysicsServer3D.sphere_shape_create()
+	PhysicsServer3D.shape_set_data(shape, radius)
+	var body := PhysicsServer3D.body_create()
+	PhysicsServer3D.body_set_mode(body, mode)
+	PhysicsServer3D.body_add_shape(body, shape)
+	PhysicsServer3D.body_set_collision_layer(body, 1)
+	PhysicsServer3D.body_set_collision_mask(body, 1)
+	PhysicsServer3D.body_set_space(body, wspace)
+	PhysicsServer3D.body_set_state(body,
+			PhysicsServer3D.BODY_STATE_TRANSFORM, Transform3D(Basis(), pos))
+	owned.append(body)
+	owned.append(shape)
+	return body
+
+
+func _joint_make(j: RID, t: String, a: RID, b: RID) -> void:
+	match t:
+		"pin":
+			PhysicsServer3D.joint_make_pin(j, a, Vector3.ZERO, b, Vector3.ZERO)
+		"hinge":
+			PhysicsServer3D.joint_make_hinge(j, a, Transform3D(), b, Transform3D())
+		"slider":
+			PhysicsServer3D.joint_make_slider(j, a, Transform3D(), b, Transform3D())
+		"cone":
+			PhysicsServer3D.joint_make_cone_twist(j, a, Transform3D(), b,
+					Transform3D())
+		"g6dof":
+			PhysicsServer3D.joint_make_generic_6dof(j, a, Transform3D(), b,
+					Transform3D())
+
+
+func _joint_set(j: RID, t: String, i: int, v: float) -> void:
+	match t:
+		"pin": PhysicsServer3D.pin_joint_set_param(j, i, v)
+		"hinge": PhysicsServer3D.hinge_joint_set_param(j, i, v)
+		"slider": PhysicsServer3D.slider_joint_set_param(j, i, v)
+		"cone": PhysicsServer3D.cone_twist_joint_set_param(j, i, v)
+		"g6dof": PhysicsServer3D.generic_6dof_joint_set_param(j, 0, i, v)
+
+
+func _joint_get(j: RID, t: String, i: int) -> Variant:
+	match t:
+		"pin": return PhysicsServer3D.pin_joint_get_param(j, i)
+		"hinge": return PhysicsServer3D.hinge_joint_get_param(j, i)
+		"slider": return PhysicsServer3D.slider_joint_get_param(j, i)
+		"cone": return PhysicsServer3D.cone_twist_joint_get_param(j, i)
+		"g6dof": return PhysicsServer3D.generic_6dof_joint_get_param(j, 0, i)
+	return null
+
+
+func _idx_list(v: Array) -> String:
+	if v.is_empty():
+		return "-"
+	var parts := PackedStringArray()
+	for i in v:
+		parts.append(str(i))
+	return ",".join(parts)
+
+
+# --child --arm=jp_plain / jp_jolt / jp_dummy (r89): the pin constraint as a
+# WITNESS, one variant per fresh A/B pair so no variant contaminates another.
+# A default pin is a SOFT constraint (it settles at a non-zero offset under a
+# 1 g load), softness 0 freezes the body at its initial offset with exactly
+# zero velocity, softness 1 closes the gap, and an impulse clamp below the
+# support impulse makes the joint sag. `nomake` is the falsification control
+# (the joint exists, is never made, and the body falls freely) — and
+# `joint_make_generic_6dof` is compared against it: on Jolt the trace is the
+# control's, which is the silent no-op. The r88-scout's softness/clamp
+# parameter indices are re-used verbatim (p0 bias, p1 damping, p2 clamp).
+func _child_joint_pin(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	var traces := {}
+	var lvs := {}
+	var types := {}
+	var coll := "absent"
+	var rb := {}
+	var vi := 0
+	for v in JP_VARIANTS:
+		# Each variant gets its own patch of space: two bodies placed at the
+		# SAME coordinates in different variants would collide with each other
+		# (measured: the shared-position form pushed every variant's body and
+		# the equilibrium never settled), and a joint is freed before the
+		# bodies it references (the reverse order double-frees the engine's
+		# constraint list).
+		var base := Vector3(20.0 * vi, 0, 0)
+		vi += 1
+		var a := _mk_body(base + Vector3(0, 3, 0),
+				PhysicsServer3D.BODY_MODE_STATIC, Vector3(0.4, 0.4, 0.4))
+		var b := _mk_sphere_body(base + Vector3(0, 2, 0),
+				PhysicsServer3D.BODY_MODE_RIGID, 0.5)
+		var j := PhysicsServer3D.joint_create()
+		match v:
+			"pin":
+				_joint_make(j, "pin", a, b)
+			"soft0":
+				_joint_make(j, "pin", a, b)
+				PhysicsServer3D.pin_joint_set_param(j, 0, 0.0)
+			"soft1":
+				_joint_make(j, "pin", a, b)
+				PhysicsServer3D.pin_joint_set_param(j, 0, 1.0)
+			"clamp2":
+				_joint_make(j, "pin", a, b)
+				PhysicsServer3D.pin_joint_set_param(j, 2, 0.01)
+			"g6dof":
+				_joint_make(j, "g6dof", a, b)
+		if v == "pin":
+			coll = str(PhysicsServer3D.joint_is_disabled_collisions_between_bodies(j))
+		types[v] = str(PhysicsServer3D.joint_get_type(j))
+		# the pin parameter readback is only meaningful on a pin-family joint
+		# (the getter's own type guard fires otherwise, which is not a claim
+		# this arm makes)
+		if v != "g6dof" and v != "nomake":
+			rb[v] = "%s,%s,%s" % [
+					_f4(PhysicsServer3D.pin_joint_get_param(j, 0)),
+					_f4(PhysicsServer3D.pin_joint_get_param(j, 1)),
+					_f4(PhysicsServer3D.pin_joint_get_param(j, 2))]
+		var g4 := 0.0
+		for i in range(JP_TICKS):
+			await physics_frame
+			if i == 3:
+				g4 = _body_pos(a).distance_to(_body_pos(b))
+		traces[v] = "%.4f,%.4f" % [g4,
+				_body_pos(a).distance_to(_body_pos(b))]
+		lvs[v] = "%.4f" % _body_lv_y(b)
+		PhysicsServer3D.free_rid(j)
+	_note(prefix, "types=%s traces=%s lvs=%s rb=%s coll=%s" % [
+			str(types), str(traces), str(lvs), str(rb), coll])
+	_emit(prefix, "backend", str(_backend_name()))
+	for v in JP_VARIANTS:
+		_emit(prefix, v + "_gap", traces[v])
+		_emit(prefix, v + "_lv", lvs[v])
+		_emit(prefix, v + "_type", types[v])
+	_emit(prefix, "pin_rb", rb["pin"])
+	_emit(prefix, "soft0_rb", rb["soft0"])
+	_emit(prefix, "soft1_rb", rb["soft1"])
+	_emit(prefix, "clamp2_rb", rb["clamp2"])
+	_emit(prefix, "coll_default", coll)
+	_emit(prefix, "g6dof_eq_nomake",
+			"true" if traces["g6dof"] == traces["nomake"] else "false")
+	_quit_clean()
+
+
+# --child --arm=jq_plain / jq_jolt / jq_dummy (r89): the per-parameter
+# round-trip table. Each joint type is written 0.5 at EVERY parameter index and
+# read straight back: "honored" means the read returns the write, "dropped"
+# means the backend kept its own default. Jolt silently drops a per-type
+# subset (solver-tuning params) while honoring limits/motors; GodotPhysics
+# honors the whole table except the slider, whose getter is write-opaque and
+# emits a wrong-type guard per call. The guard line is counted by the parent
+# from the raw log, so a silently-zero read can never pass as a write-opaque
+# getter.
+func _child_joint_param(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	var a := _mk_body(Vector3(0, 3, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(0.2, 0.2, 0.2))
+	var b := _mk_body(Vector3(0, 2, 0), PhysicsServer3D.BODY_MODE_RIGID,
+			Vector3(0.2, 0.2, 0.2))
+	await _frames(2)
+	_emit(prefix, "backend", str(_backend_name()))
+	for t in JP_TYPES:
+		var j := PhysicsServer3D.joint_create()
+		_joint_make(j, t, a, b)
+		_emit(prefix, t + "_type", str(PhysicsServer3D.joint_get_type(j)))
+		var hon := []
+		var drop := []
+		for i in range(JP_TYPES[t]):
+			_joint_set(j, t, i, 0.5)
+			var got: Variant = _joint_get(j, t, i)
+			if got is float and absf(got - 0.5) < 0.0001:
+				hon.append(i)
+			else:
+				drop.append(i)
+		_emit(prefix, t + "_hon", _idx_list(hon))
+		_emit(prefix, t + "_drop", _idx_list(drop))
+		PhysicsServer3D.free_rid(j)
+	# the flags round-trip separately from the float table
+	var jh := PhysicsServer3D.joint_create()
+	_joint_make(jh, "hinge", a, b)
+	var hf := 0
+	for f in range(2):
+		PhysicsServer3D.hinge_joint_set_flag(jh, f, true)
+		if PhysicsServer3D.hinge_joint_get_flag(jh, f) == true:
+			hf += 1
+	_emit(prefix, "hinge_flags", "%d/2" % [hf])
+	PhysicsServer3D.free_rid(jh)
+	var jg := PhysicsServer3D.joint_create()
+	_joint_make(jg, "g6dof", a, b)
+	var gf := 0
+	for f in range(6):
+		PhysicsServer3D.generic_6dof_joint_set_flag(jg, 0, f, true)
+		if PhysicsServer3D.generic_6dof_joint_get_flag(jg, 0, f) == true:
+			gf += 1
+	_emit(prefix, "g6dof_flags", "%d/6" % [gf])
+	PhysicsServer3D.free_rid(jg)
+	# an UNMADE joint reads type 5 (JOINT_TYPE_MAX) and the default solver
+	# priority on both real backends
+	var ju := PhysicsServer3D.joint_create()
+	_emit(prefix, "unmade_type", str(PhysicsServer3D.joint_get_type(ju)))
+	_emit(prefix, "unmade_solver",
+			str(PhysicsServer3D.joint_get_solver_priority(ju)))
+	_emit(prefix, "coll_default", str(
+			PhysicsServer3D.joint_is_disabled_collisions_between_bodies(ju)))
+	PhysicsServer3D.free_rid(ju)
 	_quit_clean()

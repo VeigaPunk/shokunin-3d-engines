@@ -492,6 +492,30 @@ CASES = [
     ("phys3d_events_freed_space_methods", "phys3d_events.gd",
      ["--arm=freed_space_methods"], 0,
      "PASS phys3d_events freed_space_methods gp=crash6@post_fetch jolt=crash-or-dead@post_fetch dummy=empty child_exit=0"),
+    # r89 body-state lattice (PhysicsDirectBodyState3D phase order + the
+    # contact record's impulse lag, the _integrate_forces interior rules, the
+    # joint family's pin witness / per-parameter drop table / solver priority
+    # and RID lifecycle, cross-space handles, the sleeping body). Appended at
+    # the tail, insertion-only. No row of this block is crash-capable: the one
+    # crash class the block met — Jolt aborting inside free_rid when a space is
+    # released before the bodies living in it — was fixed in the child's
+    # teardown order (the r88 rule), not pinned as an envelope, so the
+    # crash-capable rows above keep their tail position among crash rows.
+    ("phys3d_events_if_phase", "phys3d_events.gd", ["--arm=if_phase"], 0,
+     "PASS phys3d_events if_phase gp=lag jolt=same if_eq_e=true child_exit=0"),
+    ("phys3d_events_if_write", "phys3d_events.gd", ["--arm=if_write"], 0,
+     "PASS phys3d_events if_write immediate=vel,xform,impulse deferred=force,torque sleep=kept,jolt_zeroed child_exit=0"),
+    ("phys3d_events_joint_pin", "phys3d_events.gd", ["--arm=joint_pin"], 0,
+     "PASS phys3d_events joint_pin gp=soft jolt=dropped dummy=flat child_exit=0"),
+    ("phys3d_events_joint_param", "phys3d_events.gd", ["--arm=joint_param"], 0,
+     "PASS phys3d_events joint_param gp=sliderblind jolt=drops dummy=drops child_exit=0"),
+    ("phys3d_events_joint_solver", "phys3d_events.gd",
+     ["--arm=joint_solver"], 0,
+     "PASS phys3d_events joint_solver prio=honored,ignored clear=immediate reuse=true freed=refusal child_exit=0"),
+    ("phys3d_events_cross_space", "phys3d_events.gd", ["--arm=cross_space"], 0,
+     "PASS phys3d_events cross_space two_world=answers raw=answers ident=per_space box=half,full jolt_raw=frozen child_exit=0"),
+    ("phys3d_events_sleep_state", "phys3d_events.gd", ["--arm=sleep_state"], 0,
+     "PASS phys3d_events sleep_state stale_buf=retained writes=wake toggle=gp_resleeps,jolt_frozen floor=gp_wakes,jolt_not child_exit=0"),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored
