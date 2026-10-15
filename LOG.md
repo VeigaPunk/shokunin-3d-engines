@@ -1223,3 +1223,15 @@ corpus/knowledge/seed.md).
   simplifier/scribe/verifier2 VERIFIED (4212 delta samples 0 off-pin,
   600/600 envelope, fresh starved-mode hits 172) + post-fold
   baseline-r2 + adj orchestrator. ADMIT-corr. dd32c3c + 75739bc.
+- ROUND 93 (2026-10-15): Area3D signal-in-tick ordering lattice. ADMIT at
+  661749f (265 rows). Author 265/265; all 6 wave-B seats green under
+  load 90-149: critic PASS (1136 child execs, 0 multi-hash cells),
+  reviewer ADMIT-recommend, simplifier PASS (SP1-5 -8 lines queued),
+  verifier VERIFIED (64 execs byte-exact, Jolt order flip observed
+  live on unpinned diagnostics only), scribe custody intact.
+- LAWS: in_step post-IF/pre-E signal ordering; queue_free exits post-E;
+  in-dispatch monitoring write refused verbatim; GP/Jolt frozen-teleport
+  + bsi splits; Dummy vacuity; Jolt multi-overlap deliberately unpinned.
+- FOLDS QUEUED: SP1-5; reviewer F1-F5 report nits; freed_space segv
+  class -> flake list; navagent re-anchor spec (fc6d033); bpy stamp
+  spec (6421676).

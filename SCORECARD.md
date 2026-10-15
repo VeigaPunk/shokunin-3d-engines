@@ -211,3 +211,13 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 
 | r89 | game-dev-3d | body-state phase lattice + joint family | ADMIT-corr | c16f6ba + 93d01fb |
 | r92 | improved | improved | improved | RemoteTransform3D/anim-x-body/scheduler timing (23 rows, 235->258); verifier FAILED pre-fold -> fold re-anchored timing to iteration boundary + settled ticks; idlemode envelope = legal set; VERIFIED on folded bytes (4212 samples 0 off-pin) |
+
+## Round 93 verdict — 2026-10-15
+
+| axis | verdict | evidence |
+|---|---|---|
+| depth | **improved** | Area3D signal phase lattice admitted: `in_step` (post-IF/pre-E) ordering across 3 entry shapes, `queue_free` post-E exits, in-dispatch `monitoring` refusal with exact text, `free_rid` `no_if` exits + backend teardown errors, GP/Jolt frozen-teleport/`bsi` splits, Dummy `nif=0` vacuity, Jolt multi-overlap order honestly unpinned (`seqeq=-`/`pairs=-`) — verified as live flips by two independent seats. |
+| coverage | **improved** | +7 rows → 265 (218 ordinary + 47 negative), 18 cases × 3 backends = 54 cells; author 265/265 + byte-identical ×3; verifier 64 execs byte-exact @load127; critic 1136 child execs, 0 multi-hash cells, `bodysig` 90/90/backend. |
+| calibration | **improved** | boundary corrections folded pre-authoring (queue_free post-E, refusal semantics, order instability unpinned); scribe F1 pre-commit child delta disclosed (diagnostic-only, M surfaces identical 54/54); reviewer F1-F5 report nits filed; critic F1 adds freed_space segv class to flake list. |
+
+| r93 | game-dev-3d | Area3D signal-in-tick ordering lattice | ADMIT | 661749f |
