@@ -1,0 +1,53 @@
+{
+  "verdict": "PASS",
+  "normal": {
+    "command": [
+      "/usr/bin/godot",
+      "--headless",
+      "--path",
+      "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r88-baseline/runs/20261014T235527966109Z/scratch",
+      "--script",
+      "res://timeout_tree3d.gd",
+      "--"
+    ],
+    "actual_exit": 0,
+    "stdout": "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org\n\nTREE_TIMEOUT_3D: spatial node ready\n",
+    "stderr": "",
+    "error": null,
+    "classified": true,
+    "reasons": []
+  },
+  "timeout": {
+    "command": [
+      "/usr/bin/godot",
+      "--headless",
+      "--path",
+      "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/live/r88-baseline/runs/20261014T235527966109Z/scratch",
+      "--script",
+      "res://timeout_tree3d.gd",
+      "--",
+      "--hold-open"
+    ],
+    "actual_exit": null,
+    "cleanup_exit": -9,
+    "stdout": "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org\n\nTREE_TIMEOUT_3D: spatial node ready\n",
+    "stderr": "",
+    "error": "TIMEOUT after 3 seconds",
+    "timed_out": true,
+    "marker_observed": true,
+    "witness": {
+      "pid": 1146623,
+      "pgid": 1146623,
+      "ppid": 1146585
+    },
+    "witness_verified": true,
+    "witness_gone": true,
+    "witness_cleanup": "SIGTERM to verified detached witness",
+    "classified": false,
+    "reasons": [
+      "TIMEOUT after 3 seconds",
+      "no exit code (process killed or timed out)"
+    ]
+  },
+  "bounded_claim": "One identified detached Godot-spawned witness terminated after direct-child timeout; not arbitrary process-tree cleanup."
+}

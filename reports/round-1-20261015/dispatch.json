@@ -1,0 +1,29 @@
+{
+  "lane": "game-dev-3d",
+  "round": 1,
+  "transport": "OMP task",
+  "calls": 1,
+  "members": [
+    {"name": "PathPlan", "agent": "planner", "handle": "PathPlan"},
+    {"name": "ScopeConnect", "agent": "connector", "handle": "ScopeConnect"},
+    {"name": "PathRegression", "agent": "executor", "handle": "PathRegression"},
+    {"name": "PathDocs", "agent": "executor", "handle": "PathDocs"},
+    {"name": "ChecklistCalibrate", "agent": "executor", "handle": "ChecklistCalibrate"},
+    {"name": "RoundEvidence", "agent": "scribe", "handle": "RoundEvidence"},
+    {"name": "SurfaceRecon", "agent": "scout", "handle": "SurfaceRecon"},
+    {"name": "PathReview", "agent": "reviewer", "handle": "PathReview"},
+    {"name": "PathCritic", "agent": "critic", "handle": "PathCritic"}
+  ],
+  "routing_authority": "~/.omp/agent/config.yml task.agentModelOverrides, modelRoles, retry.fallbackChains",
+  "role_override_lines_observed": "318-332",
+  "routing_mutations": false,
+  "per_member_model_parameters": false,
+  "ufo_wave_validation": {
+    "command": "node scripts/ufo-swarm-wave.mjs plan --spec-json <required-nine-role-spec>",
+    "exit": 1,
+    "output": {"schema": "ufo-swarm-wave-error-v1", "code": "unknown_role", "message": "items[0].role \"planner\" is not a swarm role"},
+    "validated_ufo_wave_claimed": false,
+    "decision": "Use one heterogeneous native task batch, the shokunin host mapping; no validator or route configuration changes."
+  },
+  "scope": "Only assigned lane files and advisory reports; parent integrates, verifies, commits and pushes. Agents do not grant external promotion authority."
+}
