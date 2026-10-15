@@ -491,7 +491,7 @@ CASES = [
      "PASS phys3d_events race_class gp=classes jolt=crash-or-classes reps=4 child_exit=0"),
     ("phys3d_events_freed_space_methods", "phys3d_events.gd",
      ["--arm=freed_space_methods"], 0,
-     "PASS phys3d_events freed_space_methods gp=crash6 jolt=crash-or-dead dummy=empty child_exit=0"),
+     "PASS phys3d_events freed_space_methods gp=crash6@post_fetch jolt=crash-or-dead@post_fetch dummy=empty child_exit=0"),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored

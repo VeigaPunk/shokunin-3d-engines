@@ -832,7 +832,9 @@ floor (the in-place contact control) and reaches the wall only through motion.
   (wall only) is fetched at every position on non-threaded backends
   (`open=5`), while the threaded gate refuses it out of phase (`open=2`,
   `refused=3`, one engine ERROR per refusal). A handle STASHED at a legal
-  position answers with the same signature at every position
+  position answers with the same signature at every **sampled**
+  position — the out-of-phase firing takes the broadphase channels only
+  (the shape channel there is pinned by `race_class`) —
   (`pt1,is1,ray7,cs0,cmfrac,ri0,rv6`; the `cs/ri` zeros are geometric —
   the sweep's in-place start overlaps nothing in a wall-only space, while
   `rv` is the in-place wall overlap). The out-of-phase firing is
@@ -892,8 +894,12 @@ floor (the in-place contact control) and reaches the wall only through motion.
   process (`rc` 134/137, no child marker, breadcrumb present); the row
   accepts the **crash envelope OR the completed envelope**, each with its
   own witnesses, and its marker is branch-stable.
-- `freed_space_methods` — the freed-space postconditions **per method ×
-  backend**, the file's fatal tail. One child per method on the real
+- `freed_space_methods` — the freed-space postconditions, with the
+  **per-method dimension at the VM dead-handle call** (the
+  `Nonexistent function '<m>' in base 'previously freed'` line is
+  counted per method) while the crash/dead outcome itself is the shared
+  post-free `bds.get_space_state()` fetch — the file's fatal tail. One
+  child per method on the real
   backends (a crash cannot be caught) plus one Dummy child covering all
   six, spawned as ONE **parallel batch** (`_spawn_batch`, the r83-r87
   `_spawn_child` split into prepare/scan so the conventions stay

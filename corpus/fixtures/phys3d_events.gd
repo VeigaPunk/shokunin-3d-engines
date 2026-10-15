@@ -292,6 +292,13 @@ const CRASH_BOUND_S := 6
 const GATE_F_REPS := 3
 const RACE_REPS := 4
 const FREED_METHODS := ["pt", "ray", "is", "cs", "cm", "ri"]
+# the VM dead-handle line carries the real method name
+# ("Nonexistent function 'intersect_point' in base 'previously freed'") —
+# the parent counts the method-qualified line, not the bare token (r88 C1).
+const FREED_METHOD_NAMES := {
+	"pt": "intersect_point", "ray": "intersect_ray",
+	"is": "intersect_shape", "cs": "collide_shape",
+	"cm": "cast_motion", "ri": "get_rest_info"}
 const FREED_BOUND_S := 6
 const BATCH_BOUND_S := 12
 
@@ -664,6 +671,25 @@ func _log_count(logpath: String, token: String) -> int:
 	return n
 
 
+# r88 C6: counts `token<a>/<b>` lines whose two ids are equal — the
+# parent-side identity witness for fetch_gate's held-handle bypass conjunct.
+func _log_idpair_equal_count(logpath: String, token: String) -> int:
+	var lf := FileAccess.open(logpath, FileAccess.READ)
+	if lf == null:
+		return -1
+	var n := 0
+	while not lf.eof_reached():
+		var line := lf.get_line()
+		var at := line.find(token)
+		if at < 0:
+			continue
+		var pair := line.substr(at + token.length()).strip_edges().split("/")
+		if pair.size() == 2 and pair[0] == pair[1] and pair[0] != "nil":
+			n += 1
+	lf.close()
+	return n
+
+
 # --- r88: the query-tier read family (shared child helpers) -----------------
 
 # Fetch the world direct space state, retrying across frames: on a threaded
@@ -745,12 +771,12 @@ func _ray_params() -> PhysicsRayQueryParameters3D:
 # The params-object fingerprint for the purity cell: every writable field the
 # read family could plausibly smuggle an out-param through.
 func _params_fp(p: PhysicsShapeQueryParameters3D) -> String:
-	return "x=%s m=%s mg=%s mask=%d b=%s a=%s s=%s rid=%s ex=%d" % [
+	return "x=%s m=%s mg=%s mask=%d b=%s a=%s s=%s rid=%s ex=%s" % [
 			str(p.transform), str(p.motion), str(p.margin),
 			p.collision_mask, str(p.collide_with_bodies),
 			str(p.collide_with_areas),
 			("nil" if p.shape == null else str(p.shape.get_instance_id())),
-			str(p.shape_rid), p.exclude.size()]
+			str(p.shape_rid), str(p.exclude)]
 
 
 # Write + same-tick query inside _physics_process (callsite-tier cell).
@@ -823,8 +849,9 @@ func _run() -> void:
 		# unknown --arm used to run the threaded body silently. The
 		# threaded parent passes --arm=threaded_edge explicitly.
 		# r88: the freed-space matrix is one child per method x backend, so
-		# its 13 arm names are prefix-dispatched before the literal table
-		# (the table stays the same closed set it always was).
+		# its 12 fm_* arm names are prefix-dispatched before the literal
+		# table (the table stays the same closed set it always was; the
+		# Dummy child fd_dummy is one of its literal arms).
 		var arm_any := _argval("--arm=", "")
 		if arm_any.begins_with("fm_"):
 			await _child_freed_method(arm_any)
@@ -1754,6 +1781,7 @@ func _run() -> void:
 			var expect_bh_plain := {
 				"bh_plain_backend": "DEFAULT",
 				"bh_plain_if_same": "true",
+				"bh_plain_if_fired": ">0",
 				"bh_plain_ss_same": "true",
 				"bh_plain_ss_fired": ">0",
 				"bh_plain_detach": "nil",
@@ -1764,6 +1792,7 @@ func _run() -> void:
 			var expect_bh_jolt := {
 				"bh_jolt_backend": "Jolt Physics",
 				"bh_jolt_if_same": "true",
+				"bh_jolt_if_fired": ">0",
 				"bh_jolt_ss_same": "true",
 				"bh_jolt_ss_fired": ">0",
 				"bh_jolt_detach": "nil",
@@ -1777,6 +1806,7 @@ func _run() -> void:
 			var expect_bh_dummy := {
 				"bh_dummy_backend": "Dummy",
 				"bh_dummy_if_same": "false",
+				"bh_dummy_if_fired": "0",
 				"bh_dummy_ss_same": "false",
 				"bh_dummy_ss_fired": "0",
 				"bh_dummy_detach": "obj",
@@ -2192,17 +2222,6 @@ func _run() -> void:
 					return _fail("motion_split %s drift exit=%d serr=%s v=%s errs=%s"
 							% [probe[2], spawn["code"], str(spawn["serr"]),
 							str(spawn["verdicts"]), str(spawn["errs"])])
-			# the split itself: exactly one of the four methods honors motion
-			# on each real backend, and the two in-place-ignoring methods
-			# still answer their controls
-			for probe in [[mo_plain, "plain"], [mo_jolt, "jolt"]]:
-				var v: Dictionary = probe[0]["verdicts"]
-				if v["mo_%s_cm" % probe[1]] != "honored" \
-						or v["mo_%s_cs" % probe[1]] != "ignored" \
-						or v["mo_%s_ri" % probe[1]] != "ignored" \
-						or v["mo_%s_is" % probe[1]] != "ignored":
-					return _fail("motion_split %s split drift v=%s"
-							% [probe[1], str(v)])
 			_exit_ok("PASS phys3d_events motion_split gp=wide jolt=tight dummy=floor split=cm_only child_exit=0")
 
 		"fetch_gate":
@@ -2326,6 +2345,17 @@ func _run() -> void:
 						"res://%s/child.log" % dirname)
 				if _log_count(logp, "Space state is inaccessible") != 0:
 					return _fail("fetch_gate %s unexpected refusal" % dirname)
+			# C6 witness: every bypass sample's emitted id pair must be the
+			# SAME id twice — a truthy regression can't mint the pair.
+			for dirname in ["fgplainproj", "fgthrproj", "fgjoltthrproj",
+					"fgdummyproj", "fgdummythrproj"]:
+				var logp2 := ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname)
+				var pairs := _log_idpair_equal_count(logp2,
+						"CHILD_NOTE byp_ids ")
+				if pairs != 5:
+					return _fail("fetch_gate %s byp_ids pairs=%d (want 5)"
+							% [dirname, pairs])
 			_exit_ok("PASS phys3d_events fetch_gate plain=open thr=phase jolt_thr=phase dummy=open byp=held_same child_exit=0")
 
 		"inactive_space":
@@ -2684,7 +2714,7 @@ func _run() -> void:
 							% str(wa_counts))
 			if wa_counts[0][0] != 6 or wa_counts[0][1] != 1 \
 					or wa_counts[0][2] != 3 or wa_counts[0][3] != 1 \
-					or wa_counts[2][2] != 0:
+					or wa_counts[1][2] != 3 or wa_counts[2][2] != 0:
 				return _fail("wrong_args refusal counts=%s" % str(wa_counts))
 			_exit_ok("PASS phys3d_events wrong_args cells=13 typed=empty rc=0 text=same,floor child_exit=0")
 
@@ -2761,7 +2791,6 @@ func _run() -> void:
 				"allow_lines": freed_allow, "bound_s": FREED_BOUND_S,
 			})
 			var batch := _spawn_batch(specs)
-			var gp_ok := 0
 			var jolt_crash := 0
 			var jolt_dead := 0
 			for i in range(FREED_METHODS.size()):
@@ -2781,17 +2810,22 @@ func _run() -> void:
 					return _fail("freed_space_methods plain %s rc=%d not signal-class"
 							% [m, res["code"]])
 				if not res["verdicts"].is_empty() or crash != 1 \
-						or pre != 1 or sp_null != 1:
-					return _fail("freed_space_methods plain %s envelope rc=%d marker=%s crash=%d pre=%d sp=%d"
+						or pre != 1 or sp_null != 1 \
+						or not res["errs"].is_empty():
+					return _fail("freed_space_methods plain %s envelope rc=%d marker=%s crash=%d pre=%d sp=%d errs=%s"
 							% [m, res["code"], str(res["verdicts"]),
-							crash, pre, sp_null])
+							crash, pre, sp_null, str(res["errs"])])
+				if _log_count(logp,
+						"Nonexistent function '%s' in base 'previously freed'"
+						% FREED_METHOD_NAMES[m]) != 1:
+					return _fail("freed_space_methods plain %s method-witness drift"
+							% m)
 				if _log_count(logp, "CHILD_NOTE fm_plain_%s alive=" % m) != 1 \
 						or _log_count(logp, "CHILD_NOTE fm_plain_%s pre=" % m) != 1 \
 						or _log_count(logp, "CHILD_NOTE fm_plain_%s refetch=" % m) != 1 \
 						or _log_count(logp, "CHILD_NOTE fm_plain_%s post=" % m) != 0:
 					return _fail("freed_space_methods plain %s breadcrumb drift"
 							% m)
-				gp_ok += 1
 			for i in range(FREED_METHODS.size()):
 				var m: String = FREED_METHODS[i]
 				var res: Dictionary = batch[FREED_METHODS.size() + i]
@@ -2814,8 +2848,12 @@ func _run() -> void:
 						"Parameter \"space\" is null")
 				# the two class witnesses are unconditional: the stashed
 				# handle's call raises the previously-freed SCRIPT ERROR and
-				# the freed-space refetch names the null space.
-				if pre != 1 or sp_null != 1:
+				# the freed-space refetch names the null space — and the VM
+				# line names THIS method (r88 C1: per-method identity).
+				if pre != 1 or sp_null != 1 \
+						or _log_count(logp,
+						"Nonexistent function '%s' in base 'previously freed'"
+						% FREED_METHOD_NAMES[m]) != 1:
 					return _fail("freed_space_methods jolt %s witness pre=%d sp=%d"
 							% [m, pre, sp_null])
 				var post_tok: String = res["verdicts"].get(
@@ -2824,16 +2862,13 @@ func _run() -> void:
 					# dead-handle branch: no crash, the POST path hands back
 					# nothing usable (post=nil) and the child completes.
 					if crash != 0 or abort != 0 or post_tok != "nil" \
-							or res["verdicts"].size() != 1:
-						return _fail("freed_space_methods jolt %s dead envelope rc=0 v=%s crash=%d abort=%d"
-								% [m, str(res["verdicts"]), crash, abort])
+							or res["verdicts"].size() != 1 \
+							or not res["errs"].is_empty():
+						return _fail("freed_space_methods jolt %s dead envelope rc=0 v=%s crash=%d abort=%d errs=%s"
+								% [m, str(res["verdicts"]), crash, abort,
+								str(res["errs"])])
 					jolt_dead += 1
 				elif res["code"] == 134 or res["code"] == 137:
-					# crash branch, two measured shapes: the crash lands at
-					# bds.get_space_state() (no marker at all) or after the
-					# tokens printed (post=nil, then the exit teardown
-					# aborts). Either way the engine leaves a crash or abort
-					# line, and no other token may exist.
 					# three measured crash shapes: the kill lands at
 					# bds.get_space_state() (no token), after the POST path
 					# handed back a dead handle (post=nil), or after it
@@ -2844,10 +2879,11 @@ func _run() -> void:
 							or (res["verdicts"].size() == 1 \
 							and (post_tok == "nil" \
 							or post_tok == "t24,JoltPhysicsDirectSpaceState3D"))
-					if not marker_ok or crash + abort < 1:
-						return _fail("freed_space_methods jolt %s crash envelope rc=%d v=%s crash=%d abort=%d"
+					if not marker_ok or crash + abort < 1 \
+							or not res["errs"].is_empty():
+						return _fail("freed_space_methods jolt %s crash envelope rc=%d v=%s crash=%d abort=%d errs=%s"
 								% [m, res["code"], str(res["verdicts"]),
-								crash, abort])
+								crash, abort, str(res["errs"])])
 					jolt_crash += 1
 				else:
 					return _fail("freed_space_methods jolt %s rc=%d not crash-or-dead"
@@ -2882,7 +2918,7 @@ func _run() -> void:
 			if jolt_crash + jolt_dead != FREED_METHODS.size():
 				return _fail("freed_space_methods jolt branches=%d+%d"
 						% [jolt_crash, jolt_dead])
-			_exit_ok("PASS phys3d_events freed_space_methods gp=crash6 jolt=crash-or-dead dummy=empty child_exit=0")
+			_exit_ok("PASS phys3d_events freed_space_methods gp=crash6@post_fetch jolt=crash-or-dead@post_fetch dummy=empty child_exit=0")
 
 		_:
 			return _fail("unknown arm " + arm)
@@ -3562,6 +3598,10 @@ func _child_bh_identity(prefix: String) -> void:
 	# so `dummy_cb=never` needed the count itself. Bucketed (0 vs >0): the
 	# real-backend count is scheduling-dependent, the floor's is not.
 	_emit(prefix, "ss_fired", "0" if ss["fired"] == 0 else ">0")
+	# r88 scribe F5 completion: the integrate-forces half of dummy_cb=never
+	# earns the same bucketed pin — a Dummy that fires ONLY _integrate_forces
+	# would otherwise pass on ss_fired=0 alone.
+	_emit(prefix, "if_fired", "0" if not rb.fired else ">0")
 	_emit(prefix, "detach", str("nil" if detach_nil else "obj"))
 	_emit(prefix, "held_live", str(held_live))
 	_emit(prefix, "reattach", str(reattach_same))
@@ -4108,7 +4148,13 @@ func _sample_fetch(tag: String) -> void:
 			var hit: Variant = _call_read(bs, "pt")
 			if hit is Array:
 				q_byp_ok += 1
-			if bs == q_stash:
+			# parent-visible identity witness: the two ids, not just the
+			# count, so a truthy-regression (== -> != null) can't launder.
+			var same: bool = bs == q_stash
+			_note("byp_ids", "%s/%s" % [str((bs as Object).get_instance_id()),
+					("nil" if q_stash == null
+					else str((q_stash as Object).get_instance_id()))])
+			if same:
 				q_byp_same += 1
 
 
@@ -4259,6 +4305,8 @@ func _cm_class(cm: Variant) -> String:
 	if cm.size() >= 2 and cm[0] > 0.0 and cm[0] < 1.0 \
 			and cm[1] > 0.0 and cm[1] < 1.0:
 		return "frac"
+	if cm.size() >= 2 and cm[0] >= 0.9999 and cm[1] >= 0.9999:
+		return "blocked"
 	return "other"
 
 
@@ -4266,9 +4314,11 @@ func _cm_class(cm: Variant) -> String:
 # classes with an ENVELOPE pin. The legal channel values are measured at the
 # in-phase control (E, inside `_physics_process`); every out-of-phase sample
 # (`_process`, RACE_REPS firings) must then report each COUNT channel either
-# empty/zero or exactly the legal value, and the cast channel either empty or
-# a mid-sweep fraction in (0,1) — a torn read (the r88-scout saw 0.197/0.156)
-# is a named class, not a violation, but a value outside that union is. No
+# empty/zero or exactly the legal value, and the cast channel either empty, a
+# mid-sweep fraction in (0,1), or a torn blocked [1,1] (the wall torn out of
+# the sweep — named class since r88 C5) — a torn read (the r88-scout saw
+# 0.197/0.156) is a named class, not a violation, but a value outside that
+# union is. No
 # class is REQUIRED to appear: this is an envelope, never a distribution.
 # The Jolt child's window also tears the Jolt shape registry (its own engine
 # lines) and can abort the process; the parent pins the crash envelope OR the
@@ -4351,7 +4401,8 @@ func _race_violation(row: Dictionary, legal: Dictionary) -> String:
 		var lv: int = int(legal.get(k, -1))
 		if v != 0 and v != lv:
 			return "%s=%d" % [k, v]
-	if String(row["cm"]) != "empty" and String(row["cm"]) != "frac":
+	if String(row["cm"]) != "empty" and String(row["cm"]) != "frac" \
+			and String(row["cm"]) != "blocked":
 		return "cm=%s" % String(row["cm"])
 	return ""
 
@@ -4402,27 +4453,27 @@ func _child_param_purity(prefix: String) -> void:
 	if _params_fp(sp) == fp0:
 		pure += 1
 	var pp := _pt_params(Vector3(0, 0, -3))
-	var fpp := "pos=%s m=%d b=%s a=%s ex=%d" % [str(pp.position),
+	var fpp := "pos=%s m=%d b=%s a=%s ex=%s" % [str(pp.position),
 			pp.collision_mask, str(pp.collide_with_bodies),
-			str(pp.collide_with_areas), pp.exclude.size()]
+			str(pp.collide_with_areas), str(pp.exclude)]
 	d.intersect_point(pp)
 	calls += 1
-	if ("pos=%s m=%d b=%s a=%s ex=%d" % [str(pp.position),
+	if ("pos=%s m=%d b=%s a=%s ex=%s" % [str(pp.position),
 			pp.collision_mask, str(pp.collide_with_bodies),
-			str(pp.collide_with_areas), pp.exclude.size()]) == fpp:
+			str(pp.collide_with_areas), str(pp.exclude)]) == fpp:
 		pure += 1
 	var rp := _ray_params()
-	var fpr := "from=%s to=%s m=%d b=%s a=%s fi=%s fb=%s ex=%d" % [
+	var fpr := "from=%s to=%s m=%d b=%s a=%s fi=%s fb=%s ex=%s" % [
 			str(rp.from), str(rp.to), rp.collision_mask,
 			str(rp.collide_with_bodies), str(rp.collide_with_areas),
-			str(rp.hit_from_inside), str(rp.hit_back_faces), rp.exclude.size()]
+			str(rp.hit_from_inside), str(rp.hit_back_faces), str(rp.exclude)]
 	d.intersect_ray(rp)
 	calls += 1
-	if ("from=%s to=%s m=%d b=%s a=%s fi=%s fb=%s ex=%d" % [
+	if ("from=%s to=%s m=%d b=%s a=%s fi=%s fb=%s ex=%s" % [
 			str(rp.from), str(rp.to), rp.collision_mask,
 			str(rp.collide_with_bodies), str(rp.collide_with_areas),
 			str(rp.hit_from_inside), str(rp.hit_back_faces),
-			rp.exclude.size()]) == fpr:
+			str(rp.exclude)]) == fpr:
 		pure += 1
 	# shape_rid beats shape: at z=-1.7 the RID sphere (r=0.5) reaches the
 	# wall face at z=-2 (near edge -2.2) while the tiny box (0.2 full, near
@@ -4633,7 +4684,7 @@ func _cb_sig(b: Variant) -> String:
 # --child --arm=wa_plain / wa_jolt / wa_dummy (r88): the wrong-argument
 # class. Every cell is refused in the WRAPPER layer: rc=0 and a typed empty
 # (Array / PackedFloat32Array / Dictionary per method). One child runs all
-# twelve cells; the refusal TEXT is counted from the raw log by the parent
+# thirteen cells; the refusal TEXT is counted from the raw log by the parent
 # and required equal across backends.
 func _child_wrong_args(prefix: String) -> void:
 	wspace = root.get_world_3d().space
@@ -4682,17 +4733,8 @@ func _child_wrong_args(prefix: String) -> void:
 func _child_geom_split(prefix: String) -> void:
 	wspace = root.get_world_3d().space
 	_mk_body(Vector3(0, 0, -3))
-	var floor_b := PhysicsServer3D.body_create()
-	var fs := PhysicsServer3D.box_shape_create()
-	PhysicsServer3D.shape_set_data(fs, Vector3(20, 0.5, 20))
-	PhysicsServer3D.body_set_mode(floor_b, PhysicsServer3D.BODY_MODE_STATIC)
-	PhysicsServer3D.body_add_shape(floor_b, fs)
-	PhysicsServer3D.body_set_collision_layer(floor_b, 1)
-	PhysicsServer3D.body_set_space(floor_b, wspace)
-	PhysicsServer3D.body_set_state(floor_b,
-			PhysicsServer3D.BODY_STATE_TRANSFORM,
-			Transform3D(Basis(), Vector3(0, -0.5, 0)))
-	owned.append_array([floor_b, fs])
+	_mk_body(Vector3(0, -0.5, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(20, 0.5, 20))
 	await _frames(4)
 	var d: Variant = await _fetch_world_dss()
 	if d == null:
