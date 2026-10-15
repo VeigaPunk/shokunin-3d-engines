@@ -9,12 +9,10 @@ extends SceneTree
 # ERROR/WARNING counts and crash-class evidence, and prints ONE digest
 # line per run. No object ids / addresses / timestamps are emitted.
 #
-# Crash cells (GP frees a live body's RID): the pin is the envelope
-# class — signal-class rc, M-prefix content/count, crash marker — never
-# ASLR backtrace bytes. `freeb_ops` under GP is a measured bimodal
-# crash-timing class (crash between pin_param and joint_clear ~2/3,
-# clean completion ~1/3): the digest emits the stable 6-line prefix sha
-# + `mode_ok` (both named realizations allowed), never one mode.
+# Crash cells (a case frees a live body's RID): the pin is the envelope
+# class — `mode_ok` plus the stable M-prefix sha — never ASLR backtrace
+# bytes; rc class and crash marker are admission predicates (the BIMODAL
+# table below names both realizations per cell).
 #
 # Arms (the `match` dispatch is the sole index):
 #   sweep      joint_set_solver_priority round-trip -2..128 + unmade sets
@@ -44,15 +42,36 @@ const ARM_CASES := {
 	"twopin": ["twopin_hi1", "twopin_hi2"],
 }
 
-# Cases whose GP realization crashes inside the freed-endpoint window:
-# digest emits rc-class + stable M-prefix, not raw stdout.
-const GP_CRASH_CASES := {
-	"freeb_ops": 6, "freeb_twice": 4, "freeb_dyn": 8,
-	"chain3_freemid": 2,
+# Teardown-UAF window (r90 verifier): the child's teardown loop frees
+# [joint, joint2] + joints + bodies + shapes unconditionally, so any case
+# that frees one of those RIDs mid-run makes the teardown re-free a UAF —
+# Invalid ID (clean rc=0) or SIGSEGV (rc 134/137/139), decided per run by
+# heap state. A 504-run matrix (corpus/live/r90-repair/mx.csv, every
+# endpoint case x 3 backends x 12 reps) shows the mechanism present on
+# every exposed gp+jolt cell (the teardown loop re-frees the case's freed
+# RID) and the crash realized on 10 of those 20 tags inside the 12-rep
+# window; Dummy never realizes it (its free_rid is inert).
+# sweep/rid/api quit() in _initialize and never reach the teardown loop;
+# freeb_world/detachb/twopin_* free nothing.
+# BIMODAL maps each exposed tag -> [n_pre, full_msz]: cells emit
+# mode_ok plus the sha of the first n_pre M-lines. n_pre is the full
+# line count when every observed crash lands post-DONE (teardown window:
+# m is complete in both modes) and the shared prefix length when a
+# mid-ops crash truncates the stream (freeb_ops, freeb_dyn, chain3@gp).
+# e/w are mode-dependent (the clean teardown logs the Invalid ID the
+# crash replaces) and are never emitted for these cells.
+const BIMODAL := {
+	"freeb@gp": [11, 11], "freea@gp": [11, 11],
+	"freeb_dyn@gp": [8, 11], "freeb_ops@gp": [6, 8],
+	"freeb_make@gp": [4, 4], "freeb_twice@gp": [4, 4],
+	"freeb_afterclear@gp": [4, 4], "freej_then_b@gp": [4, 4],
+	"detachb_free@gp": [4, 4], "chain3_freemid@gp": [2, 3],
+	"freeb@jolt": [11, 11], "freea@jolt": [11, 11],
+	"freeb_dyn@jolt": [11, 11], "freeb_ops@jolt": [6, 8],
+	"freeb_make@jolt": [4, 4], "freeb_twice@jolt": [4, 4],
+	"freeb_afterclear@jolt": [4, 4], "freej_then_b@jolt": [4, 4],
+	"detachb_free@jolt": [4, 4], "chain3_freemid@jolt": [3, 3],
 }
-# Only freeb_ops is rep-bimodal on GP (crash vs clean completion);
-# the others crash deterministically.
-const GP_BIMODAL := {"freeb_ops": true}
 
 
 func _initialize() -> void:
@@ -96,13 +115,6 @@ func _project_body(name: String, engine: String) -> String:
 
 func _run_child(case: String, bk: String, engine: String) -> Dictionary:
 	var dirname := "r90bt_%s_%s_%s" % [arm, case, bk]
-	if dirname.length() > 0:
-		for i in dirname.length():
-			var c := dirname.unicode_at(i)
-			var ok := (c >= 0x30 and c <= 0x39) or (c >= 0x41 and c <= 0x5A) \
-					or (c >= 0x61 and c <= 0x7A) or c == 0x5F
-			if not ok:
-				return {"err": "unsafe dirname char U+%04X" % c}
 	var dir := ProjectSettings.globalize_path("res://" + dirname)
 	if DirAccess.make_dir_recursive_absolute(dir) != OK:
 		return {"err": "mkdir failed"}
@@ -127,7 +139,6 @@ func _run_child(case: String, bk: String, engine: String) -> Dictionary:
 	var nerr := 0
 	var nwarn := 0
 	var sig11 := 0
-	var throw_ := 0
 	while not lf.eof_reached():
 		var line := lf.get_line()
 		if line.begins_with("M0 ") or line.begins_with("M "):
@@ -138,43 +149,31 @@ func _run_child(case: String, bk: String, engine: String) -> Dictionary:
 			nwarn += 1
 		elif "handle_crash: Program crashed with signal 11" in line:
 			sig11 += 1
-		elif "std::system_error" in line:
-			throw_ += 1
 	lf.close()
 	return {"rc": code, "m": mlines, "ne": nerr, "nw": nwarn,
-		"sig11": sig11, "throw": throw_}
+		"sig11": sig11}
 
 
 func _emit(case: String, bk: String, d: Dictionary) -> void:
 	var tag := "%s@%s" % [case, bk]
-	if GP_CRASH_CASES.has(case) and bk == "gp":
-		# crash-envelope cell: pin the stable M-prefix (sha), the rc
-		# class and the single crash marker. freeb_ops is rep-bimodal
-		# (crash mid-ops vs clean completion) — mode_ok admits both
-		# named realizations, either failing closes the row.
-		var n_pre: int = GP_CRASH_CASES[case]
+	if BIMODAL.has(tag):
+		# Teardown-UAF cell: two named realizations share the emitted
+		# prefix — clean completion (rc=0, sig11=0, m exactly full_msz)
+		# or a SIGSEGV (rc 134/137/139, sig11=1) either mid-ops (m
+		# truncated at >= n_pre) or post-DONE (m complete). Anything
+		# outside both is mode_ok=0 and closes the row.
+		var n_pre: int = BIMODAL[tag][0]
+		var full_msz: int = BIMODAL[tag][1]
 		var pre: Array = d["m"].slice(0, n_pre)
 		var pre_sha := " ".join(pre).sha256_text().substr(0, 16)
-		if GP_BIMODAL.has(case):
-			# measured realizations: crash mid-ops (rc 134/137, e=1) or
-			# clean completion (rc 0, m=prefix+2, e=2). Pin the shared
-			# 6-line prefix + the named-mode set; e is mode-dependent.
-			var mode_ok := 0
-			if (d["rc"] == 134 or d["rc"] == 137) and d["sig11"] == 1 \
-					and d["ne"] == 1:
-				mode_ok = 1  # crash mid-ops
-			elif d["rc"] == 0 and d["m"].size() == n_pre + 2 \
-					and d["ne"] == 2:
-				mode_ok = 1  # clean completion
-			_parts.append("%s{mode_ok=%d,m%d=%s,w=%d}" % [
-					tag, mode_ok, n_pre, pre_sha, d["nw"]])
-			return
-		# rc is bound-dependent (134 when the handler finishes, 137 when
-		# the bound kills it mid-backtrace) — pin the signal class.
-		var rcc := "sig" if d["rc"] in [134, 137, 139] else str(d["rc"])
-		_parts.append("%s{rcc=%s,sig11=%d,m%d=%s,e=%d,w=%d}" % [
-				tag, rcc, d["sig11"], n_pre, pre_sha,
-				d["ne"], d["nw"]])
+		var msz: int = d["m"].size()
+		var clean: bool = d["rc"] == 0 and d["sig11"] == 0 \
+				and msz == full_msz
+		var crash: bool = d["sig11"] == 1 \
+				and (d["rc"] in [134, 137, 139]) and msz >= n_pre
+		var mode_ok := 1 if clean or crash else 0
+		_parts.append("%s{mode_ok=%d,m%d=%s}" % [
+				tag, mode_ok, n_pre, pre_sha])
 		return
 	_parts.append("%s{rc=%d,m=%s,e=%d,w=%d}" % [
 			tag, d["rc"], "|".join(d["m"]), d["ne"], d["nw"]])
