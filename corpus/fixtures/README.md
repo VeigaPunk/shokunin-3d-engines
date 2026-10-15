@@ -785,6 +785,139 @@ counted in the raw child log rather than trusted from the child's print.
 
 Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
 
+## PhysicsDirectSpaceState3D read family + body-state inertia getters (round 88)
+
+`python3 corpus/fixtures/run_battery.py --only phys3d_events_motion_split,phys3d_events_fetch_gate,phys3d_events_inactive_space,phys3d_events_param_purity,phys3d_events_body_inertia,phys3d_events_wrong_args,phys3d_events_geom_split,phys3d_events_race_class,phys3d_events_freed_space_methods`
+pins nine further classes on the read family
+(`intersect_point` / `intersect_ray` / `intersect_shape` / `collide_shape` /
+`cast_motion` / `get_rest_info`) and on the `PhysicsDirectBodyState3D`
+inertia getters. Every arm is a generated-project child (three backends plus
+their threaded twins); the backend-split arms are gated on both engine hints
+(`BLOCKED`, never a fabricated split), every child verdict dict is compared
+**whole**, and every engine-line claim is counted in the raw child log.
+Canonical geometry: wall box (half 1) at `(0,0,-3)`, floor box (half 1) at
+`(0,-1,0)` with its top at `y=0` — so a sphere at `(0,0,-1)` overlaps the
+floor (the in-place contact control) and reaches the wall only through motion.
+
+- `motion_split` — the **semantic split**. ONE
+  `PhysicsShapeQueryParameters3D` per geometry, reused across the four
+  methods that accept it: `cast_motion` APPLIES motion (a fraction strictly
+  inside `(0,1)`; the shared -2z sweep object reads `0.2500,0.2539`
+  GodotPhysics / `0.2485,0.2500` Jolt while `collide_shape` /
+  `get_rest_info` / `intersect_shape` on that same object report nothing),
+  and a start overlap does NOT pin the cast to 0 (the penetrating-floor
+  start reads the identical wall bracket). The wall-contact bracket is a
+  **per-backend envelope**, never a cross-backend equality: GodotPhysics
+  widens around the geometric `0.1` by its margin handling
+  (`0.0977,0.1035`), Jolt lands tight (`0.0999,0.1002`). Moving away with
+  nothing in the sweep is a clean miss (`[1,1]`), zero and short motion are
+  blocked (`[1,1]`). Dummy is the empty floor.
+- `fetch_gate` — the **access gate lattice**, five children. Three
+  acquisition paths per sample (server space fetch, `World3D`
+  property, body state), so a threaded refusal is counted **per path** in
+  the raw log: `3d/run_on_separate_thread=true` refuses all three at every
+  out-of-phase position — `_initialize` before the first step, the deferred
+  start, a process frame, and each `_process` firing (6/8 samples refused,
+  12 `Space state is inaccessible` + 6 `Body state is inaccessible` lines)
+  — and grants only inside the physics tick (the `physics_frame`
+  continuation and `_physics_process`). Non-threaded backends hand the
+  object out at every position; Dummy has no gate at all. The **bypass
+  cell**: a body state held from a legal position hands out the SAME dss
+  object at refused positions (`byp_same=5/5`) and a query through it
+  answers (`byp=5/5`) — on Jolt+thread that call can additionally print
+  `intersect_point must not be called while the physics space is being
+  stepped` and still answer (admitted, recorded, never count-pinned).
+- `inactive_space` — the gate keys on the **step cycle, not on
+  activation**. A `space_create` + `space_set_active(false)` private space
+  (wall only) is fetched at every position on non-threaded backends
+  (`open=5`), while the threaded gate refuses it out of phase (`open=2`,
+  `refused=3`, one engine ERROR per refusal). A handle STASHED at a legal
+  position answers with the same signature at every position
+  (`pt1,is1,ray7,cs0,cmfrac,ri0,rv6`; the `cs/ri` zeros are geometric —
+  the sweep's in-place start overlaps nothing in a wall-only space, while
+  `rv` is the in-place wall overlap). The out-of-phase firing is
+  broadphase-only **on purpose**: the Jolt shape channel in that window
+  tears the shape registry (this child aborted 134 the same way before the
+  split, and the r88 scout's `gt_proj_jolt_thr.r1` aborted on exactly that
+  sequence) — the tear/crash class is pinned by `race_class`.
+- `param_purity` — the params objects are **pure input**: transform,
+  motion, margin, mask, bodies/areas flags, shape, `shape_rid` and exclude
+  are fingerprinted before and after each of the six reads (6/6 pure on
+  every backend); `shape_rid` **beats** `shape` when both are set (the
+  both-set query at `z=-1.7` reads `1,0,1`: RID sphere hit, resource-only
+  miss, RID-only hit); repeated identical calls return **fresh containers**
+  (not `is_same`, contents equal), 3/3. Dummy's geometry answers `0,0,0`.
+- `body_inertia` — the inertia getters **as values**. Rigid box
+  (half `2×0.5×0.5`, mass 2): `get_inverse_mass` 0.5, `get_inverse_inertia`
+  `(3, 0.352941, 0.352941)` on both real backends; the rot-Y-30 tensor is
+  `(2.338235,0,-1.146210 / 0,0.352941,0 / -1.146210,0,1.014706)`, and the
+  child **derives** it in-run as `R · diag(measured local) · Rᵀ` (`world`)
+  rather than restating it; `BODY_PARAM_INERTIA (9,4,1)` reads back
+  `(0.111111,0.25,1.0)`, the mass rewrite halves it, and
+  `BODY_PARAM_CENTER_OF_MASS (0.4,0,0)` is reflected. Static/kinematic is
+  the split: GodotPhysics zeros (`imass 0`, zero tensor), Jolt's
+  placeholders (`imass 1`, zero inertia, **identity** tensor), Dummy
+  `imass 0` + identity (`floor`). Jolt's principal-axes basis is
+  magnitude-sorted — even at identity it returns a column permutation
+  (`0,1,0 / 0,0,1 / 1,0,0`), and its COM read-back carries a float error
+  (`0.400002`) — both pinned per backend, never cross-pinned.
+- `wrong_args` — the wrong-argument class. Thirteen cells (wrong-class
+  params, `null`, no-shape, `max_results` -1/0) all refuse in the WRAPPER
+  layer with `rc=0` and a typed empty (`Array` / `PackedFloat32Array` /
+  `Dictionary` per method), identical token-for-token on all three
+  backends. The refusal TEXT is a **log witness**: `Required object
+  "rp_shape_query" is null.` ×6, `Required object "rp_point_query" is
+  null.` ×1 and the negative-size condition ×1 are counted per backend and
+  required equal across backends; `Parameter "shape" is null.` is the
+  Dummy floor split (3/3/0).
+- `geom_split` — the backend-geometry splits as **per-backend envelopes**.
+  A point on the floor's top boundary counts the containing wall only on
+  GodotPhysics (`pt=1`) and additionally the touched floor on Jolt
+  (`pt=2`); the wall-contact bracket is wide vs tight (as in
+  `motion_split`); the same in-place floor penetration returns a tilted
+  depenetration normal `(-0,0.447214,-0.894427)` on GodotPhysics and a
+  pure-up `(0,1,0)` on Jolt; the overlap rest point is the query centre
+  (`start`) on GodotPhysics and offset on Jolt. Contact geometry is never
+  cross-backend equal.
+- `race_class` — the threaded window as **NAMED non-deterministic classes
+  with an ENVELOPE pin**, never a distribution. Each child measures the
+  legal channel values at an in-phase control (`pt=1 ray=7 is=1 cs=2
+  cm=frac ri=6`), then requires every out-of-phase sample to report each
+  count channel either empty/zero or exactly the legal value, and the cast
+  channel either empty or a mid-sweep fraction in `(0,1)`. No class is
+  required to appear — the r88 scout's torn reads (`0.197`, `0.156`) are
+  inside the envelope, a value outside it fails the row. The Jolt child's
+  window also tears the Jolt shape registry (`Failed to build Jolt Physics
+  sphere shape…`, `Parameter "jolt_shape" is null.`) and can abort the
+  process (`rc` 134/137, no child marker, breadcrumb present); the row
+  accepts the **crash envelope OR the completed envelope**, each with its
+  own witnesses, and its marker is branch-stable.
+- `freed_space_methods` — the freed-space postconditions **per method ×
+  backend**, the file's fatal tail. One child per method on the real
+  backends (a crash cannot be caught) plus one Dummy child covering all
+  six, spawned as ONE **parallel batch** (`_spawn_batch`, the r83-r87
+  `_spawn_child` split into prepare/scan so the conventions stay
+  single-sourced; each child still carries its own `timeout -s KILL` bound
+  and the batch adds a fail-closed deadline — 13 crash children in ~3 s
+  against the 20 s per-case bound). GodotPhysics aborts on all six
+  (`rc` 134/137, `handle_crash` line, the previously-freed SCRIPT ERROR,
+  the null-space refetch, breadcrumb `alive=`/`pre=`/`refetch=` present and
+  `post=` absent, no marker). Jolt is **process-sensitive**: crash
+  (three measured shapes — at `bds.get_space_state()`, after a dead
+  `post=nil`, or after a live wrapper whose query aborts, the last one
+  ending in `terminate called after throwing an instance of
+  'std::system_error'`) or the dead-handle path (`rc=0`, `post=nil`, no
+  crash line) — so the Jolt cells gate on "crash envelope OR dead handle"
+  with the rc+result conjuncts. Dummy answers typed empties at every step
+  (`alive/pre/ret` typed-empty, `refetch/post` a fresh Dummy dss) with
+  `rc=0`. **Teardown order is load-bearing under Jolt**: freeing a
+  never-activated private space with a live body still inside aborts
+  (`rc` 134 inside `free_rid(space)`; `space→body→shape` 2/2 vs
+  `shape→body→space` and `body→shape→space` 2/2 clean), which is why the
+  `inactive_space` child registers its private space last.
+
+Bounded to `4.7.2.stable.arch_linux.ed1daf0bf` on this host.
+
 ## Determinism rules for new cases
 
 - Fixed tick budgets only. Count ticks through the actor's own counter and

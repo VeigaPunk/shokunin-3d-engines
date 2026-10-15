@@ -13,10 +13,10 @@ Exit contract per case (authored in each fixture's header comment):
 
 Battery exit code is 0 only when every case passes.
 
-Pass an ABSOLUTE --runs path. The tree-timeout witness probe verifies the
-child's /proc cmdline verbatim, which is absolute — a relative --runs makes
-that probe deterministically FAIL (witness never matches) while every other
-case still passes. Measured twice across rounds (r73-reviewer, r75-author).
+Relative --runs paths are resolved against the current working directory,
+including symlinks, before creating scratch. Godot globalizes descendant
+paths; using the same canonical root keeps /proc identity checks independent
+of the caller's path spelling without relaxing witness ownership checks.
 """
 import argparse
 import hashlib
@@ -468,6 +468,30 @@ CASES = [
      "PASS phys3d_events body_tier gp_impulse=zero jolt_impulse=real gp_lshape=-1 jolt_lshape=0 gp_sleep_lv=kept jolt_sleep_lv=zeroed dummy_cc=0 detach_write=silent,loud,silent child_exit=0"),
     ("phys3d_events_freed_space", "phys3d_events.gd", ["--arm=freed_space"], 0,
      "PASS phys3d_events freed_space gp=crash jolt=crash dummy=empty child_exit=0"),
+    # r88 query-tier read family (PhysicsDirectSpaceState3D + the
+    # PhysicsDirectBodyState3D inertia getters). Appended at the tail,
+    # insertion-only; the two rows whose children can crash
+    # (`race_class`, `freed_space_methods`) are last, the freed-space
+    # matrix last of all (the r87 freed_space row precedent).
+    ("phys3d_events_motion_split", "phys3d_events.gd", ["--arm=motion_split"], 0,
+     "PASS phys3d_events motion_split gp=wide jolt=tight dummy=floor split=cm_only child_exit=0"),
+    ("phys3d_events_fetch_gate", "phys3d_events.gd", ["--arm=fetch_gate"], 0,
+     "PASS phys3d_events fetch_gate plain=open thr=phase jolt_thr=phase dummy=open byp=held_same child_exit=0"),
+    ("phys3d_events_inactive_space", "phys3d_events.gd", ["--arm=inactive_space"], 0,
+     "PASS phys3d_events inactive_space plain=open thr=phase jolt_thr=phase alts=answered sig=wall_only child_exit=0"),
+    ("phys3d_events_param_purity", "phys3d_events.gd", ["--arm=param_purity"], 0,
+     "PASS phys3d_events param_purity pure=6/6 prec=rid fresh=3/3 child_exit=0"),
+    ("phys3d_events_body_inertia", "phys3d_events.gd", ["--arm=body_inertia"], 0,
+     "PASS phys3d_events body_inertia gp=box jolt=box dummy=floor tensor=world st=zeros,placeholders child_exit=0"),
+    ("phys3d_events_wrong_args", "phys3d_events.gd", ["--arm=wrong_args"], 0,
+     "PASS phys3d_events wrong_args cells=13 typed=empty rc=0 text=same,floor child_exit=0"),
+    ("phys3d_events_geom_split", "phys3d_events.gd", ["--arm=geom_split"], 0,
+     "PASS phys3d_events geom_split gp=boundary1,wide,tilt jolt=boundary2,tight,up child_exit=0"),
+    ("phys3d_events_race_class", "phys3d_events.gd", ["--arm=race_class"], 0,
+     "PASS phys3d_events race_class gp=classes jolt=crash-or-classes reps=4 child_exit=0"),
+    ("phys3d_events_freed_space_methods", "phys3d_events.gd",
+     ["--arm=freed_space_methods"], 0,
+     "PASS phys3d_events freed_space_methods gp=crash6 jolt=crash-or-dead dummy=empty child_exit=0"),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored
@@ -793,7 +817,7 @@ def main():
     args = parser.parse_args()
 
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
-    run_dir = args.runs / stamp
+    run_dir = args.runs.resolve() / stamp
     scratch = run_dir / "scratch"
     scratch.mkdir(parents=True)
     digests_before = seed_digests()

@@ -163,6 +163,89 @@
 #                as one crash line in the raw log plus the breadcrumb
 #                prefix at that backend's site plus the ABSENCE of any
 #                child marker
+#   motion_split parent arm (round 88): the read family's motion semantics —
+#                ONE PhysicsShapeQueryParameters3D per geometry, reused
+#                across the four methods that accept it: cast_motion APPLIES
+#                motion (a fraction in (0,1) — and a start overlap does NOT
+#                pin the cast to 0), while collide_shape / get_rest_info /
+#                intersect_shape ignore it (a clear-start -2z sweep that ENDS
+#                embedded in the wall reports nothing; the in-place overlap
+#                controls answer). The wall-contact bracket is a per-backend
+#                ENVELOPE (GodotPhysics widens around the geometric 0.1 by
+#                its margin handling, Jolt lands tight) — never a
+#                cross-backend equality.
+#   fetch_gate   parent arm (round 88): the access gate as a lattice. Under
+#                run_on_separate_thread the fresh fetch is refused at EVERY
+#                out-of-phase position (including _initialize, before the
+#                first step) and granted only inside the physics tick, each
+#                refusal printing one engine ERROR per acquisition path;
+#                non-threaded backends hand the object out everywhere; Dummy
+#                has no gate at all. The bypass cell: a held body handle's
+#                get_space_state() returns the SAME dss object at refused
+#                positions and queries through it answer.
+#   inactive_space parent arm (round 88): the gate keys on the step cycle,
+#                not on activation — space_create + space_set_active(false)
+#                is fetched at every position on non-threaded backends, while
+#                the threaded gate refuses it out of phase. A STASHED
+#                never-stepped inactive-space handle answers everywhere
+#                (its cs/ri zeros are geometric: the private space carries
+#                only the wall).
+#   race_class   parent arm (round 88): the threaded window as NAMED
+#                non-deterministic classes. Each child measures the legal
+#                channel values at an in-phase position and then requires
+#                every out-of-phase sample to be either empty/zero or the
+#                legal value — an ENVELOPE pin, never a distribution: no
+#                class is required to appear, and a torn value (a channel
+#                outside {empty, legal}) fails the row. The Jolt child's
+#                outcome is bimodal — the same off-phase shape-query window
+#                tears the Jolt shape registry (its own engine lines) and can
+#                abort the process (rc 134/137, no child marker) — so the row
+#                accepts the crash envelope OR the completed named-class
+#                envelope, each with its own witnesses.
+#   param_purity parent arm (round 88): the params objects are pure input —
+#                no read method mutates transform/motion/margin/mask/shape/
+#                shape_rid/exclude (fingerprinted before and after each
+#                call); shape_rid beats shape when both are set; repeated
+#                calls return fresh containers (not the same instance) with
+#                equal contents.
+#   body_inertia parent arm (round 88): the PhysicsDirectBodyState3D inertia
+#                getters pinned as values — rigid box (half 2x0.5x0.5, mass
+#                2) imass 0.5 / inverse inertia (3, 0.352941, 0.352941) on
+#                both real backends, the world-space tensor R*diag*R^T
+#                verified in-child against the measured local values, the
+#                BODY_PARAM_INERTIA and BODY_PARAM_CENTER_OF_MASS writes
+#                reflected, and the static/kinematic split (GodotPhysics
+#                zeros, Jolt placeholders imass 1 + zero inertia + identity
+#                tensor, Dummy imass 0 + identity) pinned per backend.
+#   wrong_args   parent arm (round 88): the wrong-argument class — every
+#                wrong-class / null / no-shape / non-positive max_results
+#                cell is refused in the WRAPPER layer with rc=0 and a typed
+#                empty (Array / PackedFloat32Array / Dictionary per method),
+#                and the refusal TEXT is counted in each backend's raw log
+#                and required equal across backends (the Dummy floor emits
+#                no "Parameter shape is null" line, so that count is pinned
+#                per backend instead).
+#   geom_split   parent arm (round 88): the backend-geometry splits as
+#                ENVELOPES, never cross-backend equality — the boundary-
+#                touching intersect_point counts the containing wall only on
+#                GodotPhysics and additionally the touched floor on Jolt;
+#                the same wall-contact bracket that motion_split pins; the
+#                same in-place floor penetration yields a tilted
+#                depenetration normal on GodotPhysics and a pure-up normal
+#                on Jolt; the overlap rest point is the query center on
+#                GodotPhysics and offset on Jolt.
+#   freed_space_methods parent arm (round 88, FATAL TAIL): the freed-space
+#                postconditions PER METHOD x BACKEND, one child per method on
+#                the real backends (a crash cannot be caught) plus one Dummy
+#                child covering all six. GodotPhysics aborts (rc 134/137) on
+#                every method at the POST bds.get_space_state() call;
+#                Jolt's per-method outcome is process-sensitive (crash OR a
+#                dead-handle path with the previously-freed SCRIPT ERROR and
+#                rc=0), so the Jolt cells gate on "crash envelope OR dead
+#                handle" with the rc+result conjuncts; Dummy answers typed
+#                empties with rc=0. The children are spawned in ONE parallel
+#                batch (the per-case 20 s bound), each still wrapped in
+#                `timeout -s KILL` and the batch itself fail-closed.
 #
 # Reproduce one arm:
 #   godot --headless --path <scratch> --script res://phys3d_events.gd -- --arm=isect
@@ -198,6 +281,19 @@ const HANG_RC := 137
 # line, no child marker, a signal-class rc) and accepts both.
 const BODY_REPS := 8
 const CRASH_BOUND_S := 6
+# r88 query-tier arms. GATE_F_REPS bounds the `_process` (out-of-phase)
+# firings each gate/race child samples; RACE_REPS bounds the threaded
+# race-window samples (envelope pins only — no class is required to appear).
+# FREED_BOUND_S bounds each freed-space child (a crashing child dumps its
+# backtrace in ~1.5 s; the bound cuts a load-slowed handler short, rc 137).
+# BATCH_BOUND_S bounds a whole parallel child batch as a fail-closed net on
+# top of each child's own `timeout -s KILL` (a batch that outlives it is a
+# named failure, never a silent partial row).
+const GATE_F_REPS := 3
+const RACE_REPS := 4
+const FREED_METHODS := ["pt", "ray", "is", "cs", "cm", "ri"]
+const FREED_BOUND_S := 6
+const BATCH_BOUND_S := 12
 
 var owned: Array[RID] = []
 var owned_nodes: Array[Node] = []
@@ -207,6 +303,12 @@ var sig_log := []
 
 
 func _initialize() -> void:
+	# r88: the gate children sample position A — inside _initialize, before
+	# the first step — so their setup runs here; every other arm still runs
+	# its setup in _run (the r83-r87 behaviour, byte-identical).
+	if _is_fetch_arm():
+		_fetch_gate_setup()
+		_sample_fetch("A")
 	call_deferred("_run")
 
 
@@ -222,9 +324,10 @@ func _frames(n: int) -> void:
 		await physics_frame
 
 
-func _mk_body(pos: Vector3, mode := PhysicsServer3D.BODY_MODE_STATIC) -> RID:
+func _mk_body(pos: Vector3, mode := PhysicsServer3D.BODY_MODE_STATIC,
+		ext := Vector3(1.0, 1.0, 1.0)) -> RID:
 	var shape := PhysicsServer3D.box_shape_create()
-	PhysicsServer3D.shape_set_data(shape, Vector3(1.0, 1.0, 1.0))
+	PhysicsServer3D.shape_set_data(shape, ext)
 	var body := PhysicsServer3D.body_create()
 	PhysicsServer3D.body_set_mode(body, mode)
 	PhysicsServer3D.body_add_shape(body, shape)
@@ -239,11 +342,12 @@ func _mk_body(pos: Vector3, mode := PhysicsServer3D.BODY_MODE_STATIC) -> RID:
 
 
 func _sphere_params(pos: Vector3, motion := Vector3.ZERO,
-		mask := 1) -> PhysicsShapeQueryParameters3D:
+		mask := 1, with_shape := true) -> PhysicsShapeQueryParameters3D:
 	var s := SphereShape3D.new()
 	s.radius = 0.5
 	var p := PhysicsShapeQueryParameters3D.new()
-	p.shape = s
+	if with_shape:
+		p.shape = s
 	p.transform = Transform3D(Basis(), pos)
 	p.motion = motion
 	p.collision_mask = mask
@@ -332,6 +436,23 @@ func _quit_clean(code := 0, message := "") -> void:
 func _spawn_child(dirname: String, project_body: String, arm: String,
 		allow_inaccessible: bool, script_res := "res://phys3d_events.gd",
 		bound_s := 30, allow_lines := []) -> Dictionary:
+	var prep := _child_prepare(dirname, project_body, arm, script_res, bound_s)
+	if prep.has("err"):
+		return prep
+	var code := OS.execute("/bin/sh", ["-c", prep["cmd"]], [], false)
+	return _child_scan(prep, code, allow_inaccessible, allow_lines)
+
+
+# r88: the freed-space matrix spawns one child per method on the real
+# backends, and the per-case bound is 20 s — a serial batch of 13 crash
+# children would not fit. `_child_prepare` / `_child_scan` are the r83-r87
+# `_spawn_child` body split at its two natural seams (project generation +
+# stale-log unlink + command build; then the exit code + CHILD_RESULT/error
+# scan), so the parallel batch reuses the SAME single-sourced conventions
+# instead of opening a second spawn path. `_spawn_child` itself is the
+# prepare -> OS.execute -> scan composition it always was, byte-identical.
+func _child_prepare(dirname: String, project_body: String, arm: String,
+		script_res := "res://phys3d_events.gd", bound_s := 30) -> Dictionary:
 	var dir := ProjectSettings.globalize_path("res://" + dirname)
 	var mk := DirAccess.make_dir_recursive_absolute(dir)
 	if mk != OK:
@@ -354,11 +475,15 @@ func _spawn_child(dirname: String, project_body: String, arm: String,
 	# log from a prior run would forge a verdict map, so remove it
 	# before spawn (missing-after-spawn stays a named failure).
 	DirAccess.remove_absolute(logpath)
-	var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
+	return {"dir": dir, "logpath": logpath, "cmd": cmd, "arm": arm}
+
+
+func _child_scan(prep: Dictionary, code: int, allow_inaccessible: bool,
+		allow_lines: Array) -> Dictionary:
 	var res := {"code": code, "verdicts": {}, "last": "", "serr": false, "errs": []}
-	var lf := FileAccess.open(logpath, FileAccess.READ)
+	var lf := FileAccess.open(prep["logpath"], FileAccess.READ)
 	if lf == null:
-		return {"err": "%s child log missing" % arm}
+		return {"err": "%s child log missing" % prep["arm"]}
 	while not lf.eof_reached():
 		var line := lf.get_line()
 		if line.begins_with("CHILD_RESULT "):
@@ -366,7 +491,16 @@ func _spawn_child(dirname: String, project_body: String, arm: String,
 			var kv := line.substr(13).split("=", true, 1)
 			if kv.size() == 2:
 				res["verdicts"][kv[0]] = kv[1]
-		elif "SCRIPT ERROR" in line or "Parse Error" in line:
+		elif "Parse Error" in line:
+			res["serr"] = true
+			res["errs"].append(line)
+		# r88: the SCRIPT ERROR branch routes through the same admission
+		# predicate as ERROR lines, so a freed-space arm can name its
+		# expected witness class ("previously freed"). Parse Error stays
+		# unconditional, and every r83-r87 arm passes no token that can
+		# match a SCRIPT ERROR line, so their receipts are unchanged.
+		elif "SCRIPT ERROR" in line \
+				and not _error_allowed(line, allow_inaccessible, allow_lines):
 			res["serr"] = true
 			res["errs"].append(line)
 		elif ("ObjectDB" in line and "leaked" in line):
@@ -378,6 +512,49 @@ func _spawn_child(dirname: String, project_body: String, arm: String,
 			res["errs"].append(line)
 	lf.close()
 	return res
+
+
+# r88: the parallel batch. Specs are the same fields `_spawn_child` takes,
+# plus a per-child allow_lines. Every child still carries its own
+# `timeout -s KILL` bound; the batch adds a fail-closed deadline on top
+# (stragglers are SIGKILLed and the caller fails on `batch_timeout`).
+func _spawn_batch(specs: Array) -> Array:
+	var preps := []
+	for spec in specs:
+		var prep := _child_prepare(spec["dirname"], spec["project_body"],
+				spec["arm"], spec.get("script_res", "res://phys3d_events.gd"),
+				spec.get("bound_s", 30))
+		if not prep.has("err"):
+			var pid := OS.create_process("/bin/sh", ["-c", prep["cmd"]])
+			if pid <= 0:
+				prep = {"err": "%s cannot create child process" % spec["arm"]}
+			else:
+				prep["pid"] = pid
+				prep["allow_inaccessible"] = spec.get("allow_inaccessible", false)
+				prep["allow_lines"] = spec.get("allow_lines", [])
+		preps.append(prep)
+	var deadline := Time.get_ticks_msec() + BATCH_BOUND_S * 1000
+	var running := true
+	while running and Time.get_ticks_msec() < deadline:
+		running = false
+		for prep in preps:
+			if prep.has("pid") and OS.is_process_running(prep["pid"]):
+				running = true
+		if running:
+			OS.delay_msec(20)
+	var out := []
+	for prep in preps:
+		if prep.has("err"):
+			out.append(prep)
+			continue
+		if running and OS.is_process_running(prep["pid"]):
+			OS.kill(prep["pid"])
+		var code := OS.get_process_exit_code(prep["pid"])
+		var res := _child_scan(prep, code, prep["allow_inaccessible"],
+				prep["allow_lines"])
+		res["batch_timeout"] = running
+		out.append(res)
+	return out
 
 
 # r86 simplifier: one generator for all 13 child project bodies (four r83-r85
@@ -487,6 +664,95 @@ func _log_count(logpath: String, token: String) -> int:
 	return n
 
 
+# --- r88: the query-tier read family (shared child helpers) -----------------
+
+# Fetch the world direct space state, retrying across frames: on a threaded
+# backend the fetch is legal only inside the physics tick, so a child that
+# arrives one frame early retries instead of failing.
+func _fetch_world_dss() -> Variant:
+	for i in range(24):
+		var d: Variant = PhysicsServer3D.space_get_direct_state(wspace)
+		if d != null:
+			return d
+		await physics_frame
+	return null
+
+
+# Guarded liveness. A Variant can hold a previously-freed Object, and the
+# `is` operator itself raises on one ("Left operand of 'is' is a previously
+# freed instance") — is_instance_valid() is the safe test, and the caller
+# keeps this in its own frame so a freed handle is a named "dead", never a
+# coroutine abort.
+func _dss_live(v: Variant) -> Variant:
+	if v == null or not is_instance_valid(v):
+		return null
+	if v is PhysicsDirectSpaceState3D:
+		return v
+	return null
+
+
+# The freed-space children's value formatter: "t<typeof>,n<size>" for the
+# container returns, "dead" for a freed handle, "nil" for a null Variant.
+# typeof() dispatches first because `is` on a previously-freed instance
+# raises, and is_instance_valid() is only meaningful for Objects.
+func _fmt_read(v: Variant) -> String:
+	if v == null:
+		return "nil"
+	if typeof(v) == TYPE_OBJECT:
+		if not is_instance_valid(v):
+			return "dead"
+		return "t%d,%s" % [typeof(v), v.get_class()]
+	if v is Array or v is Dictionary or v is PackedFloat32Array:
+		return "t%d,n%d" % [typeof(v), v.size()]
+	return "t%d,%s" % [typeof(v), str(v)]
+
+
+# One plain-helper frame per risky call: the r88-scout's rev-1 lesson is that
+# a script error inside the deferred _run coroutine aborts the coroutine (the
+# r86 hang class), while the same error inside a callee only aborts the callee.
+func _call_read(d: Variant, method: String) -> Variant:
+	match method:
+		"pt":
+			return d.intersect_point(_pt_params(Vector3(0, 0, -3)))
+		"ray":
+			return d.intersect_ray(_ray_params())
+		"is":
+			return d.intersect_shape(_sphere_params(Vector3(0, 0, -2.2)))
+		"cs":
+			return d.collide_shape(
+					_sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, -5)))
+		"cm":
+			return d.cast_motion(
+					_sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, -5)))
+		"ri":
+			return d.get_rest_info(
+					_sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, -5)))
+	return null
+
+
+func _pt_params(pos: Vector3) -> PhysicsPointQueryParameters3D:
+	var p := PhysicsPointQueryParameters3D.new()
+	p.position = pos
+	p.collision_mask = 1
+	return p
+
+
+func _ray_params() -> PhysicsRayQueryParameters3D:
+	return PhysicsRayQueryParameters3D.create(
+			Vector3(0, 5, -3), Vector3(0, -5, -3))
+
+
+# The params-object fingerprint for the purity cell: every writable field the
+# read family could plausibly smuggle an out-param through.
+func _params_fp(p: PhysicsShapeQueryParameters3D) -> String:
+	return "x=%s m=%s mg=%s mask=%d b=%s a=%s s=%s rid=%s ex=%d" % [
+			str(p.transform), str(p.motion), str(p.margin),
+			p.collision_mask, str(p.collide_with_bodies),
+			str(p.collide_with_areas),
+			("nil" if p.shape == null else str(p.shape.get_instance_id())),
+			str(p.shape_rid), p.exclude.size()]
+
+
 # Write + same-tick query inside _physics_process (callsite-tier cell).
 # Stores measured outcomes; never prints (the parent asserts the fields so
 # the marker is earned, not claimed).
@@ -556,6 +822,13 @@ func _run() -> void:
 		# r84 critic: the child dispatch must be total -- a bare or
 		# unknown --arm used to run the threaded body silently. The
 		# threaded parent passes --arm=threaded_edge explicitly.
+		# r88: the freed-space matrix is one child per method x backend, so
+		# its 13 arm names are prefix-dispatched before the literal table
+		# (the table stays the same closed set it always was).
+		var arm_any := _argval("--arm=", "")
+		if arm_any.begins_with("fm_"):
+			await _child_freed_method(arm_any)
+			return
 		match _argval("--arm=", ""):
 			"jolt_edge":
 				await _child_jolt()
@@ -605,6 +878,56 @@ func _run() -> void:
 				await _child_freed_space("fs_jolt")
 			"fs_dummy":
 				await _child_freed_space("fs_dummy")
+			"mo_plain":
+				await _child_motion_split("mo_plain")
+			"mo_jolt":
+				await _child_motion_split("mo_jolt")
+			"mo_dummy":
+				await _child_motion_split("mo_dummy")
+			"fg_plain":
+				await _child_fetch_gate("fg_plain")
+			"fg_thr":
+				await _child_fetch_gate("fg_thr")
+			"fg_jolt_thr":
+				await _child_fetch_gate("fg_jolt_thr")
+			"fg_dummy":
+				await _child_fetch_gate("fg_dummy")
+			"fg_dummy_thr":
+				await _child_fetch_gate("fg_dummy_thr")
+			"ia_plain":
+				await _child_inactive_space("ia_plain")
+			"ia_thr":
+				await _child_inactive_space("ia_thr")
+			"ia_jolt_thr":
+				await _child_inactive_space("ia_jolt_thr")
+			"rc_plain":
+				await _child_race_class("rc_plain")
+			"rc_jolt":
+				await _child_race_class("rc_jolt")
+			"pq_plain":
+				await _child_param_purity("pq_plain")
+			"pq_jolt":
+				await _child_param_purity("pq_jolt")
+			"pq_dummy":
+				await _child_param_purity("pq_dummy")
+			"bi_plain":
+				await _child_body_inertia("bi_plain")
+			"bi_jolt":
+				await _child_body_inertia("bi_jolt")
+			"bi_dummy":
+				await _child_body_inertia("bi_dummy")
+			"wa_plain":
+				await _child_wrong_args("wa_plain")
+			"wa_jolt":
+				await _child_wrong_args("wa_jolt")
+			"wa_dummy":
+				await _child_wrong_args("wa_dummy")
+			"gs_plain":
+				await _child_geom_split("gs_plain")
+			"gs_jolt":
+				await _child_geom_split("gs_jolt")
+			"fd_dummy":
+				await _child_freed_dummy("fd_dummy")
 			var bad:
 				_quit_clean(2, "CHILD_RESULT child_arm=unknown arm='%s'" % bad)
 		return
@@ -1801,6 +2124,766 @@ func _run() -> void:
 						str(fs_dummy["verdicts"])])
 			_exit_ok("PASS phys3d_events freed_space gp=crash jolt=crash dummy=empty child_exit=0")
 
+		"motion_split":
+			# r88: the read family's motion semantics. ONE params object per
+			# geometry, four methods — cast_motion applies motion, the other
+			# three ignore it — and the wall-contact bracket is a per-backend
+			# envelope (never a cross-backend equality).
+			if _gate("Jolt Physics", "motion_split", "jolt"): return
+			if _gate("Dummy", "motion_split", "dummy"): return
+			var mo_plain := _spawn_child("moplainproj",
+					_project_body("MoPlain", "", false), "mo_plain", false)
+			if mo_plain.has("err"):
+				return _fail(mo_plain["err"])
+			var mo_jolt := _spawn_child("mojoltproj",
+					_project_body("MoJolt", "Jolt Physics", false),
+					"mo_jolt", false)
+			if mo_jolt.has("err"):
+				return _fail(mo_jolt["err"])
+			var mo_dummy := _spawn_child("modummyproj",
+					_project_body("MoDummy", "Dummy", false), "mo_dummy", false)
+			if mo_dummy.has("err"):
+				return _fail(mo_dummy["err"])
+			var expect_mo_plain := {
+				"mo_plain_backend": "DEFAULT",
+				"mo_plain_cm": "honored",
+				"mo_plain_cm_bracket": "wide",
+				"mo_plain_cm_pen": "same",
+				"mo_plain_cm_shared": "honored",
+				"mo_plain_cm_away": "miss",
+				"mo_plain_cm_zero": "blocked",
+				"mo_plain_cm_short": "blocked",
+				"mo_plain_cs": "ignored",
+				"mo_plain_ri": "ignored",
+				"mo_plain_is": "ignored",
+			}
+			var expect_mo_jolt := {
+				"mo_jolt_backend": "Jolt Physics",
+				"mo_jolt_cm": "honored",
+				"mo_jolt_cm_bracket": "tight",
+				"mo_jolt_cm_pen": "same",
+				"mo_jolt_cm_shared": "honored",
+				"mo_jolt_cm_away": "miss",
+				"mo_jolt_cm_zero": "blocked",
+				"mo_jolt_cm_short": "blocked",
+				"mo_jolt_cs": "ignored",
+				"mo_jolt_ri": "ignored",
+				"mo_jolt_is": "ignored",
+			}
+			var expect_mo_dummy := {
+				"mo_dummy_backend": "Dummy",
+				"mo_dummy_cm": "empty",
+				"mo_dummy_cm_bracket": "drift",
+				"mo_dummy_cm_pen": "empty",
+				"mo_dummy_cm_shared": "empty",
+				"mo_dummy_cm_away": "empty",
+				"mo_dummy_cm_zero": "empty",
+				"mo_dummy_cm_short": "empty",
+				"mo_dummy_cs": "floor",
+				"mo_dummy_ri": "floor",
+				"mo_dummy_is": "floor",
+			}
+			for probe in [[mo_plain, expect_mo_plain, "plain"],
+					[mo_jolt, expect_mo_jolt, "jolt"],
+					[mo_dummy, expect_mo_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("motion_split %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# the split itself: exactly one of the four methods honors motion
+			# on each real backend, and the two in-place-ignoring methods
+			# still answer their controls
+			for probe in [[mo_plain, "plain"], [mo_jolt, "jolt"]]:
+				var v: Dictionary = probe[0]["verdicts"]
+				if v["mo_%s_cm" % probe[1]] != "honored" \
+						or v["mo_%s_cs" % probe[1]] != "ignored" \
+						or v["mo_%s_ri" % probe[1]] != "ignored" \
+						or v["mo_%s_is" % probe[1]] != "ignored":
+					return _fail("motion_split %s split drift v=%s"
+							% [probe[1], str(v)])
+			_exit_ok("PASS phys3d_events motion_split gp=wide jolt=tight dummy=floor split=cm_only child_exit=0")
+
+		"fetch_gate":
+			# r88: the access gate lattice. Three acquisition paths per
+			# sample, so a threaded refusal is counted per path in the raw
+			# log; the held-handle bypass hands out the SAME dss object at
+			# refused positions.
+			if _gate("Jolt Physics", "fetch_gate", "jolt"): return
+			if _gate("Dummy", "fetch_gate", "dummy"): return
+			var fg_allow := ["Space state is inaccessible",
+					"Body state is inaccessible",
+					# the Jolt+thread bypass query can print this engine
+					# error and still answer (a race observable, recorded
+					# in the child log; never a pinned count)
+					"must not be called while the physics space is being stepped"]
+			var fg_plain := _spawn_child("fgplainproj",
+					_project_body("FgPlain", "", false), "fg_plain", false,
+					"res://phys3d_events.gd", 30, fg_allow)
+			if fg_plain.has("err"):
+				return _fail(fg_plain["err"])
+			var fg_thr := _spawn_child("fgthrproj",
+					_project_body("FgThr", "", true), "fg_thr", false,
+					"res://phys3d_events.gd", 30, fg_allow)
+			if fg_thr.has("err"):
+				return _fail(fg_thr["err"])
+			var fg_jolt_thr := _spawn_child("fgjoltthrproj",
+					_project_body("FgJoltThr", "Jolt Physics", true),
+					"fg_jolt_thr", false, "res://phys3d_events.gd", 30, fg_allow)
+			if fg_jolt_thr.has("err"):
+				return _fail(fg_jolt_thr["err"])
+			var fg_dummy := _spawn_child("fgdummyproj",
+					_project_body("FgDummy", "Dummy", false), "fg_dummy", false,
+					"res://phys3d_events.gd", 30, fg_allow)
+			if fg_dummy.has("err"):
+				return _fail(fg_dummy["err"])
+			var fg_dummy_thr := _spawn_child("fgdummythrproj",
+					_project_body("FgDummyThr", "Dummy", true),
+					"fg_dummy_thr", false, "res://phys3d_events.gd", 30, fg_allow)
+			if fg_dummy_thr.has("err"):
+				return _fail(fg_dummy_thr["err"])
+			# A (in _initialize), B, C, D, E + GATE_F_REPS out-of-phase firings
+			var fg_samples := 5 + GATE_F_REPS
+			var expect_fg_plain := {
+				"fg_plain_backend": "DEFAULT",
+				"fg_plain_samples": str(fg_samples),
+				"fg_plain_grant": str(fg_samples),
+				"fg_plain_refuse": "0",
+				"fg_plain_partial": "0",
+				"fg_plain_gate": "open",
+				"fg_plain_byp": "5/5",
+				"fg_plain_byp_same": "5/5",
+			}
+			var expect_fg_thr := {
+				"fg_thr_backend": "DEFAULT",
+				"fg_thr_samples": str(fg_samples),
+				"fg_thr_grant": "2",
+				"fg_thr_refuse": "6",
+				"fg_thr_partial": "0",
+				"fg_thr_gate": "phase",
+				"fg_thr_byp": "5/5",
+				"fg_thr_byp_same": "5/5",
+			}
+			var expect_fg_jolt_thr := {
+				"fg_jolt_thr_backend": "Jolt Physics",
+				"fg_jolt_thr_samples": str(fg_samples),
+				"fg_jolt_thr_grant": "2",
+				"fg_jolt_thr_refuse": "6",
+				"fg_jolt_thr_partial": "0",
+				"fg_jolt_thr_gate": "phase",
+				"fg_jolt_thr_byp": "5/5",
+				"fg_jolt_thr_byp_same": "5/5",
+			}
+			var expect_fg_dummy := {
+				"fg_dummy_backend": "Dummy",
+				"fg_dummy_samples": str(fg_samples),
+				"fg_dummy_grant": str(fg_samples),
+				"fg_dummy_refuse": "0",
+				"fg_dummy_partial": "0",
+				"fg_dummy_gate": "open",
+				"fg_dummy_byp": "5/5",
+				"fg_dummy_byp_same": "5/5",
+			}
+			var expect_fg_dummy_thr := {
+				"fg_dummy_thr_backend": "Dummy",
+				"fg_dummy_thr_samples": str(fg_samples),
+				"fg_dummy_thr_grant": str(fg_samples),
+				"fg_dummy_thr_refuse": "0",
+				"fg_dummy_thr_partial": "0",
+				"fg_dummy_thr_gate": "open",
+				"fg_dummy_thr_byp": "5/5",
+				"fg_dummy_thr_byp_same": "5/5",
+			}
+			for probe in [[fg_plain, expect_fg_plain, "plain"],
+					[fg_thr, expect_fg_thr, "thr"],
+					[fg_jolt_thr, expect_fg_jolt_thr, "jolt_thr"],
+					[fg_dummy, expect_fg_dummy, "dummy"],
+					[fg_dummy_thr, expect_fg_dummy_thr, "dummy_thr"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("fetch_gate %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# the refusal counts are the log conjunct: one ERROR per
+			# acquisition path per refused sample (2 space paths + 1 body
+			# path), so a silently-nil fetch can never pass as a refusal.
+			for probe in [["fgthrproj", 6], ["fgjoltthrproj", 6]]:
+				var logp := ProjectSettings.globalize_path(
+						"res://%s/child.log" % probe[0])
+				if _log_count(logp, "Space state is inaccessible") \
+						!= 2 * int(probe[1]) \
+						or _log_count(logp, "Body state is inaccessible") \
+						!= int(probe[1]):
+					return _fail("fetch_gate %s refusal lines=%d/%d expected=%d/%d"
+							% [probe[0],
+							_log_count(logp, "Space state is inaccessible"),
+							_log_count(logp, "Body state is inaccessible"),
+							2 * int(probe[1]), int(probe[1])])
+			for dirname in ["fgplainproj", "fgdummyproj", "fgdummythrproj"]:
+				var logp := ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname)
+				if _log_count(logp, "Space state is inaccessible") != 0:
+					return _fail("fetch_gate %s unexpected refusal" % dirname)
+			_exit_ok("PASS phys3d_events fetch_gate plain=open thr=phase jolt_thr=phase dummy=open byp=held_same child_exit=0")
+
+		"inactive_space":
+			# r88: the gate keys on the step cycle, not on activation.
+			if _gate("Jolt Physics", "inactive_space", "jolt"): return
+			var ia_plain := _spawn_child("iaplainproj",
+					_project_body("IaPlain", "", false), "ia_plain", false)
+			if ia_plain.has("err"):
+				return _fail(ia_plain["err"])
+			var ia_allow := ["Space state is inaccessible",
+					"must not be called while the physics space is being stepped"]
+			var ia_thr := _spawn_child("iathrproj",
+					_project_body("IaThr", "", true), "ia_thr", false,
+					"res://phys3d_events.gd", 30, ia_allow)
+			if ia_thr.has("err"):
+				return _fail(ia_thr["err"])
+			var ia_jolt_thr := _spawn_child("iajoltthrproj",
+					_project_body("IaJoltThr", "Jolt Physics", true),
+					"ia_jolt_thr", false, "res://phys3d_events.gd", 30,
+					ia_allow)
+			if ia_jolt_thr.has("err"):
+				return _fail(ia_jolt_thr["err"])
+			var ia_sig := "pt1,is1,ray7,cs0,cmfrac,ri0,rv6"
+			var expect_ia_plain := {
+				"ia_plain_backend": "DEFAULT",
+				"ia_plain_samples": "5",
+				"ia_plain_open": "5",
+				"ia_plain_refused": "0",
+				"ia_plain_alts": "2/2",
+				"ia_plain_f_bp": "1/1",
+				"ia_plain_sig": ia_sig,
+			}
+			var expect_ia_thr := {
+				"ia_thr_backend": "DEFAULT",
+				"ia_thr_samples": "5",
+				"ia_thr_open": "2",
+				"ia_thr_refused": "3",
+				"ia_thr_alts": "2/2",
+				"ia_thr_f_bp": "1/1",
+				"ia_thr_sig": ia_sig,
+			}
+			var expect_ia_jolt_thr := {
+				"ia_jolt_thr_backend": "Jolt Physics",
+				"ia_jolt_thr_samples": "5",
+				"ia_jolt_thr_open": "2",
+				"ia_jolt_thr_refused": "3",
+				"ia_jolt_thr_alts": "2/2",
+				"ia_jolt_thr_f_bp": "1/1",
+				"ia_jolt_thr_sig": ia_sig,
+			}
+			for probe in [[ia_plain, expect_ia_plain, "plain"],
+					[ia_thr, expect_ia_thr, "thr"],
+					[ia_jolt_thr, expect_ia_jolt_thr, "jolt_thr"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("inactive_space %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			for dirname in ["iathrproj", "iajoltthrproj"]:
+				var logp := ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname)
+				if _log_count(logp, "Space state is inaccessible") != 3:
+					return _fail("inactive_space %s refusal lines=%d expected=3"
+							% [dirname,
+							_log_count(logp, "Space state is inaccessible")])
+			if _log_count(ProjectSettings.globalize_path(
+					"res://iaplainproj/child.log"),
+					"Space state is inaccessible") != 0:
+				return _fail("inactive_space plain unexpected refusal")
+			_exit_ok("PASS phys3d_events inactive_space plain=open thr=phase jolt_thr=phase alts=answered sig=wall_only child_exit=0")
+
+		"race_class":
+			# r88: the threaded window as named classes with an ENVELOPE pin
+			# (no class is required to appear; a value outside {empty, legal}
+			# is the failure). The Jolt child's window can tear the Jolt
+			# shape registry and abort — the row accepts the crash envelope
+			# OR the completed envelope, each with its own witnesses.
+			if _gate("Jolt Physics", "race_class", "jolt"): return
+			var rc_allow := ["Space state is inaccessible",
+					"must not be called while the physics space is being stepped"]
+			var rc_plain := _spawn_child("rcplainproj",
+					_project_body("RcPlain", "", true), "rc_plain", false,
+					"res://phys3d_events.gd", 30, rc_allow)
+			if rc_plain.has("err"):
+				return _fail(rc_plain["err"])
+			var rc_jolt := _spawn_child("rcjoltproj",
+					_project_body("RcJolt", "Jolt Physics", true),
+					"rc_jolt", false, "res://phys3d_events.gd", 30, rc_allow)
+			if rc_jolt.has("err"):
+				return _fail(rc_jolt["err"])
+			var expect_rc_plain := {
+				"rc_plain_backend": "DEFAULT",
+				"rc_plain_e_legal": "6",
+				"rc_plain_f": str(RACE_REPS),
+				"rc_plain_refused": str(RACE_REPS),
+				"rc_plain_envelope": "ok",
+			}
+			if rc_plain["code"] != 0 or rc_plain["serr"] \
+					or rc_plain["verdicts"] != expect_rc_plain:
+				return _fail("race_class plain drift exit=%d serr=%s v=%s errs=%s"
+						% [rc_plain["code"], str(rc_plain["serr"]),
+						str(rc_plain["verdicts"]), str(rc_plain["errs"])])
+			var rc_plain_log := ProjectSettings.globalize_path(
+					"res://rcplainproj/child.log")
+			if _log_count(rc_plain_log, "Space state is inaccessible") \
+					!= RACE_REPS:
+				return _fail("race_class plain refusal lines=%d expected=%d"
+						% [_log_count(rc_plain_log,
+						"Space state is inaccessible"), RACE_REPS])
+			# the Jolt child: completed envelope OR the crash class
+			var rc_jolt_log := ProjectSettings.globalize_path(
+					"res://rcjoltproj/child.log")
+			var rc_tear := _log_count(rc_jolt_log,
+					"Failed to build Jolt Physics sphere shape")
+			var rc_abort := _log_count(rc_jolt_log, "pure virtual method called") \
+					+ _log_count(rc_jolt_log,
+					"terminate called without an active exception")
+			if rc_jolt["code"] == 134 or rc_jolt["code"] == 137:
+				# the crash mode is heap-layout dependent (r87's freed_space
+				# split): the uncaught C++ exception path aborts through
+				# `terminate` with NO Godot signal handler, while the other
+				# mode lands in `handle_crash`. Both carry the tear line and
+				# the abort line, and neither may leave a child marker.
+				if not rc_jolt["verdicts"].is_empty() or rc_tear < 1 \
+						or rc_abort < 1 \
+						or _log_count(rc_jolt_log,
+								"CHILD_NOTE rc_jolt stash=dss") != 1:
+					return _fail("race_class jolt crash envelope drift rc=%d v=%s tear=%d abort=%d"
+							% [rc_jolt["code"], str(rc_jolt["verdicts"]),
+							rc_tear, rc_abort])
+			elif rc_jolt["code"] == 0:
+				# the completed branch: the same envelope as GodotPhysics,
+				# with the Jolt tear lines admitted as the expected witness
+				# class (the registry tears; the process survives and the
+				# envelope holds). Any OTHER error line is a defect.
+				var expect_rc_jolt := {
+					"rc_jolt_backend": "Jolt Physics",
+					"rc_jolt_e_legal": "6",
+					"rc_jolt_f": str(RACE_REPS),
+					"rc_jolt_refused": str(RACE_REPS),
+					"rc_jolt_envelope": "ok",
+				}
+				var tear_only := true
+				for line in rc_jolt["errs"]:
+					if not ("Failed to build Jolt Physics sphere shape" in line
+							or "Parameter \"jolt_shape\" is null." in line):
+						tear_only = false
+				if rc_jolt["verdicts"] != expect_rc_jolt or not tear_only:
+					return _fail("race_class jolt envelope drift v=%s errs=%s"
+							% [str(rc_jolt["verdicts"]),
+							str(rc_jolt["errs"])])
+			else:
+				return _fail("race_class jolt rc=%d not crash-or-completed"
+						% rc_jolt["code"])
+			_exit_ok("PASS phys3d_events race_class gp=classes jolt=crash-or-classes reps=%d child_exit=0" % RACE_REPS)
+
+		"param_purity":
+			# r88: the params objects are pure input, shape_rid beats shape,
+			# and repeated calls return fresh containers.
+			if _gate("Jolt Physics", "param_purity", "jolt"): return
+			if _gate("Dummy", "param_purity", "dummy"): return
+			var pq_plain := _spawn_child("pqplainproj",
+					_project_body("PqPlain", "", false), "pq_plain", false)
+			if pq_plain.has("err"):
+				return _fail(pq_plain["err"])
+			var pq_jolt := _spawn_child("pqjoltproj",
+					_project_body("PqJolt", "Jolt Physics", false),
+					"pq_jolt", false)
+			if pq_jolt.has("err"):
+				return _fail(pq_jolt["err"])
+			var pq_dummy := _spawn_child("pqdummyproj",
+					_project_body("PqDummy", "Dummy", false), "pq_dummy", false)
+			if pq_dummy.has("err"):
+				return _fail(pq_dummy["err"])
+			var expect_pq_plain := {
+				"pq_plain_backend": "DEFAULT",
+				"pq_plain_pure": "6/6",
+				"pq_plain_prec": "1,0,1",
+				"pq_plain_fresh": "3/3",
+			}
+			var expect_pq_jolt := {
+				"pq_jolt_backend": "Jolt Physics",
+				"pq_jolt_pure": "6/6",
+				"pq_jolt_prec": "1,0,1",
+				"pq_jolt_fresh": "3/3",
+			}
+			var expect_pq_dummy := {
+				"pq_dummy_backend": "Dummy",
+				"pq_dummy_pure": "6/6",
+				"pq_dummy_prec": "0,0,0",
+				"pq_dummy_fresh": "3/3",
+			}
+			for probe in [[pq_plain, expect_pq_plain, "plain"],
+					[pq_jolt, expect_pq_jolt, "jolt"],
+					[pq_dummy, expect_pq_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("param_purity %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			_exit_ok("PASS phys3d_events param_purity pure=6/6 prec=rid fresh=3/3 child_exit=0")
+
+		"body_inertia":
+			# r88: the PhysicsDirectBodyState3D inertia getters as values.
+			if _gate("Jolt Physics", "body_inertia", "jolt"): return
+			if _gate("Dummy", "body_inertia", "dummy"): return
+			var bi_plain := _spawn_child("biplainproj",
+					_project_body("BiPlain", "", false), "bi_plain", false)
+			if bi_plain.has("err"):
+				return _fail(bi_plain["err"])
+			var bi_jolt := _spawn_child("bijoltproj",
+					_project_body("BiJolt", "Jolt Physics", false),
+					"bi_jolt", false)
+			if bi_jolt.has("err"):
+				return _fail(bi_jolt["err"])
+			var bi_dummy := _spawn_child("bidummyproj",
+					_project_body("BiDummy", "Dummy", false), "bi_dummy", false)
+			if bi_dummy.has("err"):
+				return _fail(bi_dummy["err"])
+			var bi_diag := "3.000000,0.000000,0.000000,0.000000,0.352941,0.000000,0.000000,0.000000,0.352941"
+			var bi_y30 := "2.338235,0.000000,-1.146210,0.000000,0.352941,0.000000,-1.146210,0.000000,1.014706"
+			var bi_ident := "1.000000,0.000000,0.000000,0.000000,1.000000,0.000000,0.000000,0.000000,1.000000"
+			var bi_zero := "0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000,0.000000"
+			var expect_bi_plain := {
+				"bi_plain_backend": "DEFAULT",
+				"bi_plain_r_imass": "0.500000",
+				"bi_plain_r_ii": "3.000000,0.352941,0.352941",
+				"bi_plain_r_iit": bi_diag,
+				"bi_plain_r_pax": bi_ident,
+				"bi_plain_tensor": "world",
+				"bi_plain_r_y30_iit": bi_y30,
+				"bi_plain_r_y30_pax": "rot",
+				"bi_plain_r_m4_imass": "0.250000",
+				"bi_plain_r_m4_ii": "1.500000,0.176471,0.176471",
+				"bi_plain_st": "0.000000/0.000000,0.000000,0.000000/" + bi_zero,
+				"bi_plain_kn": "0.000000/0.000000,0.000000,0.000000/" + bi_zero,
+				"bi_plain_iw": "1.000000/0.111111,0.250000,1.000000",
+				"bi_plain_cb": "0.400000,0.000000,0.000000/6.000000,0.634250,0.634250",
+			}
+			var expect_bi_jolt := expect_bi_plain.duplicate()
+			for k in expect_bi_plain.keys():
+				if k.begins_with("bi_plain_"):
+					expect_bi_jolt.erase(k)
+			for k in expect_bi_plain.keys():
+				if k.begins_with("bi_plain_"):
+					expect_bi_jolt["bi_jolt_" + k.substr(9)] = expect_bi_plain[k]
+			expect_bi_jolt["bi_jolt_backend"] = "Jolt Physics"
+			# Jolt's principal-axes basis is magnitude-sorted, so even the
+			# identity orientation comes back as a column permutation (the
+			# r88-scout's y30 reading; measured here at identity too), and
+			# its COM read-back carries a float error on the 0.4 write.
+			expect_bi_jolt["bi_jolt_r_pax"] = "0.000000,1.000000,0.000000,0.000000,0.000000,1.000000,1.000000,0.000000,0.000000"
+			expect_bi_jolt["bi_jolt_r_y30_pax"] = "perm"
+			expect_bi_jolt["bi_jolt_st"] = "1.000000/0.000000,0.000000,0.000000/" + bi_ident
+			expect_bi_jolt["bi_jolt_kn"] = "1.000000/0.000000,0.000000,0.000000/" + bi_ident
+			expect_bi_jolt["bi_jolt_cb"] = "0.400002,0.000000,0.000000/6.000000,0.634249,0.634249"
+			var expect_bi_dummy := {
+				"bi_dummy_backend": "Dummy",
+				"bi_dummy_r_imass": "0.000000",
+				"bi_dummy_r_ii": "0.000000,0.000000,0.000000",
+				"bi_dummy_r_iit": bi_ident,
+				"bi_dummy_r_pax": bi_ident,
+				"bi_dummy_tensor": "floor",
+				"bi_dummy_r_y30_iit": bi_ident,
+				"bi_dummy_r_y30_pax": "identity",
+				"bi_dummy_r_m4_imass": "0.000000",
+				"bi_dummy_r_m4_ii": "0.000000,0.000000,0.000000",
+				"bi_dummy_st": "0.000000/0.000000,0.000000,0.000000/" + bi_ident,
+				"bi_dummy_kn": "0.000000/0.000000,0.000000,0.000000/" + bi_ident,
+				"bi_dummy_iw": "0.000000/0.000000,0.000000,0.000000",
+				"bi_dummy_cb": "0.000000,0.000000,0.000000/0.000000,0.000000,0.000000",
+			}
+			for probe in [[bi_plain, expect_bi_plain, "plain"],
+					[bi_jolt, expect_bi_jolt, "jolt"],
+					[bi_dummy, expect_bi_dummy, "dummy"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("body_inertia %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			_exit_ok("PASS phys3d_events body_inertia gp=box jolt=box dummy=floor tensor=world st=zeros,placeholders child_exit=0")
+
+		"wrong_args":
+			# r88: the wrong-argument class — typed empties, rc=0, and the
+			# refusal text counted from the raw log and equal across backends.
+			if _gate("Jolt Physics", "wrong_args", "jolt"): return
+			if _gate("Dummy", "wrong_args", "dummy"): return
+			var wa_allow := ["Required object", "Parameter \"shape\" is null",
+					"Condition \"p_size < 0\""]
+			var wa_plain := _spawn_child("waplainproj",
+					_project_body("WaPlain", "", false), "wa_plain", false,
+					"res://phys3d_events.gd", 30, wa_allow)
+			if wa_plain.has("err"):
+				return _fail(wa_plain["err"])
+			var wa_jolt := _spawn_child("wajoltproj",
+					_project_body("WaJolt", "Jolt Physics", false),
+					"wa_jolt", false, "res://phys3d_events.gd", 30, wa_allow)
+			if wa_jolt.has("err"):
+				return _fail(wa_jolt["err"])
+			var wa_dummy := _spawn_child("wadummyproj",
+					_project_body("WaDummy", "Dummy", false), "wa_dummy", false,
+					"res://phys3d_events.gd", 30, wa_allow)
+			if wa_dummy.has("err"):
+				return _fail(wa_dummy["err"])
+			var wa_cells := {
+				"point_shapeparams": "t28,n0",
+				"isect_pointparams": "t28,n0",
+				"isect_rayparams": "t28,n0",
+				"isect_null": "t28,n0",
+				"cast_pointparams": "t32,n0",
+				"collide_rayparams": "t28,n0",
+				"rest_rayparams": "t27,n0",
+				"isect_noshape": "t28,n0",
+				"cast_noshape": "t32,n0",
+				"rest_noshape": "t27,n0",
+				"collide_maxres": "t28,n0",
+				"isect_maxres0": "t28,n0",
+				"point_maxres0": "t28,n0",
+			}
+			for probe in [[wa_plain, "plain", "DEFAULT"],
+					[wa_jolt, "jolt", "Jolt Physics"],
+					[wa_dummy, "dummy", "Dummy"]]:
+				var spawn: Dictionary = probe[0]
+				var want := {"wa_%s_backend" % probe[1]: probe[2]}
+				for k in wa_cells:
+					want["wa_%s_%s" % [probe[1], k]] = wa_cells[k]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != want:
+					return _fail("wrong_args %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[1], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			# the refusal text is a log witness, counted per backend: the two
+			# wrapper-layer strings are identical and identically counted on
+			# all three backends; the shape-null line is the Dummy floor
+			# split (absent there); the negative max_results condition is
+			# identical everywhere.
+			var wa_counts := []
+			for dirname in ["waplainproj", "wajoltproj", "wadummyproj"]:
+				var logp := ProjectSettings.globalize_path(
+						"res://%s/child.log" % dirname)
+				wa_counts.append([_log_count(logp,
+						"Required object \"rp_shape_query\" is null."),
+						_log_count(logp,
+						"Required object \"rp_point_query\" is null."),
+						_log_count(logp, "Parameter \"shape\" is null."),
+						_log_count(logp,
+						"Condition \"p_size < 0\" is true. Returning: ERR_INVALID_PARAMETER")])
+			for i in range(1, 3):
+				if wa_counts[i][0] != wa_counts[0][0] \
+						or wa_counts[i][1] != wa_counts[0][1] \
+						or wa_counts[i][3] != wa_counts[0][3]:
+					return _fail("wrong_args refusal text drift counts=%s"
+							% str(wa_counts))
+			if wa_counts[0][0] != 6 or wa_counts[0][1] != 1 \
+					or wa_counts[0][2] != 3 or wa_counts[0][3] != 1 \
+					or wa_counts[2][2] != 0:
+				return _fail("wrong_args refusal counts=%s" % str(wa_counts))
+			_exit_ok("PASS phys3d_events wrong_args cells=13 typed=empty rc=0 text=same,floor child_exit=0")
+
+		"geom_split":
+			# r88: the backend-geometry splits as per-backend envelopes.
+			if _gate("Jolt Physics", "geom_split", "jolt"): return
+			var gs_plain := _spawn_child("gsplainproj",
+					_project_body("GsPlain", "", false), "gs_plain", false)
+			if gs_plain.has("err"):
+				return _fail(gs_plain["err"])
+			var gs_jolt := _spawn_child("gsjoltproj",
+					_project_body("GsJolt", "Jolt Physics", false),
+					"gs_jolt", false)
+			if gs_jolt.has("err"):
+				return _fail(gs_jolt["err"])
+			var expect_gs_plain := {
+				"gs_plain_backend": "DEFAULT",
+				"gs_plain_pt_boundary": "1",
+				"gs_plain_pt_inside": "1",
+				"gs_plain_cm": "frac",
+				"gs_plain_normal": "tilt",
+				"gs_plain_ri_n": "6",
+				"gs_plain_ovp": "start",
+				"gs_plain_cs": "2,neg",
+			}
+			var expect_gs_jolt := {
+				"gs_jolt_backend": "Jolt Physics",
+				"gs_jolt_pt_boundary": "2",
+				"gs_jolt_pt_inside": "1",
+				"gs_jolt_cm": "frac",
+				"gs_jolt_normal": "up",
+				"gs_jolt_ri_n": "6",
+				"gs_jolt_ovp": "offset",
+				"gs_jolt_cs": "2,neg",
+			}
+			for probe in [[gs_plain, expect_gs_plain, "plain"],
+					[gs_jolt, expect_gs_jolt, "jolt"]]:
+				var spawn: Dictionary = probe[0]
+				if spawn["code"] != 0 or spawn["serr"] \
+						or spawn["verdicts"] != probe[1]:
+					return _fail("geom_split %s drift exit=%d serr=%s v=%s errs=%s"
+							% [probe[2], spawn["code"], str(spawn["serr"]),
+							str(spawn["verdicts"]), str(spawn["errs"])])
+			_exit_ok("PASS phys3d_events geom_split gp=boundary1,wide,tilt jolt=boundary2,tight,up child_exit=0")
+
+		"freed_space_methods":
+			# r88, FATAL TAIL: the freed-space postcondition PER METHOD x
+			# BACKEND. One child per method on the real backends (a crash
+			# cannot be caught); the Dummy floor runs all six in one child.
+			# The children are spawned as ONE parallel batch: each still
+			# carries its own `timeout -s KILL` bound, and the batch's own
+			# deadline is fail-closed.
+			if _gate("Jolt Physics", "freed_space_methods", "jolt"): return
+			if _gate("Dummy", "freed_space_methods", "dummy"): return
+			var freed_allow := ["previously freed", "Parameter \"space\" is null",
+					"has no owner", "were leaked at exit", "was leaked at exit"]
+			var specs := []
+			for m in FREED_METHODS:
+				specs.append({
+					"dirname": "fmplain" + m, "arm": "fm_plain_" + m,
+					"project_body": _project_body("FmPlain" + m, "", false),
+					"allow_lines": freed_allow, "bound_s": FREED_BOUND_S,
+				})
+			for m in FREED_METHODS:
+				specs.append({
+					"dirname": "fmjolt" + m, "arm": "fm_jolt_" + m,
+					"project_body": _project_body("FmJolt" + m,
+							"Jolt Physics", false),
+					"allow_lines": freed_allow, "bound_s": FREED_BOUND_S,
+				})
+			specs.append({
+				"dirname": "fmdummy", "arm": "fd_dummy",
+				"project_body": _project_body("FmDummy", "Dummy", false),
+				"allow_lines": freed_allow, "bound_s": FREED_BOUND_S,
+			})
+			var batch := _spawn_batch(specs)
+			var gp_ok := 0
+			var jolt_crash := 0
+			var jolt_dead := 0
+			for i in range(FREED_METHODS.size()):
+				var m: String = FREED_METHODS[i]
+				var res: Dictionary = batch[i]
+				if res.has("err") or res.get("batch_timeout", false):
+					return _fail("freed_space_methods plain %s err=%s timeout=%s"
+							% [m, str(res.get("err")), str(res.get("batch_timeout"))])
+				var logp := ProjectSettings.globalize_path(
+						"res://fmplain%s/child.log" % m)
+				var crash := _log_count(logp,
+						"handle_crash: Program crashed with signal 11")
+				var pre := _log_count(logp, "previously freed")
+				var sp_null := _log_count(logp,
+						"Parameter \"space\" is null")
+				if res["code"] != 134 and res["code"] != 137:
+					return _fail("freed_space_methods plain %s rc=%d not signal-class"
+							% [m, res["code"]])
+				if not res["verdicts"].is_empty() or crash != 1 \
+						or pre != 1 or sp_null != 1:
+					return _fail("freed_space_methods plain %s envelope rc=%d marker=%s crash=%d pre=%d sp=%d"
+							% [m, res["code"], str(res["verdicts"]),
+							crash, pre, sp_null])
+				if _log_count(logp, "CHILD_NOTE fm_plain_%s alive=" % m) != 1 \
+						or _log_count(logp, "CHILD_NOTE fm_plain_%s pre=" % m) != 1 \
+						or _log_count(logp, "CHILD_NOTE fm_plain_%s refetch=" % m) != 1 \
+						or _log_count(logp, "CHILD_NOTE fm_plain_%s post=" % m) != 0:
+					return _fail("freed_space_methods plain %s breadcrumb drift"
+							% m)
+				gp_ok += 1
+			for i in range(FREED_METHODS.size()):
+				var m: String = FREED_METHODS[i]
+				var res: Dictionary = batch[FREED_METHODS.size() + i]
+				if res.has("err") or res.get("batch_timeout", false):
+					return _fail("freed_space_methods jolt %s err=%s timeout=%s"
+							% [m, str(res.get("err")), str(res.get("batch_timeout"))])
+				var logp := ProjectSettings.globalize_path(
+						"res://fmjolt%s/child.log" % m)
+				var crash := _log_count(logp,
+						"handle_crash: Program crashed with signal 11")
+				# Jolt's abort modes: `pure virtual method called`,
+				# `terminate called without an active exception`, and the
+				# scout's `terminate called after throwing an instance of
+				# 'std::system_error'` (measured in this arm) — one token
+				# covers all three.
+				var abort := _log_count(logp, "pure virtual method called") \
+						+ _log_count(logp, "terminate called")
+				var pre := _log_count(logp, "previously freed")
+				var sp_null := _log_count(logp,
+						"Parameter \"space\" is null")
+				# the two class witnesses are unconditional: the stashed
+				# handle's call raises the previously-freed SCRIPT ERROR and
+				# the freed-space refetch names the null space.
+				if pre != 1 or sp_null != 1:
+					return _fail("freed_space_methods jolt %s witness pre=%d sp=%d"
+							% [m, pre, sp_null])
+				var post_tok: String = res["verdicts"].get(
+						"fm_jolt_%s_post" % m, "")
+				if res["code"] == 0:
+					# dead-handle branch: no crash, the POST path hands back
+					# nothing usable (post=nil) and the child completes.
+					if crash != 0 or abort != 0 or post_tok != "nil" \
+							or res["verdicts"].size() != 1:
+						return _fail("freed_space_methods jolt %s dead envelope rc=0 v=%s crash=%d abort=%d"
+								% [m, str(res["verdicts"]), crash, abort])
+					jolt_dead += 1
+				elif res["code"] == 134 or res["code"] == 137:
+					# crash branch, two measured shapes: the crash lands at
+					# bds.get_space_state() (no marker at all) or after the
+					# tokens printed (post=nil, then the exit teardown
+					# aborts). Either way the engine leaves a crash or abort
+					# line, and no other token may exist.
+					# three measured crash shapes: the kill lands at
+					# bds.get_space_state() (no token), after the POST path
+					# handed back a dead handle (post=nil), or after it
+					# handed back a LIVE wrapper whose query/teardown then
+					# aborts (post=<dss class>). A marker, if present, is
+					# exactly one post= token and no other claim.
+					var marker_ok: bool = res["verdicts"].is_empty() \
+							or (res["verdicts"].size() == 1 \
+							and (post_tok == "nil" \
+							or post_tok == "t24,JoltPhysicsDirectSpaceState3D"))
+					if not marker_ok or crash + abort < 1:
+						return _fail("freed_space_methods jolt %s crash envelope rc=%d v=%s crash=%d abort=%d"
+								% [m, res["code"], str(res["verdicts"]),
+								crash, abort])
+					jolt_crash += 1
+				else:
+					return _fail("freed_space_methods jolt %s rc=%d not crash-or-dead"
+							% [m, res["code"]])
+			var dmy: Dictionary = batch[2 * FREED_METHODS.size()]
+			if dmy.has("err") or dmy.get("batch_timeout", false):
+				return _fail("freed_space_methods dummy err=%s timeout=%s"
+						% [str(dmy.get("err")), str(dmy.get("batch_timeout"))])
+			var dmy_shape := {"pt": "t28,n0", "ray": "t27,n0", "is": "t28,n0",
+					"cs": "t28,n0", "cm": "t32,n0", "ri": "t27,n0"}
+			var want_dmy := {}
+			for m in FREED_METHODS:
+				want_dmy["fd_dummy_%s_alive" % m] = dmy_shape[m]
+				want_dmy["fd_dummy_%s_pre" % m] = dmy_shape[m]
+				want_dmy["fd_dummy_%s_refetch" % m] = \
+						"t24,PhysicsDirectSpaceState3DDummy"
+				want_dmy["fd_dummy_%s_post" % m] = \
+						"t24,PhysicsDirectSpaceState3DDummy"
+				want_dmy["fd_dummy_%s_ret" % m] = dmy_shape[m]
+			var dmy_log := ProjectSettings.globalize_path(
+					"res://fmdummy/child.log")
+			if dmy["code"] != 0 or dmy["serr"] \
+					or dmy["verdicts"] != want_dmy \
+					or _log_count(dmy_log,
+							"handle_crash: Program crashed with signal 11") != 0:
+				return _fail("freed_space_methods dummy drift exit=%d serr=%s v=%s"
+						% [dmy["code"], str(dmy["serr"]),
+						str(dmy["verdicts"])])
+			# the marker is branch-stable (the per-method branch is a race
+			# observable, recorded in each child log and counted here): every
+			# Jolt method must land in exactly one of the two envelopes.
+			if jolt_crash + jolt_dead != FREED_METHODS.size():
+				return _fail("freed_space_methods jolt branches=%d+%d"
+						% [jolt_crash, jolt_dead])
+			_exit_ok("PASS phys3d_events freed_space_methods gp=crash6 jolt=crash-or-dead dummy=empty child_exit=0")
+
 		_:
 			return _fail("unknown arm " + arm)
 
@@ -2783,3 +3866,936 @@ func _emit(prefix: String, key: String, value: String) -> void:
 
 func _note(prefix: String, text: String) -> void:
 	prints("CHILD_NOTE %s %s" % [prefix, text])
+
+
+# --- r88: the query-tier read family (child bodies) --------------------------
+# Every arm below is a generated-project CHILD: the laws are backend-scoped,
+# the freed-space class kills a child process, and the gate/race cells are
+# position-determined inside a live tree. Geometry is the r87/r88 canonical
+# pair — wall box (half 1) at (0,0,-3), floor box (half 1) at (0,-1,0) with
+# its top at y=0 — so the in-place contact controls are the floor (a sphere at
+# (0,0,-1) overlaps the floor slab, never the wall) and the wall is reached
+# only by motion.
+
+# The `_physics_process` / `_process` sampler the gate, inactive-space and
+# race children share: one node, one mode, the probe's `_q_sample` measures.
+# `f_max` bounds the out-of-phase (`_process`) firings; `_physics_process`
+# fires once (the in-phase control). One class, not three (r86 SP1).
+class QNode extends Node:
+	var probe
+	var q_mode := "fetch"
+	var f_max := 1
+	var f_seen := 0
+	var e_seen := 0
+
+	func _physics_process(_d: float) -> void:
+		if e_seen == 0:
+			e_seen = 1
+			probe._q_sample(q_mode, "E")
+
+	func _process(_d: float) -> void:
+		if f_seen < f_max:
+			f_seen += 1
+			probe.q_f_seen = f_seen
+			probe._q_sample(q_mode, "F")
+
+
+func _add_qnode(mode: String, f_max: int) -> void:
+	var n := QNode.new()
+	n.probe = self
+	n.q_mode = mode
+	n.f_max = f_max
+	root.add_child(n)
+	owned_nodes.append(n)
+
+
+# One dispatcher so the three sampler modes cannot drift apart.
+func _q_sample(mode: String, tag: String) -> void:
+	match mode:
+		"fetch":
+			_sample_fetch(tag)
+		"inactive":
+			_sample_inactive(tag)
+		"race":
+			_sample_race(tag)
+
+
+# --child --arm=mo_plain / mo_jolt / mo_dummy (r88): the motion split.
+# ONE PhysicsShapeQueryParameters3D per geometry, reused across the four
+# methods that accept it. cast_motion APPLIES motion (a fraction strictly
+# inside (0,1), and a start overlap does NOT pin it to 0); collide_shape /
+# get_rest_info / intersect_shape ignore it — the clear-start -2z sweep that
+# ENDS embedded in the wall reports nothing, while the in-place controls
+# answer. The wall-contact bracket is a per-backend envelope: GodotPhysics
+# widens around the geometric 0.1 by its margin handling, Jolt lands tight.
+func _child_motion_split(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	_mk_body(Vector3(0, 0, -3))
+	_mk_body(Vector3(0, -1, 0))
+	await _frames(4)
+	var d: Variant = await _fetch_world_dss()
+	if d == null:
+		_note(prefix, "dss=nil")
+		_quit_clean(1)
+		return
+	var clear := _sphere_params(Vector3(0, 0.6, -1.0), Vector3(0, 0, -5.0))
+	var pen := _sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, -5.0))
+	var away := _sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, 5.0))
+	var zero := _sphere_params(Vector3(0, 0.6, -1.0), Vector3.ZERO)
+	var short := _sphere_params(Vector3(0, 0.6, -1.0), Vector3(0, 0, -0.5))
+	var sweep := _sphere_params(Vector3(0, 0.6, -1.0), Vector3(0, 0, -2.0))
+	var inplace := _sphere_params(Vector3(0, 0, -2.2))
+	var cm_clear: Variant = d.cast_motion(clear)
+	var cm_pen: Variant = d.cast_motion(pen)
+	var cm_away: Variant = d.cast_motion(away)
+	var cm_shared: Variant = d.cast_motion(sweep)
+	var cm_zero: Variant = d.cast_motion(zero)
+	var cm_short: Variant = d.cast_motion(short)
+	var cs_sweep: Variant = d.collide_shape(sweep)
+	var cs_inplace: Variant = d.collide_shape(inplace)
+	var ri_sweep: Variant = d.get_rest_info(sweep)
+	var ri_inplace: Variant = d.get_rest_info(inplace)
+	var is_sweep: Variant = d.intersect_shape(sweep)
+	var is_inplace: Variant = d.intersect_shape(inplace)
+	var cm_tok := "empty"
+	var bracket := "drift"
+	var pen_tok := "empty"
+	var lo := -1.0
+	var hi := -1.0
+	if cm_clear is PackedFloat32Array and cm_clear.size() >= 2:
+		lo = minf(cm_clear[0], cm_clear[1])
+		hi = maxf(cm_clear[0], cm_clear[1])
+		if lo > 0.0 and hi < 1.0:
+			cm_tok = "honored"
+		else:
+			cm_tok = "blocked"
+		if hi - lo <= 0.002 and lo >= 0.098 and hi <= 0.102:
+			bracket = "tight"
+		elif lo >= 0.09 and hi <= 0.11:
+			bracket = "wide"
+	if cm_pen is PackedFloat32Array and cm_pen.size() >= 2 and lo >= 0.0:
+		pen_tok = "same" if (absf(cm_pen[0] - lo) < 0.01 \
+				and absf(cm_pen[1] - hi) < 0.01) else "pinned"
+	var away_tok := "empty"
+	if cm_away is PackedFloat32Array and cm_away.size() >= 2:
+		# a cast moving AWAY from the wall with nothing else in its path is
+		# a clean miss ([1,1]) in this geometry. (The r88-scout's ~0.6 away
+		# fraction came from its extra dynamic body sitting in the sweep —
+		# not reproduced here, and not claimed.)
+		away_tok = "miss" if (absf(cm_away[0] - 1.0) < 0.0001 \
+				and absf(cm_away[1] - 1.0) < 0.0001) else "other"
+	var shared_tok := "empty"
+	if cm_shared is PackedFloat32Array and cm_shared.size() >= 2:
+		# the SAME params object the three ignoring methods read: the cast
+		# sees its motion, the others never do.
+		shared_tok = "honored" if (cm_shared[0] > 0.0 and cm_shared[0] < 1.0) \
+				else "blocked"
+	var zero_tok := "empty"
+	if cm_zero is PackedFloat32Array and cm_zero.size() >= 2:
+		zero_tok = "blocked" if (absf(cm_zero[0] - 1.0) < 0.0001 \
+				and absf(cm_zero[1] - 1.0) < 0.0001) else "open"
+	var short_tok := "empty"
+	if cm_short is PackedFloat32Array and cm_short.size() >= 2:
+		short_tok = "blocked" if (absf(cm_short[0] - 1.0) < 0.0001 \
+				and absf(cm_short[1] - 1.0) < 0.0001) else "open"
+	var cs_tok := "floor"
+	if cs_inplace is Array and cs_inplace.size() > 0:
+		cs_tok = "ignored" if cs_sweep.size() == 0 else "applied"
+	var ri_tok := "floor"
+	if ri_inplace is Dictionary and ri_inplace.size() > 0:
+		ri_tok = "ignored" if ri_sweep.size() == 0 else "applied"
+	var is_tok := "floor"
+	if is_inplace is Array and is_inplace.size() > 0:
+		is_tok = "ignored" if is_sweep.size() == 0 else "applied"
+	_note(prefix, "cm=%.4f,%.4f pen=%.4f,%.4f away=%.4f,%.4f shared=%.4f,%.4f cs=%d/%d ri=%d/%d is=%d/%d" % [
+			lo, hi,
+			(cm_pen[0] if cm_pen is PackedFloat32Array and cm_pen.size() >= 2 else -1.0),
+			(cm_pen[1] if cm_pen is PackedFloat32Array and cm_pen.size() >= 2 else -1.0),
+			(cm_away[0] if cm_away is PackedFloat32Array and cm_away.size() >= 2 else -1.0),
+			(cm_away[1] if cm_away is PackedFloat32Array and cm_away.size() >= 2 else -1.0),
+			(cm_shared[0] if cm_shared is PackedFloat32Array and cm_shared.size() >= 2 else -1.0),
+			(cm_shared[1] if cm_shared is PackedFloat32Array and cm_shared.size() >= 2 else -1.0),
+			(cs_sweep.size() if cs_sweep is Array else -1),
+			(cs_inplace.size() if cs_inplace is Array else -1),
+			(ri_sweep.size() if ri_sweep is Dictionary else -1),
+			(ri_inplace.size() if ri_inplace is Dictionary else -1),
+			(is_sweep.size() if is_sweep is Array else -1),
+			(is_inplace.size() if is_inplace is Array else -1)])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "cm", cm_tok)
+	_emit(prefix, "cm_bracket", bracket)
+	_emit(prefix, "cm_pen", pen_tok)
+	_emit(prefix, "cm_shared", shared_tok)
+	_emit(prefix, "cm_away", away_tok)
+	_emit(prefix, "cm_zero", zero_tok)
+	_emit(prefix, "cm_short", short_tok)
+	_emit(prefix, "cs", cs_tok)
+	_emit(prefix, "ri", ri_tok)
+	_emit(prefix, "is", is_tok)
+	_quit_clean()
+
+
+# --child --arm=fg_plain / fg_thr / fg_jolt_thr / fg_dummy / fg_dummy_thr
+# (r88): the access gate. Three acquisition paths per sample — the server
+# space fetch, the World3D property, and the body state — so a refusal is
+# counted in the raw log per path. Non-threaded: every sample grants.
+# Threaded: every out-of-phase sample (the deferred start, a process frame,
+# and each `_process` firing) refuses all three paths; the in-phase samples
+# (the physics_frame continuation and `_physics_process`) grant. Dummy has no
+# gate. The bypass cell: a body state held from a legal position hands out
+# the SAME dss object at refused positions, and a query through it answers.
+var q_setup := false
+var q_rig_set := false
+var q_rig := RID()
+var q_held: Variant = null
+var q_stash: Variant = null
+var q_samples := 0
+var q_grant := 0
+var q_refuse := 0
+var q_partial := 0
+var q_byp_seen := 0
+var q_byp_ok := 0
+var q_byp_same := 0
+var q_rows := []
+var q_f_seen := 0
+
+
+func _is_fetch_arm() -> bool:
+	if not ("--child" in OS.get_cmdline_user_args()):
+		return false
+	return _argval("--arm=", "").begins_with("fg_")
+
+
+func _fetch_gate_setup() -> void:
+	if q_setup:
+		return
+	q_setup = true
+	wspace = root.get_world_3d().space
+	q_rig = _mk_body(Vector3(0, 8, 0), PhysicsServer3D.BODY_MODE_RIGID)
+	PhysicsServer3D.body_set_param(q_rig,
+			PhysicsServer3D.BODY_PARAM_GRAVITY_SCALE, 0.0)
+	# the RID itself is not a liveness test: under Dummy every create returns
+	# RID(0), and the Dummy floor answers a fetch for RID() too — so the
+	# body-path flag is "the setup ran", not "the RID is nonzero".
+	q_rig_set = true
+
+
+func _body_state(b: RID) -> Variant:
+	return PhysicsServer3D.body_get_direct_state(b)
+
+
+func _held_space(b: Variant) -> Variant:
+	return b.get_space_state()
+
+
+func _sample_fetch(tag: String) -> void:
+	q_samples += 1
+	var f := 1 if PhysicsServer3D.space_get_direct_state(wspace) != null else 0
+	var w := 1 if root.get_world_3d().direct_space_state != null else 0
+	var b := 1 if (q_rig_set and _body_state(q_rig) != null) else 0
+	var paths := f + w + b
+	if paths == 3:
+		q_grant += 1
+	elif paths == 0:
+		q_refuse += 1
+	else:
+		q_partial += 1
+	q_rows.append("%s:%d%d%d" % [tag, f, w, b])
+	if q_held != null:
+		var bs: Variant = _dss_live(_held_space(q_held))
+		if bs != null:
+			q_byp_seen += 1
+			var hit: Variant = _call_read(bs, "pt")
+			if hit is Array:
+				q_byp_ok += 1
+			if bs == q_stash:
+				q_byp_same += 1
+
+
+func _child_fetch_gate(prefix: String) -> void:
+	_fetch_gate_setup()
+	await process_frame
+	_sample_fetch("B")
+	await process_frame
+	_sample_fetch("C")
+	await physics_frame
+	q_stash = _dss_live(PhysicsServer3D.space_get_direct_state(wspace))
+	q_held = _body_state(q_rig)
+	_sample_fetch("D")
+	_add_qnode("fetch", GATE_F_REPS)
+	var deadline := Engine.get_physics_frames() + 30
+	while q_f_seen < GATE_F_REPS and Engine.get_physics_frames() < deadline:
+		await physics_frame
+	var gate_tok := "phase"
+	if q_refuse == 0 and q_partial == 0:
+		gate_tok = "open"
+	_note(prefix, "rows=%s stash=%s held=%s" % [str(q_rows),
+			("nil" if q_stash == null else "dss"),
+			("nil" if q_held == null else "bds")])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "samples", "%d" % [q_samples])
+	_emit(prefix, "grant", "%d" % [q_grant])
+	_emit(prefix, "refuse", "%d" % [q_refuse])
+	_emit(prefix, "partial", "%d" % [q_partial])
+	_emit(prefix, "gate", gate_tok)
+	_emit(prefix, "byp", "%d/%d" % [q_byp_ok, q_byp_seen])
+	_emit(prefix, "byp_same", "%d/%d" % [q_byp_same, q_byp_seen])
+	_quit_clean()
+
+
+# --child --arm=ia_plain / ia_thr / ia_jolt_thr (r88): the never-activated
+# private space. The gate keys on the step cycle, not on activation: on
+# non-threaded backends the fetch of space_create + space_set_active(false)
+# is granted at every sampled position, while the threaded gate refuses it
+# out of phase. A handle STASHED at a legal position answers everywhere with
+# the same signature; its cs/ri zeros are geometric (the private space
+# carries only the wall, so the -5z sweep's in-place start does not overlap).
+var alt_space := RID()
+var ia_stash: Variant = null
+var ia_open := 0
+var ia_refused := 0
+var ia_samples := 0
+var ia_alts_ok := 0
+var ia_alts_seen := 0
+var ia_f_bp := 0
+var ia_sig := ""
+
+
+func _child_inactive_space(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	alt_space = PhysicsServer3D.space_create()
+	PhysicsServer3D.space_set_active(alt_space, false)
+	var s := PhysicsServer3D.box_shape_create()
+	PhysicsServer3D.shape_set_data(s, Vector3(1, 1, 1))
+	var alt_wall := PhysicsServer3D.body_create()
+	PhysicsServer3D.body_set_mode(alt_wall, PhysicsServer3D.BODY_MODE_STATIC)
+	PhysicsServer3D.body_add_shape(alt_wall, s)
+	PhysicsServer3D.body_set_collision_layer(alt_wall, 1)
+	PhysicsServer3D.body_set_space(alt_wall, alt_space)
+	PhysicsServer3D.body_set_state(alt_wall,
+			PhysicsServer3D.BODY_STATE_TRANSFORM,
+			Transform3D(Basis(), Vector3(0, 0, -3)))
+	# teardown order is load-bearing under Jolt: free_rid(space) while the
+	# space still holds a live body aborts (measured: rc 134 inside
+	# free_rid(space) with the order space->body->shape, 2/2; shape->body->
+	# space and body->shape->space exit 0, 2/2 each). The private space is
+	# therefore registered LAST, so _cleanup_rids frees contents first and
+	# this arm measures the fetch lattice, not a teardown order artifact.
+	owned.append_array([s, alt_wall, alt_space])
+	await process_frame
+	_sample_inactive("B")
+	await process_frame
+	_sample_inactive("C")
+	await physics_frame
+	ia_stash = _dss_live(PhysicsServer3D.space_get_direct_state(alt_space))
+	_sample_inactive("D")
+	_add_qnode("inactive", 1)
+	var deadline := Engine.get_physics_frames() + 30
+	while q_f_seen < 1 and Engine.get_physics_frames() < deadline:
+		await physics_frame
+	_note(prefix, "open=%d refused=%d samples=%d sig=%s" % [ia_open,
+			ia_refused, ia_samples, ia_sig])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "samples", "%d" % [ia_samples])
+	_emit(prefix, "open", "%d" % [ia_open])
+	_emit(prefix, "refused", "%d" % [ia_refused])
+	_emit(prefix, "alts", "%d/%d" % [ia_alts_ok, ia_alts_seen])
+	_emit(prefix, "f_bp", "%d/1" % [ia_f_bp])
+	_emit(prefix, "sig", ia_sig)
+	_quit_clean()
+
+
+func _sample_inactive(tag: String) -> void:
+	ia_samples += 1
+	if PhysicsServer3D.space_get_direct_state(alt_space) != null:
+		ia_open += 1
+	else:
+		ia_refused += 1
+	if ia_stash == null:
+		return
+	if tag == "F":
+		# The out-of-phase firing is BROADPHASE-ONLY on purpose: the Jolt
+		# shape channel in this window tears the shape registry (measured —
+		# the r88-scout's gt_proj_jolt_thr.r1 aborted on exactly this
+		# sequence, and this child aborted the same way before the split).
+		# The shape-channel battery is taken at the in-phase positions and
+		# the tear/crash class is pinned by the race_class row.
+		var pt: Variant = _call_read(ia_stash, "pt")
+		var ry: Variant = _call_read(ia_stash, "ray")
+		if pt is Array and ry is Dictionary:
+			ia_f_bp += 1
+		return
+	var sig := _alts_sig(ia_stash)
+	ia_alts_seen += 1
+	if ia_sig == "":
+		ia_sig = sig
+	if sig == ia_sig:
+		ia_alts_ok += 1
+
+
+func _alts_sig(d: Variant) -> String:
+	var pt: Variant = _call_read(d, "pt")
+	var ry: Variant = _call_read(d, "ray")
+	var i_s: Variant = _call_read(d, "is")
+	var cs: Variant = _call_read(d, "cs")
+	var cm: Variant = _call_read(d, "cm")
+	var ri: Variant = _call_read(d, "ri")
+	var rv: Variant = d.get_rest_info(_sphere_params(Vector3(0, 0, -2.2)))
+	return "pt%d,is%d,ray%d,cs%d,cm%s,ri%d,rv%d" % [
+			(pt.size() if pt is Array else -1),
+			(i_s.size() if i_s is Array else -1),
+			(ry.size() if ry is Dictionary else -1),
+			(cs.size() if cs is Array else -1),
+			_cm_class(cm),
+			(ri.size() if ri is Dictionary else -1),
+			(rv.size() if rv is Dictionary else -1)]
+
+
+func _cm_class(cm: Variant) -> String:
+	if not (cm is PackedFloat32Array):
+		return "other"
+	if cm.size() == 0:
+		return "empty"
+	if cm.size() >= 2 and cm[0] > 0.0 and cm[0] < 1.0 \
+			and cm[1] > 0.0 and cm[1] < 1.0:
+		return "frac"
+	return "other"
+
+
+# --child --arm=rc_plain / rc_jolt (r88): the threaded race window as NAMED
+# classes with an ENVELOPE pin. The legal channel values are measured at the
+# in-phase control (E, inside `_physics_process`); every out-of-phase sample
+# (`_process`, RACE_REPS firings) must then report each COUNT channel either
+# empty/zero or exactly the legal value, and the cast channel either empty or
+# a mid-sweep fraction in (0,1) — a torn read (the r88-scout saw 0.197/0.156)
+# is a named class, not a violation, but a value outside that union is. No
+# class is REQUIRED to appear: this is an envelope, never a distribution.
+# The Jolt child's window also tears the Jolt shape registry (its own engine
+# lines) and can abort the process; the parent pins the crash envelope OR the
+# completed envelope, each with its own witnesses.
+var race_legal := {}
+var race_env := "ok"
+var race_bad := ""
+var race_f := 0
+var race_e_legal := 0
+var race_refused := 0
+var race_notes := []
+
+
+func _child_race_class(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	_mk_body(Vector3(0, 0, -3))
+	_mk_body(Vector3(0, -1, 0))
+	await _frames(4)
+	q_stash = _dss_live(PhysicsServer3D.space_get_direct_state(wspace))
+	if q_stash == null:
+		_note(prefix, "stash=nil")
+		_quit_clean(1)
+		return
+	_note(prefix, "stash=dss")
+	_add_qnode("race", RACE_REPS)
+	var deadline := Engine.get_physics_frames() + 30
+	while race_f < RACE_REPS and Engine.get_physics_frames() < deadline:
+		await physics_frame
+	_note(prefix, "legal=%s classes=%s" % [str(race_legal),
+			str(race_notes)])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "e_legal", "%d" % [race_e_legal])
+	_emit(prefix, "f", "%d" % [race_f])
+	_emit(prefix, "refused", "%d" % [race_refused])
+	_emit(prefix, "envelope", race_env)
+	_quit_clean()
+
+
+func _sample_race(tag: String) -> void:
+	if PhysicsServer3D.space_get_direct_state(wspace) == null:
+		race_refused += 1
+	var row := _race_row(q_stash)
+	if tag == "E":
+		race_legal = row
+		for k in ["pt", "ray", "is", "cs", "ri"]:
+			if int(row[k]) > 0:
+				race_e_legal += 1
+		if String(row["cm"]) == "frac":
+			race_e_legal += 1
+		return
+	race_f += 1
+	var bad := _race_violation(row, race_legal)
+	if bad != "" and race_env == "ok":
+		race_env = "violation"
+		race_bad = bad
+	race_notes.append(_race_class(row, race_legal) if race_env == "ok"
+			else race_bad)
+
+
+func _race_row(d: Variant) -> Dictionary:
+	var pt: Variant = _call_read(d, "pt")
+	var ry: Variant = _call_read(d, "ray")
+	var i_s: Variant = _call_read(d, "is")
+	var cs: Variant = _call_read(d, "cs")
+	var cm: Variant = _call_read(d, "cm")
+	var ri: Variant = _call_read(d, "ri")
+	return {
+		"pt": (pt.size() if pt is Array else -1),
+		"ray": (ry.size() if ry is Dictionary else -1),
+		"is": (i_s.size() if i_s is Array else -1),
+		"cs": (cs.size() if cs is Array else -1),
+		"cm": _cm_class(cm),
+		"ri": (ri.size() if ri is Dictionary else -1),
+	}
+
+
+func _race_violation(row: Dictionary, legal: Dictionary) -> String:
+	for k in ["pt", "ray", "is", "cs", "ri"]:
+		var v: int = row[k]
+		var lv: int = int(legal.get(k, -1))
+		if v != 0 and v != lv:
+			return "%s=%d" % [k, v]
+	if String(row["cm"]) != "empty" and String(row["cm"]) != "frac":
+		return "cm=%s" % String(row["cm"])
+	return ""
+
+
+func _race_class(row: Dictionary, legal: Dictionary) -> String:
+	var empty := []
+	for k in ["pt", "ray", "is", "cs", "ri"]:
+		if int(row[k]) == 0:
+			empty.append(k)
+	if String(row["cm"]) == "empty":
+		empty.append("cm")
+	elif String(row["cm"]) != String(legal.get("cm", "frac")):
+		empty.append("cm-torn")
+	return "all" if empty.is_empty() else "+".join(empty)
+
+
+# --child --arm=pq_plain / pq_jolt / pq_dummy (r88): params-object purity.
+# Every read is fingerprinted before and after the call; shape_rid beats
+# shape when both are set; repeated calls return fresh containers.
+func _child_param_purity(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	_mk_body(Vector3(0, 0, -3))
+	_mk_body(Vector3(0, -1, 0))
+	await _frames(4)
+	var d: Variant = await _fetch_world_dss()
+	if d == null:
+		_note(prefix, "dss=nil")
+		_quit_clean(1)
+		return
+	var pure := 0
+	var calls := 0
+	var sp := _sphere_params(Vector3(0, 0, -2.2))
+	var fp0 := _params_fp(sp)
+	d.intersect_shape(sp)
+	calls += 1
+	if _params_fp(sp) == fp0:
+		pure += 1
+	d.collide_shape(sp)
+	calls += 1
+	if _params_fp(sp) == fp0:
+		pure += 1
+	d.cast_motion(sp)
+	calls += 1
+	if _params_fp(sp) == fp0:
+		pure += 1
+	d.get_rest_info(sp)
+	calls += 1
+	if _params_fp(sp) == fp0:
+		pure += 1
+	var pp := _pt_params(Vector3(0, 0, -3))
+	var fpp := "pos=%s m=%d b=%s a=%s ex=%d" % [str(pp.position),
+			pp.collision_mask, str(pp.collide_with_bodies),
+			str(pp.collide_with_areas), pp.exclude.size()]
+	d.intersect_point(pp)
+	calls += 1
+	if ("pos=%s m=%d b=%s a=%s ex=%d" % [str(pp.position),
+			pp.collision_mask, str(pp.collide_with_bodies),
+			str(pp.collide_with_areas), pp.exclude.size()]) == fpp:
+		pure += 1
+	var rp := _ray_params()
+	var fpr := "from=%s to=%s m=%d b=%s a=%s fi=%s fb=%s ex=%d" % [
+			str(rp.from), str(rp.to), rp.collision_mask,
+			str(rp.collide_with_bodies), str(rp.collide_with_areas),
+			str(rp.hit_from_inside), str(rp.hit_back_faces), rp.exclude.size()]
+	d.intersect_ray(rp)
+	calls += 1
+	if ("from=%s to=%s m=%d b=%s a=%s fi=%s fb=%s ex=%d" % [
+			str(rp.from), str(rp.to), rp.collision_mask,
+			str(rp.collide_with_bodies), str(rp.collide_with_areas),
+			str(rp.hit_from_inside), str(rp.hit_back_faces),
+			rp.exclude.size()]) == fpr:
+		pure += 1
+	# shape_rid beats shape: at z=-1.7 the RID sphere (r=0.5) reaches the
+	# wall face at z=-2 (near edge -2.2) while the tiny box (0.2 full, near
+	# edge -1.8) does not, and neither touches the floor slab.
+	var srv_sphere: RID = PhysicsServer3D.sphere_shape_create()
+	PhysicsServer3D.shape_set_data(srv_sphere, 0.5)
+	owned.append(srv_sphere)
+	var tiny := BoxShape3D.new()
+	tiny.size = Vector3(0.2, 0.2, 0.2)
+	var both := PhysicsShapeQueryParameters3D.new()
+	both.shape = tiny
+	both.shape_rid = srv_sphere
+	both.transform = Transform3D(Basis(), Vector3(0, 0, -1.7))
+	both.collision_mask = 1
+	var both_n: int = d.intersect_shape(both).size()
+	var only_box := PhysicsShapeQueryParameters3D.new()
+	only_box.shape = tiny
+	only_box.transform = Transform3D(Basis(), Vector3(0, 0, -1.7))
+	only_box.collision_mask = 1
+	var box_n: int = d.intersect_shape(only_box).size()
+	var only_rid := PhysicsShapeQueryParameters3D.new()
+	only_rid.shape_rid = srv_sphere
+	only_rid.transform = Transform3D(Basis(), Vector3(0, 0, -1.7))
+	only_rid.collision_mask = 1
+	var rid_n: int = d.intersect_shape(only_rid).size()
+	# fresh containers: two identical calls, distinct instances, equal values
+	var a1: Variant = d.intersect_shape(sp)
+	var a2: Variant = d.intersect_shape(sp)
+	var fresh := 0
+	if not is_same(a1, a2) and a1 == a2:
+		fresh += 1
+	var y1: Variant = d.intersect_ray(rp)
+	var y2: Variant = d.intersect_ray(rp)
+	if not is_same(y1, y2) and y1 == y2:
+		fresh += 1
+	var c1: Variant = d.collide_shape(sp)
+	var c2: Variant = d.collide_shape(sp)
+	if not is_same(c1, c2) and c1 == c2:
+		fresh += 1
+	_note(prefix, "pure=%d/%d prec=%d,%d,%d fresh=%d" % [pure, calls,
+			both_n, box_n, rid_n, fresh])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "pure", "%d/%d" % [pure, calls])
+	_emit(prefix, "prec", "%d,%d,%d" % [both_n, box_n, rid_n])
+	_emit(prefix, "fresh", "%d/3" % [fresh])
+	_quit_clean()
+
+
+# --child --arm=bi_plain / bi_jolt / bi_dummy (r88): the body-state inertia
+# getters as values. The rigid box (half 2x0.5x0.5, mass 2) pins imass and
+# the local inverse inertia; the y30 tensor is verified in-child against
+# R*diag*R^T built from the MEASURED local values (the world-space claim is
+# derived, not restated); the BODY_PARAM_INERTIA and CENTER_OF_MASS writes
+# are read back; static and kinematic are pinned per backend (GodotPhysics
+# zeros, Jolt's inconsistent placeholders, Dummy's identity tensor).
+func _child_body_inertia(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	var r := _mk_body(Vector3(0, 8, 0), PhysicsServer3D.BODY_MODE_RIGID,
+			Vector3(2.0, 0.5, 0.5))
+	PhysicsServer3D.body_set_param(r,
+			PhysicsServer3D.BODY_PARAM_MASS, 2.0)
+	var st := _mk_body(Vector3(20, 8, 0), PhysicsServer3D.BODY_MODE_STATIC,
+			Vector3(2.0, 0.5, 0.5))
+	var kn := _mk_body(Vector3(40, 8, 0), PhysicsServer3D.BODY_MODE_KINEMATIC,
+			Vector3(2.0, 0.5, 0.5))
+	var iw := _mk_body(Vector3(60, 8, 0), PhysicsServer3D.BODY_MODE_RIGID,
+			Vector3(2.0, 0.5, 0.5))
+	PhysicsServer3D.body_set_param(iw,
+			PhysicsServer3D.BODY_PARAM_INERTIA, Vector3(9.0, 4.0, 1.0))
+	var cb := _mk_body(Vector3(80, 8, 0), PhysicsServer3D.BODY_MODE_RIGID,
+			Vector3(2.0, 0.5, 0.5))
+	PhysicsServer3D.body_set_param(cb,
+			PhysicsServer3D.BODY_PARAM_CENTER_OF_MASS, Vector3(0.4, 0.0, 0.0))
+	for b in [r, iw, cb]:
+		PhysicsServer3D.body_set_param(b,
+				PhysicsServer3D.BODY_PARAM_GRAVITY_SCALE, 0.0)
+	await _frames(8)
+	var rb: Variant = await _fetch_body_state(r)
+	var r_imass := "nil"
+	var r_ii := "nil"
+	var r_iit := "nil"
+	var r_pax := "nil"
+	if rb != null:
+		r_imass = "%.6f" % rb.get_inverse_mass()
+		r_ii = _v3s(rb.get_inverse_inertia())
+		r_iit = _bs(rb.get_inverse_inertia_tensor())
+		r_pax = _bs(rb.get_principal_inertia_axes())
+	PhysicsServer3D.body_set_state(r, PhysicsServer3D.BODY_STATE_TRANSFORM,
+			Transform3D(Basis(Vector3(0, 1, 0), deg_to_rad(30.0)),
+					Vector3(0, 8, 0)))
+	await _frames(4)
+	var ry30: Variant = PhysicsServer3D.body_get_direct_state(r)
+	var r_y30_iit := "nil"
+	var r_y30_pax := "nil"
+	var tensor := "nil"
+	if ry30 != null:
+		r_y30_iit = _bs(ry30.get_inverse_inertia_tensor())
+		r_y30_pax = _bs(ry30.get_principal_inertia_axes())
+		tensor = _tensor_check(ry30)
+	PhysicsServer3D.body_set_param(r, PhysicsServer3D.BODY_PARAM_MASS, 4.0)
+	await _frames(2)
+	var rm4: Variant = PhysicsServer3D.body_get_direct_state(r)
+	var r_m4_imass := "nil"
+	var r_m4_ii := "nil"
+	if rm4 != null:
+		r_m4_imass = "%.6f" % rm4.get_inverse_mass()
+		r_m4_ii = _v3s(rm4.get_inverse_inertia())
+	var st_b: Variant = await _fetch_body_state(st)
+	var kn_b: Variant = await _fetch_body_state(kn)
+	var iw_b: Variant = await _fetch_body_state(iw)
+	var cb_b: Variant = await _fetch_body_state(cb)
+	_note(prefix, "r=%s/%s/%s y30=%s m4=%s/%s st=%s kn=%s iw=%s cb=%s" % [
+			r_imass, r_ii, r_iit, r_y30_iit, r_m4_imass, r_m4_ii,
+			("nil" if st_b == null else _st_sig(st_b)),
+			("nil" if kn_b == null else _st_sig(kn_b)),
+			("nil" if iw_b == null else _iw_sig(iw_b)),
+			("nil" if cb_b == null else _cb_sig(cb_b))])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "r_imass", r_imass)
+	_emit(prefix, "r_ii", r_ii)
+	_emit(prefix, "r_iit", r_iit)
+	_emit(prefix, "r_pax", r_pax)
+	_emit(prefix, "tensor", tensor)
+	_emit(prefix, "r_y30_iit", r_y30_iit)
+	_emit(prefix, "r_y30_pax", _pax_class(r_y30_pax))
+	_emit(prefix, "r_m4_imass", r_m4_imass)
+	_emit(prefix, "r_m4_ii", r_m4_ii)
+	_emit(prefix, "st", ("nil" if st_b == null else _st_sig(st_b)))
+	_emit(prefix, "kn", ("nil" if kn_b == null else _st_sig(kn_b)))
+	_emit(prefix, "iw", ("nil" if iw_b == null else _iw_sig(iw_b)))
+	_emit(prefix, "cb", ("nil" if cb_b == null else _cb_sig(cb_b)))
+	_quit_clean()
+
+
+func _fetch_body_state(b: RID) -> Variant:
+	for i in range(24):
+		var d: Variant = PhysicsServer3D.body_get_direct_state(b)
+		if d != null:
+			return d
+		await physics_frame
+	return null
+
+
+func _v3s(v: Vector3) -> String:
+	return "%.6f,%.6f,%.6f" % [v.x, v.y, v.z]
+
+
+func _bs(b: Basis) -> String:
+	return "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f" % [
+			b.x.x, b.x.y, b.x.z, b.y.x, b.y.y, b.y.z,
+			b.z.x, b.z.y, b.z.z]
+
+
+# The world-space tensor claim: R * diag(measured local ii) * R^T must equal
+# the measured tensor of the y30 body. `diag` is the LOCAL inverse inertia
+# read at identity, `rot` the body's own basis — the check derives the world
+# tensor from those two measurements, it does not restate the tensor.
+func _tensor_check(rb: Variant) -> String:
+	var local: Vector3 = rb.get_inverse_inertia()
+	var t: Transform3D = rb.get_transform()
+	var r := t.basis
+	var d := Basis(Vector3(local.x, 0, 0), Vector3(0, local.y, 0),
+			Vector3(0, 0, local.z))
+	var want := r * d * r.transposed()
+	var got: Basis = rb.get_inverse_inertia_tensor()
+	var err := 0.0
+	for i in range(3):
+		err = maxf(err, absf(want[i].x - got[i].x))
+		err = maxf(err, absf(want[i].y - got[i].y))
+		err = maxf(err, absf(want[i].z - got[i].z))
+	if err < 0.00001:
+		return "world"
+	# the Dummy floor: zero local inertia and an identity tensor are the
+	# "no data" placeholder convention (the Jolt static/kinematic pair uses
+	# the same identity marker), so the derived-tensor claim does not apply.
+	if local.length() < 0.000001 and got.is_equal_approx(Basis()):
+		return "floor"
+	return "drift"
+
+
+func _pax_class(pax: String) -> String:
+	if pax == "nil":
+		return "nil"
+	if pax == "1.000000,0.000000,0.000000,0.000000,1.000000,0.000000,0.000000,0.000000,1.000000":
+		return "identity"
+	if pax == "0.866025,0.000000,-0.500000,0.000000,1.000000,0.000000,0.500000,0.000000,0.866025":
+		return "rot"
+	if pax == "0.000000,1.000000,0.000000,0.500000,0.000000,0.866025,0.866025,0.000000,-0.500000":
+		return "perm"
+	return "other"
+
+
+func _st_sig(b: Variant) -> String:
+	return "%s/%s/%s" % ["%.6f" % b.get_inverse_mass(),
+			_v3s(b.get_inverse_inertia()), _bs(b.get_inverse_inertia_tensor())]
+
+
+func _iw_sig(b: Variant) -> String:
+	return "%s/%s" % ["%.6f" % b.get_inverse_mass(),
+			_v3s(b.get_inverse_inertia())]
+
+
+func _cb_sig(b: Variant) -> String:
+	return "%s/%s" % [_v3s(b.get_center_of_mass()),
+			_v3s(b.get_inverse_inertia())]
+
+
+# --child --arm=wa_plain / wa_jolt / wa_dummy (r88): the wrong-argument
+# class. Every cell is refused in the WRAPPER layer: rc=0 and a typed empty
+# (Array / PackedFloat32Array / Dictionary per method). One child runs all
+# twelve cells; the refusal TEXT is counted from the raw log by the parent
+# and required equal across backends.
+func _child_wrong_args(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	_mk_body(Vector3(0, 0, -3))
+	await _frames(6)
+	var d: Variant = await _fetch_world_dss()
+	if d == null:
+		_note(prefix, "dss=nil")
+		_quit_clean(1)
+		return
+	var cells := {
+		"point_shapeparams": d.intersect_point(_sphere_params(Vector3(0, 0, -3))),
+		"isect_pointparams": d.intersect_shape(_pt_params(Vector3(0, 0, -3))),
+		"isect_rayparams": d.intersect_shape(_ray_params()),
+		"isect_null": d.intersect_shape(null),
+		"cast_pointparams": d.cast_motion(_pt_params(Vector3(0, 0, -3))),
+		"collide_rayparams": d.collide_shape(_ray_params()),
+		"rest_rayparams": d.get_rest_info(_ray_params()),
+		"isect_noshape": d.intersect_shape(_sphere_params(
+				Vector3(0, 0, -3), Vector3.ZERO, 1, false)),
+		"cast_noshape": d.cast_motion(_sphere_params(
+				Vector3(0, 0, -1.0), Vector3(0, 0, -5), 1, false)),
+		"rest_noshape": d.get_rest_info(_sphere_params(
+				Vector3(0, 0, -1.0), Vector3(0, 0, -5), 1, false)),
+		"collide_maxres": d.collide_shape(_sphere_params(
+				Vector3(0, 0, -1.0), Vector3(0, 0, -5)), -1),
+		"isect_maxres0": d.intersect_shape(_sphere_params(
+				Vector3(0, 0, -2.2)), 0),
+		"point_maxres0": d.intersect_point(_pt_params(Vector3(0, 0, -3)), 0),
+	}
+	var rows := []
+	for k in cells:
+		var v: Variant = cells[k]
+		var tok := _fmt_read(v)
+		rows.append("%s=%s" % [k, tok])
+		_emit(prefix, k, tok)
+	_note(prefix, "cells=%s" % str(rows))
+	_emit(prefix, "backend", str(_backend_name()))
+	_quit_clean()
+
+
+# --child --arm=gs_plain / gs_jolt (r88): the backend-geometry splits, pinned
+# as per-backend envelopes. The floor here is the wide slab (20 x 0.5 x 20 at
+# (0,-0.5,0), top at y=0) so a point ON the boundary is the discriminant: the
+# containing wall only on GodotPhysics, the touched floor too on Jolt.
+func _child_geom_split(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	_mk_body(Vector3(0, 0, -3))
+	var floor_b := PhysicsServer3D.body_create()
+	var fs := PhysicsServer3D.box_shape_create()
+	PhysicsServer3D.shape_set_data(fs, Vector3(20, 0.5, 20))
+	PhysicsServer3D.body_set_mode(floor_b, PhysicsServer3D.BODY_MODE_STATIC)
+	PhysicsServer3D.body_add_shape(floor_b, fs)
+	PhysicsServer3D.body_set_collision_layer(floor_b, 1)
+	PhysicsServer3D.body_set_space(floor_b, wspace)
+	PhysicsServer3D.body_set_state(floor_b,
+			PhysicsServer3D.BODY_STATE_TRANSFORM,
+			Transform3D(Basis(), Vector3(0, -0.5, 0)))
+	owned.append_array([floor_b, fs])
+	await _frames(4)
+	var d: Variant = await _fetch_world_dss()
+	if d == null:
+		_note(prefix, "dss=nil")
+		_quit_clean(1)
+		return
+	var pt_boundary: int = d.intersect_point(
+			_pt_params(Vector3(0, 0, -3))).size()
+	var pt_inside: int = d.intersect_point(
+			_pt_params(Vector3(0, -0.25, 0))).size()
+	var cm: Variant = d.cast_motion(
+			_sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, -5)))
+	var ri: Variant = d.get_rest_info(
+			_sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, -5)))
+	var ri_ov: Variant = d.get_rest_info(_sphere_params(Vector3(0, 0, -2.2)))
+	var cs: Variant = d.collide_shape(
+			_sphere_params(Vector3(0, 0, -1.0), Vector3(0, 0, -5)))
+	var cm_tok := _cm_class(cm)
+	var normal := Vector3.ZERO
+	var ri_n := 0
+	if ri is Dictionary and ri.size() > 0:
+		ri_n = ri.size()
+		normal = ri["normal"]
+	var n_tok := "none"
+	if ri_n > 0:
+		n_tok = "up" if absf(normal.y) > 0.999 else "tilt"
+	var ovp_tok := "none"
+	if ri_ov is Dictionary and ri_ov.size() > 0:
+		var p: Vector3 = ri_ov["point"]
+		ovp_tok = "start" if p.distance_to(Vector3(0, 0, -2.2)) < 0.01 \
+				else "offset"
+	var cs_y := "none"
+	if cs is Array and cs.size() > 0:
+		cs_y = "neg" if cs[0].y < -0.0001 else "zero"
+	_note(prefix, "pt=%d/%d cm=%s normal=%s ovp=%s cs=%d/%s" % [
+			pt_boundary, pt_inside, cm_tok, _v3s(normal), ovp_tok,
+			(cs.size() if cs is Array else -1), cs_y])
+	_emit(prefix, "backend", str(_backend_name()))
+	_emit(prefix, "pt_boundary", "%d" % [pt_boundary])
+	_emit(prefix, "pt_inside", "%d" % [pt_inside])
+	_emit(prefix, "cm", cm_tok)
+	_emit(prefix, "normal", n_tok)
+	_emit(prefix, "ri_n", "%d" % [ri_n])
+	_emit(prefix, "ovp", ovp_tok)
+	_emit(prefix, "cs", "%d,%s" % [(cs.size() if cs is Array else -1), cs_y])
+	_quit_clean()
+
+
+# --child --arm=fm_<backend>_<method> (r88): one freed-space postcondition
+# per process, because a crash cannot be caught. The sequence is the r87
+# freed_space one: fetch a live handle + body state, call ALIVE, free the
+# space, call on the stashed handle (PRE), refetch the freed space RID, then
+# the POST path through the held body state. Every risky call sits in its own
+# helper frame, so a "previously freed" script error aborts the callee (not
+# the deferred coroutine — the r88-scout's rev-1 hang class).
+func _child_freed_method(arm: String) -> void:
+	var parts := arm.split("_")
+	var method: String = parts[2] if parts.size() > 2 else "pt"
+	wspace = root.get_world_3d().space
+	var rig := _mk_body(Vector3(0, 8, 0), PhysicsServer3D.BODY_MODE_RIGID)
+	PhysicsServer3D.body_set_param(rig,
+			PhysicsServer3D.BODY_PARAM_GRAVITY_SCALE, 0.0)
+	await _frames(2)
+	var stash: Variant = _dss_live(PhysicsServer3D.space_get_direct_state(wspace))
+	var bds: Variant = _body_state(rig)
+	_note(arm, "alive=%s" % _fmt_read(_call_read(stash, method)))
+	PhysicsServer3D.free_rid(wspace)
+	_note(arm, "freed")
+	_note(arm, "pre=%s" % _fmt_read(_call_read(stash, method)))
+	_note(arm, "refetch=%s" % _fmt_read(
+			PhysicsServer3D.space_get_direct_state(wspace)))
+	var sp: Variant = _dss_live(_held_space(bds)) if bds != null else null
+	_note(arm, "post=%s" % _fmt_read(sp))
+	if sp != null:
+		_note(arm, "post_ret=%s" % _fmt_read(_call_read(sp, method)))
+		_emit(arm, "post", _fmt_read(_call_read(sp, method)))
+		_quit_clean()
+		return
+	_emit(arm, "post", "nil")
+	_quit_clean()
+
+
+# --child --arm=fd_dummy (r88): the Dummy freed-space floor in ONE child —
+# the silent backend never crashes, so all six methods run in one process.
+# The world space is freed once; every subsequent call answers typed-empty
+# and the refetch hands out a fresh Dummy dss.
+func _child_freed_dummy(prefix: String) -> void:
+	wspace = root.get_world_3d().space
+	var rig := _mk_body(Vector3(0, 8, 0), PhysicsServer3D.BODY_MODE_RIGID)
+	await _frames(2)
+	var stash: Variant = _dss_live(PhysicsServer3D.space_get_direct_state(wspace))
+	var bds: Variant = _body_state(rig)
+	var alive := {}
+	for m in FREED_METHODS:
+		alive[m] = _fmt_read(_call_read(stash, m))
+	PhysicsServer3D.free_rid(wspace)
+	for m in FREED_METHODS:
+		_emit(prefix, m + "_alive", str(alive[m]))
+		_emit(prefix, m + "_pre", _fmt_read(_call_read(stash, m)))
+		_emit(prefix, m + "_refetch", _fmt_read(
+				PhysicsServer3D.space_get_direct_state(wspace)))
+		var sp: Variant = _dss_live(_held_space(bds)) if bds != null else null
+		_emit(prefix, m + "_post", _fmt_read(sp))
+		if sp != null:
+			_emit(prefix, m + "_ret", _fmt_read(_call_read(sp, m)))
+	_quit_clean()
