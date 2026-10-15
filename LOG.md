@@ -1156,3 +1156,24 @@ corpus/knowledge/seed.md).
   sequences remain possible — r88 mutation pass); dss refusal is a
   ~475-575 stochastic band; hang detect rides rc/timeout.
 - Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf. ADMIT-corr.
+
+## round 88 — PhysicsDirectSpaceState3D read family + body state (phys3d_events)
+
+- MOVE (3028263): nine cells — motion_split (cast_motion alone honors
+  motion), fetch_gate (phase-gated acquisition + held-handle bypass),
+  inactive_space (step-cycle gate), param_purity, body_inertia,
+  wrong_args, geom_split, race_class, freed_space_methods; _spawn_batch
+  parallel crash children (13 in ~3s, own KILL bounds + deadline).
+- VERIFIED: author 210/210 x2; verifier independent 210/210 x2,
+  prior-201 index-identical, token/breadcrumb/torn forges killed.
+- FOLDS (44a488c): simplifier vfold (-27, proven); critic C1
+  method-qualified VM witness, C2 errs-empty envelopes, C3 Jolt
+  shape-null count, C4 injective exclude fp, C5 torn blocked cast
+  class, C6 byp_ids parent witness, C7/C8 site-accurate wording;
+  scribe F5 if_fired bucketed pin (dummy_cb=never earns both halves).
+- SENTINEL (recorded, r89 queue): S1 sibling-log forgery, S2 deadline
+  kills wrapper not payload (ECHILD miscount), S3 dirname traversal
+  self-trojan, S4 last-match parser, S5 pid-identity kill.
+- Seats: scout, author(ds-flash), baseline, boundary, critic(ds-flash),
+  verifier(swe-2), simplifier, sentinel(swe-2), scribe; fold+adj swe-2.
+  ADMIT-corr.
