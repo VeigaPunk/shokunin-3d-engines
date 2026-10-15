@@ -1177,3 +1177,27 @@ corpus/knowledge/seed.md).
 - Seats: scout, author(ds-flash), baseline, boundary, critic(ds-flash),
   verifier(swe-2), simplifier, sentinel(swe-2), scribe; fold+adj swe-2.
   ADMIT-corr.
+
+## round 89 — body-state phase lattice + joint family (ADMIT-corr)
+
+- 7 cells in `phys3d_events.gd`: if_phase IF→E→F ordering (PHASEMK
+  real-time merged-log witness; GP impulse lands one solve late vs
+  Jolt same-step), if_write deferred-force classes, joint_pin/
+  joint_param/joint_solver Jolt drop lists (Jolt WARNING counts
+  pinned 3/35/1, zero on GP/Dummy), cross_space Jolt non-main-space
+  split (b_bound/b_find world-binding pins), sleep_state held-state
+  stale-read classes. +7 rows → 217 (171 ordinary + 46 negative).
+  Author 217/217 ×4, prior-210 index-identical; verifier 217/217 ×2,
+  3 forge-kills live.
+- FOLDS (c16f6ba): simplifier P1+P2+P3 proven (P4 declined — 14-arm
+  rewrite, auditability risk); critic C2 guard whitelist
+  [A-Za-z0-9_-] kills live shell-escape (h2 PWNED pre-fix); C3
+  unasserted sleep row now fails named.
+- RECORD: boundary — Jolt body_set_space→freed space SIGABRTs 6/6 at
+  teardown vs GP clean; slept=41 pin is sampler-fragile (Jolt reports
+  SLEEPING at tick 1 in air); Jolt joint-make wakes sleeping pairs.
+  Scribe seat died in rate-limit sweep; record audit absorbed into
+  adjudicator (retry may land post-hoc → r90 queue).
+- Seats: author(ds), baseline, verifier(swe-2), critic(ds), boundary+
+  simplifier+scribe(ds/zfl, scribe lost); fold+adj swe-2. ADMIT-corr.
+  Commit c16f6ba.
