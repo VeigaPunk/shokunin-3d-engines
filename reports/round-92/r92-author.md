@@ -13,7 +13,7 @@ Landed three parent fixtures plus one shared child probe, all self-contained and
 
 ## Cells armed
 
-23 new CASES rows → **369 child cells** per battery pass (Σ case×backend, plus 24 idlemode reps):
+23 new CASES rows → **123 child cells** per battery pass (Σ case×backend, plus 24 idlemode reps); 369 = 3 × 123 across the three passes then on disk (dev + run1 + run2):
 
 | Row | Children | Content |
 |---|---|---|

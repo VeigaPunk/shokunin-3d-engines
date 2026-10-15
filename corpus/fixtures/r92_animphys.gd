@@ -4,16 +4,21 @@ extends SceneTree
 # and folds each merged log into a verbatim digest cell
 # `<case>@<bk>{rc=..,m=<M-lines|..>,e=..,w=..,s=..}`.
 #
-# Every animation cell pins callback_mode_process =
+# Animation cells pin callback_mode_process =
 # ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS (the scout's fixture-design law)
-# EXCEPT `idlemode`, the contrast arm: idle-mode advance is scheduled by
-# host idle frames, so its per-rep x is a distribution, not a constant.
-# The arm runs REPS_IDLEN reps per backend (>= the mandated six), validates
-# each rep against an invariant envelope — rc=0, s=0, e=0, w=0, one M0 and
-# one M DONE, the `post` row with y=2.0000, z=0.0000, playing=true, and the
-# backend constants lv=(0,-1.1376,0)/srv=(x,2,0) on gp+jolt vs
-# lv=(0,0,0)/srv=nil on dummy — and pins only `ok=REPS` + `xband`, the
-# median-x bucket. x itself never enters the marker.
+# EXCEPT `idlemode`, the contrast arm, and `manual`, which is
+# PROCESS_MANUAL by construction. IDLE-mode advance is scheduled by host
+# idle frames, so each rep's (x,y) is a distribution, not a constant —
+# under a starved box zero idle frames may land inside the fixed physics
+# window, leaving x=0.0000 while the body keeps free-falling (r92-critic
+# F3's observed starved mode x=0.0000 y=1.9240). The arm runs REPS_IDLEN
+# reps per backend (>= the mandated six), validates each rep against an
+# invariant envelope — rc=0, s=0, e=0, w=0, one M0 and one M DONE, the
+# `post` row with x inside the track's [0,3] reach, y at 2.0000 or within
+# the bounded free-fall depth, z=0.0000, playing=true, and the backend
+# constants lv=(0,-1.1376,0)/srv=(x,y,0) on gp+jolt vs lv=(0,0,0)/srv=nil
+# on dummy — and pins only `ok=REPS`. The per-rep mode tallies ride a `#`
+# diagnostic line, never the marker.
 #
 # Laws pinned:
 #   rbpos/rbfrozen: track transforms land as per-tick teleports on live and
@@ -34,8 +39,10 @@ extends SceneTree
 #     track_insert_key cell: both inserts return -1, the track keeps 0
 #     keys, play still teleports to zero — with the two engine ERROR
 #     witness lines pinned as e=2.
-#   iforder: the tick's E read sees the previous push; the idle read sees
-#     this tick's pushed value (per-tick +0.05 advance visible at idle).
+#   iforder: E/I phase contrast — the idle read lands on the last push of
+#     the crossed iteration's batch: I.x = E.x + 0.05*dpf with dpf the
+#     batch's tick count (>=1; the count is the scheduler's, r92-critic
+#     F2). Rows pin ok=1 predicates, not absolute positions.
 #   badkey_insert (NEGATIVE, exit 2): the SAME wrong-typed inserts, but the
 #     author checks the -1 returns and refuses to play — the transform is
 #     never destroyed. Emits NEGATIVE REJECTED when every backend shows
@@ -101,7 +108,9 @@ func _run_arm(case_name: String) -> void:
 
 func _run_idlen() -> void:
 	# Envelope arm: REPS_IDLEN independent child processes per backend; the
-	# parent's marker pins the predicate aggregate, never a sampled value.
+	# parent's marker pins the predicate aggregate (ok=REPS), never a
+	# sampled value. Per-rep mode tallies are diagnostic-only (`#` line):
+	# which legal mode a starved box produces is the scheduler's.
 	var specs := []
 	for b in BACKENDS:
 		for r in REPS_IDLEN:
@@ -111,24 +120,37 @@ func _run_idlen() -> void:
 				"case": "idlemode",
 			})
 	var out := _spawn_batch(specs)
+	var diag := []
 	for i in BACKENDS.size():
 		var bk: String = BACKENDS[i][0]
 		var oks := 0
+		var modes := {}
 		var xs := []
 		for r in REPS_IDLEN:
 			var res: Dictionary = out[i * REPS_IDLEN + r]
 			var ev := _env_idlen(bk, res)
+			modes[ev["mode"]] = modes.get(ev["mode"], 0) + 1
 			if ev["ok"]:
 				oks += 1
 				xs.append(ev["x"])
-		parts.append("idlemode@%s{reps=%d,ok=%d,xband=%s}" % [
-				bk, REPS_IDLEN, oks, _xband(xs)])
+		parts.append("idlemode@%s{reps=%d,ok=%d}" % [bk, REPS_IDLEN, oks])
+		xs.sort()
+		diag.append("%s:%s xs=%s" % [bk, modes, xs])
+	print("# r92_animphys idlemode modes %s" % " ".join(diag))
 	print("PASS r92_animphys idlemode %s" % " ".join(parts))
 	quit(0)
 
 
 func _env_idlen(bk: String, res: Dictionary) -> Dictionary:
-	var r := {"ok": false, "x": -1.0}
+	# Per-rep invariant envelope. IDLE-mode advance is idle-frame driven:
+	# under a starved box zero idle frames may land inside the fixed
+	# 6-tick physics window, so x stays 0.0000 while the body keeps
+	# free-falling (r92-critic F3 — e.g. x=0.0000 y=1.9240). The legal
+	# modes are therefore "advanced" (the track holds y at 2.0000) AND
+	# "starved" (x=0, y inside the bounded free-fall depth — the fall is
+	# bounded by the window's fixed tick count, not wall time). srv
+	# mirrors the node position for a live body; dummy never integrates.
+	var r := {"ok": false, "x": -1.0, "mode": "bad"}
 	if res.has("err") or res["rc"] != 0 or res["e"] != 0 \
 			or res["w"] != 0 or res["s"] != 0:
 		return r
@@ -150,32 +172,20 @@ func _env_idlen(bk: String, res: Dictionary) -> Dictionary:
 		if kv.size() == 2:
 			d[kv[0]] = kv[1]
 	var x := float(d.get("x", "-1"))
+	var y := float(d.get("y", "-1"))
+	var z := float(d.get("z", "99"))
 	var lv_ok: bool = d.get("lv") == ("(0.0000,-1.1376,0.0000)"
 			if bk != "dummy" else "(0.0000,0.0000,0.0000)")
-	var srv_ok: bool = d.get("srv") == (("(%s,2.0000,0.0000)" % d.get("x", "?"))
+	var srv_ok: bool = d.get("srv") == (("(%s,%s,0.0000)" % [
+			d.get("x", "?"), d.get("y", "?")])
 			if bk != "dummy" else "nil")
-	if x >= 0.05 and x <= 1.2 and d.get("y") == "2.0000" \
-			and d.get("z") == "0.0000" and d.get("playing") == "true" \
+	if x >= -0.0005 and x <= 3.0005 and y >= 1.8 and y <= 2.0005 \
+			and z >= -0.0005 and z <= 0.0005 and d.get("playing") == "true" \
 			and lv_ok and srv_ok:
 		r["ok"] = true
 		r["x"] = x
+		r["mode"] = "starved" if x <= 0.005 else "advanced"
 	return r
-
-
-func _xband(xs: Array) -> String:
-	if xs.is_empty():
-		return "none"
-	xs.sort()
-	var med: float = xs[xs.size() / 2]
-	if med < 0.05:
-		return "lt0.05"
-	if med < 0.2:
-		return "0.05-0.2"
-	if med < 0.5:
-		return "0.2-0.5"
-	if med < 1.2:
-		return "0.5-1.2"
-	return "hi"
 
 
 func _run_negative() -> void:

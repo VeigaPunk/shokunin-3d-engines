@@ -7,33 +7,48 @@ extends SceneTree
 #
 # argv: `-- <case>`
 #
-# Rep-stability contract (r92-scout receipt note): only pf-stamped physics
-# observables and labelled summary rows cross this boundary — seq/n_e/n_f/
-# anim_t stamps and F-row multiplicity are the scheduler's, never emitted.
-# The one exception is `idlemode`, whose `post` line is a sample of a
-# scheduler-dependent value validated by the parent against an invariant
-# envelope (x bounded, y/z/lv/srv per-backend constants), never a constant.
+# Rep-stability contract (r92-scout receipt note, folded r92-critic):
+# only pf-stamped physics observables and labelled summary rows cross this
+# boundary — seq/n_e/n_f stamps and F-row multiplicity are the
+# scheduler's, never emitted. Animation-position `t=` fields appear only
+# in cells pinning ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS, where the
+# value is tick-derived and rep-stable; `idlemode` withholds it.
 #
-# All animation cells pin callback_mode_process =
+# Scheduler-shaped windows pin relations, not absolutes:
+#  * tm_* arms: a write inside tick k only reaches the NEXT main-loop
+#    iteration's step batch (Main::iteration() reads the step once per
+#    iteration), so the first post-mutation tick is load-keyed — the
+#    sampled E0/E1/E2 deltas are taken past a forced iteration boundary
+#    (settled step) and `done` carries no pf stamp.
+#  * iforder: the idle read sees the last push of the crossed iteration's
+#    batch — E/I rows emit ok=1 predicates against the pf-keyed +0.05
+#    advance law instead of pinning positions (raw values ride `#`
+#    diagnostic lines only).
+#  * idlemode: `post` is a scheduler-dependent sample validated by the
+#    parent against an invariant envelope (x/z bounds, lv/srv backend
+#    constants, y=2.0000-or-bounded-freefall — the starved mode
+#    included), never a constant.
+#
+# All other animation cells pin callback_mode_process =
 # ANIMATION_CALLBACK_MODE_PROCESS_PHYSICS except `idlemode` (the contrast
-# cell) — the scout's fixture-design law.
+# cell) and `manual` (PROCESS_MANUAL) — the scout's fixture-design law.
 
 var case := ""
 var stage: Node3D
 var target: Node3D
 var source: RemoteTransform3D
-var ball: RB
+var ball: RigidBody3D
 var player: AnimationPlayer
-var cap_f := false
-var f_rows: Array = []
-
-
-func f4(v: float) -> String:
-	return "%.4f" % v
 
 
 func v3(v: Vector3) -> String:
 	return "(%.4f,%.4f,%.4f)" % [v.x, v.y, v.z]
+
+
+func near_v3(a: Vector3, b: Vector3) -> bool:
+	# display-granularity compare: the same predicate that pins the %.4f
+	# rows, so load-shaped tick batches cannot move it.
+	return (a - b).length() <= 0.0005
 
 
 func tf(n: Variant) -> String:
@@ -81,14 +96,6 @@ class Watcher extends Node:
 	var probe
 	func _physics_process(_d: float) -> void:
 		probe.on_e()
-	func _process(_d: float) -> void:
-		if probe.cap_f:
-			probe.cap_f = false
-			probe.f_rows.append("pf=%d pos=%s lv=%s srv=%s" % [
-					Engine.get_physics_frames(),
-					probe.v3(probe.ball.global_position),
-					probe.v3(probe.ball.linear_velocity),
-					probe.srv(probe.ball)])
 
 
 class PhaseWriter extends Node:
@@ -115,13 +122,11 @@ class PhaseWriter extends Node:
 
 class PhaseReader extends Node:
 	var probe
-	var n_e := 0
 	var n_f := 0
 	var e_rows: Array = []
 	var f_rows2: Array = []
 	func _physics_process(_d: float) -> void:
-		n_e += 1
-		e_rows.append([n_e, Engine.get_physics_frames(),
+		e_rows.append([Engine.get_physics_frames(),
 				probe.target.global_position.x])
 	func _process(_d: float) -> void:
 		n_f += 1
@@ -282,7 +287,6 @@ func c_phase() -> void:
 	w.arm_at = 2
 	w.n_e = 0
 	w.n_f = 0
-	r.n_e = 0
 	r.n_f = 0
 	r.e_rows.clear()
 	r.f_rows2.clear()
@@ -297,11 +301,11 @@ func c_phase() -> void:
 	var nexte_dpf := -1
 	var postf := -1.0
 	for e in r.e_rows:
-		if e[1] == wpf and same < 0:
-			same = e[2]
-		if e[1] > wpf and nexte_dpf < 0:
-			nexte = e[2]
-			nexte_dpf = e[1] - wpf
+		if e[0] == wpf and same < 0:
+			same = e[1]
+		if e[0] > wpf and nexte_dpf < 0:
+			nexte = e[1]
+			nexte_dpf = e[0] - wpf
 	for f in r.f_rows2:
 		if f[1] >= wpf and postf < 0:
 			postf = f[2]
@@ -318,7 +322,6 @@ func c_phase() -> void:
 	w.arm_at = 3
 	w.n_e = 0
 	w.n_f = 0
-	r.n_e = 0
 	r.n_f = 0
 	r.e_rows.clear()
 	r.f_rows2.clear()
@@ -338,9 +341,9 @@ func c_phase() -> void:
 		if f[0] > w.arm_at and postf2 < 0:
 			postf2 = f[2]
 	for e in r.e_rows:
-		if e[1] > wpf and nexte2_dpf < 0:
-			nexte2 = e[2]
-			nexte2_dpf = e[1] - wpf
+		if e[0] > wpf and nexte2_dpf < 0:
+			nexte2 = e[1]
+			nexte2_dpf = e[0] - wpf
 	emit("f", "imm=%.1f same_f=%.1f post_f=%.1f next_e=%.1f" % [
 			w.wrote_ox, samef, postf2, nexte2])
 	r.free()
@@ -615,7 +618,6 @@ func c_driver() -> void:
 # AnimationPlayer x physics bodies
 # ===========================================================================
 
-var watcher: Watcher
 var live_e := false
 var e_emit_from := -1
 var e_emit_to := -1
@@ -683,9 +685,8 @@ func mk_reset(x: float) -> void:
 
 
 func ball_build(y: float, freeze: bool, mode := 0) -> void:
-	ball = RB.new()
+	ball = RigidBody3D.new()
 	ball.name = "Ball"
-	ball.probe = self
 	ball.freeze = freeze
 	ball.position = Vector3(0, y, 0)
 	ball.can_sleep = false
@@ -703,14 +704,10 @@ func ball_build(y: float, freeze: bool, mode := 0) -> void:
 	mk_anim(NodePath("Ball"), Vector3(0, 2, 0), Vector3(3, 2, 0))
 
 
-class RB extends RigidBody3D:
-	var probe
-
-
 func anim_watch() -> void:
-	watcher = Watcher.new()
-	watcher.probe = self
-	root.add_child(watcher)
+	var w := Watcher.new()
+	w.probe = self
+	root.add_child(w)
 
 
 func c_rb(freeze: bool) -> void:
@@ -731,10 +728,7 @@ func c_rb(freeze: bool) -> void:
 	for i in range(8):
 		await physics_frame
 	live_e = false
-	cap_f = true
 	await process_frame
-	for fr in f_rows:
-		emit("F_post", fr)
 	emit("post", "freeze=%s pos=%s srv=%s lv=%s playing=%s" % [
 			freeze, v3(ball.global_position), srv(ball),
 			v3(ball.linear_velocity), player.is_playing()])
@@ -978,18 +972,52 @@ func c_iforder() -> void:
 	root.add_child(stage)
 	floor_build()
 	ball_build(2.0, true)
-	anim_watch()
 	await physics_frame
 	player.play("travel")
+	# Phase contrast under PHYSICS callback mode: each physics tick pushes
+	# the track +0.05 x, so after n ticks the position is 0.05*n. The tick
+	# distance between an E read and the following idle read is the
+	# scheduler's — a starved iteration batches several ticks and the idle
+	# read lands on the batch's last tick (r92-critic F2: observed I.x =
+	# E.x + 0.05*dpf with dpf up to 3) — so E/I emit ok=1 predicates
+	# against that relation, never the raw values (those ride `#` lines).
+	var pf0 := -1
+	var dummy := str(ProjectSettings.get_setting(
+			"physics/3d/physics_engine")) == "Dummy"
 	for i in range(4):
 		var pf := Engine.get_physics_frames()
-		emit("E", "pf=%d pos=%s srv=%s" % [pf,
-				v3(ball.global_position), srv(ball)])
+		if pf0 < 0:
+			pf0 = pf
+		var epos := ball.global_position
+		var es := srv(ball)
+		var ex := 0.05 * float(pf - pf0)
+		var eok := near_v3(epos, Vector3(ex, 2.0, 0.0)) \
+				and (es == "nil") == dummy \
+				and (dummy or es == v3(Vector3(ex, 2.0, 0.0)))
+		print("# iforder E%d pf=%d pos=%s srv=%s" % [i, pf, v3(epos), es])
+		emit("E%d" % i, "ok=%d" % int(eok))
 		await physics_frame
 		await process_frame
-		emit("I", "pos=%s srv=%s" % [v3(ball.global_position), srv(ball)])
-	emit("post", "pos=%s srv=%s playing=%s" % [v3(ball.global_position),
-			srv(ball), player.is_playing()])
+		var ipf := Engine.get_physics_frames()
+		var ipos := ball.global_position
+		var is2 := srv(ball)
+		var dpf := ipf - pf
+		var ix := epos.x + 0.05 * float(dpf)
+		var iok := dpf >= 1 and near_v3(ipos, Vector3(ix, 2.0, 0.0)) \
+				and (is2 == "nil") == dummy \
+				and (dummy or is2 == v3(Vector3(ix, 2.0, 0.0)))
+		print("# iforder I%d pf=%d dpf=%d pos=%s srv=%s" % [
+				i, ipf, dpf, v3(ipos), is2])
+		emit("I%d" % i, "ok=%d" % int(iok))
+	var pf_post := Engine.get_physics_frames()
+	var postx := 0.05 * float(pf_post - pf0)
+	var ps := srv(ball)
+	var pok := near_v3(ball.global_position, Vector3(postx, 2.0, 0.0)) \
+			and (ps == "nil") == dummy \
+			and (dummy or ps == v3(Vector3(postx, 2.0, 0.0)))
+	print("# iforder post pf=%d pos=%s srv=%s playing=%s" % [
+			pf_post, v3(ball.global_position), ps, player.is_playing()])
+	emit("post", "ok=%d playing=%s" % [int(pok), player.is_playing()])
 	stage.free()
 
 
@@ -1000,12 +1028,13 @@ func c_iforder() -> void:
 var tm_case := ""
 var tm_mutated := false
 var tm_ne := 0
+var tm_d := 0.0
 
 
 func on_tm_tick(d: float) -> void:
 	tm_ne += 1
 	var pf := Engine.get_physics_frames()
-	if pf <= 4 or pf >= 9:
+	if pf <= 4:
 		return
 	if tm_ne == 4 and not tm_mutated:
 		tm_mutated = true
@@ -1043,8 +1072,7 @@ func on_tm_tick(d: float) -> void:
 				ProjectSettings.get_setting(
 						"physics/common/physics_interpolation")])
 		return
-	if pf >= 5 and pf <= 8:
-		emit("E", "pf=%d delta=%.6f" % [pf, d])
+	tm_d = d
 
 
 func c_tm(sub: String) -> void:
@@ -1057,9 +1085,20 @@ func c_tm(sub: String) -> void:
 	var t := Ticker.new()
 	t.probe = self
 	root.add_child(t)
-	for i in range(12):
+	# Main::iteration() reads the delivered step once per iteration and
+	# shares it across that iteration's whole physics-step batch: a write
+	# inside tick pf=5 only reaches the NEXT iteration's batch, and how
+	# many ticks share the mutation's batch is the scheduler's — a pin on
+	# the first post-mutation tick flaked under CPU load (r92-critic F1).
+	# Wait past one full iteration boundary, then sample three ticks, each
+	# sealed by an idle boundary — every sample is the settled step.
+	while not tm_mutated:
 		await physics_frame
-	emit("done", "pf=%d tsc=%.4f tps=%d jit=%.4f mps=%d" % [
-			Engine.get_physics_frames(), Engine.time_scale,
-			Engine.physics_ticks_per_second, Engine.physics_jitter_fix,
-			Engine.max_physics_steps_per_frame])
+	await process_frame
+	for i in range(3):
+		await physics_frame
+		await process_frame
+		emit("E%d" % i, "delta=%.6f" % tm_d)
+	emit("done", "tsc=%.4f tps=%d jit=%.4f mps=%d" % [
+			Engine.time_scale, Engine.physics_ticks_per_second,
+			Engine.physics_jitter_fix, Engine.max_physics_steps_per_frame])

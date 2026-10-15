@@ -4,23 +4,28 @@ extends SceneTree
 # and folds each merged log into a verbatim digest cell
 # `<case>@<bk>{rc=..,m=<M-lines|..>,e=..,w=..,s=..}`.
 #
-# The child mutates Engine inside tick pf=5 and emits only pf-stamped
-# delta rows for the post-mutation window pf=6..8 plus read-back rows —
-# the rep-stability contract: engine-level timing is backend-blind, so all
-# three engines must report identical M rows (the digest still records
-# each backend's own M0 engine name).
+# The child mutates Engine inside tick pf=5 and emits delta rows only for
+# the settled post-mutation window (E0/E1/E2, sampled past a forced
+# iteration boundary) plus read-back rows — the rep-stability contract:
+# engine-level timing is backend-blind, so all three engines must report
+# identical M rows (the digest still records each backend's own M0 engine
+# name).
 #
 # Laws pinned:
-#   tps:    physics_ticks_per_second writes take effect on the NEXT tick —
-#     30 -> delta 0.033333, 120 -> 0.008333.
-#   tscale: time_scale multiplies the delivered delta at unchanged tps —
-#     0.5 -> 0.008333, 2 -> 0.033333, 10 -> 0.166667.
+#   tps:    physics_ticks_per_second writes take effect from the NEXT
+#     main-loop iteration's tick batch — Main::iteration() reads the step
+#     once per iteration, so a mutation's own batch mates can still carry
+#     the old step; that transient is scheduler-keyed and unpinned
+#     (r92-critic F1). Settled: 30 -> delta 0.033333, 120 -> 0.008333.
+#   tscale: time_scale multiplies the delivered delta at unchanged tps
+#     (settled, same boundary discipline) — 0.5 -> 0.008333, 2 -> 0.033333,
+#     10 -> 0.166667.
 #   edge:   time_scale=0 keeps physics callbacks alive with delta 0.000000
 #     and pf still advances; time_scale=-1 delivers delta -0.016667.
 #   refuse: physics_ticks_per_second=0 / -60 are refused with one engine
 #     ERROR line each (e=1) and read back unchanged at 60.
-#   steps:  max_physics_steps_per_frame=1 under time_scale=10 delivers the
-#     full 0.166667 delta (not a clamped slice); a runtime
+#   steps:  max_physics_steps_per_frame=1 under time_scale=10 settles to
+#     the full 0.166667 delta (not a clamped slice); a runtime
 #     physics_interpolation write reads back true but leaves the delta
 #     schedule unchanged; physics_jitter_fix=0.0 reads back 0.0000 with
 #     the schedule unchanged (the scout arm had only ever written the
