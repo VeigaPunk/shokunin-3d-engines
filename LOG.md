@@ -1235,3 +1235,12 @@ corpus/knowledge/seed.md).
 - FOLDS QUEUED: SP1-5; reviewer F1-F5 report nits; freed_space segv
   class -> flake list; navagent re-anchor spec (fc6d033); bpy stamp
   spec (6421676).
+- ROUND 94 (2026-10-15): cannon.js physics lattice. ADMIT-with-findings at
+  05e72ef (284 rows, +19). Author 284/284; verifier VERIFIED (114/114
+  rep-stable); critic F1 MEDIUM: 4 accumulator cells flip ~1% under heavy
+  contention (cannon 16.67ms wall-bail) -> flake list; reviewer
+  corroborated (1/200). SP1-4 -22 queued. package.json load-bearing
+  resolved in author's favor (battery layout fails without it).
+- LAWS: bit-exact Float64 determinism; internalStep clock dep; scoped
+  order neutrality; mu/v0 friction grid; fixedStep wall-clock class;
+  dt=0 NaN freeze; GridBroadphase refusal; 6 negative controls.

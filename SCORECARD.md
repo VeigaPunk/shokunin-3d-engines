@@ -221,3 +221,13 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 | calibration | **improved** | boundary corrections folded pre-authoring (queue_free post-E, refusal semantics, order instability unpinned); scribe F1 pre-commit child delta disclosed (diagnostic-only, M surfaces identical 54/54); reviewer F1-F5 report nits filed; critic F1 adds freed_space segv class to flake list. |
 
 | r93 | game-dev-3d | Area3D signal-in-tick ordering lattice | ADMIT | 661749f |
+
+## Round 94 verdict — 2026-10-15
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | +19 `r94_cannon_*` rows → 284 (13 ord + 6 neg): vendored cannon-es@0.20.0 byte-pinned, 66 children/pass, bit-exact sha witnesses. Author 284/284; verifier 19/19 @load123, 114/114 rep-stable; reviewer 57/57 fresh exact. |
+| depth | **improved** | Boundary falsifications folded pre-authoring (internalStep impurity, order-neutrality scope, μ/v₀ grid, fixedStep wall-clock, dt=0 NaN-freeze, GridBroadphase refusal); cross-runtime check v24↔v26 node byte-identical. |
+| calibration | **improved** | Critic F1: accumulator cells flip ~1% under contention via engine-internal 16.67 ms wall-bail — corroborated by reviewer, filed to flake list; package.json load-bearing proven in battery layout; nan-witness over-count corrected; SP1-4 −22 queued. |
+
+| r94 | game-dev-3d | cannon.js physics lattice | ADMIT-with-findings | 05e72ef |
