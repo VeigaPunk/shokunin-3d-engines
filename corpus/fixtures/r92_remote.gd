@@ -14,9 +14,13 @@ extends SceneTree
 #
 # Laws pinned (all three engines, node side — RemoteTransform3D is a
 # backend-blind SceneTree feature):
-#   boundary: writes never propagate synchronously; the target observes the
-#     pushed transform at the next frame boundary, whether the write ran in
-#     an idle or a physics callback (one await suffices).
+#   boundary: writes never propagate synchronously in GLOBAL-coordinate
+#     mode; the target observes the pushed transform at the next frame
+#     boundary, whether the write ran in an idle or a physics callback
+#     (one await suffices). r92-boundary measured local-mode propagation
+#     synchronous at the write and set_notify_transform(false) killing
+#     propagation outright — both unarmed here (r92-reviewer F1; evidence
+#     in reports/round-92/r92-boundary.md, corpus/live/r92-boundary/).
 #   phase:    a physics-callback write is stale to a LATER same-tick
 #     _physics_process and visible to the next idle/tick read; an
 #     idle-callback write is stale to a same-frame _process reader and
