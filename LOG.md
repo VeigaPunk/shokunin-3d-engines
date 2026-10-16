@@ -1279,3 +1279,15 @@ corpus/knowledge/seed.md).
   ClassDB.instantiate null under load (made=360/beq=0 vs pin).
 - LAWS: animtree node-mode matrix; clsloop td-encoded heap abort;
   bep/beg/bec process-flag envelopes; backend-shared ClassDB behavior.
+- ROUND 100 (2026-10-16): fixed-fps/quit-after/render-target/Area3D
+  capstone. ADMIT-with-findings on corrected successor 523c943
+  (350 rows, +8; 142 cells), not on incomplete 8183191 alone.
+  Pristine author landing: 342/350, eight missing-seed failures;
+  successor: all eight new rows independently green, unchanged pins.
+  Verifier reproduced 350/350 x2 with seeds, 142/142 cells x2,
+  six detected mutations and two exact controls. All five wave-B
+  reports filed; see reports/round-100/r100-adjudicator.md.
+- CARRY-FORWARD: life bound 5->3 proven but not landed; source-line
+  coupling in six cells; unbound-envelope content blind spot;
+  parent simplifications queued; documentary corrections recorded.
+  Lane integration/review queue closes at r100, not all fold debt.
