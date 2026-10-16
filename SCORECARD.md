@@ -231,3 +231,13 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 | calibration | **improved** | Critic F1: accumulator cells flip ~1% under contention via engine-internal 16.67 ms wall-bail — corroborated by reviewer, filed to flake list; package.json load-bearing proven in battery layout; nan-witness over-count corrected; SP1-4 −22 queued. |
 
 | r94 | game-dev-3d | cannon.js physics lattice | ADMIT-with-findings | 05e72ef |
+
+## Round 95 verdict — 2026-10-15
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | +20 `r95_bullet_*` rows → 304 (14 ord + 6 neg): 52 child cells/pass, vendored `.so` byte-pinned and reproduced by `strip --strip-debug` of the scout build. Author 304/304 ×2; verifier 304/304 + 208 dual-build execs byte-identical. |
+| depth | **improved** | Boundary corrections encoded (DIRECT-scoped wall-clock purity, SHM `rt=1` pump-live `fell`, order non-neutrality permutation-invariant, 1-ulp friction, EMPTY calibration); all 6 negatives carry in-child live controls (r94 gap closed). |
+| calibration | **improved** | SHM `d`-count race found independently by 4 seats (teardown partial-line prints; M-surface never moves — fail-closed); fold spec filed (envelope/deterministic drain); SP1–SP6 −42 proven queued; `sl_force_mb` rest-pin precision corrected. |
+
+| r95 | game-dev-3d | Bullet/PyBullet physics lattice | ADMIT-with-findings | 0767b59 |

@@ -1244,3 +1244,11 @@ corpus/knowledge/seed.md).
 - LAWS: bit-exact Float64 determinism; internalStep clock dep; scoped
   order neutrality; mu/v0 friction grid; fixedStep wall-clock class;
   dt=0 NaN freeze; GridBroadphase refusal; 6 negative controls.
+- ROUND 95 (2026-10-15): Bullet/PyBullet lattice. ADMIT-with-findings at
+  0767b59 (304 rows, +20). Author 304/304 x2; verifier VERIFIED (208
+  dual-build execs byte-identical); 4-seat consensus F1: SHM d-count is
+  teardown partial-line race (fold spec: envelope or deterministic
+  drain). SP1-6 -42 queued.
+- LAWS: DIRECT-scoped purity; SHM rt=1 pump-live fell class; order
+  non-neutrality (permutation-invariant); 1-ulp friction; EMPTY-sleep;
+  six negatives w/ in-child live controls; vendored .so reproduced.
