@@ -1271,3 +1271,11 @@ corpus/knowledge/seed.md).
   consensus (fold spec: per-pid dir + mask).
 - LAWS: cold-cache load->null; err=0/7/43; sniff both ways; res://
   blind-concat; write bytes==generate_buffer; pgsha backend-inert.
+- ROUND 99 (2026-10-16): AnimationTree lattice.
+  ADMIT-with-findings at f1ff626 (342 rows, +9). Verifier VERIFIED
+  (342/342 x2); critic 549 cells 0 diffs 8/10 mutations; reviewer
+  ADMIT-recommend; simplifier -9 proven, SP-5 refuted (probe line-
+  coupling); scribe AUDIT PASSES-WF — F1 material: clsloop
+  ClassDB.instantiate null under load (made=360/beq=0 vs pin).
+- LAWS: animtree node-mode matrix; clsloop td-encoded heap abort;
+  bep/beg/bec process-flag envelopes; backend-shared ClassDB behavior.
