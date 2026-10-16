@@ -1252,3 +1252,9 @@ corpus/knowledge/seed.md).
 - LAWS: DIRECT-scoped purity; SHM rt=1 pump-live fell class; order
   non-neutrality (permutation-invariant); 1-ulp friction; EMPTY-sleep;
   six negatives w/ in-child live controls; vendored .so reproduced.
+- ROUND 96 (2026-10-15): Jolt determinism lattice. ADMIT at dd054a2
+  (316 rows, +12). All 5 gates green; verifier 316/316 + 492/492 cells
+  re-derived; allowlist mutation-proven in vivo.
+- LAWS: Jolt warning expected-error class w/ self-gate; --time-scale =
+  tps bake byte-identical both backends; Dummy vacuity w/ live controls;
+  sleep1 hang rc=137 + 128KiB cap + log removal.

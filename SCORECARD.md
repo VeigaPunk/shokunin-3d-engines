@@ -241,3 +241,13 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 | calibration | **improved** | SHM `d`-count race found independently by 4 seats (teardown partial-line prints; M-surface never moves — fail-closed); fold spec filed (envelope/deterministic drain); SP1–SP6 −42 proven queued; `sl_force_mb` rest-pin precision corrected. |
 
 | r95 | game-dev-3d | Bullet/PyBullet physics lattice | ADMIT-with-findings | 0767b59 |
+
+## Round 96 verdict — 2026-10-15
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | +12 `r96_joltdet_*` rows → 316: Jolt-vs-GP determinism grid across joints/contacts/restkin/tps/solver/mechanisms/tscale/ffps/dummy/thread/knobs/nc; 123 cells ×4 passes, 160 bounded children. |
+| depth | **improved** | Warning allowlist proven load-bearing in vivo (mutation reddens 3/3); ts=tps sha-equal 6/6 both backends; hang reproduced outside the parent (rc=137, 9.7 MB); verifier re-derived all 492 cell shas from a contract re-implementation. |
+| calibration | **improved** | Three gates converged on the header's "warning fails the arm" defect (marker check is the real gate); thread-knob drop-blindness filed; SP1-4 −14 proven queued; seeds_unchanged flag correctly attributed sibling r97 files. |
+
+| r96 | game-dev-3d | Jolt determinism lattice | ADMIT | dd054a2 |
