@@ -251,3 +251,13 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 | calibration | **improved** | Three gates converged on the header's "warning fails the arm" defect (marker check is the real gate); thread-knob drop-blindness filed; SP1-4 −14 proven queued; seeds_unchanged flag correctly attributed sibling r97 files. |
 
 | r96 | game-dev-3d | Jolt determinism lattice | ADMIT | dd054a2 |
+
+## Round 97 verdict — 2026-10-15
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | +8 `r97_nodelat_*` rows → 324: joint/soft-body/DSS/CB/vehicle/XR/suspension surfaces, 79 cells + 83 bounded children per pass; deferred-pin census kept unpinned by design. |
+| depth | **improved** | All five gates independently re-derived the cells (verifier 79/79x3, critic 317/317, reviewer 237/237, scribe 79/79); mutations detected 10/11 + 6/6 + mechanistic moves; xr crash envelope strict (fail-closed). |
+| calibration | **improved** | Task-headline mismatch flagged by author (authored real claims, not invented cells); prose-vs-receipt corrections folded (plat_ride fl=1, ClassDB 45); 4-seat consensus comment defects queued. |
+
+| r97 | game-dev-3d | node lattice (joints/soft/DSS/CB/vehicle/XR) | ADMIT | ec27b78 |

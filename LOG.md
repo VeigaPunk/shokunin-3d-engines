@@ -1258,3 +1258,10 @@ corpus/knowledge/seed.md).
 - LAWS: Jolt warning expected-error class w/ self-gate; --time-scale =
   tps bake byte-identical both backends; Dummy vacuity w/ live controls;
   sleep1 hang rc=137 + 128KiB cap + log removal.
+- ROUND 97 (2026-10-15): node lattice (joints/soft/DSS/CB/vehicle/XR).
+  ADMIT at ec27b78 (324 rows, +8). All 5 gates green; verifier 79/79 x3
+  cells re-derived; xr crash envelope strict-pinned (236+ children, 0
+  escapes).
+- LAWS: joint bind-order free + get_rid validity backend split; soft-
+  body contract + thickness-selective GP law; DSS flag matrix; deferred
+  deletion step-granular; CB edges; vehicle lattice.
