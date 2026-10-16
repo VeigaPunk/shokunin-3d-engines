@@ -1265,3 +1265,9 @@ corpus/knowledge/seed.md).
 - LAWS: joint bind-order free + get_rid validity backend split; soft-
   body contract + thickness-selective GP law; DSS flag matrix; deferred
   deletion step-granular; CB edges; vehicle lattice.
+- ROUND 98 (2026-10-15): GLTF/GLB runtime-import lattice.
+  ADMIT-with-findings at b6d60b1 (333 rows, +9). Verifier VERIFIED 22/22;
+  137 cells x4 sources re-derived; user-dir concurrency hazard 4-seat
+  consensus (fold spec: per-pid dir + mask).
+- LAWS: cold-cache load->null; err=0/7/43; sniff both ways; res://
+  blind-concat; write bytes==generate_buffer; pgsha backend-inert.

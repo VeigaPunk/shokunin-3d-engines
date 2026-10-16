@@ -261,3 +261,13 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 | calibration | **improved** | Task-headline mismatch flagged by author (authored real claims, not invented cells); prose-vs-receipt corrections folded (plat_ride fl=1, ClassDB 45); 4-seat consensus comment defects queued. |
 
 | r97 | game-dev-3d | node lattice (joints/soft/DSS/CB/vehicle/XR) | ADMIT | ec27b78 |
+
+## Round 98 verdict — 2026-10-15
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | +9 `r98_gltflat_*` rows → 333: cold-cache import dead-end, document taxonomy, sniff/extbin/class/write/TRS/phys/var surfaces; 17 vendored assets sha-pinned; 137 cells per pass. |
+| depth | **improved** | 4 seats re-derived all cells (581+411+411+137x4 instances); 9 mechanistic mutant detections; clobber repair proven byte-pinned vs manifest (manifest predates repair); 0 .godot minted. |
+| calibration | **improved** | Author disclosed + repaired a tracked-seed clobber — scribe caught the disclosure's own inaccuracy (the class worked); user-dir hazard named by 4 seats with a controlled repro; fold spec filed. |
+
+| r98 | game-dev-3d | GLTF/GLB runtime-import lattice | ADMIT-with-findings | b6d60b1 |
