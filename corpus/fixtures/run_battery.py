@@ -766,6 +766,44 @@ CASES = [
      'PASS r96_joltdet knobs gp{props=67,keys=67,sha=874d8759ff135309} jolt{props=67,keys=67,sha=874d8759ff135309} dummy{props=67,keys=67,sha=874d8759ff135309} keys{eq_gp_jolt=1,eq_gp_dummy=1}'),
     ("r96_joltdet_nc", "r96_joltdet.gd", ["--arm=nc"], 0,
      'PASS r96_joltdet nc nocache_stack{reps=4,pose_eq=1,pose_sha=298e8a9a00657651,y0=0.199833333,vmax=0.000093835}'),
+    # r97 gameplay node-class lattice: r97_nodelat.gd drives byte-identical
+    # copies of the r97 scout/boundary probes (res://r97_probe_*.gd) as
+    # bounded children and pins their normalized receipts. Only
+    # boundary-surviving claims are pinned: the joint node lattice (binding
+    # order free, get_rid() valid at construction on GP+Jolt / invalid on
+    # Dummy, bad-or-absent node_b silently world-pins A, non-body node_a
+    # silently inert, node-level teardown clean), the DSS flag matrix
+    # (collide_with_areas defaults false for rays, hit_from_inside on an
+    # inside ray, backend-ordered max_results survivors), the
+    # CharacterBody3D edges, the VehicleBody3D drop/drive/suspension
+    # snapshot set, the re-scoped GP soft-body law (thickness-selective
+    # contact, not "no collision") with Jolt's thin-slab-only mass/precision
+    # failures, the pinned-cloth phase law (--pins=now == pf=0; the deferred
+    # branch is censused in '#' diagnostics, never pinned), the XRServer
+    # crash/no-crash envelope, and step-granular deferred deletion under
+    # --fixed-fps batching. Declared normalizations before hashing: the
+    # allowlisted 2-line Jolt job-system warning (any position, counted in
+    # `w`), runtime object ids `<Class#12345>` -> `<Class#N>`, and crash
+    # dumps' ASLR fields (Load address -> A, `[n] <hex> ...` -> `[n] F`,
+    # frame count preserved). Allowed engine errors stay in the hashed
+    # stream and are counted in `ee`; any other ERROR-class line lands in
+    # `ue` and fails the cell.
+    ("r97_nodelat_joint", "r97_nodelat.gd", ["--arm=joint"], 0,
+     'PASS r97_nodelat joint bind@gp{rc=0,sha=dea5b2a8461d1d4f,rsha=a59accb2b7f9505b} bind@jolt{rc=0,sha=94e1d554a06cd80b,rsha=d846ded0de34df2f} bindpre@gp{rc=0,sha=9997cafb8c4452d3,rsha=a59accb2b7f9505b,req=1} badpath@gp{rc=0,sha=086ef71b41b25dd4,rsha=0fe1e04e72ab056c} badpath@jolt{rc=0,sha=ce6f1065c32b0e89,rsha=df9b0db5d4acc048} nob@gp{rc=0,sha=2f89943ee434ca5f,rsha=0fe1e04e72ab056c,req=1} bindnode@gp{rc=0,sha=029da13fce0f7537,a=-0.25,-2.6667,0.0,b=0.25,-2.9667,0.0,jrid=true} getrid@gp{rc=0,sha=0a3481b909bbcda6,prerid=true} getrid@jolt{rc=0,sha=db00753dfa79efdb,prerid=true} getrid@dummy{rc=0,sha=0db0f5bbb3c164ef,prerid=false} freerj@gp{rc=0,sha=827bb9c6ea549519,jrid=gone} freerj@jolt{rc=0,sha=89a2ad9636b38b1c,jrid=gone} freeb@gp{rc=0,sha=f85823c9332c8457,b=gone,jrid=true} freeb@jolt{rc=0,sha=71f7bf24b405cf26,b=gone,jrid=true} readd@gp{rc=0,sha=e275712b92906124,jrid=true} repath@gp{rc=0,sha=d2abaff354ea0131,jrid=true} repath@jolt{rc=0,sha=0c5f5b2d19a30df6,jrid=true} dupclaim@gp{rc=0,sha=6eed4e0a03ef4d5f,jrid=true} hmot@gp{rc=0,sha=8386a27bde66eda4,avb=0.0,0.0,-2.5} hmot@jolt{rc=0,sha=b17ef22ea73249dc,avb=0.0,0.0,-2.5019} hlim@gp{rc=0,sha=7b8357b7a7ee2b6c,avb=0.0,0.0,0.0618} exclx_on@gp{rc=0,sha=21536e018c398db1,rsha=f53f7a030f903255} exclx_off@gp{rc=0,sha=33e4cba19b626e84,rsha=57fc1fae6e7e785c,rdiff=1} clampbig@gp{rc=0,sha=8ea4d558815717a0,avb=0.0,0.0,-20.0715}'),
+    ("r97_nodelat_soft", "r97_nodelat.gd", ["--arm=soft"], 0,
+     'PASS r97_nodelat soft drop_unidx@gp{rc=0,sha=99b57992e2481b29,v4=0.0,0.0,0.0,ee=9} nomesh@gp{rc=0,sha=893963394291db42,v4=0.0,0.0,0.0} drop_idx@gp{rc=0,sha=49c898e8b15d70a5,v4=0.09066,-10.83421,-0.03045} drop_idx@jolt{rc=0,sha=6090c7a238d6d358,v4=0.0,0.05,0.0} mass_hi@jolt{rc=0,sha=a2bda43536e16b9b,v4=0.0,-16.17986,0.0} prec_hi@jolt{rc=0,sha=20cf34195cbdba97,v4=0.0,-16.17628,0.0} freeme@gp{rc=0,sha=21c8470eee4634ec,v4=-}'),
+    ("r97_nodelat_dss", "r97_nodelat.gd", ["--arm=dss"], 0,
+     'PASS r97_nodelat dss ray_areas@gp{rc=0,sha=32a12190df943d8c,n=0,col=-} ray_areason@gp{rc=0,sha=55cb526dc5b9ab59,n=7,col=area,pos=2.75,1.0,0.0} ray_hfi_in@gp{rc=0,sha=bd73e3eb2f00f00e,n=7,col=sph,pos=0.0,1.0,0.0,nrm=0.0,0.0,0.0} ray_bf_upon@gp{rc=0,sha=97a0284b42b1dc19,n=0} maxres@gp{rc=0,sha=2010048e9ea3bdcc,n=2,cols=tri,wall2} maxres@jolt{rc=0,sha=d38e56af0016e19f,n=2,cols=tri,sph}'),
+    ("r97_nodelat_cb", "r97_nodelat.gd", ["--arm=cb"], 0,
+     'PASS r97_nodelat cb float@gp{rc=0,sha=c2f218a3cb1f94ec,fl=0,wlo=1,v=0.0,-19.6,0.0} float@jolt{rc=0,sha=df89c6a4128ac1f5,fl=0,wlo=1,v=0.0,-19.6,0.0} constspd@gp{rc=0,sha=8b6c315225c5fcdd,rv=1.8794,-0.684,0.0,fl=1} constspd@jolt{rc=0,sha=5214f2c4198be251,rv=3.3011,3.2221,0.0,fl=1} updir@gp{rc=0,sha=128650c57c47ad9e,fl=0,wlo=1} plat_ride@gp{rc=0,sha=f23b8c598797c2a8,fl=1,n=1,pvel=0.0,2.0,0.0,rv=0.0,2.0,0.0} plat_ride@jolt{rc=0,sha=7a9b0b685c818491,fl=1,n=0,pvel=0.0,2.0,0.0,rv=0.0,2.0,0.0} margin_hi@gp{rc=0,sha=765796008882b411,pos=0.0,0.5919,0.0,fl=1} margin_hi@jolt{rc=0,sha=b87a175e557527e1,pos=0.0,0.5969,0.0,fl=1} maxslides@gp{rc=0,sha=9b802f6398262836,rv=-0.0096,0.0,0.1265,pos=1.8874,0.5729,0.0012} maxslides@jolt{rc=0,sha=e4bdc80b4671f698,rv=0.0,0.0,-0.0,pos=1.8846,0.5769,-0.0019}'),
+    ("r97_nodelat_vehicle", "r97_nodelat.gd", ["--arm=vehicle"], 0,
+     'PASS r97_nodelat vehicle drop@gp{rc=0,sha=425a7c4a250955a0,pos=0.0,0.7299,0.0,contact=4} drop@jolt{rc=0,sha=425a7c4a250955a0,pos=0.0,0.7299,0.0,contact=4,feq=1} drive@gp{rc=0,sha=2dc9c1d471174ff6,rsha=1f8d813ac9d0a8d6} drive@jolt{rc=0,sha=aeb5f254cccaa0db,rsha=e5477edb7d679d86,rdiff=1} susp5@gp{rc=0,sha=f761665a4a39d0c6,pos=0.0,0.4566,0.0,v=0.145} susp0@gp{rc=0,sha=7741a9af1081538c,pos=0.0,0.3383,0.0,v=0.2448}'),
+    ("r97_nodelat_softfloor", "r97_nodelat.gd", ["--arm=softfloor"], 0,
+     'PASS r97_nodelat softfloor drop_t01@gp{rc=0,sha=021b21a69333e3a7,v4=0.09066,-10.83421,-0.03045,below=1} drop_t02@gp{rc=0,sha=748ce1acea5c7817,v4=0.0,0.1018,0.0,below=0} drop_t04@gp{rc=0,sha=5714c2ea28095819,v4=-4.26994,-0.96678,-0.03466,below=1} drop_t05@gp{rc=0,sha=bb4cc69cb0569202,v4=0.06371,0.09762,0.20894,below=0} drop_t20@gp{rc=0,sha=ef1b312b7ceadb82,v4=0.0,0.1018,0.0,below=0} drop_t01@jolt{rc=0,sha=0fc9882d8bbc8147,v4=0.0,0.05,0.0,below=0} drop_t20@jolt{rc=0,sha=69ff6344ecc2ebdb,v4=0.0,0.05,0.0,below=0} drop_t20@dummy{rc=0,sha=cefaf203142636d0,v4=0.0,0.0,0.0,below=1} mass_hi_t20@jolt{rc=0,sha=4fef1fc13182c198,v4=0.0,0.05,0.0,below=0} prec_hi_t20@jolt{rc=0,sha=84984deff8751aed,v4=0.0,0.05,0.0,below=0} collide_now@gp{rc=0,sha=7734de7aa5179c12,v4=0.0001,2.92696,0.00145,ball=-0.0137,0.24,-0.01219} collide_now@jolt{rc=0,sha=159b1b67d75327f6,v4=-0.00028,3.01132,0.00028,ball=-0.65199,0.53641,-0.39756} pinmid_now@gp{rc=0,sha=19659f85cf0e1000,v4=0.0,3.0,0.0,v0=-0.50021,2.67761,-0.38735}'),
+    ("r97_nodelat_xr", "r97_nodelat.gd", ["--arm=xr"], 0,
+     'PASS r97_nodelat xr cls@gp{rc=134,sha=1f797afd5a60b213,ee=1,classes=45,noinst=5,fatal=1} cls@jolt{rc=134,sha=1f797afd5a60b213,ee=1,classes=45,noinst=5,fatal=1} iso_clean@gp{rc=0,sha=2f027270a931ffad,done=1,fatal=0} iso_xrs@gp{rc=134,sha=90e164358a6e264c,ee=1,done=1,fatal=1} iso_xrs@jolt{rc=134,sha=90e164358a6e264c,ee=1,done=1,fatal=1} xr_same@gp{rc=0,sha=7e30f0a2b0579d1a,ee=2,lk=1,identical=false} xr_keep@gp{rc=0,sha=c62382279f80e8cb,ee=2,lk=1} xr_dbl@gp{rc=0,sha=a7e3e042022c4839,ee=2,lk=1,same=false}'),
+    ("r97_nodelat_freegrain", "r97_nodelat.gd", ["--arm=freegrain"], 0,
+     'PASS r97_nodelat freegrain ffps10_at6@gp{rc=0,sha=f1cf8e683768615f,same_frame=1,gone_next=1} ffps60_at8@gp120{rc=0,sha=ae09a73bdb3db917,same_frame=1,gone_next=1} ffps30_at4@gp120{rc=0,sha=cb8d0283053562eb,same_frame=1,gone_next=1} ffps60_at8@jolt120{rc=0,sha=ae09a73bdb3db917,same_frame=1,gone_next=1}'),
 ]
 
 # Adversarial self-check, run only with --probe-failing. Exactly one authored
