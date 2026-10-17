@@ -1298,3 +1298,8 @@ corpus/knowledge/seed.md).
 - Already present as real fields: `axes` (score table, lines 6–10), `planned` (inline `planned:` field carrying r71–r72 planned claims), `retired` (inline `retired: none.`). No duplicate sections added for these.
 - Added at end of `SCORECARD.md`: `## Capabilities` repertoire-table scaffold (empty, `— none yet —`) and `## Saturation` placeholder — the saturation line + stagnation window N remain the lane's to declare on a round per `AXES.md` §The stagnation nudge.
 - No axis claim was made, no score moved, no verdict changed; no capability row enters through this rollout.
+## 2026-10-17 — root README rewritten
+
+- **Trigger.** Operator request for a repository front door. The previous `README.md` was the shared lane template: it described `SKILL.md` as possibly absent and did not name the battery.
+- **Action.** Rewrote `README.md` from `PROVINCE.md` (owned 3D surfaces, mint host fact, refusals), `corpus/fixtures/run_battery.py` docstring (seed copy, exit contract), `corpus/fixtures/three/run_layer_cases.mjs` (seed hash before/after), and `corpus/README.md`. File listing of the repo root has no `SKILL.md`. Scorecard statement that scalar scores stay unassigned is repeated, not replaced with a number. No Devin wiki URL was present and none was added.
+- **Non-claims.** No axis claim, no score change, no fixture run. Not a craft round.
