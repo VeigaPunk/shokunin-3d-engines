@@ -5,6 +5,8 @@ under the [shokunin skill](https://github.com/VeigaPunk/shokunin).
 
 **Domain:** 3D game production verified by executable headless fixtures — spatial queries, camera/frustum, transforms, determinism — across Godot, three.js, Unity, Unreal.
 
+**Wiki:** [Devin wiki](https://app.devin.ai/org/veigapunk/wiki/VeigaPunk/shokunin-3d-engines?branch=main)
+
 ## What's here
 
 - `SKILL.md` — the distilled expertise: decision tables, error patterns,
