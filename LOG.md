@@ -1298,3 +1298,13 @@ corpus/knowledge/seed.md).
 - Already present as real fields: `axes` (score table, lines 6–10), `planned` (inline `planned:` field carrying r71–r72 planned claims), `retired` (inline `retired: none.`). No duplicate sections added for these.
 - Added at end of `SCORECARD.md`: `## Capabilities` repertoire-table scaffold (empty, `— none yet —`) and `## Saturation` placeholder — the saturation line + stagnation window N remain the lane's to declare on a round per `AXES.md` §The stagnation nudge.
 - No axis claim was made, no score moved, no verdict changed; no capability row enters through this rollout.
+
+## 2026-10-17 — root README
+
+Motivating evidence: the previous root README was the shared lane template.
+It named a root `SKILL.md` this repo does not have (`ls`). The replacement
+cites `PROVINCE.md`, `SHONEN.md` (one independent box, round 2),
+`corpus/fixtures/run_battery.py`, `corpus/knowledge/engines.md`, and the
+docstrings of `corpus/artifacts/glb-r9/validate_glb.py`,
+`unity-r19/verify_scene.py`, and `unreal-r22/verify_descriptor.py`. No
+Devin wiki URL was present; none was added.
