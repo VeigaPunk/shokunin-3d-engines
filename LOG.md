@@ -1298,3 +1298,10 @@ corpus/knowledge/seed.md).
 - Already present as real fields: `axes` (score table, lines 6–10), `planned` (inline `planned:` field carrying r71–r72 planned claims), `retired` (inline `retired: none.`). No duplicate sections added for these.
 - Added at end of `SCORECARD.md`: `## Capabilities` repertoire-table scaffold (empty, `— none yet —`) and `## Saturation` placeholder — the saturation line + stagnation window N remain the lane's to declare on a round per `AXES.md` §The stagnation nudge.
 - No axis claim was made, no score moved, no verdict changed; no capability row enters through this rollout.
+
+## 2026-10-17 — repository README
+
+- **Trigger.** Root `README.md` was the shared lane stub: it named `SKILL.md` as possibly absent and did not say which battery to run. `ls` shows no root `SKILL.md`.
+- **Evidence.** Domain, host fact, and refusals are `PROVINCE.md`. Battery contract (scratch copy, SHA-256 seed map, exit 0 only when every case passes) is the docstring of `corpus/fixtures/run_battery.py`. Engine census path `corpus/knowledge/engines.md` exists. three.js drivers are `corpus/fixtures/three/run_*.mjs`.
+- **Action.** Replaced `README.md`. `corpus/README.md` was not edited. No Devin wiki URL was present.
+- **Outcome.** No axis claim; no score moved. The Godot battery was not executed in this change.
