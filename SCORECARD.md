@@ -271,3 +271,15 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 | calibration | **improved** | Author disclosed + repaired a tracked-seed clobber — scribe caught the disclosure's own inaccuracy (the class worked); user-dir hazard named by 4 seats with a controlled repro; fold spec filed. |
 
 | r98 | game-dev-3d | GLTF/GLB runtime-import lattice | ADMIT-with-findings | b6d60b1 |
+
+## Capabilities
+
+| Capability | What it can now do | Evidence pointer | First-working round |
+|---|---|---|---|
+| — none yet — | | | |
+
+Rows enter only through a round that demonstrates the capability running (`AXES.md` §Capabilities); none enter through this rollout.
+
+## Saturation
+
+The lane's saturation line and stagnation window N are to be declared by the lane on its next round per `AXES.md` §The stagnation nudge; not asserted by this conformance change.
