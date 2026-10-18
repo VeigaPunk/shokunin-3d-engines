@@ -3,9 +3,9 @@
 From the repo root run:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/artifacts/glb-r12/run_import.py
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_cases.mjs
+python3 corpus/artifacts/glb-r12/run_import.py
+python3 corpus/fixtures/run_battery.py
+node corpus/fixtures/three/run_cases.mjs
 ```
 
 `run_import.py` creates three ignored isolated scratch Godot projects and copies only authored `project.godot`, `inspect_import.gd` and one `triangle.glb` into each. It executes `godot --headless --editor --import --path <scratch>` then `godot --headless --path <scratch> --script res://inspect_import.gd`; full per-process stdout/stderr, exits and seed hashes are in `corpus/live/runs/r12-import-<timestamp>/verdicts.json`. No source-seed edits or rendering.

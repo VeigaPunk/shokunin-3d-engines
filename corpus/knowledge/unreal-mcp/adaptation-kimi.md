@@ -361,3 +361,146 @@ MATCH    skills/unreal-skill/SKILL.md  7a0af781c458c7d1
 ```
 
 Every one matched; the vendored tree is byte-identical to the pin.
+
+---
+
+## Correction note — 2026-10-18 (r103)
+
+Dated correction note, not a rewrite. **No row, and no line above this heading, is altered** — the
+table stands as the r101 record. This note names exactly which citations are void as written and
+what replaced them. Re-measured on this host 2026-10-18; every command and its observed output is
+in `reports/round-103/note/author.md`.
+
+Trigger, and why it is *not* §5's invalidation rule: §5 invalidates only pointers of the form
+"`kimi` binary strings line N", and only on a CLI upgrade. The binary anchor is **intact** —
+`kimi --version` → `2.2.0`, BuildID `5e67bdf95c7646325b62decd0ca8d375d325ea19`, binary sha256
+`8ee7405d82958f0a50a3aab0773aba9e01057978bad93ba379eaf89e5b6111af`. So the rule is not triggered;
+what follows is three **non-binary** citation repairs.
+
+### C1 — row 2's `config.toml:2932-2937` is void; the precedent is now at line 3290
+
+Row 2 cites `~/.kimi-code/config.toml:2932-2937` as the "live `[[hooks]]` precedent". Re-measured
+2026-10-18:
+
+```bash
+$ sed -n '2932,2937p' ~/.kimi-code/config.toml
+reasoning_key = "reasoning_content"
+support_efforts = [ "low", "medium", "high" ]
+
+[models."opencode-go-7/longcat-2.0"]
+provider = "opencode-go-7"
+model = "longcat-2.0"
+$ grep -n '\[\[hooks\]\]' ~/.kimi-code/config.toml
+3290:[[hooks]]
+$ sed -n '3290,3294p' ~/.kimi-code/config.toml
+[[hooks]]
+event = "Notification"
+matcher = "task\\.completed"
+command = "notify-send -a 'Kimi Code' 'Background task completed' 'A Kimi Code background task finished'"
+timeout = 5
+$ wc -l ~/.kimi-code/config.toml
+3322 /home/vgpnk/.kimi-code/config.toml
+```
+
+That range is a `[models.*]` table, exactly as r102 found. **The line number is not stable and must
+not be cited as if it were:** r101 cited 2932, r102 re-measured **3219** (file then 3251 lines),
+r103 measures **3290** (file now 3322 lines). The operator edits this file continuously. The
+**substance survives** — the file's only `[[hooks]]` block exists, with the same field vocabulary
+row 2 depends on (`event` / `matcher` / `command` / `timeout`) — but its event is `Notification`,
+not `SessionStart`, so it is a precedent for the *mechanism*, never for row 2's specific event.
+**Correct citation:** "`~/.kimi-code/config.toml`, the file's sole `[[hooks]]` block (line 3290 as
+of 2026-10-18; a moving target — locate it with `grep -n '\[\[hooks\]\]'`, do not trust the
+number)". Row 13's `config.toml:1` is **not** affected: line 1 is still
+`default_permission_mode = "auto"`.
+
+### C2 — every docs URL needs an `/en/` (or `/zh/`) prefix
+
+Rows 1, 3, 5, 6, 7, 9, 10 and 13 cite `moonshotai.github.io/kimi-code/{customization,configuration}/*.html`
+as a source pointer. Re-measured 2026-10-18:
+
+```bash
+$ for u in customization/plugins.html customization/hooks.html customization/mcp.html configuration/config-files.html; do
+>   printf 'root %s -> ' "$u"; curl -s -o /dev/null -w '%{http_code}\n' --max-time 15 "https://moonshotai.github.io/kimi-code/$u"
+>   printf 'en   %s -> ' "$u"; curl -s -o /dev/null -w '%{http_code}\n' --max-time 15 "https://moonshotai.github.io/kimi-code/en/$u"; done
+root customization/plugins.html -> 404
+en   customization/plugins.html -> 200
+root customization/hooks.html -> 404
+en   customization/hooks.html -> 200
+root customization/mcp.html -> 404
+en   customization/mcp.html -> 200
+root configuration/config-files.html -> 404
+en   configuration/config-files.html -> 200
+```
+
+All four root-relative paths are **404**; all four `/en/`-prefixed paths are **200**. **The cited
+content is unchanged** — only the prefix moved. The section anchors the rows name still resolve on
+the `/en/` pages (`Hooks in Plugins`, `Installation and Management`, `Plugin Manifest`,
+`Return Values`, `Top-level fields`), row 9's verbatim quotation still reads "per-user and apply to
+all projects; project-level installation scope is not yet supported", and rows 3/5's
+`startup` / `resume` / `exit code 2` facts still appear. **No row's content changes; prefix `/en/`.**
+
+### C3 — the `/tmp` working trees are volatile; the vendored `upstream/` copy is the durable substitute
+
+§3.2, §3.3 and §4.2 run commands against `/tmp/ue-skills-ref` and `/tmp/r101work`, and §4's greps
+against `/tmp/kimi_strings.txt`. Those `/tmp` paths are not durable: a reboot or `tmpfiles` sweep
+removes them. They happen to be **currently live** (`/tmp/ue-skills-ref` still exists and
+`git -C /tmp/ue-skills-ref rev-parse HEAD` still returns the pin `a6aa73a…`), so the sections
+re-run as written *today* — but they will not always. This file already ships the substitute:
+`corpus/knowledge/unreal-mcp/upstream/`, byte-identical to the pinned clone. Re-ran §4.2's search
+against the vendored copy:
+
+```bash
+$ cd corpus/knowledge/unreal-mcp
+$ grep -o "GenerateClientConfig [A-Za-z]*" upstream/skills/unreal-mcp/references/*.md | sort -u
+upstream/skills/unreal-mcp/references/operations.md:GenerateClientConfig ClaudeCode
+upstream/skills/unreal-mcp/references/setup.md:GenerateClientConfig ClaudeCode
+$ grep -rn "Kimi\|kimi" upstream/ --include=*.md --include=*.json ; echo "exit=$?"
+exit=1
+$ sha256sum upstream/hooks/hooks.json upstream/README.md
+259124f0631b7d4b92e9e744003e8798b910c00dac201656b97906b3b5ebdc0c  upstream/hooks/hooks.json
+483693ad0e14d027525d25c3d3eb4883e774b2f8150013181f9625e2dd46b40e  upstream/README.md
+```
+
+Same verdict as §4.2 (only target `ClaudeCode`; the plugin has zero Kimi awareness), and both
+digests match the subtree manifest prefixes (`259124f0…b5ebdc0c`, `483693ad…46b40e`), so the
+vendored copy is still the pinned content. **Correct citation for §3.2, §3.3 and §4.2:** the
+vendored `upstream/` path, not `/tmp/ue-skills-ref`.
+
+### Carry-forward, and what is *not* claimed
+
+- The published changelog's newest entry is **2.1.1**, older than the installed **2.2.0** binary
+  (`curl -s …/en/release-notes/changelog.html | grep -c '2\.2\.0'` → `0`). The docs lag the shipped
+  CLI, so for CLI-surface claims the binary is the source of truth — which is already §5's posture.
+  This strengthens the table's design rather than weakening it.
+- **No row's verdict changes.** All 15 rows keep their status class. The six `verified-here` rows
+  (2, 3, 4, 8, 9, 11) were re-confirmed by the r102 re-probe where re-run (rows 3 and 4 directly;
+  rows 2, 8, 9, 11 via their binary/file pointers).
+- **`unproven-runtime` is untouched.** Unreal Editor is still not installed on this host, so every
+  §6 item remains `unproven-runtime`. Nothing in this note is a runtime claim about the editor or
+  about live-MCP behavior, and none is implied.
+
+### Out of scope — a fourth defect this note does *not* repair
+
+While re-checking the citations, a defect outside the three classes above surfaced at the **top of
+this file** (`:6`), and it is reported here rather than silently folded in. Line 6 cites the upstream
+repository as `https://github.com/EpicGames/unreal-engine-skills-for-claude-code`, which is **404** —
+the real repository name carries a `-plugin` suffix:
+
+```bash
+$ curl -sIL --max-time 20 -o /dev/null -w '%{http_code}\n' https://github.com/EpicGames/unreal-engine-skills-for-claude-code
+404
+$ curl -sIL --max-time 20 -o /dev/null -w '%{http_code}\n' https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin
+200
+$ git ls-remote https://github.com/EpicGames/unreal-engine-skills-for-claude-code main
+remote: Repository not found.
+fatal: repository 'https://github.com/EpicGames/unreal-engine-skills-for-claude-code/' not found
+$ git ls-remote https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin main
+a6aa73ada02a9fb1f5415bec491f9942c519b297	refs/heads/main
+```
+
+`PROVENANCE.md:19` already records the correct `-plugin` URL, and the `/tmp/ue-skills-ref` clone's
+`origin` is the `-plugin` form — so this is a one-token display defect in the header only; the pin,
+the SHA and the provenance chain are unaffected. It is left **uncorrected on purpose**: line 6 is
+part of the r101 record above this heading, and repairing it belongs to whoever owns the header
+(either a further dated note, or a separate declared repair). Independent confirmation, with the
+same conclusion: `reports/round-103/note/urls.md` §4 (SEAT-07).

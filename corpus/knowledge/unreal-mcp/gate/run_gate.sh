@@ -21,6 +21,7 @@
 #
 # usage: corpus/knowledge/unreal-mcp/gate/run_gate.sh
 # ---------------------------------------------------------------------------
+# shellcheck disable=SC2016  # check 4's pointer regexes use LITERAL backticks (markdown delimiters), not substitution
 set -u
 
 for _t in git sha256sum grep find sort comm; do
@@ -35,6 +36,10 @@ EXPECTED_CARDS=13
 EXPECTED_STATIC=12
 EXPECTED_UNPROVEN=1
 EXPECTED_VERIFIED=0
+# A3 (SEAT-09, r103): the pinned 13 domain names, sorted file stems. Mirrored in
+# gate/README.md ("Pinned card-name set"); both must be edited together. The set
+# is the r101 declared 13 (`corpus/knowledge/unreal-mcp/README.md` card table).
+PINNED_CARD_NAMES='actors-scene animation-controlrig assets-content blueprints editor-general gameplay-gas materials meshes-textures scripting-programmatic sequencer testing-automation ui-umg-slate vfx-niagara-dataflow'
 
 SUB=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 GATE_DIR=$SUB/gate
@@ -62,11 +67,17 @@ fi
 #     emptied or corrupted with the gate still green.
 MANIFEST_COUNT=$(find "$SUB/.manifest.d" -maxdepth 1 -name '*.sha256' | wc -l)
 printf 'MANIFEST_FILES=%s\n' "$MANIFEST_COUNT"
-if ! (cd "$SUB" && sha256sum --strict -c .manifest.d/*.sha256 >/tmp/advgate/.h1 2>&1); then
+# r103 (SEAT-09): this used a hardcoded /tmp/advgate/.h1 scratch file. On any host
+# without that directory the redirect failed, sha256sum never ran, and the gate
+# printed `FAIL per-seat manifest sweep` + exit 1 on a CLEAN tree — a spurious
+# fail-closed, not a real one. mktemp keeps the check host-independent.
+MANLOG=$(mktemp)
+if ! (cd "$SUB" && sha256sum --strict -c .manifest.d/*.sha256 >"$MANLOG" 2>&1); then
   printf 'FAIL per-seat manifest sweep (--strict) failed:\n'
-  sed 's/^/  /' /tmp/advgate/.h1
+  sed 's/^/  /' "$MANLOG"
   FAILS=$((FAILS+1))
 fi
+rm -f "$MANLOG"
 
 # HARDENING H (SEAT-20): CRLF in a manifest is accepted silently by sha256sum -c.
 CRFILES=$(grep -lU $'\r' "$SUB"/.manifest.d/*.sha256 2>/dev/null)
@@ -103,15 +114,40 @@ fi
 #   2c path-set equality both ways: vendored upstream/ files vs `git ls-files`;
 #   2d byte-identity per file against the clone's blobs — a manifest can be
 #      regenerated from a corrupted tree, this comparison cannot.
+#
+#   A4 (SEAT-09, r103) — BLOCKED is a THIRD state, not a flavour of FAIL.
+#     Until r103 an unreachable upstream printed `STEP=FAIL` and the run exited 1,
+#     so a reader of `GATE RESULT: FAIL` could not tell "this host had no network"
+#     from "the vendored bytes diverge". Now the clone-failure branch prints a
+#     distinct `CHECK 2 BLOCKED (network)` signal and the gate exits 2 — declared
+#     in gate/README.md alongside the other codes. It is deliberately NOT counted
+#     in FAILS: a blocked check is not a failed check, and the exit code is what
+#     carries the distinction (0 PASS / 1 FAIL / 2 BLOCKED).
+#     GATE_REF=<path> names an existing clone at the pin for air-gapped runs; with
+#     it set no network is touched and the check is scored normally.
 # ---------------------------------------------------------------------------
 printf 'CHECK 2 clone-equivalence\n'
-C2_PASS=1
+C2_PASS=1; C2_BLOCKED=0
+C2_REF=${GATE_REF:-}
+[ -n "$C2_REF" ] && printf 'GATE_REF=%s (offline reference; no clone attempted)\n' "$C2_REF"
 if ! command -v git >/dev/null 2>&1; then
   printf 'FAIL git not available (check 2 requires git)\n'
   C2_PASS=0
 else
   CLONE=$WORK/clone
-  if timeout 180 git clone --quiet "$REPO" "$CLONE" >"$WORK/clone.log" 2>&1; then
+  if [ -n "$C2_REF" ]; then
+    if git -C "$C2_REF" rev-parse HEAD >/dev/null 2>&1; then
+      CLONE=$C2_REF
+      C2_CLONE_RC=0
+    else
+      printf 'FAIL GATE_REF is not a git clone: %s\n' "$C2_REF"
+      C2_PASS=0; C2_CLONE_RC=1
+    fi
+  else
+    timeout 180 git clone --quiet "$REPO" "$CLONE" >"$WORK/clone.log" 2>&1
+    C2_CLONE_RC=$?
+  fi
+  if [ "$C2_PASS" -eq 1 ] && [ "$C2_CLONE_RC" -eq 0 ]; then
     C2_HEAD=$(git -C "$CLONE" rev-parse HEAD)
     C2_DIRTY=$(git -C "$CLONE" status --porcelain | wc -l)
     git -C "$CLONE" ls-files | sort > "$WORK/clone-files.txt"
@@ -136,26 +172,49 @@ else
     done < "$WORK/clone-files.txt"
     printf 'BLOB_DIFFS=%s\n' "$C2_BLOBDIFF"
     [ "$C2_BLOBDIFF" -eq 0 ] || C2_PASS=0
-  else
-    printf 'FAIL fresh clone failed (network down or repo unreachable) — BLOCKED, not PASS\n'
+  elif [ "$C2_PASS" -eq 1 ]; then
+    # A4: unreachable upstream — a distinct BLOCKED state, exit 2, never folded
+    # into FAILS. (Reached only when no GATE_REF was supplied; a bad GATE_REF
+    # has already set C2_PASS=0 and is a genuine FAIL.)
+    printf 'CHECK 2 BLOCKED (network)\n'
+    printf 'BLOCKED fresh clone could not complete — upstream unreachable, nothing compared\n'
+    printf 'BLOCKED exit 2 is not a verdict: the vendored bytes are UNCHECKED, not divergent\n'
     sed -n '1,5p' "$WORK/clone.log"
-    C2_PASS=0
+    C2_BLOCKED=1; C2_PASS=0
   fi
 fi
-if [ "$C2_PASS" -eq 1 ]; then printf 'STEP=PASS\n\n'; else printf 'STEP=FAIL\n\n'; FAILS=$((FAILS+1)); fi
+if [ "$C2_BLOCKED" -eq 1 ]; then
+  printf 'STEP=BLOCKED\n\n'
+elif [ "$C2_PASS" -eq 1 ]; then printf 'STEP=PASS\n\n'; else printf 'STEP=FAIL\n\n'; FAILS=$((FAILS+1)); fi
 
 # ---------------------------------------------------------------------------
-# CHECK 3 — verdict-card inventory and label scan
+# CHECK 3 — verdict-card inventory, name set, and label scan
 #   Rule (ported from reports/round-101/r101-verification-protocol.md §4): the
-#   DECLARED label is the token on the FIRST line of the card that contains any
-#   allowed token. That line must (a) appear within the first 40 lines,
+#   DECLARED label is the token on the first line that is a DECLARATION, not the
+#   first line that merely mentions a token. A declaration is anchored: the line
+#   must start (leading whitespace allowed) with one of the five label shapes the
+#   13 cards actually use — `**Label:** \`X\``, `**Label:**\`X\`**`,
+#   `**Label:** **\`X\``, `**\`X\`**`, `# Label: \`X\`` — where Label may also be
+#   `Verdict` and may carry a ` label` suffix. A2 (SEAT-09, r103): the old rule
+#   took the first token-bearing line, so a prose sentence above the declaration
+#   ("this card is emphatically not `verified-here`") hijacked it. Anchoring the
+#   match makes such a line not-a-declaration, exactly as intended.
+#   The declaration line must (a) appear within the first 40 lines,
 #   (b) be bold- or heading-marked, (c) carry exactly ONE allowed token.
-#   Expected: 13 cards, BAD=0, census 12 static-only / 1 unproven-runtime / 0
-#   verified-here.
+#   A3 (SEAT-09, r103): the 13 card FILENAMES are compared against the pinned set
+#   (PINNED_CARD_NAMES, mirrored in gate/README.md) — a renamed/typo'd card that
+#   keeps the count at 13 is a FAIL.
+#   Expected: 13 cards, BAD=0, NAME_SET=OK, census 12 static-only / 1
+#   unproven-runtime / 0 verified-here.
 # ---------------------------------------------------------------------------
 printf 'CHECK 3 verdict-card-scan\n'
 ALLOWED='(^|[^A-Za-z0-9-])(verified-here|static-only|unproven-runtime)([^A-Za-z0-9-]|$)'
 TOKENS='verified-here|static-only|unproven-runtime'
+LABEL_RE="^[[:space:]]*\\*\\*(Label|Verdict)( label)?:\\*\\*[[:space:]]*\`?($TOKENS)|\
+^[[:space:]]*\\*\\*(Label|Verdict)( label)?:[[:space:]]*\`?($TOKENS)\`?\\*\\*|\
+^[[:space:]]*(Label|Verdict)( label)?:[[:space:]]*\\*\\*[[:space:]]*\`?($TOKENS)|\
+^[[:space:]]*\\*\\*\`($TOKENS)\`\\*\\*|\
+^[[:space:]]*#+[[:space:]]*(Label|Verdict)( label)?:[[:space:]]*\`?($TOKENS)"
 CARDS=$(find "$SUB/executability" -maxdepth 1 -type f 2>/dev/null | sort)
 NONMD=$(find "$SUB/executability" -maxdepth 1 -type f ! -iname '*.md' 2>/dev/null)
 [ -n "$NONMD" ] && { printf 'FAIL non-markdown file in executability/:\n%s\n' "$NONMD"; FAILS=$((FAILS+1)); }
@@ -166,7 +225,7 @@ C3_N=$(printf '%s' "$CARDS" | grep -c . || true)
 C3_BAD=0; N_STATIC=0; N_UNPROVEN=0; N_VERIFIED=0
 while IFS= read -r f; do
   [ -z "$f" ] && continue
-  rec=$(grep -nE "$ALLOWED" "$f" | head -1)
+  rec=$(grep -nE "$LABEL_RE" "$f" | head -1)
   if [ -z "$rec" ]; then printf 'FAIL no-label       %s\n' "$f"; C3_BAD=$((C3_BAD+1)); continue; fi
   ln=${rec%%:*}; text=${rec#*:}
   cnt=$(printf '%s' "$text" | grep -oE "$ALLOWED" | wc -l)
@@ -184,7 +243,19 @@ done <<< "$CARDS"
 printf 'CARDS=%s EXPECTED=%s BAD=%s\n' "$C3_N" "$EXPECTED_CARDS" "$C3_BAD"
 printf 'CENSUS static-only=%s unproven-runtime=%s verified-here=%s EXPECTED=%s/%s/%s\n' \
   "$N_STATIC" "$N_UNPROVEN" "$N_VERIFIED" "$EXPECTED_STATIC" "$EXPECTED_UNPROVEN" "$EXPECTED_VERIFIED"
-if [ "$C3_N" -eq "$EXPECTED_CARDS" ] && [ "$C3_BAD" -eq 0 ] && \
+# A3 (SEAT-09, r103): the 13 domain names are pinned. A count-only check let a card
+# be silently dropped-and-replaced under a typo'd or renamed filename with the gate
+# still green. Names are the file stems, sorted; both directions are reported.
+NAME_BAD=0
+for n in $PINNED_CARD_NAMES; do
+  [ -f "$SUB/executability/$n.md" ] || { printf 'FAIL card-name-missing %s.md\n' "$n"; NAME_BAD=$((NAME_BAD+1)); }
+done
+for f in $CARDS; do
+  b=$(basename "$f" .md)
+  case " $PINNED_CARD_NAMES " in *" $b "*) ;; *) printf 'FAIL card-name-extra %s\n' "$(basename "$f")"; NAME_BAD=$((NAME_BAD+1));; esac
+done
+printf 'NAME_SET=%s NAME_BAD=%s\n' "$([ "$NAME_BAD" -eq 0 ] && echo OK || echo BAD)" "$NAME_BAD"
+if [ "$C3_N" -eq "$EXPECTED_CARDS" ] && [ "$C3_BAD" -eq 0 ] && [ "$NAME_BAD" -eq 0 ] && \
    [ "$N_STATIC" -eq "$EXPECTED_STATIC" ] && [ "$N_UNPROVEN" -eq "$EXPECTED_UNPROVEN" ] && \
    [ "$N_VERIFIED" -eq "$EXPECTED_VERIFIED" ]; then
   printf 'STEP=PASS\n\n'
@@ -206,44 +277,71 @@ fi
 #       upstream/README.md:500) — second line of defence for peers' reports that
 #       quote this README verbatim. EXACT match, NOT a keyword filter: a real
 #       pointer on a line that happens to say "control" is still counted.
+#   A1 (SEAT-09, r103): every ENDPOINT of a `:a-b` range or `:a,b` list is validated,
+#   and POINTERS counts endpoints (the reference sweep's semantics); POINTER_STRINGS
+#   counts the unique pointer strings those endpoints came from.
 #   Expected: UNRESOLVED=0.
 # ---------------------------------------------------------------------------
 printf 'CHECK 4 pointer-sweep\n'
 BASE=$SUB
 SELF=$GATE_DIR/README.md
 SENTINEL='upstream/nope\.md:[0-9]+|upstream/README\.md:(9999|500)'
-P_TOTAL=0; P_BAD=0; P_SKIPPED=0
+P_TOTAL=0; P_BAD=0; P_SKIPPED=0; P_STRINGS=0
 while IFS= read -r f; do
   case "$f" in "$SUB"/upstream/*|"$SELF") continue;; esac
   while IFS= read -r ptr; do
     [ -z "$ptr" ] && continue
     if printf '%s' "$ptr" | grep -qE "^($SENTINEL)$"; then P_SKIPPED=$((P_SKIPPED+1)); continue; fi
-    p=${ptr%:*}; ln=${ptr##*:}
-    P_TOTAL=$((P_TOTAL+1))
-    if [ ! -f "$BASE/$p" ]; then printf 'MISSING-PATH %s :: %s\n' "$f" "$ptr"; P_BAD=$((P_BAD+1)); continue; fi
+    P_STRINGS=$((P_STRINGS+1))
+    p=${ptr%:*}; rest=${ptr#*:}
+    if [ ! -f "$BASE/$p" ]; then
+      printf 'MISSING-PATH %s :: %s\n' "$f" "$ptr"; P_BAD=$((P_BAD+1)); continue
+    fi
     n=$(wc -l < "$BASE/$p")
-    [ "$ln" -lt 1 ] && { printf 'LINE-ZERO %s :: %s\n' "$f" "$ptr"; P_BAD=$((P_BAD+1)); }
-    [ "$ln" -gt "$n" ] && { printf 'LINE-OOR %s :: %s (max %s)\n' "$f" "$ptr" "$n"; P_BAD=$((P_BAD+1)); }
-  done < <(grep -ohE "upstream/[^\`\"|)]+\.[A-Za-z0-9]+:[0-9]+" "$f" | sort -u)
+    # A1 (SEAT-09, r103): validate EVERY endpoint, and count every endpoint. `:a-b`
+    # ranges and `:a,b` lists were previously read as `:a` only, because the old
+    # extraction regex stopped at the first number while ${ptr##*:} still kept the
+    # tail — so a planted `upstream/README.md:1-9999` resolved as in-range `:1`.
+    # P_TOTAL now has the same semantics as the round's reference sweep
+    # (reports/round-102/reruns/pointer-sweep.sh): one increment per endpoint.
+    for ln in $(printf '%s' "$rest" | tr ',-' '  '); do
+      P_TOTAL=$((P_TOTAL+1))
+      [ "$ln" -lt 1 ] && { printf 'LINE-ZERO %s :: %s\n' "$f" "$ptr"; P_BAD=$((P_BAD+1)); continue; }
+      [ "$ln" -gt "$n" ] && { printf 'LINE-OOR %s :: %s (max %s)\n' "$f" "$ptr" "$n"; P_BAD=$((P_BAD+1)); }
+    done
+  done < <(grep -ohE "upstream/[^\`\"|)]+\.[A-Za-z0-9]+:[0-9]+([,-][0-9]+)*" "$f" | sort -u)
 done < <(find "$SUB" -type f \( -iname '*.md' -o -iname '*.txt' -o -iname '*.markdown' \) | sort)
 # HARDENING G (SEAT-20): the upstream/-only sweep cannot see dangling
 # corpus/... or reports/... pointers. Sweep backtick-wrapped repo-relative paths.
-REPO=$(cd "$SUB/../../.." && pwd)
+# A4b (SEAT-09, r103): this root is named REPO_ROOT, not REPO. It previously
+# reused REPO — the same name as the upstream clone URL at the top of the file —
+# so any caller overriding the clone target (`REPO=<url> run_gate.sh`, the obvious
+# way to test the BLOCKED path) silently repointed pass B at a nonexistent
+# directory and produced ~26 spurious MISSING-PATH-REL failures. Distinct names.
+REPO_ROOT=$(cd "$SUB/../../.." && pwd)
 while IFS= read -r ptr; do
   [ -z "$ptr" ] && continue
   case "$ptr" in http*|*'<'*|*'*'*|*'$'*) continue;; esac
   case "$ptr" in
-    corpus/*|reports/*|docs/*) base=$REPO ;;
+    corpus/*|reports/*|docs/*) base=$REPO_ROOT ;;
     executability/*|gate/*|upstream/*|.manifest.d/*) base=$SUB ;;
     *) continue ;;
   esac
   P_TOTAL=$((P_TOTAL+1))
   [ -e "$base/$ptr" ] || { printf 'MISSING-PATH-REL %s\n' "$ptr"; P_BAD=$((P_BAD+1)); }
 done < <({ grep -rhoE '[`][A-Za-z0-9_./-]+\.(md|sh|json|sha256|py|txt)(:[0-9]+)?[`]' --include='*.md' "$SUB" 2>/dev/null; grep -rhoE '[`]upstream/[A-Za-z0-9_./-]+:[0-9]+[`]' --include='*.md' "$SUB" 2>/dev/null; } | tr -d '`' | sed 's/:[0-9]\+$//' | sort -u)
-printf 'POINTERS=%s SKIPPED_CONTROL_SENTINELS=%s UNRESOLVED=%s\n' "$P_TOTAL" "$P_SKIPPED" "$P_BAD"
+printf 'POINTERS=%s POINTER_STRINGS=%s SKIPPED_CONTROL_SENTINELS=%s UNRESOLVED=%s\n' \
+  "$P_TOTAL" "$P_STRINGS" "$P_SKIPPED" "$P_BAD"
 if [ "$P_BAD" -eq 0 ]; then printf 'STEP=PASS\n\n'; else printf 'STEP=FAIL\n\n'; FAILS=$((FAILS+1)); fi
 
 # ---------------------------------------------------------------------------
+# Exit codes (A4, SEAT-09, r103): 0 PASS · 1 FAIL · 2 BLOCKED (CHECK 2 only).
+# The code, not the summary line, is what distinguishes a blocked check from a
+# failed one; GATE RESULT still reads PASS/FAIL so no existing caller breaks.
+if [ "$C2_BLOCKED" -eq 1 ] && [ "$FAILS" -eq 0 ]; then
+  printf 'GATE RESULT: BLOCKED (checks failed: 0; CHECK 2 could not run)\n'
+  exit 2
+fi
 printf 'GATE RESULT: %s (checks failed: %s)\n' \
   "$([ "$FAILS" -eq 0 ] && echo PASS || echo FAIL)" "$FAILS"
 [ "$FAILS" -eq 0 ] && exit 0 || exit 1

@@ -7,8 +7,8 @@ References read 2026-10-13:
 From repository root, use the declared isolated Python package environment:
 
 ```sh
-uv run --no-project --with pyyaml python .shokunin/game-dev-3d/corpus/artifacts/unity-r19/verify_scene.py
-uv run --no-project --with pyyaml python .shokunin/game-dev-3d/corpus/artifacts/unity-r19/verify_scene.py .shokunin/game-dev-3d/corpus/artifacts/unity-r19/Hierarchy.broken-reference.unity --expect-reject
+uv run --no-project --with pyyaml python corpus/artifacts/unity-r19/verify_scene.py
+uv run --no-project --with pyyaml python corpus/artifacts/unity-r19/verify_scene.py corpus/artifacts/unity-r19/Hierarchy.broken-reference.unity --expect-reject
 ```
 
 `Hierarchy.unity` is four self-authored documents: GameObject IDs 100/200,

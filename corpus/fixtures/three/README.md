@@ -3,10 +3,10 @@
 From the repository root:
 
 ```sh
-npm ci --prefix .shokunin/game-dev-3d/corpus/fixtures/three
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_cases.mjs
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r6.json
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py
+npm ci --prefix corpus/fixtures/three
+node corpus/fixtures/three/run_cases.mjs
+node corpus/fixtures/three/run_cases.mjs --receipt corpus/live/three-r6.json
+python3 corpus/fixtures/run_battery.py
 ```
 
 The three-case runner uses the actual pinned three.js 0.186.1 `Object3D` API. A parent translated `(2,0,0)` and rotated `Y=90°` owns a child translated `(0,0,-3)` and rotated `X=90°`. World origin must be the hand-authored `(-1,0,0)`; parent multiplication must equal `child.matrixWorld`. The negative arm proves the parent/child setup is still intact then rejects reversed composition (exit 2). A scratch-like `--mutate-offset` run changes child Z to -4 while leaving the literal expectation fixed; it must exit 1 with a specific diagnostic. The runner enforces exit/stream/line signatures and unchanged seed SHA-256 values. No WebGL renderer is created, no pixels read, and no Unity/Unreal runtime inference is made. `node_modules/` is ignored and `npm ci` is lane-local.
@@ -16,8 +16,8 @@ The three-case runner uses the actual pinned three.js 0.186.1 `Object3D` API. A 
 From the repository root after the same lane-local `npm ci`:
 
 ```sh
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_camera_cases.mjs
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_camera_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r58.json
+node corpus/fixtures/three/run_camera_cases.mjs
+node corpus/fixtures/three/run_camera_cases.mjs --receipt corpus/live/three-r58.json
 ```
 
 This separate camera battery uses three.js `PerspectiveCamera`,
@@ -38,8 +38,8 @@ rendered pixels, browser, or claim about camera behavior in another engine.
 ## Orthographic depth-invariant projection/frustum (round 60)
 
 ```sh
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_ortho_cases.mjs
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_ortho_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r60.json
+node corpus/fixtures/three/run_ortho_cases.mjs
+node corpus/fixtures/three/run_ortho_cases.mjs --receipt corpus/live/three-r60.json
 ```
 
 The three-case runner uses three.js `OrthographicCamera` under Node with
@@ -64,7 +64,7 @@ logging or portable terminal formatting.
 
 ## Orthographic near-plane exclusion (round 62)
 
-`node .shokunin/game-dev-3d/corpus/fixtures/three/run_ortho_cases.mjs`
+`node corpus/fixtures/three/run_ortho_cases.mjs`
 now includes (2,1,-0.5) at positive forward depth 0.5, before near=1.
 It shares asserted NDC x=0.5/y=1/3 with depths 4,8,12 but has live
 `Frustum.containsPoint=false`; the negative retains both in-frustum
@@ -75,8 +75,8 @@ Node math result, not a rendered pixel or general precision threshold.
 ## Translated triangle Raycaster (round 63)
 
 ```sh
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_ray_cases.mjs
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_ray_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r63.json
+node corpus/fixtures/three/run_ray_cases.mjs
+node corpus/fixtures/three/run_ray_cases.mjs --receipt corpus/live/three-r63.json
 ```
 
 Real three.js `BufferGeometry` triangle vertices (-1,-1,0),(1,-1,0),
@@ -89,7 +89,7 @@ seeds. No renderer, GL, pixels, browser or arbitrary-mesh guarantee.
 
 ## Raycast front/back material side (round 64)
 
-`node .shokunin/game-dev-3d/corpus/fixtures/three/run_ray_cases.mjs`
+`node corpus/fixtures/three/run_ray_cases.mjs`
 adds a `FrontSide` negative using the same translated triangle. Its winding
 normal is +Z; the ray from (2,0,0) down -Z hits at z=-5, while the
 reverse ray from (2,0,-10) up +Z reaches the same interior point but
@@ -101,8 +101,8 @@ behavior, not rendered backface culling or all mesh winding regimes.
 ## Ordered Raycaster hits across two meshes (round 65)
 
 ```sh
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_order_cases.mjs
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_order_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r65.json
+node corpus/fixtures/three/run_order_cases.mjs
+node corpus/fixtures/three/run_order_cases.mjs --receipt corpus/live/three-r65.json
 ```
 
 Two separate translated triangle Mesh objects share a ray at x=2,y=0,
@@ -116,7 +116,7 @@ transparency, GPU behavior or arbitrary scene ordering.
 
 ## Raycaster near/far distance gates (round 66)
 
-`node .shokunin/game-dev-3d/corpus/fixtures/three/run_order_cases.mjs`
+`node corpus/fixtures/three/run_order_cases.mjs`
 now adds two controls with both original triangles intact. Ray near=4,
 far=10 excludes depth3 but retains depth5; ray near=0,far=4 retains
 depth3 but excludes depth5. Each checks measured object identity, point
@@ -139,8 +139,8 @@ claim extends to arbitrary floating-point boundary precision or rendering.
 ## Raycaster layer masks (round 68)
 
 ```sh
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_layer_cases.mjs
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_layer_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r68.json
+node corpus/fixtures/three/run_layer_cases.mjs
+node corpus/fixtures/three/run_layer_cases.mjs --receipt corpus/live/three-r68.json
 ```
 
 Separate identical triangle meshes at depths 3 and 5 use object layers 0
