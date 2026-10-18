@@ -1,0 +1,8 @@
+[application]
+
+config/name="r92rstale"
+
+[physics]
+
+common/physics_ticks_per_second=60
+3d/physics_engine="Dummy"

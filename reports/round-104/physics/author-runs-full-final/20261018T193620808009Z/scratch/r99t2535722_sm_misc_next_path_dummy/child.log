@@ -1,0 +1,35 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+SM_LINK root=AnimationNodeStateMachine pb=():<AnimationNodeStateMachinePlayback#-9223372009994451489> nodes=[&"End", &"Start", &"a", &"b", &"c"] params=n=22 parameters/current_length,parameters/current_position,parameters/current_delta,parameters/playback,parameters/End/current_length,parameters/End/current_position,parameters/End/current_delta,parameters/Start/current_length,parameters/Start/current_position,parameters/Start/current_delta,parameters/a/current_length,parameters/a/current_position,parameters/a/current_delta,parameters/a/backward,parameters/b/current_length,parameters/b/current_position,parameters/b/current_delta,parameters/b/backward,parameters/c/current_length,parameters/c/current_position,parameters/c/current_delta,parameters/c/backward
+NP_NODES mode=1 [&"End", &"Start", &"a", &"b", &"c"] ntr=2
+S pf=3 node=a actor=(0.0000,0.0000,0.0000) tp=0.0000 fading= cond=<null> cond2=-
+S pf=4 node=a actor=(0.0667,0.0000,0.0000) tp=0.0167 fading= cond=<null> cond2=-
+S pf=5 node=a actor=(0.1333,0.0000,0.0000) tp=0.0333 fading= cond=<null> cond2=-
+NP_AT_A mode=1 S pf=5 node=a actor=(0.1333,0.0000,0.0000) tp=0.0333 fading= cond=<null> cond2=- travel_path=[]
+S pf=6 node=c actor=(0.2000,0.0000,0.0000) tp=0.0000 fading= cond=<null> cond2=-
+S pf=7 node=c actor=(0.0000,0.0000,0.0000) tp=0.0000 fading= cond=<null> cond2=-
+S pf=8 node=c actor=(0.0667,0.0000,0.0000) tp=0.0167 fading= cond=<null> cond2=-
+NP_TRAVEL_C mode=1 S pf=8 node=c actor=(0.0667,0.0000,0.0000) tp=0.0167 fading= cond=<null> cond2=- travel_path=[]
+NP_NEXT_IMMEDIATE mode=1 node=c path=[]
+S pf=9 node=c actor=(0.1333,0.0000,0.0000) tp=0.0333 fading= cond=<null> cond2=-
+S pf=10 node=c actor=(0.2000,0.0000,0.0000) tp=0.0500 fading= cond=<null> cond2=-
+S pf=11 node=c actor=(0.2667,0.0000,0.0000) tp=0.0667 fading= cond=<null> cond2=-
+S pf=12 node=c actor=(0.3333,0.0000,0.0000) tp=0.0833 fading= cond=<null> cond2=-
+NP_AFTER mode=1 S pf=12 node=c actor=(0.3333,0.0000,0.0000) tp=0.0833 fading= cond=<null> cond2=- travel_path=[]
+SM_LINK root=AnimationNodeStateMachine pb=():<AnimationNodeStateMachinePlayback#-9223372009457580580> nodes=[&"End", &"Start", &"a", &"b", &"c"] params=n=22 parameters/current_length,parameters/current_position,parameters/current_delta,parameters/playback,parameters/End/current_length,parameters/End/current_position,parameters/End/current_delta,parameters/Start/current_length,parameters/Start/current_position,parameters/Start/current_delta,parameters/a/current_length,parameters/a/current_position,parameters/a/current_delta,parameters/a/backward,parameters/b/current_length,parameters/b/current_position,parameters/b/current_delta,parameters/b/backward,parameters/c/current_length,parameters/c/current_position,parameters/c/current_delta,parameters/c/backward
+NP_NODES mode=2 [&"End", &"Start", &"a", &"b", &"c"] ntr=2
+S pf=14 node=c actor=(0.0000,0.0000,0.0000) tp=0.0000 fading= cond=<null> cond2=-
+S pf=15 node=c actor=(0.0667,0.0000,0.0000) tp=0.0167 fading= cond=<null> cond2=-
+S pf=16 node=c actor=(0.1333,0.0000,0.0000) tp=0.0333 fading= cond=<null> cond2=-
+NP_AT_A mode=2 S pf=16 node=c actor=(0.1333,0.0000,0.0000) tp=0.0333 fading= cond=<null> cond2=- travel_path=[]
+S pf=17 node=c actor=(0.2000,0.0000,0.0000) tp=0.0500 fading= cond=<null> cond2=-
+S pf=18 node=c actor=(0.2667,0.0000,0.0000) tp=0.0667 fading= cond=<null> cond2=-
+S pf=19 node=c actor=(0.3333,0.0000,0.0000) tp=0.0833 fading= cond=<null> cond2=-
+NP_TRAVEL_C mode=2 S pf=19 node=c actor=(0.3333,0.0000,0.0000) tp=0.0833 fading= cond=<null> cond2=- travel_path=[]
+NP_NEXT_IMMEDIATE mode=2 node=c path=[]
+S pf=20 node=c actor=(0.4000,0.0000,0.0000) tp=0.1000 fading= cond=<null> cond2=-
+S pf=21 node=c actor=(0.4667,0.0000,0.0000) tp=0.1167 fading= cond=<null> cond2=-
+S pf=22 node=c actor=(0.5333,0.0000,0.0000) tp=0.1333 fading= cond=<null> cond2=-
+S pf=23 node=c actor=(0.6000,0.0000,0.0000) tp=0.1500 fading= cond=<null> cond2=-
+NP_AFTER mode=2 S pf=23 node=c actor=(0.6000,0.0000,0.0000) tp=0.1500 fading= cond=<null> cond2=- travel_path=[]
+SM_DONE case=next_path

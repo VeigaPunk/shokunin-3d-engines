@@ -1,0 +1,5 @@
+M0 case=det_base engine=cannon-es-0.20.0+three-0.186.1
+M det_base base h=0e24fb5aca619253 y@1=4.997272 y@30=3.733635 y@60=1.561085 y@120=1.499985 y@240=1.499985
+M det_base meta contacts=0 fric=0 sleep=2,2,2,2 nan=false
+M det_base ball x=0.001538955 y=1.499985073 q=-0.003870579,-0.000000704,0.002548041,0.999989263 stepnumber=240 time=4.000000000
+M DONE case=det_base

@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+DOCBUF append_err=0 bytes=576
+DOCBUF root=TriScene:Node3D pos=(0.0, 0.0, 0.0)
+DOCBUF TREE TriScene:Node3D
+DOCBUF TREE   RootNode:Node3D
+DOCBUF TREE     TriMesh:MeshInstance3D mesh=ArrayMesh tris=1

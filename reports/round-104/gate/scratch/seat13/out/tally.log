@@ -1,0 +1,12 @@
+run1   rc=1 bytes=2102   GATE RESULT: FAIL
+run2   rc=1 bytes=2102   GATE RESULT: FAIL
+run3   rc=1 bytes=2102   GATE RESULT: FAIL
+run4   rc=1 bytes=2102   GATE RESULT: FAIL
+run5   rc=1 bytes=2102   GATE RESULT: FAIL
+run6   rc=1 bytes=2102   GATE RESULT: FAIL
+run7   rc=1 bytes=2102   GATE RESULT: FAIL
+run8   rc=1 bytes=2102   GATE RESULT: FAIL
+run9   rc=1 bytes=2102   GATE RESULT: FAIL
+run10  rc=1 bytes=2102   GATE RESULT: FAIL
+run11  rc=1 bytes=2102   GATE RESULT: FAIL
+run12  rc=1 bytes=2102   GATE RESULT: FAIL

@@ -1,0 +1,13 @@
+M0 case=trace engine=blender-5.2.1
+M trace MUT ts=0.25 outdated=True
+M trace R5 f05=(0.000000,0.000000,4.860652)
+M trace R20 f20=(0.000000,0.000000,4.860652)
+M trace T f21=(0.000000,0.000000,4.860652) f30=(0.000000,0.000000,4.860652) f40=(0.000000,0.000000,4.860652) frozen=True
+M trace H2 f10=(0.000000,0.000000,4.956466) f20=(0.000000,0.000000,4.807371)
+M trace T2 f30=(0.000000,0.000000,4.552688)
+M trace T3 f60=(0.000000,0.000000,3.159576)
+M trace SUMMARY h1=c3af015e07cdf24e t=d32f1a69ce8ae319 h2=db5a3d0cbf7ef968 t2=4fd4be6202d9e92d t3=0b43f52c0daceded h1_eq_h2=False t_eq_t2=False
+M DONE case=trace
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

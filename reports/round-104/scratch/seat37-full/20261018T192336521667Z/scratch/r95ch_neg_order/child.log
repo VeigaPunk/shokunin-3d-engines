@@ -1,0 +1,4 @@
+M0 case=neg_order engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M neg_order neg-order forward=02309c52da41ef33 reverse=76988acc55682c1a
+# pybullet build time: Oct 15 2026 03:47:36
+NEGATIVE REJECTED: r95_bullet neg_order neg-order creation order is not bit-neutral 02309c52da41ef33->76988acc55682c1a

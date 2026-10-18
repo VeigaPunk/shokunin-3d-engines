@@ -1,0 +1,76 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ENGINE 4.7.2-stable (arch_linux)
+CLS VehicleBody3D exists=true inst=ok methods=6
+CLS VehicleWheel3D exists=true inst=ok methods=34
+CLS SoftBody3D exists=true inst=ok methods=39
+CLS PinJoint3D exists=true inst=ok methods=2
+CLS HingeJoint3D exists=true inst=ok methods=4
+CLS SliderJoint3D exists=true inst=ok methods=2
+CLS ConeTwistJoint3D exists=true inst=ok methods=2
+CLS Generic6DOFJoint3D exists=true inst=ok methods=12
+CLS Joint3D exists=true inst=no_instantiate methods=9
+CLS CharacterBody3D exists=true inst=ok methods=49
+CLS XRAnchor3D exists=true inst=ok methods=2
+CLS XRCamera3D exists=true inst=ok methods=0
+CLS XRController3D exists=true inst=ok methods=5
+CLS XROrigin3D exists=true inst=ok methods=4
+CLS XRServer exists=true inst=ok methods=22
+CLS XRInterface exists=true inst=no_instantiate methods=28
+CLS MobileVRInterface exists=true inst=ok methods=20
+CLS WebXRInterface exists=true inst=no_instantiate methods=18
+CLS XRBodyTracker exists=true inst=ok methods=8
+CLS XRHandTracker exists=true inst=ok methods=14
+CLS XRFaceTracker exists=true inst=ok methods=4
+CLS PhysicsServer3D exists=true inst=no_instantiate methods=175
+CLS PhysicsDirectSpaceState3D exists=true inst=no_instantiate methods=6
+CLS PhysicsShapeQueryParameters3D exists=true inst=ok methods=18
+CLS PhysicsRayQueryParameters3D exists=true inst=ok methods=17
+CLS PhysicsPointQueryParameters3D exists=true inst=ok methods=10
+CLS SpringBoneSimulator3D exists=true inst=ok methods=83
+CLS PhysicalBone3D exists=true inst=ok methods=38
+CLS PhysicalBoneSimulator3D exists=true inst=ok methods=5
+CLS BoneAttachment3D exists=true inst=ok methods=12
+CLS Skeleton3D exists=true inst=ok methods=56
+CLS RayCast3D exists=true inst=ok methods=35
+CLS ShapeCast3D exists=true inst=ok methods=39
+CLS SpringArm3D exists=true inst=ok methods=12
+CLS AnimatableBody3D exists=true inst=ok methods=2
+CLS StaticBody3D exists=true inst=ok methods=6
+CLS RigidBody3D exists=true inst=ok methods=60
+CLS Area3D exists=true inst=ok methods=50
+CLS CollisionShape3D exists=true inst=ok methods=10
+CLS CollisionPolygon3D exists=true inst=ok methods=13
+CLS ConcavePolygonShape3D exists=true inst=ok methods=4
+CLS ConvexPolygonShape3D exists=true inst=ok methods=2
+CLS HeightMapShape3D exists=true inst=ok methods=9
+CLS SeparationRayShape3D exists=true inst=ok methods=4
+CLS WorldBoundaryShape3D exists=true inst=ok methods=2
+SPOT Joint3D set_node_a=Y set_node_b=Y get_node_a=Y get_node_b=Y set_exclude_nodes_from_collision=Y get_exclude_nodes_from_collision=Y
+SPOT PinJoint3D set_param=Y get_param=Y
+SPOT HingeJoint3D set_param=Y get_param=Y set_flag=Y get_flag=Y
+SPOT SliderJoint3D set_param=Y get_param=Y
+SPOT ConeTwistJoint3D set_param=Y get_param=Y
+SPOT Generic6DOFJoint3D set_param=- get_param=- set_flag=- get_flag=-
+SPOT VehicleBody3D set_engine_force=Y set_brake=Y set_steering=Y
+SPOT VehicleWheel3D is_in_contact=Y get_contact_body=Y get_skidinfo=Y get_rpm=Y
+SPOT SoftBody3D pin_point=- unpin_point=- is_point_pinned=Y set_simulation_precision=Y get_simulation_precision=Y set_total_mass=Y get_collision_mask=Y
+SPOT CharacterBody3D move_and_slide=Y is_on_floor=Y is_on_floor_only=Y is_on_wall=Y is_on_wall_only=Y is_on_ceiling=Y is_on_ceiling_only=Y get_floor_normal=Y get_wall_normal=Y get_platform_velocity=Y get_last_motion=Y get_slide_collision_count=Y get_slide_collision=Y get_floor_angle=Y get_real_velocity=Y
+SPOT XRServer get_world_scale=Y set_world_scale=Y get_reference_frame=Y get_primary_interface=Y
+SPOT PhysicsServer3D soft_body_create=Y soft_body_update_rendering_server=Y soft_body_set_mesh=Y soft_body_pin_point=Y
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 55edfdec8000
+
+[1] 7fd67aa3e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7fd67aa3e6f0]
+[2] 55edff0b2012 (main+11ea012) - /usr/bin/godot(+0x11ea012) [0x55edff0b2012]
+[3] 55edfef24062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x55edfef24062]
+[4] 7fd67aa27781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7fd67aa27781]
+[5] 7fd67aa278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7fd67aa278b9]
+[6] 55edfef986d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x55edfef986d5]
+-- END OF C++ BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

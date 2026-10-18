@@ -1,0 +1,64 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE fm_plain_ri alive=t27,n0
+CHILD_NOTE fm_plain_ri freed
+SCRIPT ERROR: Invalid call. Nonexistent function 'get_rest_info' in base 'previously freed'.
+          at: _call_read (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:885)
+          GDScript backtrace (most recent call first):
+              [0] _call_read (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:885)
+              [1] _child_freed_method (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:5990)
+              [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:400)
+CHILD_NOTE fm_plain_ri pre=nil
+ERROR: Parameter "space" is null.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:193)
+   GDScript backtrace (most recent call first):
+       [0] _child_freed_method (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:5991)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:400)
+CHILD_NOTE fm_plain_ri refetch=nil
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 5652ee27b000
+
+[1] 7f2e36c3e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7f2e36c3e6f0]
+[2] 5652effff40f (main+1d8440f) - /usr/bin/godot(+0x1d8440f) [0x5652effff40f]
+[3] 5652f417b2d1 (main+5f002d1) - /usr/bin/godot(+0x5f002d1) [0x5652f417b2d1]
+[4] 5652f4acef6b (main+6853f6b) - /usr/bin/godot(+0x6853f6b) [0x5652f4acef6b]
+[5] 5652f479c4ca (main+65214ca) - /usr/bin/godot(+0x65214ca) [0x5652f479c4ca]
+[6] 5652efbbbb17 (main+1940b17) - /usr/bin/godot(+0x1940b17) [0x5652efbbbb17]
+[7] 5652efa44106 (main+17c9106) - /usr/bin/godot(+0x17c9106) [0x5652efa44106]
+[8] 5652f4acee9e (main+6853e9e) - /usr/bin/godot(+0x6853e9e) [0x5652f4acee9e]
+[9] 5652f479c4ca (main+65214ca) - /usr/bin/godot(+0x65214ca) [0x5652f479c4ca]
+[10] 5652efbbbb17 (main+1940b17) - /usr/bin/godot(+0x1940b17) [0x5652efbbbb17]
+[11] 5652efae926e (main+186e26e) - /usr/bin/godot(+0x186e26e) [0x5652efae926e]
+[12] 5652efaef753 (main+1874753) - /usr/bin/godot(+0x1874753) [0x5652efaef753]
+[13] 5652efaf87f5 (main+187d7f5) - /usr/bin/godot(+0x187d7f5) [0x5652efaf87f5]
+[14] 5652f4acef6b (main+6853f6b) - /usr/bin/godot(+0x6853f6b) [0x5652f4acef6b]
+[15] 5652f473c863 (main+64c1863) - /usr/bin/godot(+0x64c1863) [0x5652f473c863]
+[16] 5652f473cd98 (main+64c1d98) - /usr/bin/godot(+0x64c1d98) [0x5652f473cd98]
+[17] 5652f4b06d90 (main+688bd90) - /usr/bin/godot(+0x688bd90) [0x5652f4b06d90]
+[18] 5652efbbd923 (main+1942923) - /usr/bin/godot(+0x1942923) [0x5652efbbd923]
+[19] 5652efae926e (main+186e26e) - /usr/bin/godot(+0x186e26e) [0x5652efae926e]
+[20] 5652efaef753 (main+1874753) - /usr/bin/godot(+0x1874753) [0x5652efaef753]
+[21] 5652efaf87f5 (main+187d7f5) - /usr/bin/godot(+0x187d7f5) [0x5652efaf87f5]
+[22] 5652f4acef6b (main+6853f6b) - /usr/bin/godot(+0x6853f6b) [0x5652f4acef6b]
+[23] 5652f473c863 (main+64c1863) - /usr/bin/godot(+0x64c1863) [0x5652f473c863]
+[24] 5652f473cd98 (main+64c1d98) - /usr/bin/godot(+0x64c1d98) [0x5652f473cd98]
+[25] 5652f4b06d90 (main+688bd90) - /usr/bin/godot(+0x688bd90) [0x5652f4b06d90]
+[26] 5652f23beeb0 (main+4143eb0) - /usr/bin/godot(+0x4143eb0) [0x5652f23beeb0]
+[27] 5652ef465278 (main+11ea278) - /usr/bin/godot(+0x11ea278) [0x5652ef465278]
+[28] 5652ef2d7062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x5652ef2d7062]
+[29] 7f2e36c27781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7f2e36c27781]
+[30] 7f2e36c278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7f2e36c278b9]
+[31] 5652ef34b6d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x5652ef34b6d5]
+-- END OF C++ BACKTRACE --
+================================================================
+GDScript backtrace (most recent call first):
+    [0] _held_space (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:5312)
+    [1] _child_freed_method (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:5993)
+    [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-full/20261018T192336521667Z/scratch/phys3d_events.gd:400)
+-- END OF GDSCRIPT BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

@@ -1,0 +1,4 @@
+M0 case=par_sleep_nat engine=cannon-es-0.20.0+three-0.186.1
+M par_sleep_nat sleep_natural world.allowSleep=true sleepStep=62 state=2 y=0.499998 v=0.000000
+M par_sleep_nat velWrite y=0.499998 v=4.999163 state=2 thenWakeUp y=0.580575 v=4.834659 state=0 (yBefore=0.499998)
+M DONE case=par_sleep_nat

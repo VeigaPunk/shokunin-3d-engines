@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE js_dummy prio=0/0 gap=0.0000,0.0000 lv=0.0000,0.0000 clear=0.0000/0.0000/0/0.0000/0.0000 remade=0 freed=0/ok/ok
+CHILD_RESULT js_dummy_backend=Dummy
+CHILD_RESULT js_dummy_prio_before=0
+CHILD_RESULT js_dummy_prio_after=0
+CHILD_RESULT js_dummy_ctl_gap=0.0000
+CHILD_RESULT js_dummy_pri_gap=0.0000
+CHILD_RESULT js_dummy_ctl_lv=0.0000
+CHILD_RESULT js_dummy_pri_lv=0.0000
+CHILD_RESULT js_dummy_prio_effect=none
+CHILD_RESULT js_dummy_clear_gap_before=0.0000
+CHILD_RESULT js_dummy_clear_lv_before=0.0000
+CHILD_RESULT js_dummy_clear_type_after=0
+CHILD_RESULT js_dummy_clear_gap_same=0.0000
+CHILD_RESULT js_dummy_clear_lv_next=0.0000
+CHILD_RESULT js_dummy_clear_gap_end=0.0000
+CHILD_RESULT js_dummy_double_clear=ok
+CHILD_RESULT js_dummy_remade_type=0
+CHILD_RESULT js_dummy_freed_type=0
+CHILD_RESULT js_dummy_freed_clear=ok
+CHILD_RESULT js_dummy_freed_make=ok

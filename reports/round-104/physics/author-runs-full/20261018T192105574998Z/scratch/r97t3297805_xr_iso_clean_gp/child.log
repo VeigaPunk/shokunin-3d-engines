@@ -1,0 +1,42 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+B VehicleBody3D node
+B VehicleWheel3D node
+B SoftBody3D node
+B PinJoint3D node
+B HingeJoint3D node
+B SliderJoint3D node
+B ConeTwistJoint3D node
+B Generic6DOFJoint3D node
+B CharacterBody3D node
+B XRAnchor3D node
+B XRCamera3D node
+B XRController3D node
+B XROrigin3D node
+B MobileVRInterface refcounted
+B XRBodyTracker refcounted
+B XRHandTracker refcounted
+B XRFaceTracker refcounted
+B PhysicsShapeQueryParameters3D refcounted
+B PhysicsRayQueryParameters3D refcounted
+B PhysicsPointQueryParameters3D refcounted
+B SpringBoneSimulator3D node
+B PhysicalBone3D node
+B PhysicalBoneSimulator3D node
+B BoneAttachment3D node
+B Skeleton3D node
+B RayCast3D node
+B ShapeCast3D node
+B SpringArm3D node
+B AnimatableBody3D node
+B StaticBody3D node
+B RigidBody3D node
+B Area3D node
+B CollisionShape3D node
+B CollisionPolygon3D node
+B ConcavePolygonShape3D refcounted
+B ConvexPolygonShape3D refcounted
+B HeightMapShape3D refcounted
+B SeparationRayShape3D refcounted
+B WorldBoundaryShape3D refcounted
+B DONE

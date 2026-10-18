@@ -1,0 +1,51 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+IT0 case=pin rest=1.0000 spawn_err=-0.3000
+IT t=1 gap=0.3 lv=0.0 y=1.7
+IT t=2 gap=0.192 lv=0.0 y=1.808
+IT t=3 gap=0.12288 lv=0.0 y=1.87712
+IT t=4 gap=0.078643 lv=0.0 y=1.921357
+IT t=5 gap=0.050332 lv=0.0 y=1.949668
+IT t=6 gap=0.032212 lv=0.0 y=1.967788
+IT t=7 gap=0.020616 lv=0.0 y=1.979384
+IT t=8 gap=0.013194 lv=0.0 y=1.986806
+IT t=9 gap=0.008444 lv=0.0 y=1.991556
+IT t=10 gap=0.005404 lv=0.0 y=1.994596
+IT t=15 gap=0.00058 lv=0.0 y=1.99942
+IT t=20 gap=0.000062 lv=0.0 y=1.999938
+IT t=25 gap=0.000007 lv=0.0 y=1.999993
+IT t=30 gap=0.000002 lv=0.0 y=1.999998
+IT t=35 gap=0.000002 lv=0.0 y=1.999998
+IT t=40 gap=0.000002 lv=0.0 y=1.999998
+IT t=45 gap=0.000002 lv=0.0 y=1.999998
+IT t=50 gap=0.000002 lv=0.0 y=1.999998
+IT t=55 gap=0.000002 lv=0.0 y=1.999998
+IT t=60 gap=0.000002 lv=0.0 y=1.999998
+IT t=65 gap=0.000002 lv=0.0 y=1.999998
+IT t=70 gap=0.000002 lv=0.0 y=1.999998
+IT t=75 gap=0.000002 lv=0.0 y=1.999998
+IT t=80 gap=0.000002 lv=0.0 y=1.999998
+IT t=85 gap=0.000002 lv=0.0 y=1.999998
+IT t=90 gap=0.000002 lv=0.0 y=1.999998
+IT t=95 gap=0.000002 lv=0.0 y=1.999998
+IT t=100 gap=0.000002 lv=0.0 y=1.999998
+IT t=105 gap=0.000002 lv=0.0 y=1.999998
+IT t=110 gap=0.000002 lv=0.0 y=1.999998
+IT t=115 gap=0.000002 lv=0.0 y=1.999998
+IT t=120 gap=0.000002 lv=0.0 y=1.999998
+IT t=125 gap=0.000002 lv=0.0 y=1.999998
+IT t=130 gap=0.000002 lv=0.0 y=1.999998
+IT t=135 gap=0.000002 lv=0.0 y=1.999998
+IT t=140 gap=0.000002 lv=0.0 y=1.999998
+IT t=145 gap=0.000002 lv=0.0 y=1.999998
+IT t=150 gap=0.000002 lv=0.0 y=1.999998
+IT t=155 gap=0.000002 lv=0.0 y=1.999998
+IT t=160 gap=0.000002 lv=0.0 y=1.999998
+IT t=165 gap=0.000002 lv=0.0 y=1.999998
+IT t=170 gap=0.000002 lv=0.0 y=1.999998
+IT t=175 gap=0.000002 lv=0.0 y=1.999998
+IT t=180 gap=0.000002 lv=0.0 y=1.999998
+ITSUM case=pin ticks=180 last_gap=0.000002 last_lv=0.0 last_over=0.0 last_pen0=0.0 last_sum=0.0 last_xz4=0.0 last_y2=0.0 last_y4=0.0 max_gap=0.3 max_over=-1000000000.0 max_sum=-1000000000.0 max_vmax=-1000000000.0 min_pen0=1000000000.0
+ERROR: 1 RID allocations of type 'P11JoltJoint3D' were leaked at exit.
+ERROR: 2 RID allocations of type 'P11JoltShape3D' were leaked at exit.
+ERROR: 2 RID allocations of type 'P10JoltBody3D' were leaked at exit.

@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+LF_BOOT case=finalize_touch
+LF_FIN_PRE pf=3
+LF_FIN_TOUCH valid=false
+SCRIPT ERROR: Invalid access to property or key 'global_position' on a base object of type 'previously freed'.
+          at: _finalize (res://r100b_life.gd:91)
+          GDScript backtrace (most recent call first):
+              [0] _finalize (res://r100b_life.gd:91)

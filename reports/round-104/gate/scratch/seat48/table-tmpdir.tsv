@@ -1,0 +1,7 @@
+run	rc	verdict	step_pass	step_bad	pointers	secs
+1	0	PASS (checks failed: 0)	4	0	101	0.90
+2	0	PASS (checks failed: 0)	4	0	101	0.90
+3	0	PASS (checks failed: 0)	4	0	101	0.89
+4	0	PASS (checks failed: 0)	4	0	101	0.95
+5	0	PASS (checks failed: 0)	4	0	101	0.91
+6	0	PASS (checks failed: 0)	4	0	101	0.87

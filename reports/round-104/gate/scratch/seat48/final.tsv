@@ -1,0 +1,13 @@
+arm	run	sha12	tmp_avail	rc	verdict	steps	pointers	secs
+DEFAULT	1	e55213049db7	3.2G	0	PASS (checks failed: 0)	4/0	102	1.43
+DEFAULT	2	e55213049db7	3.1G	0	PASS (checks failed: 0)	4/0	102	1.30
+DEFAULT	3	e55213049db7	3.1G	0	PASS (checks failed: 0)	4/0	102	1.21
+DEFAULT	4	e55213049db7	3.1G	2	BLOCKED (checks failed: 0; CHECK 2 could not run)	3/1	102	1.15
+DEFAULT	5	e55213049db7	3.1G	2	BLOCKED (checks failed: 0; CHECK 2 could not run)	3/1	102	1.33
+DEFAULT	6	e55213049db7	3.1G	2	BLOCKED (checks failed: 0; CHECK 2 could not run)	3/1	102	1.03
+GATE_WORKDIR	1	e55213049db7	-	0	PASS (checks failed: 0)	4/0	102	1.52
+GATE_WORKDIR	2	e55213049db7	-	0	PASS (checks failed: 0)	4/0	102	1.40
+GATE_WORKDIR	3	e55213049db7	-	1	FAIL (checks failed: 1)	3/1	103	1.84
+GATE_WORKDIR	4	e55213049db7	-	1	FAIL (checks failed: 1)	3/1	103	1.58
+GATE_WORKDIR	5	e55213049db7	-	1	FAIL (checks failed: 1)	3/1	103	2.66
+GATE_WORKDIR	6	e55213049db7	-	1	FAIL (checks failed: 1)	3/1	103	3.20

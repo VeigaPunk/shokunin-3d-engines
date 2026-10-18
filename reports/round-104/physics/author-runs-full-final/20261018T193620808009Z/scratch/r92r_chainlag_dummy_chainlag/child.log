@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=chainlag engine=Dummy
+M chainlag w1_fwd order=fwd write=1.0 f1[b=1.0 c=1.0 leaf=1.0] f2[b=1.0 c=1.0 leaf=1.0] f3[b=1.0 c=1.0 leaf=1.0] f4[b=1.0 c=1.0 leaf=1.0]
+M chainlag w2_fwd order=fwd write=2.0 f1[b=2.0 c=2.0 leaf=2.0] f2[b=2.0 c=2.0 leaf=2.0] f3[b=2.0 c=2.0 leaf=2.0] f4[b=2.0 c=2.0 leaf=2.0]
+M chainlag w3_fwd order=fwd write=3.0 f1[b=3.0 c=3.0 leaf=3.0] f2[b=3.0 c=3.0 leaf=3.0] f3[b=3.0 c=3.0 leaf=3.0] f4[b=3.0 c=3.0 leaf=3.0]
+M chainlag w4_fwd order=fwd write=4.0 f1[b=4.0 c=4.0 leaf=4.0] f2[b=4.0 c=4.0 leaf=4.0] f3[b=4.0 c=4.0 leaf=4.0] f4[b=4.0 c=4.0 leaf=4.0]
+M chainlag w1_rev order=rev write=1.0 f1[b=1.0 c=1.0 leaf=1.0] f2[b=1.0 c=1.0 leaf=1.0] f3[b=1.0 c=1.0 leaf=1.0] f4[b=1.0 c=1.0 leaf=1.0]
+M chainlag w2_rev order=rev write=2.0 f1[b=2.0 c=2.0 leaf=2.0] f2[b=2.0 c=2.0 leaf=2.0] f3[b=2.0 c=2.0 leaf=2.0] f4[b=2.0 c=2.0 leaf=2.0]
+M chainlag w3_rev order=rev write=3.0 f1[b=3.0 c=3.0 leaf=3.0] f2[b=3.0 c=3.0 leaf=3.0] f3[b=3.0 c=3.0 leaf=3.0] f4[b=3.0 c=3.0 leaf=3.0]
+M chainlag w4_rev order=rev write=4.0 f1[b=4.0 c=4.0 leaf=4.0] f2[b=4.0 c=4.0 leaf=4.0] f3[b=4.0 c=4.0 leaf=4.0] f4[b=4.0 c=4.0 leaf=4.0]
+M DONE case=chainlag

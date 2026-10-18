@@ -1,0 +1,5 @@
+M0 case=var_sleep_phase engine=cannon-es-0.20.0+three-0.186.1
+M var_sleep_phase fixed 1@132 2@132 3@118 4@101 time=4.000000000
+M var_sleep_phase uneven 6@134 7@134 8@120 9@102 time=4.000000000
+M var_sleep_phase exact 11@132 12@132 13@118 14@101 time=4.000000000
+M DONE case=var_sleep_phase

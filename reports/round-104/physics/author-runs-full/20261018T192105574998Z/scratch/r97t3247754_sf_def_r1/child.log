@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+SF setup case=collide thick=0.1 mass=1.0 prec=-1 pins=deferred pin=top
+SF pins applied at pf=1 tick=1
+SF t=10 v4=0.00032,2.89464,0.00057 v0=-0.5,3.0,-0.5 top=0.0,0.05,0.0 below=0 ball=0.0,4.37804,0.0
+SF t=30 v4=0.00023,2.91206,0.0004 v0=-0.5,3.0,-0.5 top=0.0,0.05,0.0 below=0 ball=0.0,3.33405,0.0
+SF t=60 v4=0.00058,2.98523,-0.00061 v0=-0.5,3.0,-0.5 top=0.0,0.05,0.0 below=0 ball=-0.00032,0.16397,-0.00042
+SF t=120 v4=0.00123,2.90701,-0.00033 v0=-0.5,3.0,-0.5 top=0.0,0.05,0.0 below=0 ball=-0.02728,0.24,-0.01644
+SFSUM case=collide thick=0.1

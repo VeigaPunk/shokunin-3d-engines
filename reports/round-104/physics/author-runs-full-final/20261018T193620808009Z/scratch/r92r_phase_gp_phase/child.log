@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=phase engine=DEFAULT
+M phase e write_pf=3 imm=0.0 same_e=0.0 post_f=1.0 next_e_dpf=1 next_e=1.0
+M phase f imm=0.0 same_f=0.0 post_f=1.0 next_e=1.0
+M DONE case=phase

@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+TRDOC res://assets/nodes_only.glb append_err=0
+TR NodeScene:Node3D pos=(0.0, 0.0, 0.0) rot=(0.0, 0.0, 0.0) scale=(1.0, 1.0, 1.0)
+TR   PivotA:Node3D pos=(5.0, 0.0, 0.0) rot=(0.0, 0.0, 0.0) scale=(1.0, 1.0, 1.0)
+TR     ChildA:Node3D pos=(0.0, 0.0, 0.0) rot=(0.0, 0.0, 0.0) scale=(2.0, 2.0, 2.0)
+TR   PivotB:Node3D pos=(7.0, 8.0, 9.0) rot=(0.0, 0.0, 0.0) scale=(1.0, 1.0, 1.0)

@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE fs_dummy held=PhysicsDirectBodyState3DDummy
+CHILD_NOTE fs_dummy space=<PhysicsDirectSpaceState3DDummy#4479516912>
+CHILD_NOTE fs_dummy ray_empty=true
+CHILD_RESULT fs_dummy_ray=empty

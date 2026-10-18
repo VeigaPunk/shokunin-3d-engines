@@ -1,0 +1,9 @@
+M0 case=nan_mass engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M nan_mass mass0 z=5 nan=False
+M nan_mass neg-mass-create id=0 dynMass=-1 z=5 nan=False inf=False where=none
+M nan_mass nan-mass-create id=0 dynMass=nan z=5 nan=False inf=False where=none
+M nan_mass inf-mass-create id=0 dynMass=inf z=nan nan=True inf=False where=0.p+0.q+0.v+0.w
+M nan_mass neg-mass set=ok dynMass=1 z=3.78969868 nan=False inf=False where=none
+M nan_mass mass-change v0=-2.42374526 newMass=0 1:z=4.68016948,v=-2.42374526 10:z=4.58927903,v=-2.42374526 30:z=4.38730026,v=-2.42374526
+M DONE case=nan_mass
+# pybullet build time: Oct 15 2026 03:47:36

@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=tm_maxsteps engine=Dummy
+M tm_maxsteps pre tsc=1.0000 tps=60 jit=0.5000 mps=8 interp=false
+M tm_maxsteps mut pf=5
+M tm_maxsteps mutpost tsc=10.0000 tps=60 jit=0.5000 mps=1 interp=false
+M tm_maxsteps E0 delta=0.166667
+M tm_maxsteps E1 delta=0.166667
+M tm_maxsteps E2 delta=0.166667
+M tm_maxsteps done tsc=10.0000 tps=60 jit=0.5000 mps=1
+M DONE case=tm_maxsteps

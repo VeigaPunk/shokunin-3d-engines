@@ -1,0 +1,4 @@
+M0 case=nan_damp engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M nan_damp damping 0:set=ok,z=3.76227083,nan=False,inf=False | 1:set=ok,z=4.17228129,nan=False,inf=False | 1.5:set=ok,z=4.27577737,nan=False,inf=False | -0.5:set=ok,z=3.78969868,nan=False,inf=False | nan:set=ok,z=3.78969868,nan=False,inf=False
+M DONE case=nan_damp
+# pybullet build time: Oct 15 2026 03:47:36

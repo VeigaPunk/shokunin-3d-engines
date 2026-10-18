@@ -1,0 +1,45 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE fs_plain held=GodotPhysicsDirectBodyState3D
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 560cc00c3000
+
+[1] 7f3e6683e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7f3e6683e6f0]
+[2] 560cc1e4740f (main+1d8440f) - /usr/bin/godot(+0x1d8440f) [0x560cc1e4740f]
+[3] 560cc5fc32d1 (main+5f002d1) - /usr/bin/godot(+0x5f002d1) [0x560cc5fc32d1]
+[4] 560cc6916f6b (main+6853f6b) - /usr/bin/godot(+0x6853f6b) [0x560cc6916f6b]
+[5] 560cc65e44ca (main+65214ca) - /usr/bin/godot(+0x65214ca) [0x560cc65e44ca]
+[6] 560cc1a03b17 (main+1940b17) - /usr/bin/godot(+0x1940b17) [0x560cc1a03b17]
+[7] 560cc193126e (main+186e26e) - /usr/bin/godot(+0x186e26e) [0x560cc193126e]
+[8] 560cc1937753 (main+1874753) - /usr/bin/godot(+0x1874753) [0x560cc1937753]
+[9] 560cc19407f5 (main+187d7f5) - /usr/bin/godot(+0x187d7f5) [0x560cc19407f5]
+[10] 560cc6916f6b (main+6853f6b) - /usr/bin/godot(+0x6853f6b) [0x560cc6916f6b]
+[11] 560cc6584863 (main+64c1863) - /usr/bin/godot(+0x64c1863) [0x560cc6584863]
+[12] 560cc6584d98 (main+64c1d98) - /usr/bin/godot(+0x64c1d98) [0x560cc6584d98]
+[13] 560cc694ed90 (main+688bd90) - /usr/bin/godot(+0x688bd90) [0x560cc694ed90]
+[14] 560cc1a05923 (main+1942923) - /usr/bin/godot(+0x1942923) [0x560cc1a05923]
+[15] 560cc193126e (main+186e26e) - /usr/bin/godot(+0x186e26e) [0x560cc193126e]
+[16] 560cc1937753 (main+1874753) - /usr/bin/godot(+0x1874753) [0x560cc1937753]
+[17] 560cc19407f5 (main+187d7f5) - /usr/bin/godot(+0x187d7f5) [0x560cc19407f5]
+[18] 560cc6916f6b (main+6853f6b) - /usr/bin/godot(+0x6853f6b) [0x560cc6916f6b]
+[19] 560cc6584863 (main+64c1863) - /usr/bin/godot(+0x64c1863) [0x560cc6584863]
+[20] 560cc6584d98 (main+64c1d98) - /usr/bin/godot(+0x64c1d98) [0x560cc6584d98]
+[21] 560cc694ed90 (main+688bd90) - /usr/bin/godot(+0x688bd90) [0x560cc694ed90]
+[22] 560cc4206eb0 (main+4143eb0) - /usr/bin/godot(+0x4143eb0) [0x560cc4206eb0]
+[23] 560cc12ad278 (main+11ea278) - /usr/bin/godot(+0x11ea278) [0x560cc12ad278]
+[24] 560cc111f062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x560cc111f062]
+[25] 7f3e66827781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7f3e66827781]
+[26] 7f3e668278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7f3e668278b9]
+[27] 560cc11936d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x560cc11936d5]
+-- END OF C++ BACKTRACE --
+================================================================
+GDScript backtrace (most recent call first):
+    [0] _child_freed_space (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:5057)
+    [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+-- END OF GDSCRIPT BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

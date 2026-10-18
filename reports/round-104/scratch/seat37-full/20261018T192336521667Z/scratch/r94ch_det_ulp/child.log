@@ -1,0 +1,4 @@
+M0 case=det_ulp engine=cannon-es-0.20.0+three-0.186.1
+M det_ulp perturb mag=1e-9 h_a=0e24fb5aca619253 h_b=0c63200d1cbbf34d eq=false
+M det_ulp final dx=1.034906e-9 dy=1.179057e-13 q=3.964953e-13
+M DONE case=det_ulp

@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+RS_BOOT tps=60 ip=false maxfps=0 ts=1.000000 jit=0.500 cap=8 ds=true argz=2 userz=1
+RS_ARGV engine=--script|res://r100b_sched.gd user=--ticks=120
+RS_PR n=1 pf=1 d=0.016666667 ifr=0.000000 ts=1.000000
+RS_PR n=2 pf=1 d=0.008333333 ifr=0.500000 ts=1.000000
+RS_PR n=3 pf=2 d=0.008333333 ifr=0.000000 ts=1.000000
+RS_PR n=4 pf=2 d=0.008333333 ifr=0.500000 ts=1.000000
+RS_PR n=5 pf=3 d=0.008333333 ifr=0.000000 ts=1.000000
+RS_PR n=6 pf=3 d=0.008333333 ifr=0.500000 ts=1.000000
+RS_PH n=1 pf=1 d=0.016666667 y=5.000000 vy=0.000000 ifr=0.000000
+RS_PH n=2 pf=2 d=0.016666667 y=4.997278 vy=-0.163333 ifr=0.000000
+RS_PH n=3 pf=3 d=0.016666667 y=4.991838 vy=-0.326394 ifr=0.000000
+RS_PH n=4 pf=4 d=0.016666667 y=4.983685 vy=-0.489184 ifr=0.000000
+RS_PH n=5 pf=5 d=0.016666667 y=4.972823 vy=-0.651702 ifr=0.000000
+RS_PH n=6 pf=6 d=0.016666667 y=4.959257 vy=-0.813949 ifr=0.000000
+RS_PH n=30 pf=30 d=0.016666667 y=3.834048 vy=-4.627786 ifr=0.000000
+RS_PH n=60 pf=60 d=0.016666667 y=0.333302 vy=-9.185307 ifr=0.000000
+RS_PH n=90 pf=90 d=0.016666667 y=-5.388270 vy=-13.520366 ifr=0.000000
+RS_PH n=120 pf=120 d=0.016666667 y=-13.222269 vy=-17.643841 ifr=0.000000
+RS_END n_pr=239 n_ph=120 pf=120 ff=239 fpt=[0:1, 2:119] traj=2311ff14cd04c227
+RS_TIME t=1

@@ -1,0 +1,6 @@
+M0 case=ord_stack3 engine=cannon-es-0.20.0+three-0.186.1
+M ord_stack3 forward h=4caaad1536e64820 ph=0aa4f874f3f85934
+M ord_stack3 reverse h=d3795db5d0707284 ph=ba08156a5e6baf96
+M ord_stack3 eq h=false ph=false contacts=30:n=12/24 60:n=12/24 120:n=0/0 240:n=0/0
+M ord_stack3 solver rows=106/175 rawSame=false sortedSame=false
+M DONE case=ord_stack3

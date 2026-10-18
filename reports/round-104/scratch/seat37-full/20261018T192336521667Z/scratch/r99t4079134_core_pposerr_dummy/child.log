@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+PP_PRE active=true playing=false anim='' tp=0.0833
+PP_RAW_READ (engine ERROR expected: no current animation assigned)
+ERROR: AnimationPlayer has no current animation.
+   at: get_current_animation_position (scene/animation/animation_player.cpp:732)
+   GDScript backtrace (most recent call first):
+       [0] c_pposerr (res://r99b_core.gd:304)
+PP_RAW_VALUE 0.0000
+PP_AFTER anim='' playing=false tp=0.0833
+CORE_DONE case=pposerr

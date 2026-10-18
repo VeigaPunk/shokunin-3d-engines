@@ -1,0 +1,4 @@
+M0 case=det_interleave engine=cannon-es-0.20.0+three-0.186.1
+M det_interleave interleave A=0e24fb5aca619253 base=0e24fb5aca619253 eqA=true
+M det_interleave bc B=e5253750feab8eed C=e5253750feab8eed eqBC=true
+M DONE case=det_interleave

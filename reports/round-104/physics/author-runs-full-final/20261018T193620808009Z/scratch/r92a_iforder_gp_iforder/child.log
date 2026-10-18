@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=iforder engine=DEFAULT
+# iforder E0 pf=2 pos=(0.0000,2.0000,0.0000) srv=(0.0000,2.0000,0.0000)
+M iforder E0 ok=1
+# iforder I0 pf=3 dpf=1 pos=(0.0500,2.0000,0.0000) srv=(0.0500,2.0000,0.0000)
+M iforder I0 ok=1
+# iforder E1 pf=3 pos=(0.0500,2.0000,0.0000) srv=(0.0500,2.0000,0.0000)
+M iforder E1 ok=1
+# iforder I1 pf=4 dpf=1 pos=(0.1000,2.0000,0.0000) srv=(0.1000,2.0000,0.0000)
+M iforder I1 ok=1
+# iforder E2 pf=4 pos=(0.1000,2.0000,0.0000) srv=(0.1000,2.0000,0.0000)
+M iforder E2 ok=1
+# iforder I2 pf=5 dpf=1 pos=(0.1500,2.0000,0.0000) srv=(0.1500,2.0000,0.0000)
+M iforder I2 ok=1
+# iforder E3 pf=5 pos=(0.1500,2.0000,0.0000) srv=(0.1500,2.0000,0.0000)
+M iforder E3 ok=1
+# iforder I3 pf=6 dpf=1 pos=(0.2000,2.0000,0.0000) srv=(0.2000,2.0000,0.0000)
+M iforder I3 ok=1
+# iforder post pf=6 pos=(0.2000,2.0000,0.0000) srv=(0.2000,2.0000,0.0000) playing=true
+M iforder post ok=1 playing=true
+M DONE case=iforder

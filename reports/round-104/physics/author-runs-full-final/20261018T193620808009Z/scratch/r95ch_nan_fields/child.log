@@ -1,0 +1,11 @@
+M0 case=nan_fields engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M nan_fields nan-gravity z=nan nan=True inf=False where=1.p+1.v
+M nan_fields inf-gravity z=nan nan=True inf=False where=1.p+1.v
+M nan_fields nan-pos nan=True inf=False where=1.p
+M nan_fields inf-pos created=0 nan=False inf=True where=0.p
+M nan_fields nan-vel x=nan nan=True inf=False where=1.p+1.v
+M nan_fields inf-vel x=nan nan=True inf=False where=1.p+1.v
+M nan_fields zero-quat orn=nan,nan,nan,nan rawQ=fff8000000000000 nan=True inf=False where=1.p+1.q+1.v+1.w
+M nan_fields nan-quat ornW=nan z=nan nan=True inf=False where=1.p+1.q+1.v+1.w
+M DONE case=nan_fields
+# pybullet build time: Oct 15 2026 03:47:36

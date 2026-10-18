@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ARM manual lib=["a", "ab", "b"] tree=true active=true cb=2
+PRE pf=1 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=3 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=4 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=5 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=6 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=7 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=8 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=9 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+E pf=10 actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+POST manual_no_advance actor=(0.0000,0.0000,0.0000) ball=(0.0000,3.0000,0.0000) srv=nil tp=0.0000
+MANUAL_ADV_NOW actor=(0.0000,0.0000,0.0000) ball=(0.0000,0.0000,0.0000) srv=nil tp=0.0000
+E pf=11 actor=(0.0000,0.0000,0.0000) ball=(0.0000,0.0000,0.0000) srv=nil tp=0.0000
+E pf=12 actor=(0.0000,0.0000,0.0000) ball=(0.0000,0.0000,0.0000) srv=nil tp=0.0000
+E pf=13 actor=(0.0000,0.0000,0.0000) ball=(0.0000,0.0000,0.0000) srv=nil tp=0.0000
+E pf=14 actor=(0.0000,0.0000,0.0000) ball=(0.0000,0.0000,0.0000) srv=nil tp=0.0000
+POST manual_after_advance actor=(0.0000,0.0000,0.0000) ball=(0.0000,0.0000,0.0000) srv=nil tp=0.0000
+UT_DONE case=manual

@@ -1,0 +1,23 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=chain3_freemid engine=DEFAULT
+M chain3_freemid mid freed type1=0 type2=0
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 55ebe2df8000
+
+[1] 7f54f1a3e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7f54f1a3e6f0]
+[2] 55ebe4b74797 (main+1d7c797) - /usr/bin/godot(+0x1d7c797) [0x55ebe4b74797]
+[3] 55ebe4b74837 (main+1d7c837) - /usr/bin/godot(+0x1d7c837) [0x55ebe4b74837]
+[4] 55ebe4b496d3 (main+1d516d3) - /usr/bin/godot(+0x1d516d3) [0x55ebe4b496d3]
+[5] 55ebe3fe243a (main+11ea43a) - /usr/bin/godot(+0x11ea43a) [0x55ebe3fe243a]
+[6] 55ebe3e54062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x55ebe3e54062]
+[7] 7f54f1a27781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7f54f1a27781]
+[8] 7f54f1a278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7f54f1a278b9]
+[9] 55ebe3ec86d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x55ebe3ec86d5]
+-- END OF C++ BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

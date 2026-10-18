@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=detachb engine=Jolt Physics
+M detachb t=1 b=0.0000,2.0000,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=2 b=0.0000,2.3600,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=3 b=0.0000,2.5184,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=4 b=0.0000,2.6198,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=5 b=0.0000,2.6847,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb detached jtype=0
+M detachb t=6 b=0.0000,2.7262,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=7 b=0.0000,2.7262,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=8 b=0.0000,2.7262,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=9 b=0.0000,2.7262,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb reattached jtype=0
+M detachb t=10 b=0.0000,2.7262,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=11 b=0.0000,2.7528,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M detachb t=12 b=0.0000,2.7698,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M DONE case=detachb engine=Jolt Physics

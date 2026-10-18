@@ -1,0 +1,5 @@
+M0 case=ms_defaults engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M ms_defaults world-defaults params=fixedTimeStep=0.004166666666666667 gravityAccelerationX=0.0 gravityAccelerationY=0.0 gravityAccelerationZ=-9.82 numNonContactInnerIterations=1 numSolverIterations=50 numSubSteps=0 useRealTimeSimulation=0
+M ms_defaults world-defaults dynInfo mass=1 latFric=0.5 restit=0 rollF=0 spinF=0 cDamp=-1 cStiff=-1 bodyType=2 margin=0.5 nfields=12
+M DONE case=ms_defaults
+# pybullet build time: Oct 15 2026 03:47:36

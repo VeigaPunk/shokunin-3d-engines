@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=driver engine=DEFAULT
+M driver process_off O=(2.0000,1.0000,-3.0000) X=(1.0000,0.0000,0.0000) S=(1.0000,1.0000,1.0000)
+M driver physics_off O=(2.0000,1.0000,-3.0000) X=(1.0000,0.0000,0.0000) S=(1.0000,1.0000,1.0000)
+M driver both_off O=(2.0000,1.0000,-3.0000) X=(1.0000,0.0000,0.0000) S=(1.0000,1.0000,1.0000)
+M DONE case=driver

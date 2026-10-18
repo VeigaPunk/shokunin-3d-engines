@@ -1,0 +1,35 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+P0 case=overlap overlap0=0.300000 r=0.5 g=0
+P0 engine=Jolt Physics max_allowed_pen=0.01 contact_bias=0.8 max_sep=0.05 recycle=0.01 slop=0.1 baumgarte=0.20000000298023 spec_dist=0.01999999955297
+P t=1 sep=-0.3 lv1x=0.0 lv2x=0.0 x1=0.0 x2=0.7
+P t=2 sep=-0.228 lv1x=0.0 lv2x=0.0 x1=-0.036 x2=0.736
+P t=3 sep=-0.18192 lv1x=0.0 lv2x=0.0 x1=-0.05904 x2=0.75904
+P t=4 sep=-0.152429 lv1x=0.0 lv2x=0.0 x1=-0.073786 x2=0.773786
+P t=5 sep=-0.133554 lv1x=0.0 lv2x=0.0 x1=-0.083223 x2=0.783223
+P t=6 sep=-0.121475 lv1x=0.0 lv2x=0.0 x1=-0.089263 x2=0.789263
+P t=7 sep=-0.113744 lv1x=0.0 lv2x=0.0 x1=-0.093128 x2=0.793128
+P t=8 sep=-0.108796 lv1x=0.0 lv2x=0.0 x1=-0.095602 x2=0.795602
+P t=9 sep=-0.10563 lv1x=0.0 lv2x=0.0 x1=-0.097185 x2=0.797185
+P t=10 sep=-0.103603 lv1x=0.0 lv2x=0.0 x1=-0.098199 x2=0.798199
+P t=11 sep=-0.102306 lv1x=0.0 lv2x=0.0 x1=-0.098847 x2=0.798847
+P t=12 sep=-0.101476 lv1x=0.0 lv2x=0.0 x1=-0.099262 x2=0.799262
+P t=13 sep=-0.100944 lv1x=0.0 lv2x=0.0 x1=-0.099528 x2=0.799528
+P t=14 sep=-0.100604 lv1x=0.0 lv2x=0.0 x1=-0.099698 x2=0.799698
+P t=15 sep=-0.100387 lv1x=0.0 lv2x=0.0 x1=-0.099807 x2=0.799807
+P t=16 sep=-0.100248 lv1x=0.0 lv2x=0.0 x1=-0.099876 x2=0.799876
+P t=17 sep=-0.100159 lv1x=0.0 lv2x=0.0 x1=-0.099921 x2=0.799921
+P t=18 sep=-0.100101 lv1x=0.0 lv2x=0.0 x1=-0.099949 x2=0.799949
+P t=19 sep=-0.100065 lv1x=0.0 lv2x=0.0 x1=-0.099968 x2=0.799967
+P t=20 sep=-0.100042 lv1x=0.0 lv2x=0.0 x1=-0.099979 x2=0.799979
+P t=30 sep=-0.100001 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=40 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=50 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=60 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=70 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=80 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=90 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=100 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=110 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+P t=120 sep=-0.1 lv1x=0.0 lv2x=0.0 x1=-0.1 x2=0.8
+PSUM case=overlap sep_end=-0.1 lv1_end=0.0 lv2_end=0.0

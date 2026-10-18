@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT jolt_backend=Jolt Physics
+CHILD_RESULT jolt_dss_class=JoltPhysicsDirectSpaceState3D
+CHILD_NOTE jolt_area base=(0.0, -9.8, 0.0)/0.100000 override=(0.0, -9.8, 0.0)/0.100000 area_readback=20.0
+CHILD_RESULT jolt_area_override=ignores
+CHILD_NOTE jolt_margin m0=[0.14984130859375, 0.1500244140625] m004=[0.14599609375, 0.14617919921875] m05=[0.099853515625, 0.10003662109375]
+CHILD_RESULT jolt_margin=binds
+CHILD_NOTE jolt_sepray data={ "length": 2.0, "slide_on_slope": false } type=1 cast=[0.1998291015625, 0.20001220703125]
+CHILD_RESULT jolt_sepray=differs-constants

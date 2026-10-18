@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE dummy_class=false godot_class=false engine=Dummy
+CHILD_RESULT dummy_backend=Dummy
+CHILD_RESULT dummy_dss_class=PhysicsDirectSpaceState3DDummy
+CHILD_NOTE dummy_isect s0=0 m0=0 away=0 n1=0 back=0
+CHILD_RESULT dummy_isect=unexpected
+CHILD_NOTE dummy_cast degenerate sizes=0,0,0
+CHILD_RESULT dummy_cast=unexpected
+CHILD_NOTE dummy_btm r0=false t0=0.000000 r1=false t1=0.000000 r2=false t2=0.000000
+CHILD_RESULT dummy_btm=unexpected
+CHILD_NOTE dummy_contact_stale set=0,0 in=0,0,0 out=0,0
+CHILD_RESULT dummy_contact_stale=unexpected
+CHILD_NOTE dummy_static_nopair tp=0,0,0,0,0,0,0,0 delta=-1 mv=0,0,-1
+CHILD_RESULT dummy_static_nopair=unexpected

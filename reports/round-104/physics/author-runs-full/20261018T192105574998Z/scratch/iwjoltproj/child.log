@@ -1,0 +1,55 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Failed to retrieve inverse inertia tensor of '@RigidBody3D@25:<RigidBody3D#28454159822>'. Doing so without a physics space is not supported when using Jolt Physics. If this relates to a node, try adding the node to a scene tree first.
+   at: get_inverse_inertia_tensor (modules/jolt_physics/objects/jolt_body_3d.cpp:730)
+CHILD_NOTE iw_jolt base_same=0.0000,-0.6517,0.0000 base1=0.0000,-0.6517,0.0000 base2=0.0000,-0.8139,0.0000
+CHILD_NOTE iw_jolt classes={ "baseline_same": "0.0000,-0.6517,0.0000", "baseline_rel1": "0.0000,-0.6517,0.0000", "baseline_rel2": "0.0000,-0.8139,0.0000", "baseline_class": "control", "linvel_same": "1.0000,2.0000,3.0000", "linvel_rel1": "1.0000,2.0000,3.0000", "linvel_rel2": "0.9983,1.8333,2.9950", "linvel_class": "now", "angvel_same": "0.5000,1.0000,1.5000", "angvel_rel1": "0.5000,1.0000,1.5000", "angvel_rel2": "0.4992,0.9983,1.4975", "angvel_class": "now", "xform_same": "0.0000,8.0000,0.0000", "xform_rel1": "0.0000,8.0000,0.0000", "xform_rel2": "0.0000,7.9864,0.0000", "xform_class": "now", "cimpulse_same": "0.0000,2.3483,0.0000", "cimpulse_rel1": "0.0000,2.3483,0.0000", "cimpulse_rel2": "0.0000,2.1811,0.0000", "cimpulse_class": "now", "timpulse_same": "0.0000,0.0000,30.0000", "timpulse_rel1": "0.0000,0.0000,30.0000", "timpulse_rel2": "0.0000,0.0000,29.9500", "timpulse_class": "now", "cforce_same": "0.0000,-0.6517,0.0000", "cforce_rel1": "0.0000,-0.6517,0.0000", "cforce_rel2": "0.0000,0.1861,0.0000", "cforce_class": "deferred", "torque_same": "0.0000,0.0000,0.0000", "torque_rel1": "0.0000,0.0000,0.0000", "torque_rel2": "0.0000,0.0000,10.0000", "torque_class": "deferred", "setcforce_same": "0.0000,7.0000,0.0000", "setcforce_rel1": "0.0000,-0.6517,0.0000", "setcforce_rel2": "0.0000,-0.6973,0.0000", "setcforce_class": "deferred", "sleep_same": "true", "sleep_rel1": "true/0.0000,0.0000,0.0000", "sleep_rel2": "true/0.0000,0.0000,0.0000", "sleep_class": "zeroed", "reentrant_same": "0.0000,-0.8139,0.0000", "reentrant_rel1": "0.0000,-0.8139,0.0000", "reentrant_rel2": "0.0000,-0.9759,0.0000", "reentrant_class": "double", "detach_same": "RID(0)", "detach_rel1": "RID(0)", "detach_rel2": "RID(0)", "detach_class": "frozen" }
+CHILD_RESULT iw_jolt_backend=Jolt Physics
+CHILD_RESULT iw_jolt_baseline_same=0.0000,-0.6517,0.0000
+CHILD_RESULT iw_jolt_baseline_rel1=0.0000,-0.6517,0.0000
+CHILD_RESULT iw_jolt_baseline_rel2=0.0000,-0.8139,0.0000
+CHILD_RESULT iw_jolt_baseline_class=control
+CHILD_RESULT iw_jolt_linvel_same=1.0000,2.0000,3.0000
+CHILD_RESULT iw_jolt_linvel_rel1=1.0000,2.0000,3.0000
+CHILD_RESULT iw_jolt_linvel_rel2=0.9983,1.8333,2.9950
+CHILD_RESULT iw_jolt_linvel_class=now
+CHILD_RESULT iw_jolt_angvel_same=0.5000,1.0000,1.5000
+CHILD_RESULT iw_jolt_angvel_rel1=0.5000,1.0000,1.5000
+CHILD_RESULT iw_jolt_angvel_rel2=0.4992,0.9983,1.4975
+CHILD_RESULT iw_jolt_angvel_class=now
+CHILD_RESULT iw_jolt_xform_same=0.0000,8.0000,0.0000
+CHILD_RESULT iw_jolt_xform_rel1=0.0000,8.0000,0.0000
+CHILD_RESULT iw_jolt_xform_rel2=0.0000,7.9864,0.0000
+CHILD_RESULT iw_jolt_xform_class=now
+CHILD_RESULT iw_jolt_cimpulse_same=0.0000,2.3483,0.0000
+CHILD_RESULT iw_jolt_cimpulse_rel1=0.0000,2.3483,0.0000
+CHILD_RESULT iw_jolt_cimpulse_rel2=0.0000,2.1811,0.0000
+CHILD_RESULT iw_jolt_cimpulse_class=now
+CHILD_RESULT iw_jolt_timpulse_same=0.0000,0.0000,30.0000
+CHILD_RESULT iw_jolt_timpulse_rel1=0.0000,0.0000,30.0000
+CHILD_RESULT iw_jolt_timpulse_rel2=0.0000,0.0000,29.9500
+CHILD_RESULT iw_jolt_timpulse_class=now
+CHILD_RESULT iw_jolt_cforce_same=0.0000,-0.6517,0.0000
+CHILD_RESULT iw_jolt_cforce_rel1=0.0000,-0.6517,0.0000
+CHILD_RESULT iw_jolt_cforce_rel2=0.0000,0.1861,0.0000
+CHILD_RESULT iw_jolt_cforce_class=deferred
+CHILD_RESULT iw_jolt_torque_same=0.0000,0.0000,0.0000
+CHILD_RESULT iw_jolt_torque_rel1=0.0000,0.0000,0.0000
+CHILD_RESULT iw_jolt_torque_rel2=0.0000,0.0000,10.0000
+CHILD_RESULT iw_jolt_torque_class=deferred
+CHILD_RESULT iw_jolt_setcforce_same=0.0000,7.0000,0.0000
+CHILD_RESULT iw_jolt_setcforce_rel1=0.0000,-0.6517,0.0000
+CHILD_RESULT iw_jolt_setcforce_rel2=0.0000,-0.6973,0.0000
+CHILD_RESULT iw_jolt_setcforce_class=deferred
+CHILD_RESULT iw_jolt_sleep_same=true
+CHILD_RESULT iw_jolt_sleep_rel1=true/0.0000,0.0000,0.0000
+CHILD_RESULT iw_jolt_sleep_rel2=true/0.0000,0.0000,0.0000
+CHILD_RESULT iw_jolt_sleep_class=zeroed
+CHILD_RESULT iw_jolt_reentrant_same=0.0000,-0.8139,0.0000
+CHILD_RESULT iw_jolt_reentrant_rel1=0.0000,-0.8139,0.0000
+CHILD_RESULT iw_jolt_reentrant_rel2=0.0000,-0.9759,0.0000
+CHILD_RESULT iw_jolt_reentrant_class=double
+CHILD_RESULT iw_jolt_detach_same=RID(0)
+CHILD_RESULT iw_jolt_detach_rel1=RID(0)
+CHILD_RESULT iw_jolt_detach_rel2=RID(0)
+CHILD_RESULT iw_jolt_detach_class=frozen

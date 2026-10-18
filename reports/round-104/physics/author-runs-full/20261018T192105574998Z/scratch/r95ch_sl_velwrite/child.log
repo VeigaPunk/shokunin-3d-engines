@@ -1,0 +1,4 @@
+M0 case=sl_velwrite engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_velwrite sleep-velwrite zB=0.49999 vB=1.94289029e-16 vRead=5 z+1=0.520632014 z+31=1.05253767 v=3.61188341
+M DONE case=sl_velwrite
+# pybullet build time: Oct 15 2026 03:47:36

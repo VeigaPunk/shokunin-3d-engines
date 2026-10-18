@@ -1,0 +1,8 @@
+[application]
+
+config/name="RcPlain"
+
+[physics]
+
+common/physics_ticks_per_second=60
+3d/run_on_separate_thread=true

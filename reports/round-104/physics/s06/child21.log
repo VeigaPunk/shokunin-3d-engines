@@ -1,0 +1,120 @@
+arm=free_ops pairs=21 pinned_cells=12
+== serial_control concurrent=False wall_ms=23557
+   freeb_ops@gp             n_pre=6 msha16=124dfece8083d80f pin=124dfece8083d80f mlines=6 ok
+   freeb_ops@jolt           n_pre=6 msha16=0b9af1d2f64aad4a pin=0b9af1d2f64aad4a mlines=8 ok
+   freeb_ops@dummy          (no pin) msha16=e3b0c44298fc1c14 mlines=8
+   freeb_twice@gp           n_pre=4 msha16=e7c8b9cc20d38b1e pin=e7c8b9cc20d38b1e mlines=4 ok
+   freeb_twice@jolt         n_pre=4 msha16=c42295756101d8d6 pin=c42295756101d8d6 mlines=4 ok
+   freeb_twice@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_make@gp            n_pre=4 msha16=5a1b9bded3cbf88b pin=5a1b9bded3cbf88b mlines=4 ok
+   freeb_make@jolt          n_pre=4 msha16=22e9399210234fe5 pin=22e9399210234fe5 mlines=4 ok
+   freeb_make@dummy         (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_world@gp           (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@jolt         (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_afterclear@gp      n_pre=4 msha16=a31ec35bc29873fb pin=a31ec35bc29873fb mlines=4 ok
+   freeb_afterclear@jolt    n_pre=4 msha16=0aadc67976644396 pin=0aadc67976644396 mlines=4 ok
+   freeb_afterclear@dummy   (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freej_then_b@gp          n_pre=4 msha16=606a01100dfc83f1 pin=606a01100dfc83f1 mlines=4 ok
+   freej_then_b@jolt        n_pre=4 msha16=70d825f7cce91132 pin=70d825f7cce91132 mlines=4 ok
+   freej_then_b@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   detachb_free@gp          n_pre=4 msha16=c293b8d7f2669a3f pin=c293b8d7f2669a3f mlines=4 ok
+   detachb_free@jolt        n_pre=4 msha16=e260e2a3c6282b25 pin=e260e2a3c6282b25 mlines=4 ok
+   detachb_free@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   matched=12 mismatched=0 of 12 pinned cells
+== all21_concurrent concurrent=True wall_ms=2123
+   freeb_ops@gp             n_pre=6 msha16=124dfece8083d80f pin=124dfece8083d80f mlines=6 ok
+   freeb_ops@jolt           n_pre=6 msha16=0b9af1d2f64aad4a pin=0b9af1d2f64aad4a mlines=8 ok
+   freeb_ops@dummy          (no pin) msha16=e3b0c44298fc1c14 mlines=8
+   freeb_twice@gp           n_pre=4 msha16=e7c8b9cc20d38b1e pin=e7c8b9cc20d38b1e mlines=4 ok
+   freeb_twice@jolt         n_pre=4 msha16=c42295756101d8d6 pin=c42295756101d8d6 mlines=4 ok
+   freeb_twice@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_make@gp            n_pre=4 msha16=5a1b9bded3cbf88b pin=5a1b9bded3cbf88b mlines=4 ok
+   freeb_make@jolt          n_pre=4 msha16=22e9399210234fe5 pin=22e9399210234fe5 mlines=4 ok
+   freeb_make@dummy         (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_world@gp           (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@jolt         (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_afterclear@gp      n_pre=4 msha16=a31ec35bc29873fb pin=a31ec35bc29873fb mlines=4 ok
+   freeb_afterclear@jolt    n_pre=4 msha16=0aadc67976644396 pin=0aadc67976644396 mlines=4 ok
+   freeb_afterclear@dummy   (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freej_then_b@gp          n_pre=4 msha16=606a01100dfc83f1 pin=606a01100dfc83f1 mlines=4 ok
+   freej_then_b@jolt        n_pre=4 msha16=70d825f7cce91132 pin=70d825f7cce91132 mlines=4 ok
+   freej_then_b@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   detachb_free@gp          n_pre=4 msha16=c293b8d7f2669a3f pin=c293b8d7f2669a3f mlines=4 ok
+   detachb_free@jolt        n_pre=4 msha16=e260e2a3c6282b25 pin=e260e2a3c6282b25 mlines=4 ok
+   detachb_free@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   matched=12 mismatched=0 of 12 pinned cells
+
+RESULT serial_control mismatches=0 all21_concurrent mismatches=0
+== conc_rep0 concurrent=True wall_ms=2187
+   freeb_ops@gp             n_pre=6 msha16=124dfece8083d80f pin=124dfece8083d80f mlines=6 ok
+   freeb_ops@jolt           n_pre=6 msha16=0b9af1d2f64aad4a pin=0b9af1d2f64aad4a mlines=8 ok
+   freeb_ops@dummy          (no pin) msha16=e3b0c44298fc1c14 mlines=8
+   freeb_twice@gp           n_pre=4 msha16=e7c8b9cc20d38b1e pin=e7c8b9cc20d38b1e mlines=4 ok
+   freeb_twice@jolt         n_pre=4 msha16=c42295756101d8d6 pin=c42295756101d8d6 mlines=4 ok
+   freeb_twice@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_make@gp            n_pre=4 msha16=5a1b9bded3cbf88b pin=5a1b9bded3cbf88b mlines=4 ok
+   freeb_make@jolt          n_pre=4 msha16=22e9399210234fe5 pin=22e9399210234fe5 mlines=4 ok
+   freeb_make@dummy         (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_world@gp           (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@jolt         (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_afterclear@gp      n_pre=4 msha16=a31ec35bc29873fb pin=a31ec35bc29873fb mlines=4 ok
+   freeb_afterclear@jolt    n_pre=4 msha16=0aadc67976644396 pin=0aadc67976644396 mlines=4 ok
+   freeb_afterclear@dummy   (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freej_then_b@gp          n_pre=4 msha16=606a01100dfc83f1 pin=606a01100dfc83f1 mlines=4 ok
+   freej_then_b@jolt        n_pre=4 msha16=70d825f7cce91132 pin=70d825f7cce91132 mlines=4 ok
+   freej_then_b@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   detachb_free@gp          n_pre=4 msha16=c293b8d7f2669a3f pin=c293b8d7f2669a3f mlines=4 ok
+   detachb_free@jolt        n_pre=4 msha16=e260e2a3c6282b25 pin=e260e2a3c6282b25 mlines=4 ok
+   detachb_free@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   matched=12 mismatched=0 of 12 pinned cells
+== conc_rep1 concurrent=True wall_ms=1909
+   freeb_ops@gp             n_pre=6 msha16=124dfece8083d80f pin=124dfece8083d80f mlines=6 ok
+   freeb_ops@jolt           n_pre=6 msha16=0b9af1d2f64aad4a pin=0b9af1d2f64aad4a mlines=8 ok
+   freeb_ops@dummy          (no pin) msha16=e3b0c44298fc1c14 mlines=8
+   freeb_twice@gp           n_pre=4 msha16=e7c8b9cc20d38b1e pin=e7c8b9cc20d38b1e mlines=4 ok
+   freeb_twice@jolt         n_pre=4 msha16=c42295756101d8d6 pin=c42295756101d8d6 mlines=4 ok
+   freeb_twice@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_make@gp            n_pre=4 msha16=5a1b9bded3cbf88b pin=5a1b9bded3cbf88b mlines=4 ok
+   freeb_make@jolt          n_pre=4 msha16=22e9399210234fe5 pin=22e9399210234fe5 mlines=4 ok
+   freeb_make@dummy         (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_world@gp           (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@jolt         (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_afterclear@gp      n_pre=4 msha16=a31ec35bc29873fb pin=a31ec35bc29873fb mlines=4 ok
+   freeb_afterclear@jolt    n_pre=4 msha16=0aadc67976644396 pin=0aadc67976644396 mlines=4 ok
+   freeb_afterclear@dummy   (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freej_then_b@gp          n_pre=4 msha16=606a01100dfc83f1 pin=606a01100dfc83f1 mlines=4 ok
+   freej_then_b@jolt        n_pre=4 msha16=70d825f7cce91132 pin=70d825f7cce91132 mlines=4 ok
+   freej_then_b@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   detachb_free@gp          n_pre=4 msha16=c293b8d7f2669a3f pin=c293b8d7f2669a3f mlines=4 ok
+   detachb_free@jolt        n_pre=4 msha16=e260e2a3c6282b25 pin=e260e2a3c6282b25 mlines=4 ok
+   detachb_free@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   matched=12 mismatched=0 of 12 pinned cells
+== conc_rep2 concurrent=True wall_ms=2675
+   freeb_ops@gp             n_pre=6 msha16=124dfece8083d80f pin=124dfece8083d80f mlines=8 ok
+   freeb_ops@jolt           n_pre=6 msha16=0b9af1d2f64aad4a pin=0b9af1d2f64aad4a mlines=8 ok
+   freeb_ops@dummy          (no pin) msha16=e3b0c44298fc1c14 mlines=8
+   freeb_twice@gp           n_pre=4 msha16=e7c8b9cc20d38b1e pin=e7c8b9cc20d38b1e mlines=4 ok
+   freeb_twice@jolt         n_pre=4 msha16=c42295756101d8d6 pin=c42295756101d8d6 mlines=4 ok
+   freeb_twice@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_make@gp            n_pre=4 msha16=5a1b9bded3cbf88b pin=5a1b9bded3cbf88b mlines=4 ok
+   freeb_make@jolt          n_pre=4 msha16=22e9399210234fe5 pin=22e9399210234fe5 mlines=4 ok
+   freeb_make@dummy         (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freeb_world@gp           (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@jolt         (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_world@dummy        (no pin) msha16=e3b0c44298fc1c14 mlines=13
+   freeb_afterclear@gp      n_pre=4 msha16=a31ec35bc29873fb pin=a31ec35bc29873fb mlines=4 ok
+   freeb_afterclear@jolt    n_pre=4 msha16=0aadc67976644396 pin=0aadc67976644396 mlines=4 ok
+   freeb_afterclear@dummy   (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   freej_then_b@gp          n_pre=4 msha16=606a01100dfc83f1 pin=606a01100dfc83f1 mlines=4 ok
+   freej_then_b@jolt        n_pre=4 msha16=70d825f7cce91132 pin=70d825f7cce91132 mlines=4 ok
+   freej_then_b@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   detachb_free@gp          n_pre=4 msha16=c293b8d7f2669a3f pin=c293b8d7f2669a3f mlines=4 ok
+   detachb_free@jolt        n_pre=4 msha16=e260e2a3c6282b25 pin=e260e2a3c6282b25 mlines=4 ok
+   detachb_free@dummy       (no pin) msha16=e3b0c44298fc1c14 mlines=4
+   matched=12 mismatched=0 of 12 pinned cells
+
+REPEAT: 3 extra concurrent rounds, total mismatches=0

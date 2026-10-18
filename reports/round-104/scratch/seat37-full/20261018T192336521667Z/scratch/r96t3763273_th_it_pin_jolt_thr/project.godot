@@ -1,0 +1,9 @@
+[application]
+
+config/name="R96Scout"
+
+[physics]
+
+common/physics_ticks_per_second=60
+3d/physics_engine="Jolt Physics"
+3d/run_on_separate_thread=true

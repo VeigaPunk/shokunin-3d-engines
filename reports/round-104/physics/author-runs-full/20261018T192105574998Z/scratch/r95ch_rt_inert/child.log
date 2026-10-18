@@ -1,0 +1,4 @@
+M0 case=rt_inert engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M rt_inert rt-inert rt0:h=02309c52da41ef33,flag=0 rt1:h=02309c52da41ef33,flag=1 eq=True
+M DONE case=rt_inert
+# pybullet build time: Oct 15 2026 03:47:36

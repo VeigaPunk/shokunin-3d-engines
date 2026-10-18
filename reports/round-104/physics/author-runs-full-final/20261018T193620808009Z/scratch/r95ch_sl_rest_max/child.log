@@ -1,0 +1,4 @@
+M0 case=sl_rest_max engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_rest_max sleep-rest-max 1:an=i-1/n1/it1,z=0.999829514,v=-0.0409166667,cc=0 80:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 240:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 480:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 481:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 600:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 960:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 1400:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1
+M DONE case=sl_rest_max
+# pybullet build time: Oct 15 2026 03:47:36

@@ -1,0 +1,11 @@
+M0 case=mat_fric_sweep engine=cannon-es-0.20.0+three-0.186.1
+M mat_fric_sweep mu0 mu=0 slideX=164.671371 vx=3.344859 fricEqMax=0 predicted=inf
+M mat_fric_sweep mu0.0005 mu=0.0005 slideX=164.567904 vx=3.340009 fricEqMax=2 predicted=1272.912424
+M mat_fric_sweep mu0.001 mu=0.001 slideX=164.257502 vx=3.325460 fricEqMax=2 predicted=636.456212
+M mat_fric_sweep mu0.002 mu=0.002 slideX=163.015894 vx=3.267266 fricEqMax=2 predicted=318.228106
+M mat_fric_sweep mu0.005 mu=0.005 slideX=154.324636 vx=2.859901 fricEqMax=2 predicted=127.291242
+M mat_fric_sweep mu0.01 mu=0.01 slideX=123.284431 vx=1.405028 fricEqMax=2 predicted=63.645621
+M mat_fric_sweep mu0.05 mu=0.05 slideX=8.337526 vx=0.000000 fricEqMax=2 predicted=12.729124
+M mat_fric_sweep mu0.3 mu=0.3 slideX=0.279647 vx=0.000000 fricEqMax=2 predicted=2.121521
+M mat_fric_sweep mu0.9 mu=0.9 slideX=0.090271 vx=0.000000 fricEqMax=2 predicted=0.707174
+M DONE case=mat_fric_sweep

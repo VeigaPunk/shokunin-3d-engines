@@ -1,0 +1,4 @@
+M0 case=det_substeps engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_substeps substeps n0:h=02309c52da41ef33,z=1.49997782 n4:h=52204c986d237b60,z=1.49997935 n8:h=b186caf608002635,z=1.49997955
+M DONE case=det_substeps
+# pybullet build time: Oct 15 2026 03:47:36

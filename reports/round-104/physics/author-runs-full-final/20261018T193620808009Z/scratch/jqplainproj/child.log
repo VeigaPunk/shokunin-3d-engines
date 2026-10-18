@@ -1,0 +1,155 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT jq_plain_backend=DEFAULT
+CHILD_RESULT jq_plain_pin_type=0
+CHILD_RESULT jq_plain_pin_hon=0,1,2
+CHILD_RESULT jq_plain_pin_drop=-
+CHILD_RESULT jq_plain_hinge_type=1
+CHILD_RESULT jq_plain_hinge_hon=0,1,2,3,4,5,6,7
+CHILD_RESULT jq_plain_hinge_drop=-
+CHILD_RESULT jq_plain_slider_type=2
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "joint->get_type() != JOINT_TYPE_CONE_TWIST" is true. Returning: 0
+   at: slider_joint_get_param (modules/godot_physics_3d/godot_physics_server_3d.cpp:1498)
+   GDScript backtrace (most recent call first):
+       [0] _joint_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7032)
+       [1] _child_joint_param (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7155)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+CHILD_RESULT jq_plain_slider_hon=-
+CHILD_RESULT jq_plain_slider_drop=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21
+CHILD_RESULT jq_plain_cone_type=3
+CHILD_RESULT jq_plain_cone_hon=0,1,2,3,4
+CHILD_RESULT jq_plain_cone_drop=-
+CHILD_RESULT jq_plain_g6dof_type=4
+CHILD_RESULT jq_plain_g6dof_hon=0,1,2,3,4,10,11,12,13,14,15,16,17
+CHILD_RESULT jq_plain_g6dof_drop=5,6,7,8,9,18,19,20,21
+CHILD_RESULT jq_plain_hinge_flags=2/2
+CHILD_RESULT jq_plain_g6dof_flags=3/6
+CHILD_RESULT jq_plain_unmade_type=5
+CHILD_RESULT jq_plain_unmade_solver=1
+CHILD_RESULT jq_plain_coll_default=true

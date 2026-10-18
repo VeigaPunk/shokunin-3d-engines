@@ -1,0 +1,4 @@
+M0 case=det_interleave engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_interleave interleave A=02309c52da41ef33 base=02309c52da41ef33 eqA=True B=b5b5814549b9d518 C=b5b5814549b9d518 eqBC=True
+M DONE case=det_interleave
+# pybullet build time: Oct 15 2026 03:47:36

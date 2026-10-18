@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT sl_xform_jolt_backend=Jolt Physics
+CHILD_RESULT sl_xform_jolt_slept=41
+CHILD_RESULT sl_xform_jolt_if_calls=42
+CHILD_RESULT sl_xform_jolt_same_tr=0.0000,0.9890,0.0000
+CHILD_RESULT sl_xform_jolt_same_hdl=false
+CHILD_RESULT sl_xform_jolt_srv_sleep=false
+CHILD_RESULT sl_xform_jolt_fell=true

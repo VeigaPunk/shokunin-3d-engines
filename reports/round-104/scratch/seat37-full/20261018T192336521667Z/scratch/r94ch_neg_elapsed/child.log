@@ -1,0 +1,2 @@
+M0 case=neg_elapsed engine=cannon-es-0.20.0+three-0.186.1
+NEGATIVE REJECTED: r94_cannon neg-elapsed elapsed jitter 1e-6 moves the hash b95c69cacf7f74c7->f296e9e78042d55b stepnumber=240,240

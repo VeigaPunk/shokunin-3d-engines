@@ -1,0 +1,32 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT fd_dummy_pt_alive=t28,n0
+CHILD_RESULT fd_dummy_pt_pre=t28,n0
+CHILD_RESULT fd_dummy_pt_refetch=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_pt_post=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_pt_ret=t28,n0
+CHILD_RESULT fd_dummy_ray_alive=t27,n0
+CHILD_RESULT fd_dummy_ray_pre=t27,n0
+CHILD_RESULT fd_dummy_ray_refetch=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_ray_post=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_ray_ret=t27,n0
+CHILD_RESULT fd_dummy_is_alive=t28,n0
+CHILD_RESULT fd_dummy_is_pre=t28,n0
+CHILD_RESULT fd_dummy_is_refetch=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_is_post=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_is_ret=t28,n0
+CHILD_RESULT fd_dummy_cs_alive=t28,n0
+CHILD_RESULT fd_dummy_cs_pre=t28,n0
+CHILD_RESULT fd_dummy_cs_refetch=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_cs_post=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_cs_ret=t28,n0
+CHILD_RESULT fd_dummy_cm_alive=t32,n0
+CHILD_RESULT fd_dummy_cm_pre=t32,n0
+CHILD_RESULT fd_dummy_cm_refetch=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_cm_post=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_cm_ret=t32,n0
+CHILD_RESULT fd_dummy_ri_alive=t27,n0
+CHILD_RESULT fd_dummy_ri_pre=t27,n0
+CHILD_RESULT fd_dummy_ri_refetch=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_ri_post=t24,PhysicsDirectSpaceState3DDummy
+CHILD_RESULT fd_dummy_ri_ret=t27,n0

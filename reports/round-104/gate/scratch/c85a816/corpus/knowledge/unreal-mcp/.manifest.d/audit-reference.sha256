@@ -1,0 +1,18 @@
+# SEAT-15 PROBE — audit-reference manifest (byte-identity reference)
+# upstream: https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin
+# pinned SHA: a6aa73ada02a9fb1f5415bec491f9942c519b297 (main)
+# produced: fresh clone at /tmp/r101-audit, git rev-parse HEAD verified equal to pin
+# scope: every tracked file (git ls-files), 12/12; no symlinks, no submodules, no LFS, no .gitattributes
+# verify: cd corpus/knowledge/unreal-mcp && sha256sum -c .manifest.d/audit-reference.sha256
+5aa984848f0fd48c94394651c66f5b200ee1e2583d8df8caeecc22bb550b4d44  upstream/.claude-plugin/plugin.json
+653d372559bee26d75fcee330142276c7d9cbccba214ef008ff5392b99550f0f  upstream/CODEOWNERS
+0fad2f57a9fac18ab4a66ac23d44485544bdabb5057c99b684d485f27b81e538  upstream/.gitignore
+259124f0631b7d4b92e9e744003e8798b910c00dac201656b97906b3b5ebdc0c  upstream/hooks/hooks.json
+d3f1c871cd4edd5210ee2f448c403e1a441e569a14a1405d1a3f199c65651fdd  upstream/hooks/unreal-context.sh
+5b337be051359edcdec510103aee15f5f870efb38b6d42eecd685dc3582314a6  upstream/LICENSE
+483693ad0e14d027525d25c3d3eb4883e774b2f8150013181f9625e2dd46b40e  upstream/README.md
+e9d050087f36de51f7eeef49adb0ba9ebc603b65f74f475bc53a6debfc1f7b1c  upstream/skills/create-toolset/SKILL.md
+dbed002b4a46ab104274a31eb6682c3d277ce669216d0378df709f51567c3113  upstream/skills/unreal-mcp/references/operations.md
+bd16206ea142dc9cc1950b88af526a3137072ea152c5662e8549d21bc18a3b8a  upstream/skills/unreal-mcp/references/setup.md
+7ef8b991a82f591c5776bb5fa167c2bc2269fd00338ed3e8534eacc551d038fa  upstream/skills/unreal-mcp/SKILL.md
+7a0af781c458c7d192d6b23c16b5737922dc482470e2e4ef617bcda80f435087  upstream/skills/unreal-skill/SKILL.md

@@ -1,0 +1,5 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT dummy_backend=Dummy
+CHILD_NOTE dummy_floor tokens=["rid0", "nil", "2", "rid0", "zero", "dummy", "nil", "nil", "0", "rid0", "nil"]
+CHILD_RESULT dummy_floor=silent-floor

@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE cx_plain A=GodotPhysicsDirectSpaceState3D B=GodotPhysicsDirectSpaceState3D raw=GodotPhysicsDirectSpaceState3D rays=hit=-0.5000,hit=-10.5000,hit=-10.5000,hit=1.0000 box=hit=1.0000,hit=0.5000
+CHILD_RESULT cx_plain_backend=DEFAULT
+CHILD_RESULT cx_plain_dss_a=GodotPhysicsDirectSpaceState3D
+CHILD_RESULT cx_plain_dss_b=GodotPhysicsDirectSpaceState3D
+CHILD_RESULT cx_plain_fetch_b=GodotPhysicsDirectSpaceState3D
+CHILD_RESULT cx_plain_bds_a=GodotPhysicsDirectBodyState3D
+CHILD_RESULT cx_plain_bds_b=GodotPhysicsDirectBodyState3D
+CHILD_RESULT cx_plain_a_ne_b=true
+CHILD_RESULT cx_plain_b_bound=true
+CHILD_RESULT cx_plain_b_find=true
+CHILD_RESULT cx_plain_ident_a=true
+CHILD_RESULT cx_plain_ident_b=true
+CHILD_RESULT cx_plain_cross_ident=false
+CHILD_RESULT cx_plain_ray_a=hit=-0.5000
+CHILD_RESULT cx_plain_ray_b=hit=-10.5000
+CHILD_RESULT cx_plain_ray_fetch_b=hit=-10.5000
+CHILD_RESULT cx_plain_fall_a=1.6328
+CHILD_RESULT cx_plain_fall_b=-8.2838
+CHILD_RESULT cx_plain_node_b_fall=-8.2838
+CHILD_RESULT cx_plain_raw_fetch=GodotPhysicsDirectSpaceState3D
+CHILD_RESULT cx_plain_raw_bds=GodotPhysicsDirectBodyState3D
+CHILD_RESULT cx_plain_raw_ident=true
+CHILD_RESULT cx_plain_raw_ray=hit=1.0000
+CHILD_RESULT cx_plain_raw_moves=1.7160
+CHILD_RESULT cx_plain_srv_box=hit=1.0000
+CHILD_RESULT cx_plain_node_box=hit=0.5000

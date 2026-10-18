@@ -1,0 +1,43 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+P0 case=approach y0=0.530000 r=0.5 v0=-0.3
+P0 engine=Jolt Physics max_allowed_pen=0.01 contact_bias=0.8 max_sep=0.05 recycle=0.01 slop=0.01999999955297 baumgarte=0.20000000298023 spec_dist=0.0
+P t=1 y=0.53 gap=0.03 lv=-0.3
+P t=2 y=0.525 gap=0.025 lv=-0.3
+P t=3 y=0.52 gap=0.02 lv=-0.3
+P t=4 y=0.515 gap=0.015 lv=-0.3
+P t=5 y=0.51 gap=0.01 lv=-0.3
+P t=6 y=0.505 gap=0.005 lv=-0.3
+P t=7 y=0.5 gap=0.0 lv=-0.3
+P first_mod t=8 y=0.5 gap=0.0 lv=0.0
+P t=8 y=0.5 gap=0.0 lv=0.0
+P t=9 y=0.5 gap=0.0 lv=0.0
+P t=10 y=0.5 gap=0.0 lv=0.0
+P t=11 y=0.5 gap=0.0 lv=0.0
+P t=12 y=0.5 gap=0.0 lv=0.0
+P t=13 y=0.5 gap=0.0 lv=0.0
+P t=14 y=0.5 gap=0.0 lv=0.0
+P t=15 y=0.5 gap=0.0 lv=0.0
+P t=16 y=0.5 gap=0.0 lv=0.0
+P t=17 y=0.5 gap=0.0 lv=0.0
+P t=18 y=0.5 gap=0.0 lv=0.0
+P t=19 y=0.5 gap=0.0 lv=0.0
+P t=20 y=0.5 gap=0.0 lv=0.0
+P t=21 y=0.5 gap=0.0 lv=0.0
+P t=22 y=0.5 gap=0.0 lv=0.0
+P t=23 y=0.5 gap=0.0 lv=0.0
+P t=24 y=0.5 gap=0.0 lv=0.0
+P t=25 y=0.5 gap=0.0 lv=0.0
+P t=26 y=0.5 gap=0.0 lv=0.0
+P t=27 y=0.5 gap=0.0 lv=0.0
+P t=28 y=0.5 gap=0.0 lv=0.0
+P t=29 y=0.5 gap=0.0 lv=0.0
+P t=30 y=0.5 gap=0.0 lv=0.0
+P t=40 y=0.5 gap=0.0 lv=0.0
+P t=60 y=0.5 gap=0.0 lv=0.0
+P t=80 y=0.5 gap=0.0 lv=0.0
+P t=100 y=0.5 gap=0.0 lv=0.0
+WARNING: Jolt Physics job system exceeded the maximum number of jobs. This should not happen. Please report this. Waiting for jobs to become available...
+     at: CreateJob (modules/jolt_physics/spaces/jolt_job_system.cpp:123)
+P t=120 y=0.5 gap=0.0 lv=0.0
+PSUM case=approach first_mod_tick=8 first_mod_y=0.5 first_mod_gap=0.0 y_end=0.5 lv_end=0.0

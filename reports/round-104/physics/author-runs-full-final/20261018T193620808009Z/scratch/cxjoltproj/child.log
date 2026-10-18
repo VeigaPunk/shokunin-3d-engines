@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE cx_jolt A=JoltPhysicsDirectSpaceState3D B=JoltPhysicsDirectSpaceState3D raw=JoltPhysicsDirectSpaceState3D rays=hit=-0.5000,hit=-10.5000,hit=-10.5000,hit=1.0000 box=hit=1.0000,hit=0.5000
+CHILD_RESULT cx_jolt_backend=Jolt Physics
+CHILD_RESULT cx_jolt_dss_a=JoltPhysicsDirectSpaceState3D
+CHILD_RESULT cx_jolt_dss_b=JoltPhysicsDirectSpaceState3D
+CHILD_RESULT cx_jolt_fetch_b=JoltPhysicsDirectSpaceState3D
+CHILD_RESULT cx_jolt_bds_a=JoltPhysicsDirectBodyState3D
+CHILD_RESULT cx_jolt_bds_b=JoltPhysicsDirectBodyState3D
+CHILD_RESULT cx_jolt_a_ne_b=true
+CHILD_RESULT cx_jolt_b_bound=true
+CHILD_RESULT cx_jolt_b_find=true
+CHILD_RESULT cx_jolt_ident_a=true
+CHILD_RESULT cx_jolt_ident_b=true
+CHILD_RESULT cx_jolt_cross_ident=false
+CHILD_RESULT cx_jolt_ray_a=hit=-0.5000
+CHILD_RESULT cx_jolt_ray_b=hit=-10.5000
+CHILD_RESULT cx_jolt_ray_fetch_b=hit=-10.5000
+CHILD_RESULT cx_jolt_fall_a=1.6328
+CHILD_RESULT cx_jolt_fall_b=-8.2407
+CHILD_RESULT cx_jolt_node_b_fall=-8.2892
+CHILD_RESULT cx_jolt_raw_fetch=JoltPhysicsDirectSpaceState3D
+CHILD_RESULT cx_jolt_raw_bds=JoltPhysicsDirectBodyState3D
+CHILD_RESULT cx_jolt_raw_ident=true
+CHILD_RESULT cx_jolt_raw_ray=hit=1.0000
+CHILD_RESULT cx_jolt_raw_moves=2.0000
+CHILD_RESULT cx_jolt_srv_box=hit=1.0000
+CHILD_RESULT cx_jolt_node_box=hit=0.5000

@@ -1,0 +1,25 @@
+M0 case=nan_all engine=cannon-es-0.20.0+three-0.186.1
+M nan_all zero_dt nan=false inf=false where=none h=0d664c54367d5158 stepnumber=240 time=0 invDt=Infinity
+M nan_all neg_dt nan=false inf=false where=none h=45ac27f308815d52 stepnumber=240 time=-3.9999999999999907
+M nan_all nan_dt nan=true inf=true where=0.p+0.q+0.v+0.w h=917304a68a4ef685 stepnumber=2
+M nan_all inf_elapsed nan=false inf=false where=none h=1fd2a6b92e7a7c68 afterInf=10 accumulator=NaN stepnumber=10 time=Infinity
+M nan_all nan_elapsed nan=false inf=false where=none h=0d664c54367d5158 accumulator=NaN stepnumber=0 time=NaN
+M nan_all maxsub0 nan=false inf=false where=none h=0d664c54367d5158 stepnumber=0 time=1.0000000000000013 accumulator=0 y=5.000000000
+M nan_all iters0 nan=false inf=false where=none h=2fc07217bb307c79 contacts=0 sleep=0 y=-72.845108129
+M nan_all nan_gravity nan=true inf=true where=0.p+0.v h=5b0a2ceffbb4ed04 gravity.length=NaN
+M nan_all nan_mass nan=true inf=true where=0.p+0.v h=cd8e446d27b9f42b invMass=0
+M nan_all mass0_dynamic nan=false inf=false where=none h=0d664c54367d5158 type=1 invMass=0 y=5.000000000
+M nan_all damping_gt1 nan=true inf=true where=0.p+0.v h=cd8e446d27b9f42b v=NaN pow=NaN
+M nan_all damping_eq1 nan=false inf=false where=none h=d93ca66b9f1f81c8 v=-0.163666667 y=4.972722222
+M nan_all angdamping_gt1 nan=true inf=true where=0.q+0.w h=152fc9d393846ae3 w=NaN,NaN,NaN
+M nan_all zero_box nan=false inf=false where=none h=9b49bfbcca91e1d5 r=0 inertia=0,0,0 y=-0.000001485
+M nan_all coincident_spheres nan=false inf=false where=none h=3dbe7630228d0b20 contacts=1 ni=0,0,0 cC=2.000110769230769 sep=0.000000000 a.v=0.000000000
+M nan_all coincident_spheres_gravity nan=false inf=false where=none h=dbed9f445e3c7efa contacts=1 sep=0.000000000 a.y=-14.672741986
+M nan_all neg_radius threw="The sphere radius cannot be negative."
+M nan_all zero_quat nan=false inf=false where=none h=72d7f79206de1d0c q=0.000000000,0.000000000,0.000000000,0.000000000
+M nan_all nan_quat nan=true inf=true where=0.q h=c76401353a4625bf q=NaN y=4.959092470
+M nan_all nan_radius_midsim nan=false inf=false where=none h=f25f4f342b7047d2 r=NaN y=0.459090028
+M nan_all teleport_into_ground nan=false inf=false where=none h=421b114de59e3c2e y=-14.995366460 v=-18.747073409
+M nan_all nan_payload nan=true inf=true where=0.q+0.w h=152fc9d393846ae3 payload=canonical
+M nan_all summary cases=22 nan=7 [nan_dt,nan_gravity,nan_mass,damping_gt1,angdamping_gt1,nan_quat,nan_payload] inf_only=0 []
+M DONE case=nan_all

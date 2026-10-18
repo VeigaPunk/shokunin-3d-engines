@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+B XRServer object
+B DONE
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 55743414a000
+
+[1] 7f783603e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7f783603e6f0]
+[2] 557435334012 (main+11ea012) - /usr/bin/godot(+0x11ea012) [0x557435334012]
+[3] 5574351a6062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x5574351a6062]
+[4] 7f7836027781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7f7836027781]
+[5] 7f78360278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7f78360278b9]
+[6] 55743521a6d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x55743521a6d5]
+-- END OF C++ BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

@@ -1,0 +1,19 @@
+M0 case=b2k engine=blender-5.2.1
+Traceback (most recent call last):
+  File "/usr/share/blender/5.2/scripts/startup/bl_operators/rigidbody.py", line 165, in execute
+    bpy.ops.anim.keyframe_insert_by_name(type='BUILTIN_KSI_LocRot')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Operator bpy.ops.anim.keyframe_insert_by_name.poll() failed, context is incorrect
+00:00.240  bpy.rna          | ERROR Python script error in RIGIDBODY_OT_bake_to_keyframes.execute
+Error: Python: Traceback (most recent call last):
+  File "/usr/share/blender/5.2/scripts/startup/bl_operators/rigidbody.py", line 165, in execute
+    bpy.ops.anim.keyframe_insert_by_name(type='BUILTIN_KSI_LocRot')
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: Operator bpy.ops.anim.keyframe_insert_by_name.poll() failed, context is incorrect
+Location: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/r91_child.py:401
+M b2k b2k_call err=RuntimeError pollfail=True kf_op=True
+M b2k b2k_state actions=0 anim_data=False
+M DONE case=b2k
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

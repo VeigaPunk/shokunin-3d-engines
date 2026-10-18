@@ -1,0 +1,21 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CLS_ENGINE maxfps=0 ts=1.000000 tps=60 ipf=true ffps=false pframes=0 pframes=0
+CLS_SET application/run/max_fps = 0 (int)
+CLS_SET application/run/delta_smoothing = true (bool)
+CLS_SET physics/common/physics_ticks_per_second = 60 (int)
+CLS_SET physics/common/max_physics_steps_per_frame = 1 (int)
+CLS_SET physics/common/physics_jitter_fix = 0.5 (float)
+CLS_SET physics/common/physics_interpolation = false (bool)
+CLS_SET physics/common/enable_object_picking = true (bool)
+CLS_SET debug/settings/fps/force_fps = <absent> (String)
+CLS_ARGV engine=--script|res://r100b_cls.gd
+CLS_USER user=
+CLS_CLASS PhysicalBoneSimulator3D exists=true inst=true
+CLS_CLASS PhysicalBone3D exists=true inst=true
+CLS_CLASS Skeleton3D exists=true inst=true
+CLS_CLASS RemoteTransform3D exists=true inst=true
+CLS_CLASS Area3D exists=true inst=true
+CLS_CLASS SceneTree exists=true inst=true
+CLS_CLASS MainLoop exists=true inst=true
+CLS_DONE

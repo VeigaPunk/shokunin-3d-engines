@@ -1,0 +1,7 @@
+[application]
+
+config/name="r90bt_detach_detachb_gp"
+
+[physics]
+
+common/physics_ticks_per_second=60

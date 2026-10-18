@@ -1,0 +1,6 @@
+M0 case=ord_asym2 engine=cannon-es-0.20.0+three-0.186.1
+M ord_asym2 forward h=2e65cf7fee2231ef ph=2ea6cf8d3ddb704c
+M ord_asym2 reverse h=d02da58eee19ed26 ph=3b756009eafd9be0
+M ord_asym2 eq h=false ph=false contacts=30:n=8/16 60:n=6/12 120:n=4/8 240:n=1/2
+M ord_asym2 solver rows=225/225 rawSame=false sortedSame=false
+M DONE case=ord_asym2

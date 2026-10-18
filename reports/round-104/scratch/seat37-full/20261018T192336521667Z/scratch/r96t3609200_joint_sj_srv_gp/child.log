@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+J0 case=srv engine=DEFAULT type=0 space_a=RID(94489280512) space_b=RID(94489280512) world_space=RID(94489280512)
+J t=1 y=2.0 made=true
+J t=2 y=2.3 made=true
+J t=3 y=2.51 made=true
+J t=4 y=2.43 made=true
+J t=5 y=2.414 made=true
+J t=6 y=2.4108 made=true
+J t=7 y=2.41016 made=true
+J t=8 y=2.410032 made=true
+J t=9 y=2.410006 made=true
+J t=10 y=2.410002 made=true
+J t=11 y=2.410001 made=true
+J t=12 y=2.410001 made=true
+ERROR: 1 RID allocations of type 'P12GodotJoint3D' were leaked at exit.
+ERROR: 2 RID allocations of type 'P11GodotBody3D' were leaked at exit.
+ERROR: 2 RID allocations of type 'P12GodotShape3D' were leaked at exit.

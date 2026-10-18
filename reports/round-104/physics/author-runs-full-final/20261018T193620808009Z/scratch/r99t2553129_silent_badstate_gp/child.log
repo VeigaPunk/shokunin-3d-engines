@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+BS_P1_BEFORE playing=false node=Start
+BS_P1_AFTER_ZZZ playing=false node=Start path=[]
+ERROR: zzz is not found current state.
+   at: get_node (scene/animation/animation_node_state_machine.cpp:1375)
+ERROR: Condition "!p_state_machine->states.has(travel)" is true. Returning: false
+   at: _make_travel_path (scene/animation/animation_node_state_machine.cpp:556)
+ERROR: No such node: 'zzz'
+   at: _process (scene/animation/animation_node_state_machine.cpp:812)
+BS_P2_BEFORE playing=true node=a
+BS_P2_AFTER_ZZZ playing=true node=a path=[]
+ERROR: zzz is not found current state.
+   at: get_node (scene/animation/animation_node_state_machine.cpp:1375)
+ERROR: Condition "!p_state_machine->states.has(travel)" is true. Returning: false
+   at: _make_travel_path (scene/animation/animation_node_state_machine.cpp:556)
+ERROR: No such node: 'zzz'
+   at: _process (scene/animation/animation_node_state_machine.cpp:812)
+BS_END node=a ok=true
+SILENT_DONE case=badstate

@@ -1,0 +1,4 @@
+M0 case=mod_dt_zero_acc engine=cannon-es-0.20.0+three-0.186.1
+M mod_dt_zero_acc afterFirst stepnumber=1 time=0.016666666667 acc=NaN ball.y=5.000000000
+M mod_dt_zero_acc afterNext stepnumber=1 time=0.033333333333 acc=NaN ball.y=5.000000000 frozen=true
+M DONE case=mod_dt_zero_acc

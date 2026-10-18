@@ -1,0 +1,2 @@
+FAIL scratch root is not a directory: reports/round-104/gate/closeout/scratch
+     set GATE_WORKDIR (or TMPDIR) to an existing writable directory

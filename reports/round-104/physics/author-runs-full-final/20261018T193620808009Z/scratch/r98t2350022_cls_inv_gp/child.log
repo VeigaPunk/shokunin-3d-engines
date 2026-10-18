@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+INVBOUND engine=4.7.2-stable (arch_linux)
+INV GLTFDocument exists=true can=true inst=Resource chain=GLTFDocument<Resource<RefCounted<Object
+INV GLTFState exists=true can=true inst=Resource chain=GLTFState<Resource<RefCounted<Object
+INV GLTFNode exists=true can=true inst=Resource chain=GLTFNode<Resource<RefCounted<Object
+INV GLTFMesh exists=true can=true inst=Resource chain=GLTFMesh<Resource<RefCounted<Object
+INV GLTFAnimation exists=true can=true inst=Resource chain=GLTFAnimation<Resource<RefCounted<Object
+INV GLTFSkeleton exists=true can=true inst=Resource chain=GLTFSkeleton<Resource<RefCounted<Object
+INV GLTFSkin exists=true can=true inst=Resource chain=GLTFSkin<Resource<RefCounted<Object
+INV GLTFBufferView exists=true can=true inst=Resource chain=GLTFBufferView<Resource<RefCounted<Object
+INV GLTFAccessor exists=true can=true inst=Resource chain=GLTFAccessor<Resource<RefCounted<Object
+INV GLTFTexture exists=true can=true inst=Resource chain=GLTFTexture<Resource<RefCounted<Object
+INV GLTFTextureSampler exists=true can=true inst=Resource chain=GLTFTextureSampler<Resource<RefCounted<Object
+INV GLTFCamera exists=true can=true inst=Resource chain=GLTFCamera<Resource<RefCounted<Object
+INV GLTFLight exists=true can=true inst=Resource chain=GLTFLight<Resource<RefCounted<Object
+INV GLTFPhysicsBody exists=true can=true inst=Resource chain=GLTFPhysicsBody<Resource<RefCounted<Object
+INV GLTFPhysicsShape exists=true can=true inst=Resource chain=GLTFPhysicsShape<Resource<RefCounted<Object
+INV GLTFSpecGloss exists=true can=true inst=Resource chain=GLTFSpecGloss<Resource<RefCounted<Object
+INV GLTFDocumentExtension exists=true can=true inst=Resource chain=GLTFDocumentExtension<Resource<RefCounted<Object
+INV GLTFObjectModelProperty exists=true can=true inst=RefCounted chain=GLTFObjectModelProperty<RefCounted<Object
+INV n_asked=18 n_exists=18 n_refcounted=1

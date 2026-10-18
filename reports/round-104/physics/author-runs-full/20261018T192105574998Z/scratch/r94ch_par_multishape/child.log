@@ -1,0 +1,3 @@
+M0 case=par_multishape engine=cannon-es-0.20.0+three-0.186.1
+M par_multishape multishape_order shapeIds=2,3 offsets=-0.6,0.6 rows s1:n=0 [] s2:n=2 [si0-sj0 si1-sj0] s3:n=2 [si0-sj0 si1-sj0] s30:n=2 [si0-sj0 si1-sj0] s60:n=2 [si0-sj0 si1-sj0]
+M DONE case=par_multishape

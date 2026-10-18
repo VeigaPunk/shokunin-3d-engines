@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE gs_jolt pt=2/1 cm=frac normal=0.000000,1.000000,0.000000 ovp=offset cs=2/neg
+CHILD_RESULT gs_jolt_backend=Jolt Physics
+CHILD_RESULT gs_jolt_pt_boundary=2
+CHILD_RESULT gs_jolt_pt_inside=1
+CHILD_RESULT gs_jolt_cm=frac
+CHILD_RESULT gs_jolt_normal=up
+CHILD_RESULT gs_jolt_ri_n=6
+CHILD_RESULT gs_jolt_ovp=offset
+CHILD_RESULT gs_jolt_cs=2,neg

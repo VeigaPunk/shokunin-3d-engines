@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+FT_BEFORE actor=(0.4000,0.0000,0.0000) tp=0.1000
+FT_FREED tree_invalid=true pactive=true
+FT_AFTER actor=(0.4000,0.0000,0.0000) tp=-
+LIFE_DONE case=freetree

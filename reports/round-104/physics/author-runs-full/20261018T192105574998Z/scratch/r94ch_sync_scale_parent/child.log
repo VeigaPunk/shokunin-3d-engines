@@ -1,0 +1,4 @@
+M0 case=sync_scale_parent engine=cannon-es-0.20.0+three-0.186.1
+M sync_scale_parent scale_parent naiveWorld=9.359717,0.999996,-1.501426 bodyWorld=0.750713,0.499998,-0.320141 naiveErr=8.704044
+M sync_scale_parent scale_parent_fix local=0.160071,0.249999,-4.624644 fixedWorld=0.750713,0.499998,-0.320141 fixedErr=0.000e+0
+M DONE case=sync_scale_parent

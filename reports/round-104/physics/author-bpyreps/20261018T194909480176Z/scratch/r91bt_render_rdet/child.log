@@ -1,0 +1,12 @@
+M0 case=rdet engine=blender-5.2.1
+M rdet state f40=(0.381156,-0.006439,0.500823)
+00:00.347  render           | Saved: '/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-bpyreps/20261018T194909480176Z/scratch/r91bt_render_rdet/renderdet/a.png'
+00:00.383  render           | Saved: '/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-bpyreps/20261018T194909480176Z/scratch/r91bt_render_rdet/renderdet/b.png'
+00:00.416  render           | Saved: '/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-bpyreps/20261018T194909480176Z/scratch/r91bt_render_rdet/renderdet/c.png'
+M rdet same_state stable=True
+00:00.451  render           | Saved: '/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-bpyreps/20261018T194909480176Z/scratch/r91bt_render_rdet/renderdet/moved.png'
+M rdet moved_state differs=True
+M DONE case=rdet
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

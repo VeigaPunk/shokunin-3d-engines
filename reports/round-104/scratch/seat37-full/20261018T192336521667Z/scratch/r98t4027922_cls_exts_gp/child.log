@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+EXTS supported_n=13 list=EXT_texture_webp,GODOT_single_root,KHR_animation_pointer,KHR_lights_punctual,KHR_materials_emissive_strength,KHR_materials_pbrSpecularGlossiness,KHR_materials_unlit,KHR_node_visibility,KHR_texture_basisu,KHR_texture_transform,OMI_collider,OMI_physics_body,OMI_physics_shape
+EXTS res_exists_glb=false
+EXTS res_exists_gltf=false
+EXTS res_exists_upper=false
+EXTS res_exists_absent=false
+EXTS recog_ps=tscn,res,scn
+EXTS recog_gltfdoc=tres,res
+EXTS recog_resource=tscn,tres,anim,atlastex,curvetex,dpitex,fontdata,lmbake,material,mesh,meshlib,meshtex,mp3str,multimesh,occ,oggvorbisstr,phymat,repl,res,sample,scn,shape,stylebox,tex,theme,translation
+EXTS recog_empty=ogv,gdshaderinc,gdshader,tscn,tres,po,mo,anim,atlastex,curvetex,dpitex,fontdata,lmbake,material,mesh,meshlib,meshtex,mp3str,multimesh,occ,oggvorbisstr,phymat,repl,res,sample,scn,shape,stylebox,tex,theme,translation,image,crt,key,pub,json,gdextension,gd,gdc,ctex,ctexarray,ccube,ccubearray,ctex3d,dds,ktx,ktx2

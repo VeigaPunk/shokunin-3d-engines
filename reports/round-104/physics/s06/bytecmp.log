@@ -1,0 +1,24 @@
+sweep serial rc=0 wall_ms=2827
+sweep conc rc=0 wall_ms=1485
+IDENTICAL sweep sha=e174bd3faffefb5c
+rid serial rc=0 wall_ms=2706
+rid conc rc=0 wall_ms=1388
+IDENTICAL rid sha=be8cd5879ee78704
+api serial rc=0 wall_ms=2875
+api conc rc=0 wall_ms=1443
+IDENTICAL api sha=40bd27ccbd20d77c
+free_pair serial rc=0 wall_ms=9701
+free_pair conc rc=0 wall_ms=2344
+IDENTICAL free_pair sha=d8bf020d37ff6b4c
+free_ops serial rc=0 wall_ms=20231
+free_ops conc rc=0 wall_ms=2501
+IDENTICAL free_ops sha=07f72b5beae4a114
+detach serial rc=0 wall_ms=3357
+detach conc rc=0 wall_ms=1610
+IDENTICAL detach sha=d0856064febbee94
+chain3 serial rc=0 wall_ms=5417
+chain3 conc rc=0 wall_ms=2936
+IDENTICAL chain3 sha=6f5e4d672e84dcd2
+twopin serial rc=0 wall_ms=8394
+twopin conc rc=0 wall_ms=2089
+IDENTICAL twopin sha=2a3724ef3bfef825

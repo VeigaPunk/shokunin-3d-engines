@@ -1,0 +1,13 @@
+M0 case=neg_shm_rt engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M neg_shm_rt neg-shm-rt ctrl direct-rt1 idle1.0s froze=True
+M neg_shm_rt neg-shm-rt shm-rt1 idle2.0s fell=True
+# neg-shm-rt measured z0=5 z1=0.49999
+# pybullet build time: Oct 15 2026 03:47:36
+# startThreads creating 1 threads.
+# starting thread 0
+# started thread 0
+# MotionThreadFunc thread started
+# PosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+NEGATIVE REJECTED: r95_bullet neg_shm_rt neg-shm-rt SHM transport is not physics-neutral under rt=1: DIRECT froze idle (froze=True), SHM pump advanced the world during a bare sleep (fell=True)

@@ -1,0 +1,2 @@
+M0 case=neg_grid engine=cannon-es-0.20.0+three-0.186.1
+NEGATIVE REJECTED: r94_cannon neg-grid broadphase refused nx=2,3,4 TypeError=Cannot read properties of undefined (reading 'material') nx1_ok_y=4.997272222

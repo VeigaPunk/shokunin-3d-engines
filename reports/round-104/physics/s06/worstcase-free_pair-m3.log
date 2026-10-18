@@ -1,0 +1,52 @@
+worstcase.sh: line 42: 885458 Killed                     timeout -s KILL 300 "$GODOT" --headless --path "$OUT/$tree$i" --script res://phys3d_joints.gd -- "--arm=$ARM" > "$OUT/$tree$i.stdout" 2> "$OUT/$tree$i.stderr"
+worstcase.sh: line 1: 885459 Killed                     timeout -s KILL 300 "$GODOT" --headless --path "$OUT/$tree$i" --script res://phys3d_joints.gd -- "--arm=$ARM" > "$OUT/$tree$i.stdout" 2> "$OUT/$tree$i.stderr"
+worstcase.sh: line 1: 885460 Killed                     timeout -s KILL 300 "$GODOT" --headless --path "$OUT/$tree$i" --script res://phys3d_joints.gd -- "--arm=$ARM" > "$OUT/$tree$i.stdout" 2> "$OUT/$tree$i.stderr"
+== serial: 3 parents x 21 children, wall_ms=8393 rc=137 137 137
+   REP 1 DIFFERS vs serial solo reference:
+mode_ok=1,m11=d42ece23b296d594}
+mode_ok=1,m11=90fa3f626053dcff}
+mode_ok=1,m11=2b5f33bc87de0b0f}
+mode_ok=1,m11=affcca5e5e877587}
+mode_ok=1,m8=c3d61244e5e1dc35}
+mode_ok=1,m11=ce6c02c7734d56e3}
+   REP 2 DIFFERS vs serial solo reference:
+mode_ok=1,m11=d42ece23b296d594}
+mode_ok=1,m11=90fa3f626053dcff}
+mode_ok=1,m11=2b5f33bc87de0b0f}
+mode_ok=1,m11=affcca5e5e877587}
+mode_ok=1,m8=c3d61244e5e1dc35}
+mode_ok=1,m11=ce6c02c7734d56e3}
+   REP 3 DIFFERS vs serial solo reference:
+mode_ok=1,m11=d42ece23b296d594}
+mode_ok=1,m11=90fa3f626053dcff}
+mode_ok=1,m11=2b5f33bc87de0b0f}
+mode_ok=1,m11=affcca5e5e877587}
+mode_ok=1,m8=c3d61244e5e1dc35}
+mode_ok=1,m11=ce6c02c7734d56e3}
+   identical=0 differs=3 of 3
+worstcase.sh: line 42: 949993 Killed                     timeout -s KILL 300 "$GODOT" --headless --path "$OUT/$tree$i" --script res://phys3d_joints.gd -- "--arm=$ARM" > "$OUT/$tree$i.stdout" 2> "$OUT/$tree$i.stderr"
+worstcase.sh: line 1: 949997 Killed                     timeout -s KILL 300 "$GODOT" --headless --path "$OUT/$tree$i" --script res://phys3d_joints.gd -- "--arm=$ARM" > "$OUT/$tree$i.stdout" 2> "$OUT/$tree$i.stderr"
+worstcase.sh: line 42: 949994 Killed                     timeout -s KILL 300 "$GODOT" --headless --path "$OUT/$tree$i" --script res://phys3d_joints.gd -- "--arm=$ARM" > "$OUT/$tree$i.stdout" 2> "$OUT/$tree$i.stderr"
+== conc: 3 parents x 21 children, wall_ms=1331 rc=137 137 137
+   REP 1 DIFFERS vs serial solo reference:
+mode_ok=1,m11=d42ece23b296d594}
+mode_ok=1,m11=90fa3f626053dcff}
+mode_ok=1,m11=2b5f33bc87de0b0f}
+mode_ok=1,m11=affcca5e5e877587}
+mode_ok=1,m8=c3d61244e5e1dc35}
+mode_ok=1,m11=ce6c02c7734d56e3}
+   REP 2 DIFFERS vs serial solo reference:
+mode_ok=1,m11=d42ece23b296d594}
+mode_ok=1,m11=90fa3f626053dcff}
+mode_ok=1,m11=2b5f33bc87de0b0f}
+mode_ok=1,m11=affcca5e5e877587}
+mode_ok=1,m8=c3d61244e5e1dc35}
+mode_ok=1,m11=ce6c02c7734d56e3}
+   REP 3 DIFFERS vs serial solo reference:
+mode_ok=1,m11=d42ece23b296d594}
+mode_ok=1,m11=90fa3f626053dcff}
+mode_ok=1,m11=2b5f33bc87de0b0f}
+mode_ok=1,m11=affcca5e5e877587}
+mode_ok=1,m8=c3d61244e5e1dc35}
+mode_ok=1,m11=ce6c02c7734d56e3}
+   identical=0 differs=3 of 3

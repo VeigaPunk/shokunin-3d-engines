@@ -1,0 +1,12 @@
+{
+  "name": "game-dev-3d-three-headless",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "node scene_graph.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.1"
+  }
+}

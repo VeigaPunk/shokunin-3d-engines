@@ -1,0 +1,4 @@
+M0 case=sync_pos_only engine=cannon-es-0.20.0+three-0.186.1
+M sync_pos_only pos_only dPos=0.000e+0 maxRotDeg=125.505113 finalRotDeg=124.514597
+M sync_pos_only q objQ=0000000000000000000000000000000000000000000000003ff0000000000000 bodyQ=3fddcac8658e56323fe1085397f0777bbfe10855909bf8573fddcac7fc828075 bodyW=-0.000000,-0.000004,-0.000000
+M DONE case=sync_pos_only

@@ -1,0 +1,7 @@
+M0 case=sv_backends engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sv_backends solvertype unset:h=02309c52da41ef33,z=1.49997782,cc=13 SI:h=02309c52da41ef33,z=1.49997782,cc=13 PGS:h=8606ea0c3c45c5ad,z=1.49998,cc=13 DANTZIG:h=71248c7a8455c70a,z=1.49997818,cc=13
+M DONE case=sv_backends
+# pybullet build time: Oct 15 2026 03:47:36
+# PyBullet: Constraint Solver: MLCP + PGS
+# switched solver
+# PyBullet: Constraint Solver: MLCP + Dantzig

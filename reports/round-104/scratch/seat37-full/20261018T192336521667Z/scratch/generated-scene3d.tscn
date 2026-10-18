@@ -1,0 +1,9 @@
+[gd_scene format=3]
+
+[sub_resource type="BoxMesh" id="BoxMesh_rmhlu"]
+
+[node name="DiskRoot" type="Node3D" unique_id=1764558938]
+
+[node name="BoxVisual" type="MeshInstance3D" parent="." unique_id=948696866]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2, -3)
+mesh = SubResource("BoxMesh_rmhlu")

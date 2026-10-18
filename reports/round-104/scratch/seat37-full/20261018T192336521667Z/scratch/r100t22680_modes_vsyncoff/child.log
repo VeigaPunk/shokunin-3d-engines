@@ -1,0 +1,83 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+BM_BOOT tps=60 ip=false maxfps=0 ts=1.000000 jit=0.500 cap=8 ds=true argz=2 userz=1
+BM_ARGV engine=--script|res://r100b_modes.gd user=--ticks=120
+BM_WF n=1 wus=426
+BM_WF n=2 wus=30
+BM_WF n=3 wus=10
+BM_WF n=4 wus=9
+BM_WF n=5 wus=9
+BM_WF n=6 wus=8
+BM_WF n=7 wus=8
+BM_WF n=8 wus=8
+BM_WF n=9 wus=13
+BM_WF n=10 wus=8
+BM_WF n=11 wus=8
+BM_WF n=12 wus=9
+BM_WF n=13 wus=7
+BM_WF n=14 wus=9
+BM_WF n=15 wus=7
+BM_WF n=16 wus=14
+BM_WF n=17 wus=9
+BM_WF n=18 wus=8
+BM_WF n=19 wus=7
+BM_WF n=20 wus=9
+BM_WF n=21 wus=7
+BM_WF n=22 wus=9
+BM_WF n=23 wus=8
+BM_WF n=24 wus=8
+BM_WF n=25 wus=8
+BM_WF n=26 wus=8
+BM_WF n=27 wus=8
+BM_WF n=28 wus=8
+BM_WF n=29 wus=8
+BM_WF n=30 wus=8
+BM_WF n=31 wus=8
+BM_WF n=32 wus=8
+BM_WF n=33 wus=8
+BM_WF n=34 wus=7
+BM_WF n=35 wus=8
+BM_WF n=36 wus=8
+BM_WF n=37 wus=8
+BM_WF n=38 wus=8
+BM_WF n=39 wus=8
+BM_WF n=40 wus=7
+BM_HEAD_BEGIN
+BM_PR n=1 pf=1 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=2 pf=2 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=3 pf=3 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=4 pf=4 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=5 pf=5 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=6 pf=6 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=7 pf=7 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=8 pf=8 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PH n=1 pf=1 d=0.016666667 y=5.000000 vy=0.000000 ifr=0.000000
+BM_PH n=2 pf=2 d=0.016666667 y=4.997278 vy=-0.163333 ifr=0.000000
+BM_PH n=3 pf=3 d=0.016666667 y=4.991838 vy=-0.326394 ifr=0.000000
+BM_PH n=4 pf=4 d=0.016666667 y=4.983685 vy=-0.489184 ifr=0.000000
+BM_PH n=5 pf=5 d=0.016666667 y=4.972823 vy=-0.651702 ifr=0.000000
+BM_PH n=6 pf=6 d=0.016666667 y=4.959257 vy=-0.813949 ifr=0.000000
+BM_PH n=7 pf=7 d=0.016666667 y=4.942992 vy=-0.975926 ifr=0.000000
+BM_PH n=8 pf=8 d=0.016666667 y=4.924031 vy=-1.137632 ifr=0.000000
+BM_TAIL_BEGIN
+BM_PR n=113 pf=113 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=114 pf=114 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=115 pf=115 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=116 pf=116 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=117 pf=117 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=118 pf=118 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=119 pf=119 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PR n=120 pf=120 d=0.016666667 ifr=0.000000 ts=1.000000
+BM_PH n=113 pf=113 d=0.016666667 y=-11.210905 vy=-16.700066 ifr=0.000000
+BM_PH n=114 pf=114 d=0.016666667 y=-11.491498 vy=-16.835566 ifr=0.000000
+BM_PH n=115 pf=115 d=0.016666667 y=-11.774345 vy=-16.970840 ifr=0.000000
+BM_PH n=116 pf=116 d=0.016666667 y=-12.059443 vy=-17.105890 ifr=0.000000
+BM_PH n=117 pf=117 d=0.016666667 y=-12.346788 vy=-17.240715 ifr=0.000000
+BM_PH n=118 pf=118 d=0.016666667 y=-12.636377 vy=-17.375315 ifr=0.000000
+BM_PH n=119 pf=119 d=0.016666667 y=-12.928205 vy=-17.509689 ifr=0.000000
+BM_PH n=120 pf=120 d=0.016666667 y=-13.222269 vy=-17.643841 ifr=0.000000
+BM_TAIL_END
+BM_END n_pr=120 n_ph=120 pf=120 ff=120 fpt=[0:1, 1:119] steps_max=1 traj=2311ff14cd04c227
+BM_WALL n=120 min_us=5 med_us=6 max_us=426 hist=[0ms:120]
+BM_FPS real=1
+BM_TIME t=2

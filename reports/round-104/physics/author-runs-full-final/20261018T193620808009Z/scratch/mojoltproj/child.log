@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE mo_jolt cm=0.0999,0.1002 pen=0.0999,0.1002 away=1.0000,1.0000 shared=0.2485,0.2500 cs=0/2 ri=0/6 is=0/1
+CHILD_RESULT mo_jolt_backend=Jolt Physics
+CHILD_RESULT mo_jolt_cm=honored
+CHILD_RESULT mo_jolt_cm_bracket=tight
+CHILD_RESULT mo_jolt_cm_pen=same
+CHILD_RESULT mo_jolt_cm_shared=honored
+CHILD_RESULT mo_jolt_cm_away=miss
+CHILD_RESULT mo_jolt_cm_zero=blocked
+CHILD_RESULT mo_jolt_cm_short=blocked
+CHILD_RESULT mo_jolt_cs=ignored
+CHILD_RESULT mo_jolt_ri=ignored
+CHILD_RESULT mo_jolt_is=ignored

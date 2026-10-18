@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+LG write=1.0 imm=0.0 after1=1.0 after2=1.0 ff1=1
+LG write=2.0 imm=1.0 after1=2.0 after2=2.0 ff1=3
+LG write=3.0 imm=2.0 after1=3.0 after2=3.0 ff1=5
+LG write=4.0 imm=3.0 after1=4.0 after2=4.0 ff1=7
+RT_DONE case=lag

@@ -1,0 +1,8 @@
+[application]
+
+config/name="r90bt_api_api_dummy"
+
+[physics]
+
+common/physics_ticks_per_second=60
+3d/physics_engine="Dummy"

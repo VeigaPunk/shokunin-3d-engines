@@ -1,0 +1,4 @@
+M0 case=kn_loud engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M kn_loud knobs-loud contactERP_0.2:h=e08d5633b3cfd5cb contactSlop_0.01:h=dea262fe1f8c2307 resid_1e-6:h=f23fadf887f1b5a7 globalCFM_1e-5:h=b4a0542ad1487ca5 minIsland_2:h=cdb837583b118907 iters_10:h=210161bcc8879e15 substeps_2:h=0282277d82fd76ff ts_1/120:h=00640cdd62ab6c5d
+M DONE case=kn_loud
+# pybullet build time: Oct 15 2026 03:47:36

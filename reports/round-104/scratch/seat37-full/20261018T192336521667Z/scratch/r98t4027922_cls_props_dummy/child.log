@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+PROPS GLTFDocument n_props=16 props=GLTFDocument,RefCounted,Resource,Resource,fallback_image_format,fallback_image_quality,image_format,lossy_quality,resource_local_to_scene,resource_name,resource_path,resource_scene_unique_id,root_node_mode,script,texture_map_mode,visibility_mode
+PROPS doc_rootlike_methods=get_root_node_mode,set_root_node_mode
+PROPS state_rootlike_methods=get_root_nodes,set_root_nodes
+PROPS has_set_root_nodes=false
+PROPS has_get_root_nodes=false
+PROPS get_prop_root_nodes=<null>
+PROPS after_set_prop_root_nodes=<null>
+PROPS classdb_has_class_get_property_list=true
+PROPS GLTFState n_props=40 props=GLTFState,RefCounted,Resource,Resource,accessors,animations,bake_fps,base_path,buffer_views,buffers,cameras,copyright,create_animations,filename,glb_data,handle_binary_image,handle_binary_image_mode,images,import_as_skeleton_bones,json,lights,major_version,materials,meshes,minor_version,nodes,resource_local_to_scene,resource_name,resource_path,resource_scene_unique_id,root_nodes,scene_name,script,skeletons,skins,texture_samplers,textures,unique_animation_names,unique_names,use_named_skin_binds

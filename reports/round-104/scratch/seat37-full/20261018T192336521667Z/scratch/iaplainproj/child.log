@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE ia_plain open=5 refused=0 samples=5 sig=pt1,is1,ray7,cs0,cmfrac,ri0,rv6
+CHILD_RESULT ia_plain_backend=DEFAULT
+CHILD_RESULT ia_plain_samples=5
+CHILD_RESULT ia_plain_open=5
+CHILD_RESULT ia_plain_refused=0
+CHILD_RESULT ia_plain_alts=2/2
+CHILD_RESULT ia_plain_f_bp=1/1
+CHILD_RESULT ia_plain_sig=pt1,is1,ray7,cs0,cmfrac,ri0,rv6

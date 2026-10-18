@@ -1,0 +1,4 @@
+M0 case=kn_neutral engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M kn_neutral knobs-neutral cone_fric_1:h=02309c52da41ef33 erp_0.2:h=02309c52da41ef33 erp_0.8:h=02309c52da41ef33 frictionERP_0.2:h=02309c52da41ef33 minIsland_0:h=02309c52da41ef33 innerIter_4:h=02309c52da41ef33 ccdPen_0.02:h=02309c52da41ef33 detpairs_1:h=02309c52da41ef33 warmstart_0:h=02309c52da41ef33 eqBase=9/9
+M DONE case=kn_neutral
+# pybullet build time: Oct 15 2026 03:47:36

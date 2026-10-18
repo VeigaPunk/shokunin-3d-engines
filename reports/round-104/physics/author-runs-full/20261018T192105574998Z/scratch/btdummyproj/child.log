@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE bt_dummy first_i=-1 cc=0 impulse=- lshape_oob=absent sleep_lv=flat detach_write=done
+CHILD_RESULT bt_dummy_backend=Dummy
+CHILD_RESULT bt_dummy_cc=0
+CHILD_RESULT bt_dummy_impulse=nil
+CHILD_RESULT bt_dummy_lshape_oob=absent
+CHILD_RESULT bt_dummy_sleep_lv=flat

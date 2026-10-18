@@ -1,0 +1,7 @@
+[application]
+
+config/name="r92tedge"
+
+[physics]
+
+common/physics_ticks_per_second=60

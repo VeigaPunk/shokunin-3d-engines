@@ -1,0 +1,7 @@
+run	sha12	rc	verdict	steps	pointers	secs
+1	b6d8c61afa94	0	PASS (checks failed: 0)	4/0	101	1.15
+2	b6d8c61afa94	0	PASS (checks failed: 0)	4/0	101	1.09
+3	b6d8c61afa94	0	PASS (checks failed: 0)	4/0	101	1.22
+4	b6d8c61afa94	0	PASS (checks failed: 0)	4/0	101	1.66
+5	b6d8c61afa94	0	PASS (checks failed: 0)	4/0	101	1.26
+6	b6d8c61afa94	0	PASS (checks failed: 0)	4/0	101	1.50

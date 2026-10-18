@@ -1,0 +1,6 @@
+M0 case=var_interp engine=cannon-es-0.20.0+three-0.186.1
+M var_interp fixed interpPos.y=5.000000000 pos.y=1.561084641
+M var_interp exact interpPos.y=1.552395033996 pos.y=1.561084640788 prevPos.y=1.552395033996 interpEqPos=false
+M var_interp frac acc=1.666667e-2 interpPos.y=1.499020405350 pos.y=1.499020405350 prevPos.y=1.498636322432
+M var_interp fracQ interpQuat=bf65eb1a3d3e1344be945582a4d7667b3f5e62d4227a1e8d3feffff4e3055442 quat=bf65eb1a3d3e1345be945582a4d7667a3f5e62d4227a1e8d3feffff4e3055442 qeq=false
+M DONE case=var_interp

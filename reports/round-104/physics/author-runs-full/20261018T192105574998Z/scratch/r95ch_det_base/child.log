@@ -1,0 +1,4 @@
+M0 case=det_base engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_base base h=02309c52da41ef33 z@1=4.99982951 z@30=4.92092951 z@60=4.69026842 z@120=3.78969868 z@240=1.4999778 z@480=1.49997782 contacts=13 nan=False
+M DONE case=det_base
+# pybullet build time: Oct 15 2026 03:47:36

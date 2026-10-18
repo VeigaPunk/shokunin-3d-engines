@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=lag engine=Dummy
+M lag w1 write=1.0 imm=0.0 after1=1.0 after2=1.0
+M lag w2 write=2.0 imm=1.0 after1=2.0 after2=2.0
+M lag w3 write=3.0 imm=2.0 after1=3.0 after2=3.0
+M lag w4 write=4.0 imm=3.0 after1=4.0 after2=4.0
+M lag w5 write=5.0 imm=4.0 after1=5.0 after2=5.0
+M lag w6 write=6.0 imm=5.0 after1=6.0 after2=6.0
+M DONE case=lag

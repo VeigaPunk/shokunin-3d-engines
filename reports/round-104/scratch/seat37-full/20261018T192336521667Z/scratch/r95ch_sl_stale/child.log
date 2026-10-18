@@ -1,0 +1,4 @@
+M0 case=sl_stale engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_stale stale-manifold pre{n=1 d=-1e-05} postMove{n=1 d=-1e-05} closest{n=1 d=4.99999} postStep{n=0 d=} zNow=0.499819514 z+60=0.179994754
+M DONE case=sl_stale
+# pybullet build time: Oct 15 2026 03:47:36

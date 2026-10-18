@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE jolt_class=true godot_class=false engine=Jolt Physics
+CHILD_RESULT jolt_backend=Jolt Physics
+CHILD_RESULT jolt_dss_class=JoltPhysicsDirectSpaceState3D
+CHILD_NOTE jolt_isect s0=1 m0=0 away=0 n1=0 back=1
+CHILD_RESULT jolt_isect=same-signature
+CHILD_NOTE jolt_cast safe=0.149841 unsafe=0.150024 w0=1.000000,1.000000 n1=1.000000,1.000000
+CHILD_RESULT jolt_cast=differs-constants
+CHILD_NOTE jolt_btm r0=true t0=-0.998535 r1=false t1=-10.000000 r2=false t2=-10.000000
+CHILD_RESULT jolt_btm=differs-constants
+CHILD_NOTE jolt_contact_stale set=0,1 in=0,1,4 out=4,0
+CHILD_RESULT jolt_contact_stale=same-signature
+CHILD_NOTE jolt_static_nopair tp=0,0,1,1,1,1,1,1 delta=1 mv=1,1,1
+CHILD_RESULT jolt_static_nopair=inverts

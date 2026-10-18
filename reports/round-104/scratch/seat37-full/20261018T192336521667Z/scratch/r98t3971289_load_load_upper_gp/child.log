@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: No loader found for resource: res://assets/tri_upper.GLB (expected type: unknown)
+   at: _load (core/io/resource_loader.cpp:332)
+   GDScript backtrace (most recent call first):
+       [0] _load_res (res://r98b_mode.gd:95)
+       [1] _run (res://r98b_mode.gd:31)
+ERROR: Error loading resource: 'res://assets/tri_upper.GLB'.
+   at: load (core/core_bind.cpp:82)
+   GDScript backtrace (most recent call first):
+       [0] _load_res (res://r98b_mode.gd:95)
+       [1] _run (res://r98b_mode.gd:31)
+MODE LOAD res://assets/tri_upper.GLB -> null

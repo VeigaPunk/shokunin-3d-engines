@@ -1,0 +1,22 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+SM_LINK root=AnimationNodeStateMachine pb=():<AnimationNodeStateMachinePlayback#-9223372010078337574> nodes=[&"End", &"Start", &"a", &"b"] params=n=18 parameters/current_length,parameters/current_position,parameters/current_delta,parameters/playback,parameters/End/current_length,parameters/End/current_position,parameters/End/current_delta,parameters/Start/current_length,parameters/Start/current_position,parameters/Start/current_delta,parameters/a/current_length,parameters/a/current_position,parameters/a/current_delta,parameters/a/backward,parameters/b/current_length,parameters/b/current_position,parameters/b/current_delta,parameters/b/backward
+NX_MODE mode=1
+S pf=3 node=a actor=(0.0000,0.0000,0.0000) tp=0.0000 fading= cond=<null> cond2=-
+S pf=4 node=a actor=(0.0667,0.0000,0.0000) tp=0.0167 fading= cond=<null> cond2=-
+S pf=5 node=a actor=(0.1333,0.0000,0.0000) tp=0.0333 fading= cond=<null> cond2=-
+S pf=6 node=a actor=(0.2000,0.0000,0.0000) tp=0.0500 fading= cond=<null> cond2=-
+S pf=7 node=a actor=(0.2667,0.0000,0.0000) tp=0.0667 fading= cond=<null> cond2=-
+S pf=8 node=a actor=(0.3333,0.0000,0.0000) tp=0.0833 fading= cond=<null> cond2=-
+NX_BEFORE S pf=8 node=a actor=(0.3333,0.0000,0.0000) tp=0.0833 fading= cond=<null> cond2=-
+NX_CALL_IMMEDIATE node=a
+S pf=9 node=a actor=(0.4000,0.0000,0.0000) tp=0.1000 fading= cond=<null> cond2=-
+S pf=10 node=a actor=(0.4667,0.0000,0.0000) tp=0.1167 fading= cond=<null> cond2=-
+S pf=11 node=a actor=(0.5333,0.0000,0.0000) tp=0.1333 fading= cond=<null> cond2=-
+S pf=12 node=a actor=(0.6000,0.0000,0.0000) tp=0.1500 fading= cond=<null> cond2=-
+S pf=13 node=a actor=(0.6667,0.0000,0.0000) tp=0.1667 fading= cond=<null> cond2=-
+S pf=14 node=a actor=(0.7333,0.0000,0.0000) tp=0.1833 fading= cond=<null> cond2=-
+S pf=15 node=a actor=(0.8000,0.0000,0.0000) tp=0.2000 fading= cond=<null> cond2=-
+S pf=16 node=a actor=(0.8667,0.0000,0.0000) tp=0.2167 fading= cond=<null> cond2=-
+NX_AFTER S pf=16 node=a actor=(0.8667,0.0000,0.0000) tp=0.2167 fading= cond=<null> cond2=-
+SM_DONE case=next_enabled

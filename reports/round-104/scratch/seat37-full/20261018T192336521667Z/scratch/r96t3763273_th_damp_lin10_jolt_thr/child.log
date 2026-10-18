@@ -1,0 +1,42 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+D0 case=lin10 engine=Jolt Physics dt=0.016666666667 node_lin=10.0 node_ang=0.0 srv_lin=10.0 srv_ang=0.0 sleep_thr_lin=0.1 sleep_thr_ang=0.13962634015955 time_before_sleep=0.5 can_sleep=false
+D t=1 lv=10.0 ratio=n/a y=5.0
+D t=2 lv=8.333333015 ratio=0.833333302 y=5.0
+D t=3 lv=6.94444418 ratio=0.833333333 y=5.0
+D t=4 lv=5.787036896 ratio=0.833333345 y=5.0
+D t=5 lv=4.822530746 ratio=0.833333333 y=5.0
+D t=6 lv=4.018775463 ratio=0.8333333 y=5.0
+D t=7 lv=3.348979473 ratio=0.833333314 y=5.0
+D t=8 lv=2.790816069 ratio=0.833333286 y=5.0
+D t=9 lv=2.325680017 ratio=0.833333319 y=5.0
+D t=10 lv=1.938066602 ratio=0.833333299 y=5.0
+D t=11 lv=1.615055442 ratio=0.833333303 y=5.0
+D t=12 lv=1.345879555 ratio=0.833333346 y=5.0
+D t=13 lv=1.121566296 ratio=0.833333333 y=5.0
+D t=14 lv=0.93463856 ratio=0.833333316 y=5.0
+D t=15 lv=0.778865457 ratio=0.833333323 y=5.0
+D t=16 lv=0.649054527 ratio=0.833333308 y=5.0
+D t=17 lv=0.540878773 ratio=0.833333333 y=5.0
+D t=18 lv=0.450732291 ratio=0.833333297 y=5.0
+D t=19 lv=0.375610232 ratio=0.833333311 y=5.0
+D t=20 lv=0.313008517 ratio=0.833333307 y=5.0
+D t=30 lv=0.050552607 ratio=0.833333303 y=5.0
+D t=40 lv=0.008164527 ratio=0.833333317 y=5.0
+D t=50 lv=0.001318617 ratio=0.833333333 y=5.0
+D t=60 lv=0.000212964 ratio=0.833333333 y=5.0
+D t=70 lv=0.000034395 ratio=0.833333304 y=5.0
+D t=80 lv=0.000005555 ratio=0.833333288 y=5.0
+D t=90 lv=0.000000897 ratio=0.833333316 y=5.0
+D t=100 lv=0.000000145 ratio=0.833333333 y=5.0
+D t=110 lv=0.000000023 ratio=0.833333323 y=5.0
+D t=120 lv=0.000000004 ratio=0.83333335 y=5.0
+D t=130 lv=0.000000001 ratio=0.833333333 y=5.0
+D t=140 lv=0.0 ratio=0.833333314 y=5.0
+D t=150 lv=0.0 ratio=0.833333288 y=5.0
+D t=160 lv=0.0 ratio=0.833333322 y=5.0
+D t=170 lv=0.0 ratio=n/a y=5.0
+D t=180 lv=0.0 ratio=n/a y=5.0
+D t=190 lv=0.0 ratio=n/a y=5.0
+D t=200 lv=0.0 ratio=n/a y=5.0
+DSUM case=lin10 slept_at=-1 lv_end=0.0 y_end=5.0

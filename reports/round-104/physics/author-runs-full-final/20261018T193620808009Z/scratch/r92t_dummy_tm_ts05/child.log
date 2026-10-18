@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=tm_ts05 engine=Dummy
+M tm_ts05 pre tsc=1.0000 tps=60 jit=0.5000 mps=8 interp=false
+M tm_ts05 mut pf=5
+M tm_ts05 mutpost tsc=0.5000 tps=60 jit=0.5000 mps=8 interp=false
+M tm_ts05 E0 delta=0.008333
+M tm_ts05 E1 delta=0.008333
+M tm_ts05 E2 delta=0.008333
+M tm_ts05 done tsc=0.5000 tps=60 jit=0.5000 mps=8
+M DONE case=tm_ts05

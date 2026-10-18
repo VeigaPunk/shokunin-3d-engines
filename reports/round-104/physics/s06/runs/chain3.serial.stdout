@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+PASS phys3d_joints chain3 chain3_freemid@gp{mode_ok=1,m2=c1b063fbc58a5718} chain3_freemid@jolt{mode_ok=1,m3=544e2fc5305c356f} chain3_freemid@dummy{rc=0,m=M0 case=chain3_freemid engine=Dummy|M chain3_freemid mid freed type1=0 type2=0|M DONE case=chain3_freemid engine=Dummy,e=0,w=0}

@@ -1,0 +1,4 @@
+M0 case=fr_combine engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M fr_combine fric-combine g0.5/b0.5:x=4.08354903 g0.8/b0.8:x=1.79939656 g0.64/b1.0:x=1.79939656 g1.0/b0.64:x=1.79939656 g0.8/b1.0:x=1.46324194 g0.05/b0.05:x=9.66585442
+M DONE case=fr_combine
+# pybullet build time: Oct 15 2026 03:47:36

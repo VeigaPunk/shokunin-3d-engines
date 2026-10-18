@@ -1,0 +1,5 @@
+M0 case=neg_badid engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M neg_badid neg-badid ctrl z=4.69026842
+M neg_badid neg-badid refused=getpos,dyninfo,step9
+# pybullet build time: Oct 15 2026 03:47:36
+NEGATIVE REJECTED: r95_bullet neg_badid neg-badid 3 invalid-id calls refused (pybullet.error)

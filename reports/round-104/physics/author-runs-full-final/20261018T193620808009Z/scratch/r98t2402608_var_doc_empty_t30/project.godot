@@ -1,0 +1,7 @@
+[application]
+
+config/name="R98Scout"
+
+[physics]
+
+common/physics_ticks_per_second=30

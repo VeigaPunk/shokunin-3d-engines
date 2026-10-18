@@ -1,0 +1,114 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freeq engine=Jolt Physics
+PRE case=freeq engine=Jolt Physics threaded=false a_mon=true a_monable=true balls=1
+E pf=1 seq=1 t=1 by=2.6000 ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=1 seq=2 ovA=0/0
+IF pf=2 seq=3 body=ball
+E pf=2 seq=4 t=2 by=2.5973 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=2 seq=5 ovA=0/0
+IF pf=3 seq=6 body=ball
+E pf=3 seq=7 t=3 by=2.5918 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=3 seq=8 ovA=0/0
+IF pf=4 seq=9 body=ball
+E pf=4 seq=10 t=4 by=2.5837 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=4 seq=11 ovA=0/0
+IF pf=5 seq=12 body=ball
+E pf=5 seq=13 t=5 by=2.5728 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=5 seq=14 ovA=0/0
+IF pf=6 seq=15 body=ball
+E pf=6 seq=16 t=6 by=2.5593 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=6 seq=17 ovA=0/0
+IF pf=7 seq=18 body=ball
+E pf=7 seq=19 t=7 by=2.5430 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=7 seq=20 ovA=0/0
+IF pf=8 seq=21 body=ball
+E pf=8 seq=22 t=8 by=2.5240 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=8 seq=23 ovA=0/0
+IF pf=9 seq=24 body=ball
+E pf=9 seq=25 t=9 by=2.5024 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=9 seq=26 ovA=0/0
+IF pf=10 seq=27 body=ball
+E pf=10 seq=28 t=10 by=2.4780 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=10 seq=29 ovA=0/0
+IF pf=11 seq=30 body=ball
+E pf=11 seq=31 t=11 by=2.4510 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=11 seq=32 ovA=0/0
+IF pf=12 seq=33 body=ball
+E pf=12 seq=34 t=12 by=2.4213 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=12 seq=35 ovA=0/0
+IF pf=13 seq=36 body=ball
+E pf=13 seq=37 t=13 by=2.3890 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=13 seq=38 ovA=0/0
+IF pf=14 seq=39 body=ball
+E pf=14 seq=40 t=14 by=2.3539 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=14 seq=41 ovA=0/0
+IF pf=15 seq=42 body=ball
+E pf=15 seq=43 t=15 by=2.3162 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=15 seq=44 ovA=0/0
+IF pf=16 seq=45 body=ball
+E pf=16 seq=46 t=16 by=2.2759 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=16 seq=47 ovA=0/0
+IF pf=17 seq=48 body=ball
+E pf=17 seq=49 t=17 by=2.2328 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=17 seq=50 ovA=0/0
+IF pf=18 seq=51 body=ball
+E pf=18 seq=52 t=18 by=2.1872 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=18 seq=53 ovA=0/0
+IF pf=19 seq=54 body=ball
+E pf=19 seq=55 t=19 by=2.1389 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=19 seq=56 ovA=0/0
+IF pf=20 seq=57 body=ball
+E pf=20 seq=58 t=20 by=2.0879 ovA=0/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=20 seq=59 ovA=0/0
+IF pf=21 seq=60 body=ball
+SIG sig=A.body_entered pf=21 seq=61 body=ball ovA=1/0 ovn=ball mon=true
+SIG sig=A.body_shape_entered pf=21 seq=62 body=ball bsi=0 lsi=0 ovA=1/0 ovn=ball mon=true
+E pf=21 seq=63 t=21 by=2.0343 ovA=1/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=21 seq=64 ovA=1/0
+IF pf=22 seq=65 body=ball
+E pf=22 seq=66 t=22 by=1.9781 ovA=1/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=22 seq=67 ovA=1/0
+IF pf=23 seq=68 body=ball
+E pf=23 seq=69 t=23 by=1.9192 ovA=1/0 ovB=0/0 ifc=1 monA=true monB=true
+F pf=23 seq=70 ovA=1/0
+IF pf=24 seq=71 body=ball
+ACT FREEQ queue_free(ball) mid-overlap pf=24 seq=72
+E pf=24 seq=73 t=24 by=n/a ovA=1/0 ovB=0/0 ifc=1 monA=true monB=true
+SIG sig=A.body_exited pf=24 seq=74 body=ball ovA=1/0 ovn=ball mon=true
+SIG sig=A.body_shape_exited pf=24 seq=75 body=ball bsi=0 lsi=0 ovA=1/0 ovn=ball mon=true
+F pf=24 seq=76 ovA=0/0
+SIG sig=A.body_shape_exited pf=25 seq=77 body=<null> bsi=0 lsi=0 ovA=0/0 ovn=- mon=true
+E pf=25 seq=78 t=25 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=25 seq=79 ovA=0/0
+E pf=26 seq=80 t=26 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=26 seq=81 ovA=0/0
+E pf=27 seq=82 t=27 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=27 seq=83 ovA=0/0
+E pf=28 seq=84 t=28 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=28 seq=85 ovA=0/0
+E pf=29 seq=86 t=29 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=29 seq=87 ovA=0/0
+E pf=30 seq=88 t=30 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=30 seq=89 ovA=0/0
+E pf=31 seq=90 t=31 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=31 seq=91 ovA=0/0
+E pf=32 seq=92 t=32 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=32 seq=93 ovA=0/0
+E pf=33 seq=94 t=33 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=33 seq=95 ovA=0/0
+E pf=34 seq=96 t=34 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+DONE case=freeq engine=Jolt Physics nif=23 nsig=5 ne=34 nf=33 seq=96
+DONE_ALL case=freeq seq=96
+M freeq e23 by=1.9192 ovA=1/0 ovB=0/0 ifc=1
+M freeq e24 by=n/a ovA=1/0 ovB=0/0 ifc=1
+M freeq e25 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M freeq e34 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M freeq s1 pf=21 cls=in_step sig=A.body_entered body=ball ov=1/0 n=ball m=true
+M freeq s2 pf=21 cls=in_step sig=A.body_shape_entered body=ball bsi=0 lsi=0 ov=1/0 n=ball m=true
+M freeq s3 pf=24 cls=post_e sig=A.body_exited body=ball ov=1/0 n=ball m=true
+M freeq s4 pf=24 cls=post_e sig=A.body_shape_exited body=ball bsi=0 lsi=0 ov=1/0 n=ball m=true
+M freeq s5 pf=25 cls=no_if sig=A.body_shape_exited body=<null> bsi=0 lsi=0 ov=0/0 n=- m=true
+M freeq facts stale_ovn=ball dup=body_shape_exited@25 dup_cls=no_if
+M freeq census in_step=2 no_if=1 post_e=2 pre_if=0 idle=0 other=0 teardown=0 nif=23 ne=34 nf=33 nsig=5
+M DONE case=freeq

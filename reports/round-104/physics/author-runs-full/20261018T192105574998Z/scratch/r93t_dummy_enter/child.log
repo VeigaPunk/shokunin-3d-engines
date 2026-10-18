@@ -1,0 +1,103 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=enter engine=Dummy
+PRE case=enter engine=Dummy threaded=false a_mon=true a_monable=true balls=1
+E pf=1 seq=1 t=1 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=1 seq=2 ovA=0/0
+E pf=2 seq=3 t=2 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=2 seq=4 ovA=0/0
+E pf=3 seq=5 t=3 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=3 seq=6 ovA=0/0
+E pf=4 seq=7 t=4 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=4 seq=8 ovA=0/0
+E pf=5 seq=9 t=5 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=5 seq=10 ovA=0/0
+E pf=6 seq=11 t=6 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=6 seq=12 ovA=0/0
+E pf=7 seq=13 t=7 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=7 seq=14 ovA=0/0
+E pf=8 seq=15 t=8 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=8 seq=16 ovA=0/0
+E pf=9 seq=17 t=9 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=9 seq=18 ovA=0/0
+E pf=10 seq=19 t=10 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=10 seq=20 ovA=0/0
+E pf=11 seq=21 t=11 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=11 seq=22 ovA=0/0
+E pf=12 seq=23 t=12 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=12 seq=24 ovA=0/0
+E pf=13 seq=25 t=13 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=13 seq=26 ovA=0/0
+E pf=14 seq=27 t=14 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=14 seq=28 ovA=0/0
+E pf=15 seq=29 t=15 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=15 seq=30 ovA=0/0
+E pf=16 seq=31 t=16 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=16 seq=32 ovA=0/0
+E pf=17 seq=33 t=17 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=17 seq=34 ovA=0/0
+E pf=18 seq=35 t=18 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=18 seq=36 ovA=0/0
+E pf=19 seq=37 t=19 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=19 seq=38 ovA=0/0
+E pf=20 seq=39 t=20 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=20 seq=40 ovA=0/0
+E pf=21 seq=41 t=21 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=21 seq=42 ovA=0/0
+E pf=22 seq=43 t=22 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=22 seq=44 ovA=0/0
+E pf=23 seq=45 t=23 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=23 seq=46 ovA=0/0
+E pf=24 seq=47 t=24 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=24 seq=48 ovA=0/0
+E pf=25 seq=49 t=25 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=25 seq=50 ovA=0/0
+E pf=26 seq=51 t=26 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=26 seq=52 ovA=0/0
+E pf=27 seq=53 t=27 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=27 seq=54 ovA=0/0
+E pf=28 seq=55 t=28 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=28 seq=56 ovA=0/0
+E pf=29 seq=57 t=29 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=29 seq=58 ovA=0/0
+E pf=30 seq=59 t=30 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=30 seq=60 ovA=0/0
+E pf=31 seq=61 t=31 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=31 seq=62 ovA=0/0
+E pf=32 seq=63 t=32 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=32 seq=64 ovA=0/0
+E pf=33 seq=65 t=33 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=33 seq=66 ovA=0/0
+ACT OUT idx=0 ball=0.0000,5.0000,0.0000 pf=34 seq=67
+E pf=34 seq=68 t=34 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=34 seq=69 ovA=0/0
+E pf=35 seq=70 t=35 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=35 seq=71 ovA=0/0
+E pf=36 seq=72 t=36 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=36 seq=73 ovA=0/0
+E pf=37 seq=74 t=37 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=37 seq=75 ovA=0/0
+E pf=38 seq=76 t=38 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=38 seq=77 ovA=0/0
+E pf=39 seq=78 t=39 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=39 seq=79 ovA=0/0
+E pf=40 seq=80 t=40 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=40 seq=81 ovA=0/0
+E pf=41 seq=82 t=41 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=41 seq=83 ovA=0/0
+E pf=42 seq=84 t=42 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=42 seq=85 ovA=0/0
+E pf=43 seq=86 t=43 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=43 seq=87 ovA=0/0
+E pf=44 seq=88 t=44 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+DONE case=enter engine=Dummy nif=0 nsig=0 ne=44 nf=43 seq=88
+DONE_ALL case=enter seq=88
+M enter e1 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M enter e20 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M enter e21 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M enter e34 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M enter e35 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M enter e44 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M enter facts entry=- exit=-
+M enter census in_step=0 no_if=0 post_e=0 pre_if=0 idle=0 other=0 teardown=0 nif=0 ne=44 nf=43 nsig=0
+M DONE case=enter

@@ -1,0 +1,33 @@
+M0 case=resim engine=blender-5.2.1
+M resim pre_bake f20=(0.000000,0.000000,1.942529)
+M resim baked baked=True info=20 frames in memory (3 KiB).
+M resim mutate ts=0.25 outdated=True
+M resim post_mutation_forward f21=(0.000000,0.000000,1.942529) f30=(0.000000,0.000000,1.942529) f40=(0.000000,0.000000,1.942529) h=6498e1a38a4b7b9f
+M resim reread_head eq_pre=True f20=(0.000000,0.000000,1.942529)
+M resim after_toggle eq_pre=True f20=(0.000000,0.000000,1.942529) outdated=False
+M resim after_free_bake eq_pre=True f20=(0.000000,0.000000,1.942529) info=20 frames in memory (3 KiB). outdated=False
+M resim far_forward f45=(0.000000,0.000000,1.942529) f60=(0.000000,0.000000,1.942529)
+M DONE case=resim
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+bake: frame 1 :: 20
+bake: frame 2 :: 20
+bake: frame 3 :: 20
+bake: frame 4 :: 20
+bake: frame 5 :: 20
+bake: frame 6 :: 20
+bake: frame 7 :: 20
+bake: frame 8 :: 20
+bake: frame 9 :: 20
+bake: frame 10 :: 20
+bake: frame 11 :: 20
+bake: frame 12 :: 20
+bake: frame 13 :: 20
+bake: frame 14 :: 20
+bake: frame 15 :: 20
+bake: frame 16 :: 20
+bake: frame 17 :: 20
+bake: frame 18 :: 20
+bake: frame 19 :: 20
+bake: frame 20 :: 20
+
+Blender quit

@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE bh_dummy if_fired=false if_same=false if_refetch=false ss=0/0 detach_nil=false held_live=true reattach_same=true twin=true
+CHILD_RESULT bh_dummy_backend=Dummy
+CHILD_RESULT bh_dummy_if_same=false
+CHILD_RESULT bh_dummy_ss_same=false
+CHILD_RESULT bh_dummy_ss_fired=0
+CHILD_RESULT bh_dummy_if_fired=0
+CHILD_RESULT bh_dummy_detach=obj
+CHILD_RESULT bh_dummy_held_live=true
+CHILD_RESULT bh_dummy_reattach=true
+CHILD_RESULT bh_dummy_twin=true

@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE byp_ids 4479516912/4479516912
+CHILD_NOTE byp_ids 4479516912/4479516912
+CHILD_NOTE byp_ids 4479516912/4479516912
+CHILD_NOTE byp_ids 4479516912/4479516912
+CHILD_NOTE byp_ids 4479516912/4479516912
+CHILD_NOTE fg_dummy_thr rows=["A:111", "B:111", "C:111", "D:111", "E:111", "F:111", "F:111", "F:111"] stash=dss held=bds
+CHILD_RESULT fg_dummy_thr_backend=Dummy
+CHILD_RESULT fg_dummy_thr_samples=8
+CHILD_RESULT fg_dummy_thr_grant=8
+CHILD_RESULT fg_dummy_thr_refuse=0
+CHILD_RESULT fg_dummy_thr_partial=0
+CHILD_RESULT fg_dummy_thr_gate=open
+CHILD_RESULT fg_dummy_thr_byp=5/5
+CHILD_RESULT fg_dummy_thr_byp_same=5/5

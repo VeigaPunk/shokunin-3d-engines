@@ -1,0 +1,47 @@
+M0 case=shm_rtclass engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M shm_rtclass shm-rt rtflag=1 idle2.0s fell=True
+# shm-rt measured z0=5 z1=0.49999
+# shm-rt w1 stepped h=02309c52da41ef33
+# shm-rt w2 stepped h=02309c52da41ef33
+# shm-rt stepped distinct=False pinFree=0
+M DONE case=shm_rtclass
+# pybullet build time: Oct 15 2026 03:47:36
+# startThreads creating 1 threads.
+# starting thread 0
+# started thread 0
+# MotionThreadFunc thread started
+# startThreads creating 1 threads.
+# starting thread 0
+# started thread 0
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# MotionThreadFunc thread started
+# PosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# numActiveThreads = 0
+# stopping threads
+# Thread with taskId 0 exiting
+# Thread TERMINATED
+# destroy semaphore
+# semaphore destroyed
+# destroy main semaphore
+# main semaphore destroyed
+# startThreads creating 1 threads.
+# starting thread 0
+# started thread 0
+# MotionThreadFunc thread started
+# PosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# numActiveThreads = 0
+# stopping threads
+# Thread with taskId 0 exiting
+# Thread TERMINATED
+# destroy semaphore
+# semaphore destroyed
+# destroy main semaphore
+# main semaphore destroyed
+# PosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory

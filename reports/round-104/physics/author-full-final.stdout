@@ -1,0 +1,704 @@
+PASS navagent3d_retarget: exit=0 expected=0
+PASS navagent3d_retarget_fixed: exit=2 expected=2
+PASS navagent3d_follow: exit=0 expected=0
+PASS navagent3d_follow_stationary: exit=2 expected=2
+PASS navagent3d_next: exit=0 expected=0
+PASS navagent3d_next_alternate: exit=2 expected=2
+PASS navagent3d_distance: exit=0 expected=0
+PASS navagent3d_distance_wide_reach: exit=2 expected=2
+PASS navagent3d_detour: exit=0 expected=0
+PASS navagent3d_detour_straight: exit=2 expected=2
+PASS navagent3d_detour_assert_pathsum: exit=2 expected=2
+PASS navagent3d_detour_post_edgecentered: exit=0 expected=0
+PASS navagent3d_detour_post_none: exit=0 expected=0
+PASS navagent3d_detour_pop_lo: exit=0 expected=0
+PASS navagent3d_detour_pop_hi: exit=0 expected=0
+PASS navagent3d_detour_pop_sat: exit=0 expected=0
+PASS navagent3d_detour_mid_lo: exit=0 expected=0
+PASS navagent3d_detour_mid_hi: exit=0 expected=0
+PASS navagent3d_detour_vert_pop_eq: exit=0 expected=0
+PASS navagent3d_detour_vert_pop_above: exit=0 expected=0
+PASS navagent3d_detour_tp_mid: exit=0 expected=0
+PASS navagent3d_detour_tp_eq: exit=0 expected=0
+PASS navagent3d_detour_gap2_pop_basis: exit=0 expected=0
+PASS navagent3d_detour_fin_unr_lo: exit=0 expected=0
+PASS navagent3d_detour_fin_unr_hi: exit=0 expected=0
+PASS navagent3d_detour_vert_fin_eq: exit=0 expected=0
+PASS navagent3d_detour_vert_fin_above: exit=0 expected=0
+PASS navagent3d_detour_fin_reach_eq: exit=0 expected=0
+PASS navagent3d_detour_fin_reach_above: exit=0 expected=0
+PASS navagent3d_detour_edge_unr: exit=0 expected=0
+PASS navagent3d_detour_edge_eq: exit=0 expected=0
+PASS navagent3d_detour_edge_above: exit=0 expected=0
+PASS navagent3d_detour_fin_idx_gate: exit=0 expected=0
+PASS navagent3d_detour_fin_wall: exit=0 expected=0
+PASS navagent3d_detour_fin_latch: exit=0 expected=0
+PASS navagent3d_detour_link_shortcut: exit=0 expected=0
+PASS navagent3d_detour_link_meta_types: exit=0 expected=0
+PASS navagent3d_detour_link_meta_rids: exit=0 expected=0
+PASS navagent3d_detour_link_meta_owners: exit=0 expected=0
+PASS navagent3d_detour_link_meta: exit=0 expected=0
+PASS navagent3d_detour_link_layers_off: exit=0 expected=0
+PASS navagent3d_detour_link_layers_on: exit=0 expected=0
+PASS navagent3d_detour_link_oneway_fwd: exit=0 expected=0
+PASS navagent3d_detour_link_oneway_rev: exit=0 expected=0
+PASS navagent3d_detour_link_disabled: exit=0 expected=0
+PASS navagent3d_detour_link_travelcost: exit=0 expected=0
+PASS navagent3d_detour_link_entercost: exit=0 expected=0
+PASS navagent3d_detour_link_gap: exit=0 expected=0
+PASS navagent3d_detour_link_pop_bank: exit=0 expected=0
+PASS navagent3d_detour_link_pop_void: exit=0 expected=0
+PASS navagent3d_detour_mv_walk: exit=0 expected=0
+PASS navagent3d_detour_mv_live: exit=0 expected=0
+PASS navagent3d_detour_mv_popback: exit=0 expected=0
+PASS navagent3d_detour_mv_popstrict: exit=0 expected=0
+PASS navagent3d_detour_mv_void: exit=0 expected=0
+PASS navagent3d_detour_mv_pmd_edge: exit=0 expected=0
+PASS navagent3d_detour_mv_pmd_offmesh: exit=0 expected=0
+PASS navagent3d_detour_mv_pmd2: exit=0 expected=0
+PASS navagent3d_detour_mv_latch: exit=0 expected=0
+PASS navagent3d_detour_mv_unlatch: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_same: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_bank: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_void: exit=0 expected=0
+PASS navagent3d_detour_mv_popskip: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_lazy: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_force: exit=0 expected=0
+PASS navagent3d_detour_mv_bridge_walk: exit=0 expected=0
+PASS navagent3d_detour_mut_link_kill: exit=0 expected=0
+PASS navagent3d_detour_mut_link_drop: exit=0 expected=0
+PASS navagent3d_detour_mut_link_layers: exit=0 expected=0
+PASS navagent3d_detour_mut_layers_agent: exit=0 expected=0
+PASS navagent3d_detour_mut_layers_region: exit=0 expected=0
+PASS navagent3d_detour_mut_region_move: exit=0 expected=0
+PASS navagent3d_detour_mut_region_off: exit=0 expected=0
+PASS navagent3d_detour_mut_region_renew: exit=0 expected=0
+PASS navagent3d_detour_mut_link_revive: exit=0 expected=0
+PASS navagent3d_detour_mut_lazy: exit=0 expected=0
+PASS navagent3d_detour_mut_latch_zombie: exit=0 expected=0
+PASS navagent3d_detour_mut_win_link: exit=0 expected=0
+PASS navagent3d_detour_mut_win_region: exit=0 expected=0
+PASS navagent3d_detour_mut_map_off: exit=0 expected=0
+PASS navagent3d_detour_mut_map_cycle: exit=0 expected=0
+PASS navagent3d_detour_mut_same_link: exit=0 expected=0
+PASS navagent3d_detour_mut_same_region: exit=0 expected=0
+PASS navagent3d_detour_mut_same_agent: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_renew_xform: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_xform_renew: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_link_offmv: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_link_mvoff: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_kill_mapoff: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_mapoff_kill: exit=0 expected=0
+PASS navagent3d_detour_mut_force_link: exit=0 expected=0
+PASS navagent3d_detour_mut_force_ctl: exit=0 expected=0
+PASS navagent3d_detour_mut_ladder_link: exit=0 expected=0
+PASS navagent3d_detour_mut_ladder_region: exit=0 expected=0
+PASS navagent3d_detour_mut_mapoff_ladder: exit=0 expected=0
+PASS navagent3d_detour_mut_ctx_resume: exit=0 expected=0
+PASS navagent3d_detour_mut_ctx_phys: exit=0 expected=0
+PASS remote3d_transform: exit=0 expected=0
+PASS remote3d_transform_unbound: exit=2 expected=2
+PASS pathfollow3d_callback: exit=0 expected=0
+PASS pathfollow3d_callback_stationary: exit=2 expected=2
+PASS pathfollow3d_paced: exit=0 expected=0
+PASS pathfollow3d_paced_stationary: exit=2 expected=2
+PASS pathfollow3d_curve: exit=0 expected=0
+PASS pathfollow3d_curve_straight: exit=2 expected=2
+PASS curve3d_path: exit=0 expected=0
+PASS curve3d_path_straight: exit=2 expected=2
+PASS shapecast3d_graze: exit=0 expected=0
+PASS shapecast3d_graze_small: exit=2 expected=2
+PASS shapecast3d_sphere: exit=0 expected=0
+PASS shapecast3d_sphere_offset: exit=2 expected=2
+PASS skeleton3d_attachment: exit=0 expected=0
+PASS skeleton3d_attachment_unrotated: exit=2 expected=2
+PASS skeleton3d_rotation: exit=0 expected=0
+PASS skeleton3d_unrotated: exit=2 expected=2
+PASS skeleton3d_pose: exit=0 expected=0
+PASS skeleton3d_rest_only: exit=2 expected=2
+PASS mesh3d_faces_hit: exit=0 expected=0
+PASS mesh3d_faces_reordered: exit=2 expected=2
+PASS mesh3d_trimesh_hit: exit=0 expected=0
+PASS mesh3d_trimesh_outside: exit=2 expected=2
+PASS mesh3d_indexed: exit=0 expected=0
+PASS mesh3d_indexed_reversed: exit=2 expected=2
+PASS mesh3d_array: exit=0 expected=0
+PASS mesh3d_array_shifted: exit=2 expected=2
+PASS animation3d_blend: exit=0 expected=0
+PASS animation3d_blend_cut: exit=2 expected=2
+PASS animation3d_playback: exit=0 expected=0
+PASS animation3d_playback_still: exit=2 expected=2
+PASS animation3d_keys: exit=0 expected=0
+PASS animation3d_keys_still: exit=2 expected=2
+PASS slope3d_travel: exit=0 expected=0
+PASS slope3d_travel_level: exit=2 expected=2
+PASS jump3d_land: exit=0 expected=0
+PASS jump3d_no_floor: exit=2 expected=2
+PASS camera3d_ortho_far_boundary_exact: exit=0 expected=0
+PASS camera3d_ortho_far_boundary_inside: exit=0 expected=0
+PASS camera3d_ortho_far_boundary_outside: exit=2 expected=2
+PASS camera3d_ortho_near_boundary_exact: exit=0 expected=0
+PASS camera3d_ortho_near_boundary_inside: exit=0 expected=0
+PASS camera3d_ortho_near_boundary_outside: exit=2 expected=2
+PASS camera3d_ortho: exit=0 expected=0
+PASS camera3d_ortho_outside: exit=2 expected=2
+PASS camera3d_ortho_near: exit=2 expected=2
+PASS camera3d_ortho_far: exit=2 expected=2
+PASS scene3d_resource_disk_local: exit=0 expected=0
+PASS scene3d_resource_disk_shared: exit=2 expected=2
+PASS scene3d_resource_local: exit=0 expected=0
+PASS scene3d_resource_shared: exit=2 expected=2
+PASS scene3d_disk: exit=0 expected=0
+PASS scene3d_disk_wrong_local: exit=2 expected=2
+PASS scene3d_instances: exit=0 expected=0
+PASS scene3d_instances_wrong_local: exit=2 expected=2
+PASS slope3d_floor: exit=0 expected=0
+PASS slope3d_steep: exit=2 expected=2
+PASS floor3d_ground: exit=0 expected=0
+PASS floor3d_airborne: exit=2 expected=2
+PASS body3d_contact: exit=0 expected=0
+PASS body3d_contact_far: exit=2 expected=2
+PASS area3d_chain: exit=0 expected=0
+PASS area3d_chain_no_overlap: exit=2 expected=2
+PASS camera3d_project: exit=0 expected=0
+PASS camera3d_project_behind: exit=2 expected=2
+PASS camera3d_depth: exit=0 expected=0
+PASS camera3d_depth_far: exit=2 expected=2
+PASS camera3d_depth_near: exit=2 expected=2
+PASS navigation3d_path: exit=0 expected=0
+PASS navigation3d_path_disconnected: exit=2 expected=2
+PASS raycast3d_hit: exit=0 expected=0
+PASS raycast3d_miss: exit=2 expected=2
+PASS transform3d_compose: exit=0 expected=0
+PASS transform3d_compose_wrong_order: exit=2 expected=2
+PASS input3d_move: exit=0 expected=0
+PASS input3d_move_no_event: exit=2 expected=2
+PASS phys3d_events_isect: exit=0 expected=0
+PASS phys3d_events_cast: exit=0 expected=0
+PASS phys3d_events_btm: exit=0 expected=0
+PASS phys3d_events_pp_queries: exit=0 expected=0
+PASS phys3d_events_contact_stale: exit=0 expected=0
+PASS phys3d_events_contact_sig: exit=0 expected=0
+PASS phys3d_events_sync_cb: exit=0 expected=0
+PASS phys3d_events_srv_area_cb: exit=0 expected=0
+PASS phys3d_events_static_nopair: exit=2 expected=2
+PASS phys3d_events_threaded_edge: exit=0 expected=0
+PASS phys3d_events_phase_delta: exit=0 expected=0
+PASS phys3d_events_jolt_edge: exit=0 expected=0
+PASS phys3d_events_jolt_threaded: exit=0 expected=0
+PASS phys3d_events_dummy_refused: exit=0 expected=0
+PASS phys3d_events_srv_phase_delta: exit=0 expected=0
+PASS phys3d_events_script_size_gate: exit=0 expected=0
+PASS phys3d_events_deferred_hang: exit=0 expected=0
+PASS phys3d_events_backend_tier: exit=0 expected=0
+PASS phys3d_events_dummy_floor: exit=0 expected=0
+PASS phys3d_events_body_handle: exit=0 expected=0
+PASS phys3d_events_acq_use: exit=0 expected=0
+PASS phys3d_events_step_stamp: exit=0 expected=0
+PASS phys3d_events_write_loss: exit=0 expected=0
+PASS phys3d_events_body_tier: exit=0 expected=0
+PASS phys3d_events_freed_space: exit=0 expected=0
+PASS phys3d_events_motion_split: exit=0 expected=0
+PASS phys3d_events_fetch_gate: exit=0 expected=0
+PASS phys3d_events_inactive_space: exit=0 expected=0
+PASS phys3d_events_param_purity: exit=0 expected=0
+PASS phys3d_events_body_inertia: exit=0 expected=0
+PASS phys3d_events_wrong_args: exit=0 expected=0
+PASS phys3d_events_geom_split: exit=0 expected=0
+PASS phys3d_events_race_class: exit=0 expected=0
+PASS phys3d_events_freed_space_methods: exit=0 expected=0
+PASS phys3d_events_if_phase: exit=0 expected=0
+PASS phys3d_events_if_write: exit=0 expected=0
+PASS phys3d_events_joint_pin: exit=0 expected=0
+PASS phys3d_events_joint_param: exit=0 expected=0
+PASS phys3d_events_joint_solver: exit=0 expected=0
+PASS phys3d_events_cross_space: exit=0 expected=0
+PASS phys3d_events_sleep_state: exit=0 expected=0
+PASS phys3d_joints_sweep: exit=0 expected=0
+PASS phys3d_joints_rid: exit=0 expected=0
+PASS phys3d_joints_api: exit=0 expected=0
+PASS phys3d_joints_free_pair: exit=0 expected=0
+PASS phys3d_joints_free_ops: exit=0 expected=0
+PASS phys3d_joints_detach: exit=0 expected=0
+PASS phys3d_joints_chain3: exit=0 expected=0
+PASS phys3d_joints_twopin: exit=0 expected=0
+PASS bpy_rbw3d_det: exit=0 expected=0
+PASS bpy_rbw3d_bake: exit=0 expected=0
+PASS bpy_rbw3d_window: exit=0 expected=0
+PASS bpy_rbw3d_order: exit=0 expected=0
+PASS bpy_rbw3d_resim: exit=0 expected=0
+PASS bpy_rbw3d_knobs: exit=0 expected=0
+PASS bpy_rbw3d_ops: exit=0 expected=0
+PASS bpy_rbw3d_io: exit=0 expected=0
+FAIL bpy_rbw3d_render: exit=0 expected=0 reasons=['exact stdout marker missing']
+PASS bpy_rbw3d_ptr: exit=0 expected=0
+PASS r92_remote_boundary: exit=0 expected=0
+PASS r92_remote_phase: exit=0 expected=0
+PASS r92_remote_flags: exit=0 expected=0
+PASS r92_remote_stale: exit=0 expected=0
+PASS r92_remote_path: exit=0 expected=0
+PASS r92_remote_chainlag: exit=0 expected=0
+PASS r92_remote_srv: exit=0 expected=0
+PASS r92_remote_drive: exit=0 expected=0
+PASS r92_animphys_rbpos: exit=0 expected=0
+PASS r92_animphys_rbfrozen: exit=0 expected=0
+PASS r92_animphys_animrb: exit=0 expected=0
+PASS r92_animphys_animatable: exit=0 expected=0
+PASS r92_animphys_reset: exit=0 expected=0
+PASS r92_animphys_manual: exit=0 expected=0
+PASS r92_animphys_destroy: exit=0 expected=0
+PASS r92_animphys_iforder: exit=0 expected=0
+PASS r92_animphys_idlemode: exit=0 expected=0
+PASS r92_animphys_badkey_insert: exit=2 expected=2
+PASS r92_timing_tps: exit=0 expected=0
+PASS r92_timing_tscale: exit=0 expected=0
+PASS r92_timing_edge: exit=0 expected=0
+PASS r92_timing_refuse: exit=0 expected=0
+PASS r92_timing_steps: exit=0 expected=0
+PASS r93_areasig_edges: exit=0 expected=0
+PASS r93_areasig_writes: exit=0 expected=0
+PASS r93_areasig_exits: exit=0 expected=0
+PASS r93_areasig_dispatch: exit=0 expected=0
+PASS r93_areasig_splits: exit=0 expected=0
+PASS r93_areasig_multi: exit=0 expected=0
+PASS r93_areasig_prio: exit=0 expected=0
+FAIL r94_cannon_det: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_det2: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_varstep: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_bailout: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_nan: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_sync: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_material: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_friction: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_parity: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_parity2: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_modes: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_order: exit=0 expected=0 reasons=['exact stdout marker missing']
+FAIL r94_cannon_backends: exit=0 expected=0 reasons=['exact stdout marker missing']
+PASS r94_cannon_neg_dt: exit=2 expected=2
+PASS r94_cannon_neg_gravity: exit=2 expected=2
+PASS r94_cannon_neg_steps_early: exit=2 expected=2
+PASS r94_cannon_neg_elapsed: exit=2 expected=2
+PASS r94_cannon_neg_wxyz: exit=2 expected=2
+PASS r94_cannon_neg_grid: exit=2 expected=2
+PASS r95_bullet_det: exit=0 expected=0
+PASS r95_bullet_freeze: exit=0 expected=0
+PASS r95_bullet_rt: exit=0 expected=0
+PASS r95_bullet_shm: exit=0 expected=0
+PASS r95_bullet_sleep: exit=0 expected=0
+PASS r95_bullet_sleep2: exit=0 expected=0
+PASS r95_bullet_nan: exit=0 expected=0
+PASS r95_bullet_nan2: exit=0 expected=0
+PASS r95_bullet_fric: exit=0 expected=0
+PASS r95_bullet_rest: exit=0 expected=0
+PASS r95_bullet_knobs: exit=0 expected=0
+PASS r95_bullet_solver: exit=0 expected=0
+PASS r95_bullet_pile: exit=0 expected=0
+PASS r95_bullet_misc: exit=0 expected=0
+PASS r95_bullet_neg_dt: exit=2 expected=2
+PASS r95_bullet_neg_order: exit=2 expected=2
+PASS r95_bullet_neg_radius: exit=2 expected=2
+PASS r95_bullet_neg_simtime: exit=2 expected=2
+PASS r95_bullet_neg_badid: exit=2 expected=2
+PASS r95_bullet_neg_shm_rt: exit=2 expected=2
+PASS r96_joltdet_joint: exit=0 expected=0
+PASS r96_joltdet_contact: exit=0 expected=0
+PASS r96_joltdet_restkin: exit=0 expected=0
+PASS r96_joltdet_tps: exit=0 expected=0
+PASS r96_joltdet_solver: exit=0 expected=0
+PASS r96_joltdet_mech: exit=0 expected=0
+PASS r96_joltdet_tscale: exit=0 expected=0
+PASS r96_joltdet_ffps: exit=0 expected=0
+PASS r96_joltdet_dummy: exit=0 expected=0
+PASS r96_joltdet_thread: exit=0 expected=0
+PASS r96_joltdet_knobs: exit=0 expected=0
+PASS r96_joltdet_nc: exit=0 expected=0
+PASS r97_nodelat_joint: exit=0 expected=0
+PASS r97_nodelat_soft: exit=0 expected=0
+PASS r97_nodelat_dss: exit=0 expected=0
+PASS r97_nodelat_cb: exit=0 expected=0
+PASS r97_nodelat_vehicle: exit=0 expected=0
+PASS r97_nodelat_softfloor: exit=0 expected=0
+PASS r97_nodelat_xr: exit=0 expected=0
+PASS r97_nodelat_freegrain: exit=0 expected=0
+PASS r98_gltflat_load: exit=0 expected=0
+PASS r98_gltflat_doc: exit=0 expected=0
+PASS r98_gltflat_sniff: exit=0 expected=0
+PASS r98_gltflat_extbin: exit=0 expected=0
+PASS r98_gltflat_cls: exit=0 expected=0
+PASS r98_gltflat_write: exit=0 expected=0
+PASS r98_gltflat_tr: exit=0 expected=0
+PASS r98_gltflat_phys: exit=0 expected=0
+PASS r98_gltflat_var: exit=0 expected=0
+PASS r99_animtree_core: exit=0 expected=0
+PASS r99_animtree_ut_scope: exit=0 expected=0
+PASS r99_animtree_ut_mech: exit=0 expected=0
+PASS r99_animtree_modes: exit=0 expected=0
+PASS r99_animtree_order: exit=0 expected=0
+PASS r99_animtree_sm_adv: exit=0 expected=0
+PASS r99_animtree_sm_misc: exit=0 expected=0
+PASS r99_animtree_silent: exit=0 expected=0
+PASS r99_animtree_life: exit=0 expected=0
+PASS r100_fpslat_sched: exit=0 expected=0
+PASS r100_fpslat_qa: exit=0 expected=0
+PASS r100_fpslat_modes: exit=0 expected=0
+PASS r100_fpslat_compose: exit=0 expected=0
+PASS r100_fpslat_rt: exit=0 expected=0
+PASS r100_fpslat_area: exit=0 expected=0
+PASS r100_fpslat_life: exit=0 expected=0
+PASS r100_fpslat_cls: exit=0 expected=0
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+PASS     navagent3d_retarget                navagent3d_retarget.gd     -                  0/0       ordinary
+PASS     navagent3d_retarget_fixed          navagent3d_retarget.gd     --fixed            2/2       negative
+PASS     navagent3d_follow                  navagent3d_follow.gd       -                  0/0       ordinary
+PASS     navagent3d_follow_stationary       navagent3d_follow.gd       --stationary       2/2       negative
+PASS     navagent3d_next                    navagent3d_next.gd         -                  0/0       ordinary
+PASS     navagent3d_next_alternate          navagent3d_next.gd         --alternate        2/2       negative
+PASS     navagent3d_distance                navagent3d_distance.gd     -                  0/0       ordinary
+PASS     navagent3d_distance_wide_reach     navagent3d_distance.gd     --wide-reach       2/2       negative
+PASS     navagent3d_detour                  navagent3d_detour.gd       -                  0/0       ordinary
+PASS     navagent3d_detour_straight         navagent3d_detour.gd       --straight         2/2       negative
+PASS     navagent3d_detour_assert_pathsum   navagent3d_detour.gd       --assert-pathsum   2/2       negative
+PASS     navagent3d_detour_post_edgecentered navagent3d_detour.gd       --post-edgecentered 0/0       ordinary
+PASS     navagent3d_detour_post_none        navagent3d_detour.gd       --post-none        0/0       ordinary
+PASS     navagent3d_detour_pop_lo           navagent3d_detour.gd       --arm=pop_lo       0/0       ordinary
+PASS     navagent3d_detour_pop_hi           navagent3d_detour.gd       --arm=pop_hi       0/0       ordinary
+PASS     navagent3d_detour_pop_sat          navagent3d_detour.gd       --arm=pop_sat      0/0       ordinary
+PASS     navagent3d_detour_mid_lo           navagent3d_detour.gd       --arm=mid_lo       0/0       ordinary
+PASS     navagent3d_detour_mid_hi           navagent3d_detour.gd       --arm=mid_hi       0/0       ordinary
+PASS     navagent3d_detour_vert_pop_eq      navagent3d_detour.gd       --arm=vert_pop_eq  0/0       ordinary
+PASS     navagent3d_detour_vert_pop_above   navagent3d_detour.gd       --arm=vert_pop_above 0/0       ordinary
+PASS     navagent3d_detour_tp_mid           navagent3d_detour.gd       --arm=tp_mid       0/0       ordinary
+PASS     navagent3d_detour_tp_eq            navagent3d_detour.gd       --arm=tp_eq        0/0       ordinary
+PASS     navagent3d_detour_gap2_pop_basis   navagent3d_detour.gd       --arm=gap2_pop_basis 0/0       ordinary
+PASS     navagent3d_detour_fin_unr_lo       navagent3d_detour.gd       --arm=fin_unr_lo   0/0       ordinary
+PASS     navagent3d_detour_fin_unr_hi       navagent3d_detour.gd       --arm=fin_unr_hi   0/0       ordinary
+PASS     navagent3d_detour_vert_fin_eq      navagent3d_detour.gd       --arm=vert_fin_eq  0/0       ordinary
+PASS     navagent3d_detour_vert_fin_above   navagent3d_detour.gd       --arm=vert_fin_above 0/0       ordinary
+PASS     navagent3d_detour_fin_reach_eq     navagent3d_detour.gd       --arm=fin_reach_eq 0/0       ordinary
+PASS     navagent3d_detour_fin_reach_above  navagent3d_detour.gd       --arm=fin_reach_above 0/0       ordinary
+PASS     navagent3d_detour_edge_unr         navagent3d_detour.gd       --arm=edge_unr     0/0       ordinary
+PASS     navagent3d_detour_edge_eq          navagent3d_detour.gd       --arm=edge_eq      0/0       ordinary
+PASS     navagent3d_detour_edge_above       navagent3d_detour.gd       --arm=edge_above   0/0       ordinary
+PASS     navagent3d_detour_fin_idx_gate     navagent3d_detour.gd       --arm=fin_idx_gate 0/0       ordinary
+PASS     navagent3d_detour_fin_wall         navagent3d_detour.gd       --arm=fin_wall     0/0       ordinary
+PASS     navagent3d_detour_fin_latch        navagent3d_detour.gd       --arm=fin_latch    0/0       ordinary
+PASS     navagent3d_detour_link_shortcut    navagent3d_detour.gd       --arm=link_shortcut 0/0       ordinary
+PASS     navagent3d_detour_link_meta_types  navagent3d_detour.gd       --arm=link_meta_types 0/0       ordinary
+PASS     navagent3d_detour_link_meta_rids   navagent3d_detour.gd       --arm=link_meta_rids 0/0       ordinary
+PASS     navagent3d_detour_link_meta_owners navagent3d_detour.gd       --arm=link_meta_owners 0/0       ordinary
+PASS     navagent3d_detour_link_meta        navagent3d_detour.gd       --arm=link_meta    0/0       ordinary
+PASS     navagent3d_detour_link_layers_off  navagent3d_detour.gd       --arm=link_layers_off 0/0       ordinary
+PASS     navagent3d_detour_link_layers_on   navagent3d_detour.gd       --arm=link_layers_on 0/0       ordinary
+PASS     navagent3d_detour_link_oneway_fwd  navagent3d_detour.gd       --arm=link_oneway_fwd 0/0       ordinary
+PASS     navagent3d_detour_link_oneway_rev  navagent3d_detour.gd       --arm=link_oneway_rev 0/0       ordinary
+PASS     navagent3d_detour_link_disabled    navagent3d_detour.gd       --arm=link_disabled 0/0       ordinary
+PASS     navagent3d_detour_link_travelcost  navagent3d_detour.gd       --arm=link_travelcost 0/0       ordinary
+PASS     navagent3d_detour_link_entercost   navagent3d_detour.gd       --arm=link_entercost 0/0       ordinary
+PASS     navagent3d_detour_link_gap         navagent3d_detour.gd       --arm=link_gap     0/0       ordinary
+PASS     navagent3d_detour_link_pop_bank    navagent3d_detour.gd       --arm=link_pop_bank 0/0       ordinary
+PASS     navagent3d_detour_link_pop_void    navagent3d_detour.gd       --arm=link_pop_void 0/0       ordinary
+PASS     navagent3d_detour_mv_walk          navagent3d_detour.gd       --arm=mv_walk      0/0       ordinary
+PASS     navagent3d_detour_mv_live          navagent3d_detour.gd       --arm=mv_live      0/0       ordinary
+PASS     navagent3d_detour_mv_popback       navagent3d_detour.gd       --arm=mv_popback   0/0       ordinary
+PASS     navagent3d_detour_mv_popstrict     navagent3d_detour.gd       --arm=mv_popstrict 0/0       ordinary
+PASS     navagent3d_detour_mv_void          navagent3d_detour.gd       --arm=mv_void      0/0       ordinary
+PASS     navagent3d_detour_mv_pmd_edge      navagent3d_detour.gd       --arm=mv_pmd_edge  0/0       ordinary
+PASS     navagent3d_detour_mv_pmd_offmesh   navagent3d_detour.gd       --arm=mv_pmd_offmesh 0/0       ordinary
+PASS     navagent3d_detour_mv_pmd2          navagent3d_detour.gd       --arm=mv_pmd2      0/0       ordinary
+PASS     navagent3d_detour_mv_latch         navagent3d_detour.gd       --arm=mv_latch     0/0       ordinary
+PASS     navagent3d_detour_mv_unlatch       navagent3d_detour.gd       --arm=mv_unlatch   0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor      navagent3d_detour.gd       --arm=mv_reanchor  0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_same navagent3d_detour.gd       --arm=mv_reanchor_same 0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_bank navagent3d_detour.gd       --arm=mv_reanchor_bank 0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_void navagent3d_detour.gd       --arm=mv_reanchor_void 0/0       ordinary
+PASS     navagent3d_detour_mv_popskip       navagent3d_detour.gd       --arm=mv_popskip   0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_lazy navagent3d_detour.gd       --arm=mv_reanchor_lazy 0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_force navagent3d_detour.gd       --arm=mv_reanchor_force 0/0       ordinary
+PASS     navagent3d_detour_mv_bridge_walk   navagent3d_detour.gd       --arm=mv_bridge_walk 0/0       ordinary
+PASS     navagent3d_detour_mut_link_kill    navagent3d_detour.gd       --arm=mut_link_kill 0/0       ordinary
+PASS     navagent3d_detour_mut_link_drop    navagent3d_detour.gd       --arm=mut_link_drop 0/0       ordinary
+PASS     navagent3d_detour_mut_link_layers  navagent3d_detour.gd       --arm=mut_link_layers 0/0       ordinary
+PASS     navagent3d_detour_mut_layers_agent navagent3d_detour.gd       --arm=mut_layers_agent 0/0       ordinary
+PASS     navagent3d_detour_mut_layers_region navagent3d_detour.gd       --arm=mut_layers_region 0/0       ordinary
+PASS     navagent3d_detour_mut_region_move  navagent3d_detour.gd       --arm=mut_region_move 0/0       ordinary
+PASS     navagent3d_detour_mut_region_off   navagent3d_detour.gd       --arm=mut_region_off 0/0       ordinary
+PASS     navagent3d_detour_mut_region_renew navagent3d_detour.gd       --arm=mut_region_renew 0/0       ordinary
+PASS     navagent3d_detour_mut_link_revive  navagent3d_detour.gd       --arm=mut_link_revive 0/0       ordinary
+PASS     navagent3d_detour_mut_lazy         navagent3d_detour.gd       --arm=mut_lazy     0/0       ordinary
+PASS     navagent3d_detour_mut_latch_zombie navagent3d_detour.gd       --arm=mut_latch_zombie 0/0       ordinary
+PASS     navagent3d_detour_mut_win_link     navagent3d_detour.gd       --arm=mut_win_link 0/0       ordinary
+PASS     navagent3d_detour_mut_win_region   navagent3d_detour.gd       --arm=mut_win_region 0/0       ordinary
+PASS     navagent3d_detour_mut_map_off      navagent3d_detour.gd       --arm=mut_map_off  0/0       ordinary
+PASS     navagent3d_detour_mut_map_cycle    navagent3d_detour.gd       --arm=mut_map_cycle 0/0       ordinary
+PASS     navagent3d_detour_mut_same_link    navagent3d_detour.gd       --arm=mut_same_link 0/0       ordinary
+PASS     navagent3d_detour_mut_same_region  navagent3d_detour.gd       --arm=mut_same_region 0/0       ordinary
+PASS     navagent3d_detour_mut_same_agent   navagent3d_detour.gd       --arm=mut_same_agent 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_renew_xform navagent3d_detour.gd       --arm=mut_ord_renew_xform 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_xform_renew navagent3d_detour.gd       --arm=mut_ord_xform_renew 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_link_offmv navagent3d_detour.gd       --arm=mut_ord_link_offmv 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_link_mvoff navagent3d_detour.gd       --arm=mut_ord_link_mvoff 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_kill_mapoff navagent3d_detour.gd       --arm=mut_ord_kill_mapoff 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_mapoff_kill navagent3d_detour.gd       --arm=mut_ord_mapoff_kill 0/0       ordinary
+PASS     navagent3d_detour_mut_force_link   navagent3d_detour.gd       --arm=mut_force_link 0/0       ordinary
+PASS     navagent3d_detour_mut_force_ctl    navagent3d_detour.gd       --arm=mut_force_ctl 0/0       ordinary
+PASS     navagent3d_detour_mut_ladder_link  navagent3d_detour.gd       --arm=mut_ladder_link 0/0       ordinary
+PASS     navagent3d_detour_mut_ladder_region navagent3d_detour.gd       --arm=mut_ladder_region 0/0       ordinary
+PASS     navagent3d_detour_mut_mapoff_ladder navagent3d_detour.gd       --arm=mut_mapoff_ladder 0/0       ordinary
+PASS     navagent3d_detour_mut_ctx_resume   navagent3d_detour.gd       --arm=mut_ctx_resume 0/0       ordinary
+PASS     navagent3d_detour_mut_ctx_phys     navagent3d_detour.gd       --arm=mut_ctx_phys 0/0       ordinary
+PASS     remote3d_transform                 remote3d_transform.gd      -                  0/0       ordinary
+PASS     remote3d_transform_unbound         remote3d_transform.gd      --unbound          2/2       negative
+PASS     pathfollow3d_callback              pathfollow3d_callback.gd   -                  0/0       ordinary
+PASS     pathfollow3d_callback_stationary   pathfollow3d_callback.gd   --stationary       2/2       negative
+PASS     pathfollow3d_paced                 pathfollow3d_paced.gd      -                  0/0       ordinary
+PASS     pathfollow3d_paced_stationary      pathfollow3d_paced.gd      --stationary       2/2       negative
+PASS     pathfollow3d_curve                 pathfollow3d_curve.gd      -                  0/0       ordinary
+PASS     pathfollow3d_curve_straight        pathfollow3d_curve.gd      --straight         2/2       negative
+PASS     curve3d_path                       curve3d_path.gd            -                  0/0       ordinary
+PASS     curve3d_path_straight              curve3d_path.gd            --straight         2/2       negative
+PASS     shapecast3d_graze                  shapecast3d_graze.gd       -                  0/0       ordinary
+PASS     shapecast3d_graze_small            shapecast3d_graze.gd       --small            2/2       negative
+PASS     shapecast3d_sphere                 shapecast3d_sphere.gd      -                  0/0       ordinary
+PASS     shapecast3d_sphere_offset          shapecast3d_sphere.gd      --offset           2/2       negative
+PASS     skeleton3d_attachment              skeleton3d_attachment.gd   -                  0/0       ordinary
+PASS     skeleton3d_attachment_unrotated    skeleton3d_attachment.gd   --unrotated        2/2       negative
+PASS     skeleton3d_rotation                skeleton3d_rotation.gd     -                  0/0       ordinary
+PASS     skeleton3d_unrotated               skeleton3d_rotation.gd     --unrotated        2/2       negative
+PASS     skeleton3d_pose                    skeleton3d_pose.gd         -                  0/0       ordinary
+PASS     skeleton3d_rest_only               skeleton3d_pose.gd         --rest-only        2/2       negative
+PASS     mesh3d_faces_hit                   mesh3d_faces_hit.gd        -                  0/0       ordinary
+PASS     mesh3d_faces_reordered             mesh3d_faces_hit.gd        --reversed         2/2       negative
+PASS     mesh3d_trimesh_hit                 mesh3d_trimesh_hit.gd      -                  0/0       ordinary
+PASS     mesh3d_trimesh_outside             mesh3d_trimesh_hit.gd      --outside          2/2       negative
+PASS     mesh3d_indexed                     mesh3d_indexed.gd          -                  0/0       ordinary
+PASS     mesh3d_indexed_reversed            mesh3d_indexed.gd          --reversed         2/2       negative
+PASS     mesh3d_array                       mesh3d_array.gd            -                  0/0       ordinary
+PASS     mesh3d_array_shifted               mesh3d_array.gd            --shifted          2/2       negative
+PASS     animation3d_blend                  animation3d_blend.gd       -                  0/0       ordinary
+PASS     animation3d_blend_cut              animation3d_blend.gd       --cut              2/2       negative
+PASS     animation3d_playback               animation3d_playback.gd    -                  0/0       ordinary
+PASS     animation3d_playback_still         animation3d_playback.gd    --still            2/2       negative
+PASS     animation3d_keys                   animation3d_keys.gd        -                  0/0       ordinary
+PASS     animation3d_keys_still             animation3d_keys.gd        --still            2/2       negative
+PASS     slope3d_travel                     slope3d_travel.gd          -                  0/0       ordinary
+PASS     slope3d_travel_level               slope3d_travel.gd          --level            2/2       negative
+PASS     jump3d_land                        jump3d_gravity.gd          -                  0/0       ordinary
+PASS     jump3d_no_floor                    jump3d_gravity.gd          --lower-floor      2/2       negative
+PASS     camera3d_ortho_far_boundary_exact  camera3d_ortho.gd          --far-boundary-exact 0/0       ordinary
+PASS     camera3d_ortho_far_boundary_inside camera3d_ortho.gd          --far-boundary-inside 0/0       ordinary
+PASS     camera3d_ortho_far_boundary_outside camera3d_ortho.gd          --far-boundary-outside 2/2       negative
+PASS     camera3d_ortho_near_boundary_exact camera3d_ortho.gd          --near-boundary-exact 0/0       ordinary
+PASS     camera3d_ortho_near_boundary_inside camera3d_ortho.gd          --near-boundary-inside 0/0       ordinary
+PASS     camera3d_ortho_near_boundary_outside camera3d_ortho.gd          --near-boundary-outside 2/2       negative
+PASS     camera3d_ortho                     camera3d_ortho.gd          -                  0/0       ordinary
+PASS     camera3d_ortho_outside             camera3d_ortho.gd          --outside          2/2       negative
+PASS     camera3d_ortho_near                camera3d_ortho.gd          --near-point       2/2       negative
+PASS     camera3d_ortho_far                 camera3d_ortho.gd          --far-point        2/2       negative
+PASS     scene3d_resource_disk_local        scene3d_resource_disk.gd   -                  0/0       ordinary
+PASS     scene3d_resource_disk_shared       scene3d_resource_disk.gd   --shared           2/2       negative
+PASS     scene3d_resource_local             scene3d_resource.gd        -                  0/0       ordinary
+PASS     scene3d_resource_shared            scene3d_resource.gd        --shared           2/2       negative
+PASS     scene3d_disk                       scene3d_disk.gd            -                  0/0       ordinary
+PASS     scene3d_disk_wrong_local           scene3d_disk.gd            --wrong-local      2/2       negative
+PASS     scene3d_instances                  scene3d_instance.gd        -                  0/0       ordinary
+PASS     scene3d_instances_wrong_local      scene3d_instance.gd        --wrong-local      2/2       negative
+PASS     slope3d_floor                      slope3d_angle.gd           -                  0/0       ordinary
+PASS     slope3d_steep                      slope3d_angle.gd           --steep            2/2       negative
+PASS     floor3d_ground                     floor3d_ground.gd          -                  0/0       ordinary
+PASS     floor3d_airborne                   floor3d_ground.gd          --lower-floor      2/2       negative
+PASS     body3d_contact                     body3d_slide.gd            -                  0/0       ordinary
+PASS     body3d_contact_far                 body3d_slide.gd            --far-body         2/2       negative
+PASS     area3d_chain                       area3d_chain.gd            -                  0/0       ordinary
+PASS     area3d_chain_no_overlap            area3d_chain.gd            --no-overlap       2/2       negative
+PASS     camera3d_project                   camera3d_project.gd        -                  0/0       ordinary
+PASS     camera3d_project_behind            camera3d_project.gd        --behind-camera    2/2       negative
+PASS     camera3d_depth                     camera3d_depth.gd          -                  0/0       ordinary
+PASS     camera3d_depth_far                 camera3d_depth.gd          --far-point        2/2       negative
+PASS     camera3d_depth_near                camera3d_depth.gd          --near-point       2/2       negative
+PASS     navigation3d_path                  navigation3d_path.gd       -                  0/0       ordinary
+PASS     navigation3d_path_disconnected     navigation3d_path.gd       --disconnected     2/2       negative
+PASS     raycast3d_hit                      raycast3d.gd               -                  0/0       ordinary
+PASS     raycast3d_miss                     raycast3d.gd               --miss-ray         2/2       negative
+PASS     transform3d_compose                transform3d_compose.gd     -                  0/0       ordinary
+PASS     transform3d_compose_wrong_order    transform3d_compose.gd     --wrong-order      2/2       negative
+PASS     input3d_move                       input3d_move.gd            -                  0/0       ordinary
+PASS     input3d_move_no_event              input3d_move.gd            --no-input         2/2       negative
+PASS     phys3d_events_isect                phys3d_events.gd           --arm=isect        0/0       ordinary
+PASS     phys3d_events_cast                 phys3d_events.gd           --arm=cast         0/0       ordinary
+PASS     phys3d_events_btm                  phys3d_events.gd           --arm=btm          0/0       ordinary
+PASS     phys3d_events_pp_queries           phys3d_events.gd           --arm=pp_queries   0/0       ordinary
+PASS     phys3d_events_contact_stale        phys3d_events.gd           --arm=contact_stale 0/0       ordinary
+PASS     phys3d_events_contact_sig          phys3d_events.gd           --arm=contact_sig  0/0       ordinary
+PASS     phys3d_events_sync_cb              phys3d_events.gd           --arm=sync_cb      0/0       ordinary
+PASS     phys3d_events_srv_area_cb          phys3d_events.gd           --arm=srv_area_cb  0/0       ordinary
+PASS     phys3d_events_static_nopair        phys3d_events.gd           --arm=static_nopair 2/2       negative
+PASS     phys3d_events_threaded_edge        phys3d_events.gd           --arm=threaded_edge 0/0       ordinary
+PASS     phys3d_events_phase_delta          phys3d_events.gd           --arm=phase_delta  0/0       ordinary
+PASS     phys3d_events_jolt_edge            phys3d_events.gd           --arm=jolt_edge    0/0       ordinary
+PASS     phys3d_events_jolt_threaded        phys3d_events.gd           --arm=jolt_threaded 0/0       ordinary
+PASS     phys3d_events_dummy_refused        phys3d_events.gd           --arm=dummy_refused 0/0       ordinary
+PASS     phys3d_events_srv_phase_delta      phys3d_events.gd           --arm=srv_phase_delta 0/0       ordinary
+PASS     phys3d_events_script_size_gate     phys3d_events.gd           --arm=script_size_gate 0/0       ordinary
+PASS     phys3d_events_deferred_hang        phys3d_events.gd           --arm=deferred_hang 0/0       ordinary
+PASS     phys3d_events_backend_tier         phys3d_events.gd           --arm=backend_tier 0/0       ordinary
+PASS     phys3d_events_dummy_floor          phys3d_events.gd           --arm=dummy_floor  0/0       ordinary
+PASS     phys3d_events_body_handle          phys3d_events.gd           --arm=body_handle  0/0       ordinary
+PASS     phys3d_events_acq_use              phys3d_events.gd           --arm=acq_use      0/0       ordinary
+PASS     phys3d_events_step_stamp           phys3d_events.gd           --arm=step_stamp   0/0       ordinary
+PASS     phys3d_events_write_loss           phys3d_events.gd           --arm=write_loss   0/0       ordinary
+PASS     phys3d_events_body_tier            phys3d_events.gd           --arm=body_tier    0/0       ordinary
+PASS     phys3d_events_freed_space          phys3d_events.gd           --arm=freed_space  0/0       ordinary
+PASS     phys3d_events_motion_split         phys3d_events.gd           --arm=motion_split 0/0       ordinary
+PASS     phys3d_events_fetch_gate           phys3d_events.gd           --arm=fetch_gate   0/0       ordinary
+PASS     phys3d_events_inactive_space       phys3d_events.gd           --arm=inactive_space 0/0       ordinary
+PASS     phys3d_events_param_purity         phys3d_events.gd           --arm=param_purity 0/0       ordinary
+PASS     phys3d_events_body_inertia         phys3d_events.gd           --arm=body_inertia 0/0       ordinary
+PASS     phys3d_events_wrong_args           phys3d_events.gd           --arm=wrong_args   0/0       ordinary
+PASS     phys3d_events_geom_split           phys3d_events.gd           --arm=geom_split   0/0       ordinary
+PASS     phys3d_events_race_class           phys3d_events.gd           --arm=race_class   0/0       ordinary
+PASS     phys3d_events_freed_space_methods  phys3d_events.gd           --arm=freed_space_methods 0/0       ordinary
+PASS     phys3d_events_if_phase             phys3d_events.gd           --arm=if_phase     0/0       ordinary
+PASS     phys3d_events_if_write             phys3d_events.gd           --arm=if_write     0/0       ordinary
+PASS     phys3d_events_joint_pin            phys3d_events.gd           --arm=joint_pin    0/0       ordinary
+PASS     phys3d_events_joint_param          phys3d_events.gd           --arm=joint_param  0/0       ordinary
+PASS     phys3d_events_joint_solver         phys3d_events.gd           --arm=joint_solver 0/0       ordinary
+PASS     phys3d_events_cross_space          phys3d_events.gd           --arm=cross_space  0/0       ordinary
+PASS     phys3d_events_sleep_state          phys3d_events.gd           --arm=sleep_state  0/0       ordinary
+PASS     phys3d_joints_sweep                phys3d_joints.gd           --arm=sweep        0/0       ordinary
+PASS     phys3d_joints_rid                  phys3d_joints.gd           --arm=rid          0/0       ordinary
+PASS     phys3d_joints_api                  phys3d_joints.gd           --arm=api          0/0       ordinary
+PASS     phys3d_joints_free_pair            phys3d_joints.gd           --arm=free_pair    0/0       ordinary
+PASS     phys3d_joints_free_ops             phys3d_joints.gd           --arm=free_ops     0/0       ordinary
+PASS     phys3d_joints_detach               phys3d_joints.gd           --arm=detach       0/0       ordinary
+PASS     phys3d_joints_chain3               phys3d_joints.gd           --arm=chain3       0/0       ordinary
+PASS     phys3d_joints_twopin               phys3d_joints.gd           --arm=twopin       0/0       ordinary
+PASS     bpy_rbw3d_det                      bpy_rbw3d.gd               --arm=det          0/0       ordinary
+PASS     bpy_rbw3d_bake                     bpy_rbw3d.gd               --arm=bake         0/0       ordinary
+PASS     bpy_rbw3d_window                   bpy_rbw3d.gd               --arm=window       0/0       ordinary
+PASS     bpy_rbw3d_order                    bpy_rbw3d.gd               --arm=order        0/0       ordinary
+PASS     bpy_rbw3d_resim                    bpy_rbw3d.gd               --arm=resim        0/0       ordinary
+PASS     bpy_rbw3d_knobs                    bpy_rbw3d.gd               --arm=knobs        0/0       ordinary
+PASS     bpy_rbw3d_ops                      bpy_rbw3d.gd               --arm=ops          0/0       ordinary
+PASS     bpy_rbw3d_io                       bpy_rbw3d.gd               --arm=io           0/0       ordinary
+FAIL     bpy_rbw3d_render                   bpy_rbw3d.gd               --arm=render       0/0       ordinary
+PASS     bpy_rbw3d_ptr                      bpy_rbw3d.gd               --arm=ptr          0/0       ordinary
+PASS     r92_remote_boundary                r92_remote.gd              --arm=boundary     0/0       ordinary
+PASS     r92_remote_phase                   r92_remote.gd              --arm=phase        0/0       ordinary
+PASS     r92_remote_flags                   r92_remote.gd              --arm=flags        0/0       ordinary
+PASS     r92_remote_stale                   r92_remote.gd              --arm=stale        0/0       ordinary
+PASS     r92_remote_path                    r92_remote.gd              --arm=path         0/0       ordinary
+PASS     r92_remote_chainlag                r92_remote.gd              --arm=chainlag     0/0       ordinary
+PASS     r92_remote_srv                     r92_remote.gd              --arm=srv          0/0       ordinary
+PASS     r92_remote_drive                   r92_remote.gd              --arm=drive        0/0       ordinary
+PASS     r92_animphys_rbpos                 r92_animphys.gd            --arm=rbpos        0/0       ordinary
+PASS     r92_animphys_rbfrozen              r92_animphys.gd            --arm=rbfrozen     0/0       ordinary
+PASS     r92_animphys_animrb                r92_animphys.gd            --arm=animrb       0/0       ordinary
+PASS     r92_animphys_animatable            r92_animphys.gd            --arm=animatable   0/0       ordinary
+PASS     r92_animphys_reset                 r92_animphys.gd            --arm=reset        0/0       ordinary
+PASS     r92_animphys_manual                r92_animphys.gd            --arm=manual       0/0       ordinary
+PASS     r92_animphys_destroy               r92_animphys.gd            --arm=destroy      0/0       ordinary
+PASS     r92_animphys_iforder               r92_animphys.gd            --arm=iforder      0/0       ordinary
+PASS     r92_animphys_idlemode              r92_animphys.gd            --arm=idlemode     0/0       ordinary
+PASS     r92_animphys_badkey_insert         r92_animphys.gd            --arm=badkey_insert 2/2       negative
+PASS     r92_timing_tps                     r92_timing.gd              --arm=tps          0/0       ordinary
+PASS     r92_timing_tscale                  r92_timing.gd              --arm=tscale       0/0       ordinary
+PASS     r92_timing_edge                    r92_timing.gd              --arm=edge         0/0       ordinary
+PASS     r92_timing_refuse                  r92_timing.gd              --arm=refuse       0/0       ordinary
+PASS     r92_timing_steps                   r92_timing.gd              --arm=steps        0/0       ordinary
+PASS     r93_areasig_edges                  r93_areasig.gd             --arm=edges        0/0       ordinary
+PASS     r93_areasig_writes                 r93_areasig.gd             --arm=writes       0/0       ordinary
+PASS     r93_areasig_exits                  r93_areasig.gd             --arm=exits        0/0       ordinary
+PASS     r93_areasig_dispatch               r93_areasig.gd             --arm=dispatch     0/0       ordinary
+PASS     r93_areasig_splits                 r93_areasig.gd             --arm=splits       0/0       ordinary
+PASS     r93_areasig_multi                  r93_areasig.gd             --arm=multi        0/0       ordinary
+PASS     r93_areasig_prio                   r93_areasig.gd             --arm=prio         0/0       ordinary
+FAIL     r94_cannon_det                     r94_cannon.gd              --arm=det          0/0       ordinary
+FAIL     r94_cannon_det2                    r94_cannon.gd              --arm=det2         0/0       ordinary
+FAIL     r94_cannon_varstep                 r94_cannon.gd              --arm=varstep      0/0       ordinary
+FAIL     r94_cannon_bailout                 r94_cannon.gd              --arm=bailout      0/0       ordinary
+FAIL     r94_cannon_nan                     r94_cannon.gd              --arm=nan          0/0       ordinary
+FAIL     r94_cannon_sync                    r94_cannon.gd              --arm=sync         0/0       ordinary
+FAIL     r94_cannon_material                r94_cannon.gd              --arm=material     0/0       ordinary
+FAIL     r94_cannon_friction                r94_cannon.gd              --arm=friction     0/0       ordinary
+FAIL     r94_cannon_parity                  r94_cannon.gd              --arm=parity       0/0       ordinary
+FAIL     r94_cannon_parity2                 r94_cannon.gd              --arm=parity2      0/0       ordinary
+FAIL     r94_cannon_modes                   r94_cannon.gd              --arm=modes        0/0       ordinary
+FAIL     r94_cannon_order                   r94_cannon.gd              --arm=order        0/0       ordinary
+FAIL     r94_cannon_backends                r94_cannon.gd              --arm=backends     0/0       ordinary
+PASS     r94_cannon_neg_dt                  r94_cannon.gd              --arm=neg_dt       2/2       negative
+PASS     r94_cannon_neg_gravity             r94_cannon.gd              --arm=neg_gravity  2/2       negative
+PASS     r94_cannon_neg_steps_early         r94_cannon.gd              --arm=neg_steps_early 2/2       negative
+PASS     r94_cannon_neg_elapsed             r94_cannon.gd              --arm=neg_elapsed  2/2       negative
+PASS     r94_cannon_neg_wxyz                r94_cannon.gd              --arm=neg_wxyz     2/2       negative
+PASS     r94_cannon_neg_grid                r94_cannon.gd              --arm=neg_grid     2/2       negative
+PASS     r95_bullet_det                     r95_bullet.gd              --arm=det          0/0       ordinary
+PASS     r95_bullet_freeze                  r95_bullet.gd              --arm=freeze       0/0       ordinary
+PASS     r95_bullet_rt                      r95_bullet.gd              --arm=rt           0/0       ordinary
+PASS     r95_bullet_shm                     r95_bullet.gd              --arm=shm          0/0       ordinary
+PASS     r95_bullet_sleep                   r95_bullet.gd              --arm=sleep        0/0       ordinary
+PASS     r95_bullet_sleep2                  r95_bullet.gd              --arm=sleep2       0/0       ordinary
+PASS     r95_bullet_nan                     r95_bullet.gd              --arm=nan          0/0       ordinary
+PASS     r95_bullet_nan2                    r95_bullet.gd              --arm=nan2         0/0       ordinary
+PASS     r95_bullet_fric                    r95_bullet.gd              --arm=fric         0/0       ordinary
+PASS     r95_bullet_rest                    r95_bullet.gd              --arm=rest         0/0       ordinary
+PASS     r95_bullet_knobs                   r95_bullet.gd              --arm=knobs        0/0       ordinary
+PASS     r95_bullet_solver                  r95_bullet.gd              --arm=solver       0/0       ordinary
+PASS     r95_bullet_pile                    r95_bullet.gd              --arm=pile         0/0       ordinary
+PASS     r95_bullet_misc                    r95_bullet.gd              --arm=misc         0/0       ordinary
+PASS     r95_bullet_neg_dt                  r95_bullet.gd              --arm=neg_dt       2/2       negative
+PASS     r95_bullet_neg_order               r95_bullet.gd              --arm=neg_order    2/2       negative
+PASS     r95_bullet_neg_radius              r95_bullet.gd              --arm=neg_radius   2/2       negative
+PASS     r95_bullet_neg_simtime             r95_bullet.gd              --arm=neg_simtime  2/2       negative
+PASS     r95_bullet_neg_badid               r95_bullet.gd              --arm=neg_badid    2/2       negative
+PASS     r95_bullet_neg_shm_rt              r95_bullet.gd              --arm=neg_shm_rt   2/2       negative
+PASS     r96_joltdet_joint                  r96_joltdet.gd             --arm=joint        0/0       ordinary
+PASS     r96_joltdet_contact                r96_joltdet.gd             --arm=contact      0/0       ordinary
+PASS     r96_joltdet_restkin                r96_joltdet.gd             --arm=restkin      0/0       ordinary
+PASS     r96_joltdet_tps                    r96_joltdet.gd             --arm=tps          0/0       ordinary
+PASS     r96_joltdet_solver                 r96_joltdet.gd             --arm=solver       0/0       ordinary
+PASS     r96_joltdet_mech                   r96_joltdet.gd             --arm=mech         0/0       ordinary
+PASS     r96_joltdet_tscale                 r96_joltdet.gd             --arm=tscale       0/0       ordinary
+PASS     r96_joltdet_ffps                   r96_joltdet.gd             --arm=ffps         0/0       ordinary
+PASS     r96_joltdet_dummy                  r96_joltdet.gd             --arm=dummy        0/0       ordinary
+PASS     r96_joltdet_thread                 r96_joltdet.gd             --arm=thread       0/0       ordinary
+PASS     r96_joltdet_knobs                  r96_joltdet.gd             --arm=knobs        0/0       ordinary
+PASS     r96_joltdet_nc                     r96_joltdet.gd             --arm=nc           0/0       ordinary
+PASS     r97_nodelat_joint                  r97_nodelat.gd             --arm=joint        0/0       ordinary
+PASS     r97_nodelat_soft                   r97_nodelat.gd             --arm=soft         0/0       ordinary
+PASS     r97_nodelat_dss                    r97_nodelat.gd             --arm=dss          0/0       ordinary
+PASS     r97_nodelat_cb                     r97_nodelat.gd             --arm=cb           0/0       ordinary
+PASS     r97_nodelat_vehicle                r97_nodelat.gd             --arm=vehicle      0/0       ordinary
+PASS     r97_nodelat_softfloor              r97_nodelat.gd             --arm=softfloor    0/0       ordinary
+PASS     r97_nodelat_xr                     r97_nodelat.gd             --arm=xr           0/0       ordinary
+PASS     r97_nodelat_freegrain              r97_nodelat.gd             --arm=freegrain    0/0       ordinary
+PASS     r98_gltflat_load                   r98_gltflat.gd             --arm=load         0/0       ordinary
+PASS     r98_gltflat_doc                    r98_gltflat.gd             --arm=doc          0/0       ordinary
+PASS     r98_gltflat_sniff                  r98_gltflat.gd             --arm=sniff        0/0       ordinary
+PASS     r98_gltflat_extbin                 r98_gltflat.gd             --arm=extbin       0/0       ordinary
+PASS     r98_gltflat_cls                    r98_gltflat.gd             --arm=cls          0/0       ordinary
+PASS     r98_gltflat_write                  r98_gltflat.gd             --arm=write        0/0       ordinary
+PASS     r98_gltflat_tr                     r98_gltflat.gd             --arm=tr           0/0       ordinary
+PASS     r98_gltflat_phys                   r98_gltflat.gd             --arm=phys         0/0       ordinary
+PASS     r98_gltflat_var                    r98_gltflat.gd             --arm=var          0/0       ordinary
+PASS     r99_animtree_core                  r99_animtree.gd            --arm=core         0/0       ordinary
+PASS     r99_animtree_ut_scope              r99_animtree.gd            --arm=ut_scope     0/0       ordinary
+PASS     r99_animtree_ut_mech               r99_animtree.gd            --arm=ut_mech      0/0       ordinary
+PASS     r99_animtree_modes                 r99_animtree.gd            --arm=modes        0/0       ordinary
+PASS     r99_animtree_order                 r99_animtree.gd            --arm=order        0/0       ordinary
+PASS     r99_animtree_sm_adv                r99_animtree.gd            --arm=sm_adv       0/0       ordinary
+PASS     r99_animtree_sm_misc               r99_animtree.gd            --arm=sm_misc      0/0       ordinary
+PASS     r99_animtree_silent                r99_animtree.gd            --arm=silent       0/0       ordinary
+PASS     r99_animtree_life                  r99_animtree.gd            --arm=life         0/0       ordinary
+PASS     r100_fpslat_sched                  r100_fpslat.gd             --arm=sched        0/0       ordinary
+PASS     r100_fpslat_qa                     r100_fpslat.gd             --arm=qa           0/0       ordinary
+PASS     r100_fpslat_modes                  r100_fpslat.gd             --arm=modes        0/0       ordinary
+PASS     r100_fpslat_compose                r100_fpslat.gd             --arm=compose      0/0       ordinary
+PASS     r100_fpslat_rt                     r100_fpslat.gd             --arm=rt           0/0       ordinary
+PASS     r100_fpslat_area                   r100_fpslat.gd             --arm=area         0/0       ordinary
+PASS     r100_fpslat_life                   r100_fpslat.gd             --arm=life         0/0       ordinary
+PASS     r100_fpslat_cls                    r100_fpslat.gd             --arm=cls          0/0       ordinary
+totals: cases=350 pass=336 fail=14 ordinary=291 negative_controls=59 probes=0
+FAIL battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/verdicts.json

@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freej_then_b engine=Jolt Physics
+M freej_then_b joint freed
+M freej_then_b b freed
+M DONE case=freej_then_b engine=Jolt Physics
+ERROR: Failed to free RID: The specified RID has no owner.
+   at: free_rid (modules/jolt_physics/jolt_physics_server_3d.cpp:1598)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/hang-asis/r90_child.gd:197)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/hang-asis/r90_child.gd:22)
+ERROR: Failed to free RID: The specified RID has no owner.
+   at: free_rid (modules/jolt_physics/jolt_physics_server_3d.cpp:1598)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/hang-asis/r90_child.gd:197)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/hang-asis/r90_child.gd:22)

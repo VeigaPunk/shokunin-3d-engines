@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freeb_ops engine=Dummy
+M freeb_ops freed
+M freeb_ops get_type=0
+M freeb_ops get_prio=0
+M freeb_ops pin_param=0.0
+M freeb_ops isdis=false
+M freeb_ops cleared type=0
+M DONE case=freeb_ops engine=Dummy

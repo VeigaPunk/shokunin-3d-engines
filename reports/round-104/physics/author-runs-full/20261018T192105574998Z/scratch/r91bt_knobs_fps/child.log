@@ -1,0 +1,8 @@
+M0 case=fps engine=blender-5.2.1
+M fps fps24 fps=24 h=3302e3c1de9c5dd0 last=(0.381156,-0.006439,0.500823)
+M fps fps60 fps=60 h=1f12776ddff6285f last=(0.000000,0.000000,2.940532)
+M fps fps120 fps=120 h=9c73c3f28300910c last=(0.000000,0.000000,4.482864)
+M DONE case=fps
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

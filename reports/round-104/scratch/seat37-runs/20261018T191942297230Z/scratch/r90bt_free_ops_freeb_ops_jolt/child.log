@@ -1,0 +1,30 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freeb_ops engine=Jolt Physics
+M freeb_ops freed
+M freeb_ops get_type=0
+WARNING: Joint solver priority is not supported when using Jolt Physics. Any such value will be ignored. This joint connects '<unknown>' and '<unknown>'.
+     at: set_solver_priority (modules/jolt_physics/joints/jolt_joint_3d.cpp:182)
+     GDScript backtrace (most recent call first):
+         [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:96)
+         [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:22)
+M freeb_ops get_prio=1
+WARNING: Pin joint bias is not supported when using Jolt Physics. Any such value will be ignored. This joint connects '<unknown>' and '<unknown>'.
+     at: set_param (modules/jolt_physics/joints/jolt_pin_joint_3d.cpp:103)
+     GDScript backtrace (most recent call first):
+         [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:99)
+         [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:22)
+M freeb_ops pin_param=0.30000001192093
+ERROR: Parameter "body" is null.
+   at: body_remove_collision_exception (modules/jolt_physics/jolt_physics_server_3d.cpp:887)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:104)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:22)
+M freeb_ops isdis=false
+M freeb_ops cleared type=5
+M DONE case=freeb_ops engine=Jolt Physics
+ERROR: Failed to free RID: The specified RID has no owner.
+   at: free_rid (modules/jolt_physics/jolt_physics_server_3d.cpp:1598)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:197)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/scratch/seat37-runs/20261018T191942297230Z/scratch/r90_child.gd:22)

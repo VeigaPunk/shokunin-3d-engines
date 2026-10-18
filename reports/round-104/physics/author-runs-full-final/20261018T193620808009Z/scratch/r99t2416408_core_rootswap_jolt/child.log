@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+RS_BEFORE actor=(0.5333,0.0000,0.0000) tp=0.1333
+RS_ASSIGN root=AnimationNodeBlendTree tp=0.1333
+RS_FRAME1 actor=(0.0000,0.6000,0.0000) tp=0.1500
+RS_AFTER actor=(0.0000,1.1333,0.0000) tp=0.2833
+CORE_DONE case=rootswap

@@ -1,0 +1,7 @@
+[application]
+
+config/name="r92aanimatable"
+
+[physics]
+
+common/physics_ticks_per_second=60

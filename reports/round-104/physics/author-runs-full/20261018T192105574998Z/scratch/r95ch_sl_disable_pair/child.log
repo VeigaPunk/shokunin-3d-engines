@@ -1,0 +1,5 @@
+M0 case=sl_disable_pair engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_disable_pair sleep-freeze freezeStep=80 finalV=1.94289029e-16,0 z=0.49999
+M sl_disable_pair sleep-disable freezeStep=80 finalV=1.94289029e-16 z=0.49999 eq=True
+M DONE case=sl_disable_pair
+# pybullet build time: Oct 15 2026 03:47:36

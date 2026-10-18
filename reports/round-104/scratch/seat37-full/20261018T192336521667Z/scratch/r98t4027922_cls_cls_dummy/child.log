@@ -1,0 +1,24 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+GLTFCLS engine=4.7.2-stable (arch_linux)
+CLS GLTFDocument exists=true inst=ok methods=25
+CLS GLTFState exists=true inst=ok methods=71
+CLS GLTFNode exists=true inst=ok methods=32
+CLS GLTFMesh exists=true inst=ok methods=10
+CLS GLTFAnimation exists=true inst=ok methods=6
+CLS GLTFSkeleton exists=true inst=ok methods=11
+CLS GLTFSkin exists=true inst=ok methods=20
+CLS GLTFBufferView exists=true inst=ok methods=15
+CLS GLTFAccessor exists=true inst=ok methods=32
+CLS GLTFTexture exists=true inst=ok methods=4
+CLS GLTFTextureSampler exists=true inst=ok methods=8
+CLS GLTFCamera exists=true inst=ok methods=14
+CLS GLTFLight exists=true inst=ok methods=18
+CLS GLTFPhysicsBody exists=true inst=ok methods=20
+CLS GLTFPhysicsShape exists=true inst=ok methods=20
+CLS GLTFSpecGloss exists=true inst=ok methods=10
+CLS GLTFDocumentExtension exists=true inst=ok methods=24
+CLS GLTFObjectModelProperty exists=true inst=ok methods=18
+SPOT GLTFDocument append_from_file=Y append_from_buffer=Y append_from_scene=Y generate_scene=Y generate_buffer=Y write_to_filesystem=Y set_root_nodes=- get_supported_gltf_extensions=Y
+RECOG PackedScene=tscn,res,scn
+RECOG GLTFDocument=tres,res

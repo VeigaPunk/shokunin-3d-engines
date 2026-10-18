@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=stale engine=Jolt Physics
+M stale bound O=(2.0000,1.0000,-3.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M stale post_free valid=false
+M stale move_after_free_imm FREED
+M stale after_frame1 path=../Target
+M stale after_forcecache (no error)
+M stale rebound O=(4.0000,4.0000,4.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M stale orphan_pre in_tree=false local=O=(4.0000,4.0000,4.0000) S=(3.0000,3.0000,3.0000)
+M stale orphan_after local=O=(4.0000,4.0000,4.0000) S=(3.0000,3.0000,3.0000)
+M stale reparented O=(4.0000,4.0000,4.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M stale reparented_cached O=(4.0000,4.0000,4.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M stale repath_same O=(4.0000,4.0000,4.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M stale repath_toggle O=(5.0000,5.0000,5.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M stale src_orphan O=(5.0000,5.0000,5.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M stale src_back O=(6.0000,6.0000,6.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M DONE case=stale

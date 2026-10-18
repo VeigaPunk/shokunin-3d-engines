@@ -1,0 +1,5 @@
+M0 case=var_maxsub engine=cannon-es-0.20.0+three-0.186.1
+M var_maxsub maxsub stepnumber=10 time=0.500000000 accumulator=4.163336e-17 ball.y=4.850047582139
+M var_maxsub maxsub1000 stepnumber=30 time=0.500000000 ball.y=3.733634602311
+M var_maxsub fixed30 stepnumber=30 time=0.500000000 ball.y=3.733634602311
+M DONE case=var_maxsub

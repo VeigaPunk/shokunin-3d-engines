@@ -1,0 +1,13 @@
+M0 case=shot engine=blender-5.2.1
+00:00.511  render           | Saved: '/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/r91bt_render_shot/render/jump40.png'
+M shot jump40 ret={'FINISHED'} pre=(0.000000,0.000000,5.000000) post=(0.000000,0.000000,5.000000) written=True fcur=40
+M shot after_step20 f20=(0.000000,0.000000,1.942529)
+00:00.561  render           | Saved: '/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/r91bt_render_shot/render/from20.png'
+M shot jump40_from20 ret={'FINISHED'} pre=(0.000000,0.000000,1.942529) post=(0.000000,0.000000,1.942529) written=True fcur=40
+00:00.617  render           | Saved: '/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/r91bt_render_shot/render/seq40.png'
+M shot seq40 ret={'FINISHED'} pre=(0.381156,-0.006439,0.500823) post=(0.381156,-0.006439,0.500823) written=True fcur=40
+M shot compare h1_eq_h2=False h3_diff=True sim_f40=(0.381156,-0.006439,0.500823)
+M DONE case=shot
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

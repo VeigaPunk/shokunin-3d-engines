@@ -1,0 +1,55 @@
+GATE unreal-mcp subtree
+SUBTREE=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/knowledge/unreal-mcp
+PIN=a6aa73ada02a9fb1f5415bec491f9942c519b297
+WORK_ROOT=/tmp (from default)
+WORK_ROOT_FREE=3.1G of 16G (80% used)
+LANE_HEAD=88c3b2ca70fc83ec47a931d7b6dcff85a111c04e
+
+MANIFEST_FILES=12
+FAIL per-seat manifest sweep (--strict) failed:
+CHECK 1 manifest-byte-identity
+upstream/.claude-plugin/plugin.json: OK
+upstream/CODEOWNERS: OK
+upstream/.gitignore: OK
+upstream/hooks/hooks.json: OK
+upstream/hooks/unreal-context.sh: OK
+upstream/LICENSE: OK
+upstream/README.md: OK
+upstream/skills/create-toolset/SKILL.md: OK
+upstream/skills/unreal-mcp/references/operations.md: OK
+upstream/skills/unreal-mcp/references/setup.md: OK
+upstream/skills/unreal-mcp/SKILL.md: OK
+upstream/skills/unreal-skill/SKILL.md: OK
+MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
+STEP=PASS
+
+CHECK 2 clone-equivalence
+CHECK 2 BLOCKED (network)
+BLOCKED fresh clone could not complete — upstream unreachable, nothing compared
+BLOCKED exit 2 is not a verdict: the vendored bytes are UNCHECKED, not divergent
+STEP=BLOCKED
+
+CHECK 3 verdict-card-scan
+OK   unproven-runtime actors-scene.md                line 5
+OK   static-only      animation-controlrig.md        line 4
+OK   static-only      assets-content.md              line 15
+OK   static-only      blueprints.md                  line 4
+OK   static-only      editor-general.md              line 4
+OK   static-only      gameplay-gas.md                line 4
+OK   static-only      materials.md                   line 4
+OK   static-only      meshes-textures.md             line 4
+OK   static-only      scripting-programmatic.md      line 5
+OK   static-only      sequencer.md                   line 5
+OK   static-only      testing-automation.md          line 5
+OK   static-only      ui-umg-slate.md                line 5
+OK   static-only      vfx-niagara-dataflow.md        line 6
+CARDS=13 EXPECTED=13 BAD=0
+CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+NAME_SET=OK NAME_BAD=0
+STEP=PASS
+
+CHECK 4 pointer-sweep
+POINTERS=101 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+STEP=PASS
+
+GATE RESULT: FAIL (checks failed: 1)

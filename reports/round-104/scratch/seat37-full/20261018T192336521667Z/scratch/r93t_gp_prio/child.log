@@ -1,0 +1,110 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=prio engine=DEFAULT
+PRE case=prio engine=DEFAULT threaded=false a_mon=true a_monable=true balls=1
+E pf=1 seq=1 t=1 by=3.0000 ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=1 seq=2 ovA=0/0
+IF pf=2 seq=3 body=ball
+SIG sig=A.body_entered pf=2 seq=4 body=ball ovA=1/0 ovn=ball mon=true
+SIG sig=A.body_shape_entered pf=2 seq=5 body=ball bsi=0 lsi=0 ovA=1/0 ovn=ball mon=true
+SIG sig=A.area_entered pf=2 seq=6 area=B ovA=1/1 ovn=ball mon=true
+SIG sig=A.area_shape_entered pf=2 seq=7 area=B asi=0 lsi=0 ovA=1/1 ovn=ball mon=true
+SIG sig=B.body_entered pf=2 seq=8 body=ball ovA=1/0 ovn=ball mon=true
+SIG sig=B.area_entered pf=2 seq=9 area=A ovA=1/1 ovn=ball mon=true
+E pf=2 seq=10 t=2 by=2.9973 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=2 seq=11 ovA=1/1
+IF pf=3 seq=12 body=ball
+E pf=3 seq=13 t=3 by=2.9862 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=3 seq=14 ovA=1/1
+IF pf=4 seq=15 body=ball
+E pf=4 seq=16 t=4 by=2.9669 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=4 seq=17 ovA=1/1
+IF pf=5 seq=18 body=ball
+E pf=5 seq=19 t=5 by=2.9392 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=5 seq=20 ovA=1/1
+IF pf=6 seq=21 body=ball
+E pf=6 seq=22 t=6 by=2.9032 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=6 seq=23 ovA=1/1
+IF pf=7 seq=24 body=ball
+E pf=7 seq=25 t=7 by=2.8590 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=7 seq=26 ovA=1/1
+IF pf=8 seq=27 body=ball
+E pf=8 seq=28 t=8 by=2.8065 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=8 seq=29 ovA=1/1
+IF pf=9 seq=30 body=ball
+E pf=9 seq=31 t=9 by=2.7458 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=9 seq=32 ovA=1/1
+IF pf=10 seq=33 body=ball
+E pf=10 seq=34 t=10 by=2.6768 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=10 seq=35 ovA=1/1
+IF pf=11 seq=36 body=ball
+E pf=11 seq=37 t=11 by=2.5996 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=11 seq=38 ovA=1/1
+IF pf=12 seq=39 body=ball
+ACT PRIO swap A=5 B=0 pf=12 seq=40
+E pf=12 seq=41 t=12 by=2.5143 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=12 seq=42 ovA=1/1
+IF pf=13 seq=43 body=ball
+E pf=13 seq=44 t=13 by=2.4290 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=13 seq=45 ovA=1/1
+IF pf=14 seq=46 body=ball
+E pf=14 seq=47 t=14 by=2.3439 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=14 seq=48 ovA=1/1
+IF pf=15 seq=49 body=ball
+E pf=15 seq=50 t=15 by=2.2589 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=15 seq=51 ovA=1/1
+IF pf=16 seq=52 body=ball
+E pf=16 seq=53 t=16 by=2.1741 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=16 seq=54 ovA=1/1
+IF pf=17 seq=55 body=ball
+E pf=17 seq=56 t=17 by=2.0894 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=17 seq=57 ovA=1/1
+IF pf=18 seq=58 body=ball
+E pf=18 seq=59 t=18 by=2.0049 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=18 seq=60 ovA=1/1
+IF pf=19 seq=61 body=ball
+E pf=19 seq=62 t=19 by=1.9205 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=19 seq=63 ovA=1/1
+IF pf=20 seq=64 body=ball
+E pf=20 seq=65 t=20 by=1.8363 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=20 seq=66 ovA=1/1
+IF pf=21 seq=67 body=ball
+E pf=21 seq=68 t=21 by=1.7521 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=21 seq=69 ovA=1/1
+IF pf=22 seq=70 body=ball
+E pf=22 seq=71 t=22 by=1.6682 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=22 seq=72 ovA=1/1
+IF pf=23 seq=73 body=ball
+E pf=23 seq=74 t=23 by=1.5843 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+F pf=23 seq=75 ovA=1/1
+IF pf=24 seq=76 body=ball
+E pf=24 seq=77 t=24 by=1.5006 ovA=1/1 ovB=1/1 ifc=1 monA=true monB=true
+DONE case=prio engine=DEFAULT nif=23 nsig=6 ne=24 nf=23 seq=77
+SIG sig=A.body_exited pf=24 seq=78 body=ball ovA=1/1 ovn=ball mon=true
+SIG sig=A.body_shape_exited pf=24 seq=79 body=ball bsi=0 lsi=0 ovA=1/1 ovn=ball mon=true
+SIG sig=B.body_exited pf=24 seq=80 body=ball ovA=1/1 ovn=ball mon=true
+DONE_ALL case=prio seq=80
+M prio e1 by=3.0000 ovA=0/0 ovB=0/0 ifc=0
+M prio e2 by=2.9973 ovA=1/1 ovB=1/1 ifc=1
+M prio e3 by=2.9862 ovA=1/1 ovB=1/1 ifc=1
+M prio e11 by=2.5996 ovA=1/1 ovB=1/1 ifc=1
+M prio e12 by=2.5143 ovA=1/1 ovB=1/1 ifc=1
+M prio e13 by=2.4290 ovA=1/1 ovB=1/1 ifc=1
+M prio e23 by=1.5843 ovA=1/1 ovB=1/1 ifc=1
+M prio e24 by=1.5006 ovA=1/1 ovB=1/1 ifc=1
+M prio s1 pf=2 cls=in_step sig=A.area_entered area=B
+M prio s2 pf=2 cls=in_step sig=A.area_shape_entered area=B asi=0 lsi=0
+M prio s3 pf=2 cls=in_step sig=A.body_entered body=ball
+M prio s4 pf=2 cls=in_step sig=A.body_shape_entered body=ball bsi=0 lsi=0
+M prio s5 pf=2 cls=in_step sig=B.area_entered area=A
+M prio s6 pf=2 cls=in_step sig=B.body_entered body=ball
+M prio s7 pf=24 cls=teardown sig=A.body_exited body=ball
+M prio s8 pf=24 cls=teardown sig=A.body_shape_exited body=ball bsi=0 lsi=0
+M prio s9 pf=24 cls=teardown sig=B.body_exited body=ball
+# prio order pf2=[A.body_entered@ball,A.body_shape_entered@ball,A.area_entered@B,A.area_shape_entered@B,B.body_entered@ball,B.area_entered@A] pf24=[A.body_exited@ball,A.body_shape_exited@ball,B.body_exited@ball]
+M prio facts swap_t=12 dby3=-0.0111 dby11=-0.0772 dby13=-0.0853 dby14=-0.0851
+M prio census in_step=6 no_if=0 post_e=0 pre_if=0 idle=0 other=0 teardown=3 nif=23 ne=24 nf=23 nsig=9
+M DONE case=prio
+SIG sig=A.area_exited pf=24 seq=81 area=B ovA=0/1 ovn=- mon=true
+SIG sig=A.area_shape_exited pf=24 seq=82 area=B asi=0 lsi=0 ovA=0/1 ovn=- mon=true
+SIG sig=B.area_exited pf=24 seq=83 area=A ovA=0/0 ovn=- mon=true

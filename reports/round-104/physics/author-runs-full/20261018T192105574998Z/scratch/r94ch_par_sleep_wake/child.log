@@ -1,0 +1,4 @@
+M0 case=par_sleep_wake engine=cannon-es-0.20.0+three-0.186.1
+M par_sleep_wake sleep_wake sleptBefore=2 moverSpeedLimit=0.1 rows 401:2.9973/2/0 406:2.9427/2/0 411:2.8201/2/0 416:2.6293/2/0 421:2.3706/2/0 426:2.0439/2/0 431:1.6493/2/0 436:1.4633/0/2
+M par_sleep_wake final sleeperState=1 sleeperY=0.499987 moverY=1.499978 contacts=2
+M DONE case=par_sleep_wake

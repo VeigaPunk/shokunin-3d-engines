@@ -1,0 +1,3 @@
+M0 case=mod_elapsed_half engine=cannon-es-0.20.0+three-0.186.1
+M mod_elapsed_half elapsed-half calls=10 stepnumber=5 time=0.083333333333 acc=0.00000000000000000e+0 pos.y=4.959092470 interpPos.y=4.972726791 prevPos.y=4.972726791
+M DONE case=mod_elapsed_half

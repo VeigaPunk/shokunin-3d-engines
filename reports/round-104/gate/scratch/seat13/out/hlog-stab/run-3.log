@@ -1,0 +1,32 @@
+GATE unreal-mcp subtree
+SUBTREE=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/knowledge/unreal-mcp
+PIN=a6aa73ada02a9fb1f5415bec491f9942c519b297
+WORK_ROOT=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/gate/scratch/seat13/gw-stab (from GATE_WORKDIR)
+WORK_ROOT_FREE=772G of 930G (16% used)
+LANE_HEAD=88c3b2ca70fc83ec47a931d7b6dcff85a111c04e
+
+MANIFEST_FILES=12
+CHECK 1 manifest-byte-identity
+upstream/.claude-plugin/plugin.json: OK
+upstream/CODEOWNERS: OK
+upstream/.gitignore: OK
+upstream/hooks/hooks.json: OK
+upstream/hooks/unreal-context.sh: OK
+upstream/LICENSE: OK
+upstream/README.md: OK
+upstream/skills/create-toolset/SKILL.md: OK
+upstream/skills/unreal-mcp/references/operations.md: OK
+upstream/skills/unreal-mcp/references/setup.md: OK
+upstream/skills/unreal-mcp/SKILL.md: OK
+upstream/skills/unreal-skill/SKILL.md: OK
+MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
+STEP=PASS
+
+CHECK 2 clone-equivalence
+CLONE_HEAD=a6aa73ada02a9fb1f5415bec491f9942c519b297
+CLONE_DIRTY=0
+CLONE_TRACKED=12
+PATH_EXTRA=0 PATH_MISSING=0
+BLOB_DIFFS=0
+/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/knowledge/unreal-mcp/gate/run_gate.sh: line 273: syntax error near unexpected token `('
+/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/knowledge/unreal-mcp/gate/run_gate.sh: line 273: `      printf 'BLOCKED retry with GATE_WORKDIR (or TMPDIR) on a roomy filesystem — see gate/README.md\n''

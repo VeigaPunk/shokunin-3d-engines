@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+PASS phys3d_joints sweep sweep@gp{rc=0,m=M sweep rt=-2:-2;-1:-1;0:0;1:1;2:2;4:4;8:8;32:32;64:64;65:65;128:128|M unmade get0=1|M unmade set32 get1=32|M unmade setneg get2=-5|M DONE case=sweep engine=DEFAULT|M0 case=sweep engine=DEFAULT,e=3,w=0} sweep@jolt{rc=0,m=M sweep rt=-2:1;-1:1;0:1;1:1;2:1;4:1;8:1;32:1;64:1;65:1;128:1|M unmade get0=1|M unmade set32 get1=1|M unmade setneg get2=1|M DONE case=sweep engine=Jolt Physics|M0 case=sweep engine=Jolt Physics,e=3,w=12} sweep@dummy{rc=0,m=M sweep rt=-2:0;-1:0;0:0;1:0;2:0;4:0;8:0;32:0;64:0;65:0;128:0|M unmade get0=0|M unmade set32 get1=0|M unmade setneg get2=0|M DONE case=sweep engine=Dummy|M0 case=sweep engine=Dummy,e=0,w=0}

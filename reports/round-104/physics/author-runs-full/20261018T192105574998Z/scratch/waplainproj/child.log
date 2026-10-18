@@ -1,0 +1,72 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Required object "rp_point_query" is null.
+   at: _intersect_point (servers/physics_3d/physics_server_3d.cpp:387)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Required object "rp_shape_query" is null.
+   at: _intersect_shape (servers/physics_3d/physics_server_3d.cpp:412)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Required object "rp_shape_query" is null.
+   at: _intersect_shape (servers/physics_3d/physics_server_3d.cpp:412)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Required object "rp_shape_query" is null.
+   at: _intersect_shape (servers/physics_3d/physics_server_3d.cpp:412)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Required object "rp_shape_query" is null.
+   at: _cast_motion (servers/physics_3d/physics_server_3d.cpp:432)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Required object "rp_shape_query" is null.
+   at: _collide_shape (servers/physics_3d/physics_server_3d.cpp:447)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Required object "rp_shape_query" is null.
+   at: _get_rest_info (servers/physics_3d/physics_server_3d.cpp:465)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Parameter "shape" is null.
+   at: intersect_shape (modules/godot_physics_3d/godot_space_3d.cpp:216)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Parameter "shape" is null.
+   at: cast_motion (modules/godot_physics_3d/godot_space_3d.cpp:267)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Parameter "shape" is null.
+   at: rest_info (modules/godot_physics_3d/godot_space_3d.cpp:516)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+ERROR: Condition "p_size < 0" is true. Returning: ERR_INVALID_PARAMETER
+   at: resize (./core/templates/cowdata.h:404)
+   GDScript backtrace (most recent call first):
+       [0] _child_wrong_args (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5882)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+CHILD_RESULT wa_plain_point_shapeparams=t28,n0
+CHILD_RESULT wa_plain_isect_pointparams=t28,n0
+CHILD_RESULT wa_plain_isect_rayparams=t28,n0
+CHILD_RESULT wa_plain_isect_null=t28,n0
+CHILD_RESULT wa_plain_cast_pointparams=t32,n0
+CHILD_RESULT wa_plain_collide_rayparams=t28,n0
+CHILD_RESULT wa_plain_rest_rayparams=t27,n0
+CHILD_RESULT wa_plain_isect_noshape=t28,n0
+CHILD_RESULT wa_plain_cast_noshape=t32,n0
+CHILD_RESULT wa_plain_rest_noshape=t27,n0
+CHILD_RESULT wa_plain_collide_maxres=t28,n0
+CHILD_RESULT wa_plain_isect_maxres0=t28,n0
+CHILD_RESULT wa_plain_point_maxres0=t28,n0
+CHILD_NOTE wa_plain cells=["point_shapeparams=t28,n0", "isect_pointparams=t28,n0", "isect_rayparams=t28,n0", "isect_null=t28,n0", "cast_pointparams=t32,n0", "collide_rayparams=t28,n0", "rest_rayparams=t27,n0", "isect_noshape=t28,n0", "cast_noshape=t32,n0", "rest_noshape=t27,n0", "collide_maxres=t28,n0", "isect_maxres0=t28,n0", "point_maxres0=t28,n0"]
+CHILD_RESULT wa_plain_backend=DEFAULT

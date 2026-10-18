@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=detachb_free engine=Dummy
+M detachb_free detached
+M detachb_free freed
+M DONE case=detachb_free engine=Dummy

@@ -39,7 +39,8 @@ as such.
 > in both directions (`NAME_SET=OK`); **A4** — an unreachable upstream is a distinct `BLOCKED`
 > state with exit **2**, not a folded FAIL. The scanner sha256 is now `577c8b54…`; the expected
 > values below were re-measured against it (the earlier `POINTERS=87` pin was stale — see the pin
-> correction note).
+> correction note). The r104 scanner sha256 is `e5521304…` and the current pin is `POINTERS=103`
+> (see the r104 note below).
 >
 > **r103b (2026-10-18, SEAT-09 HARDENING-AUTHOR).** Two host-dependent defects in the script
 > itself, both found while running the A4 controls and both fixed in the same pass: (a) the
@@ -50,6 +51,82 @@ as such.
 > obvious way to exercise the BLOCKED path (`REPO=<url> run_gate.sh`) silently repointed pass B and
 > emitted ~26 spurious `MISSING-PATH-REL` — now a distinct `REPO_ROOT`. Controls A1–A4 (11 rows,
 > including a clean control) are recorded in `reports/round-103/gate/hardening.md`.
+>
+> **r104 (2026-10-18, SEAT-12 GATE-WORKDIR-AUTHOR).** The r103 close window left two unexplained
+> anomalies (`reports/round-103/gate/close-runs.md`): one run printed `GATE RESULT: FAIL` with
+> CHECK 4 PASS, and one run produced **empty output with exit 1**. Both are the same defect class —
+> the gate's two scratch sites were plain `mktemp`, i.e. hardcoded to `/tmp`, a 16G tmpfs shared
+> with the user's other sessions under a per-user quota. This seat **reproduced both live** and
+> fixed the class. See "Running under quota pressure" below.
+
+## Running under quota pressure
+
+Both of this gate's scratch sites — the manifest log and CHECK 2's clone workdir — live under
+
+```
+WORK_ROOT=${GATE_WORKDIR:-${TMPDIR:-/tmp}}
+```
+
+**The r103 root cause.** On this host `/tmp` is a 16G tmpfs shared with the user's other sessions
+under a per-user quota, and it runs near full (observed 77–80% used, ~3 GB free). When it is
+exhausted, `git clone` dies with
+
+```
+error: copy-fd: write returned: Disk quota exceeded
+fatal: cannot copy '…/templates/description' to '…/.git/description': Disk quota exceeded
+```
+
+and the consequences were worse than the error:
+
+- **A local disk failure was reported as a network failure.** CHECK 2's clone-failure branch was
+  reached identically by "upstream unreachable" and "scratch filesystem full", so a quota-exhausted
+  host printed `CHECK 2 BLOCKED (network)` and sent the reader to the wrong subsystem. (r103's
+  SEAT-01 recorded exactly this: "CHECK 2 flaky … while the network was demonstrably up".)
+- **The diagnostic destroyed itself.** The clone's stderr was redirected to `$WORK/clone.log` — on
+  the same full filesystem — so the log was created empty and the `BLOCKED` branch printed no cause
+  line at all.
+- **A clean tree could flake or print nothing.** Allocation failures under pressure surfaced as
+  silent or misleading failures, including the empty-output exit-1 run.
+
+**What to do.** If a run looks wrong — an unexpected `BLOCKED`, an empty output file, a check that
+fails on a tree you believe is clean — point the scratch at a filesystem with room and re-run:
+
+```sh
+GATE_WORKDIR=/home/you/scratch corpus/knowledge/unreal-mcp/gate/run_gate.sh; echo "exit=$?"
+```
+
+`TMPDIR` is honoured too (this is the POSIX convention most tools already follow), and `GATE_WORKDIR`
+takes precedence over it. `/tmp` remains the default, so every existing caller behaves as before.
+The gate now prints the choice and the room left on every run:
+
+```
+WORK_ROOT=/tmp (from default)
+WORK_ROOT_FREE=3.2G of 16G (80% used)
+```
+
+and **validates the root before running any check** — a typo'd or non-writable `GATE_WORKDIR` is a
+named `FAIL` up front, not an obscure failure later. The value reported in `(from …)` is
+`GATE_WORKDIR`, `TMPDIR`, or `default`.
+
+If the clone fails for a **local resource** reason, CHECK 2 now says so instead of blaming the
+network:
+
+```
+CHECK 2 BLOCKED (local-resource)
+BLOCKED fresh clone could not complete — scratch filesystem full or quota-exhausted
+BLOCKED the network may be fine: this is a DISK failure, not an unreachable upstream
+BLOCKED retry with GATE_WORKDIR (or TMPDIR) on a roomy filesystem — see gate/README.md
+```
+
+The exit code is still **2**: this is a cause classification, not a new state — the A4 contract
+(`BLOCKED` ⇒ 2) is unchanged, and the header for a genuine network block still reads exactly
+`CHECK 2 BLOCKED (network)`.
+
+**Two recorded limits of this fix.** (1) It cannot make a full filesystem work; it makes the
+failure *legible and avoidable*. (2) A caller who sets neither variable on a quota-pressured host
+still gets the old behaviour — the default is unchanged on purpose, because silently relocating
+scratch is a surprise for a close-out artifact. The banner line is the signal to look.
+
 
 ## Pinned constants
 
@@ -168,7 +245,7 @@ moves on any edit here, and it is queued as a doc-level observation rather than 
 `UNRESOLVED` is unaffected). A hardening that applies the self-exclusion to pass B is routed to a
 future round; until then, treat `POINTERS` as a measurement of *this scanner on this tree*.
 
-**Expected (re-measured 2026-10-18T18:43Z at lane HEAD `c85a816`, scanner `run_gate.sh` sha256 `577c8b54…`, subtree `adaptation-kimi.md` sha256 `084a34cd…`):** `POINTERS=101 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0`, then `STEP=PASS` (pass A = 47 endpoints from 41 strings, pass B = 54).
+**Expected (re-measured 2026-10-18T19:24Z at lane HEAD `88c3b2c`, scanner `run_gate.sh` sha256 `e5521304…`, subtree `adaptation-kimi.md` sha256 `084a34cd…`):** `POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0`, then `STEP=PASS` (pass A = 47 endpoints from 41 strings, pass B = 56).
 
 Two numbers are printed, because **A1 (r103) validates every endpoint**. `POINTERS` counts
 **endpoints** — one increment per line number, so a `:4-5` range is two and a `:61,70-79` list is
@@ -182,7 +259,8 @@ The pointer count is **scanner- and tree-relative**, not a constant: it is whate
 
 ## Expected output — pinned summary
 
-A clean run prints these seven lines and exits `0`:
+A clean run prints these seven lines and exits `0` (the banner also carries `WORK_ROOT=…` and
+`WORK_ROOT_FREE=…` — see "Running under quota pressure"):
 
 ```
 MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
@@ -190,7 +268,7 @@ CLONE_HEAD=a6aa73ada02a9fb1f5415bec491f9942c519b297   (with CLONE_DIRTY=0 CLONE_
 CARDS=13 EXPECTED=13 BAD=0
 CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
 NAME_SET=OK NAME_BAD=0
-POINTERS=101 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
 GATE RESULT: PASS (checks failed: 0)
 ```
 
@@ -202,7 +280,7 @@ GATE RESULT: PASS (checks failed: 0)
 | cards | `13` |
 | pinned card-name set | the 13 stems above, both directions |
 | label census | `12 / 1 / 0` |
-| pointer endpoints / strings (scanner-relative, `run_gate.sh` sha256 `577c8b54…`) | `101` / `41` |
+| pointer endpoints / strings (scanner-relative, `run_gate.sh` sha256 `e5521304…`) | `103` / `41` |
 | pointers unresolved | `0` |
 
 ## Exit codes
@@ -291,6 +369,25 @@ A2a is the one row that changes a *pass* into a *pass*: before A2 the same mutat
 red for the wrong reason (it misread prose as the declaration), which is a false positive, not a
 catch. A4a is the only row whose exit code is `2`.
 
+**r104 control matrix — the scratch-root change, run by SEAT-12 on 2026-10-18 against the installed
+script (`run_gate.sh` sha256 `e5521304…`).** Full transcript: `reports/round-104/gate/workdir.md`.
+
+| control | setup | exit | observed signal |
+|---|---|---|---|
+| **W0** | none (default `/tmp`) | **0** | `WORK_ROOT=/tmp (from default)`; `POINTERS=103 … UNRESOLVED=0`; `STEP=PASS` — the default path is unchanged |
+| **W1** | `GATE_WORKDIR=<roomy dir>` | **0** | `WORK_ROOT=… (from GATE_WORKDIR)`; a 20 ms poller saw the scratch dir **created and removed** (`seen_paths=5`, `residual_after=0`) |
+| **W2** | `TMPDIR=<roomy dir>`, `GATE_WORKDIR` unset | **0** | `WORK_ROOT=… (from TMPDIR)`; `residual_after=0` — the POSIX convention is honoured |
+| **W3** | `GATE_WORKDIR=<nonexistent>` | **1** | `FAIL scratch root is not a directory: …` — named up front, before any check runs |
+| **W4** | `GATE_WORKDIR=<full tmpfs>` | **2** | `CHECK 2 BLOCKED (local-resource)` + `BLOCKED … this is a DISK failure, not an unreachable upstream`; rc still `2` |
+| **W5** | dead proxy, roomy `GATE_WORKDIR` | **2** | `CHECK 2 BLOCKED (network)` — the A4 network branch is unchanged verbatim |
+| **W6** | `GATE_REF=<roomy clone>` + roomy workdir | **0** | `GATE_REF=… (offline reference; no clone attempted)`; `BLOB_DIFFS=0`; `STEP=PASS` |
+| **W7** | `kill -TERM` / `kill -INT` mid-run | 143 / 130 | signal traps ran `cleanup`; `residual_after=0` in both cases |
+
+W4 is the row this seat exists for: the same filesystem condition that r103 recorded as an
+unexplained `GATE RESULT: FAIL` / empty-output flake is now a **named** cause, and W5 proves the
+classification did not swallow the genuine network case. W0 is the control that the change is
+inert for every existing caller.
+
 The gate is also **cwd-independent**: running it from `/tmp` printed the same
 `GATE RESULT: PASS (checks failed: 0)`.
 
@@ -334,6 +431,14 @@ measured command, timestamp, and scanner sha, and the binding invariant — `UNR
 changed. Full derivation, decomposition (pass A = 47 endpoints / 41 strings, pass B = 54), and the
 off-by-one proof are in `reports/round-103/note/gate-pin.md`; the A1–A4 controls are in
 `reports/round-103/gate/hardening.md`.
+
+**Pin continuation — 2026-10-18 (r104, SEAT-12 GATE-WORKDIR-AUTHOR).** The count walked two more
+steps, `101 → 103`, for the reason this section predicts: the r104 "Running under quota pressure"
+section and the r104 control matrix above add backtick-wrapped paths, and **pass B counts this
+file**. No tree content and no counting semantics changed — only this README's own prose. The r103
+`101` rows above (the C0 control row and the r103 pin-correction block) are left as the dated r103
+measurements they are; the current pin is `103` at scanner sha256 `e5521304…`, and the binding
+invariant is still `UNRESOLVED=0`. The receipt is `reports/round-104/gate/workdir.md`.
 
 **Worked example — why the pointer filter is exact, not keyword-based.** A naive keyword filter
 (`control|expect|plant`) was rejected during authoring of the r101 protocol: it would have

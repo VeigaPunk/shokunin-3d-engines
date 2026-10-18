@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: glTF: Buffer 0 has no data and cannot be loaded.
+   at: _parse_buffers (modules/gltf/gltf_document.cpp:798)
+   GDScript backtrace (most recent call first):
+       [0] _file (res://r98b_mode.gd:62)
+       [1] _run (res://r98b_mode.gd:33)
+MODE res://assets/phys_gen.glb append_err=0
+MODE res://assets/phys_gen.glb nodes=3 meshes=0 anims=0 skel=0
+MODESCENE PhysRoot:Node3D
+MODESCENE   PhysBody:RigidBody3D body_class=RigidBody3D mass=3.5
+MODESCENE     PhysShape:CollisionShape3D shape=BoxShape3D

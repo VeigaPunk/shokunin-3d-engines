@@ -1,0 +1,35 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Parameter "joint" is null.
+   at: joint_get_type (modules/godot_physics_3d/godot_physics_server_3d.cpp:1459)
+   GDScript backtrace (most recent call first):
+       [0] _child_joint_solver (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6515)
+ERROR: Parameter "joint" is null.
+   at: joint_clear (modules/godot_physics_3d/godot_physics_server_3d.cpp:1256)
+   GDScript backtrace (most recent call first):
+       [0] _child_joint_solver (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6516)
+ERROR: Parameter "prev_joint" is null.
+   at: joint_make_pin (modules/godot_physics_3d/godot_physics_server_3d.cpp:1281)
+   GDScript backtrace (most recent call first):
+       [0] _joint_make (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:7006)
+       [1] _child_joint_solver (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6518)
+CHILD_NOTE js_plain prio=1/32 gap=0.8900,0.6473 lv=-0.0000,11.6509 clear=0.8899/-0.0000/5/-0.1633/0.9876 remade=0 freed=0/ok/ok
+CHILD_RESULT js_plain_backend=DEFAULT
+CHILD_RESULT js_plain_prio_before=1
+CHILD_RESULT js_plain_prio_after=32
+CHILD_RESULT js_plain_ctl_gap=0.8900
+CHILD_RESULT js_plain_pri_gap=0.6473
+CHILD_RESULT js_plain_ctl_lv=-0.0000
+CHILD_RESULT js_plain_pri_lv=11.6509
+CHILD_RESULT js_plain_prio_effect=jump
+CHILD_RESULT js_plain_clear_gap_before=0.8899
+CHILD_RESULT js_plain_clear_lv_before=-0.0000
+CHILD_RESULT js_plain_clear_type_after=5
+CHILD_RESULT js_plain_clear_gap_same=0.8899
+CHILD_RESULT js_plain_clear_lv_next=-0.1633
+CHILD_RESULT js_plain_clear_gap_end=0.9876
+CHILD_RESULT js_plain_double_clear=ok
+CHILD_RESULT js_plain_remade_type=0
+CHILD_RESULT js_plain_freed_type=0
+CHILD_RESULT js_plain_freed_clear=ok
+CHILD_RESULT js_plain_freed_make=ok

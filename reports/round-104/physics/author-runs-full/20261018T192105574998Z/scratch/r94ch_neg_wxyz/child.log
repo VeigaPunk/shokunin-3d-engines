@@ -1,0 +1,2 @@
+M0 case=neg_wxyz engine=cannon-es-0.20.0+three-0.186.1
+NEGATIVE REJECTED: r94_cannon neg-wxyz w-first ordering rotates the mesh by 172.360 deg

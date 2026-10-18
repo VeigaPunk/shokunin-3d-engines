@@ -1,0 +1,18 @@
+error: failed to write new configuration file /tmp/tmp.qaEenWvGwQ/clone/.git/config.lock
+error: failed to write new configuration file /tmp/tmp.qaEenWvGwQ/clone/.git/config.lock
+error: unable to write file .gitignore
+error: unable to write file CODEOWNERS
+error: unable to write file LICENSE
+error: unable to write file README.md
+error: unable to write file hooks/hooks.json
+error: unable to write file hooks/unreal-context.sh
+error: unable to write file skills/create-toolset/SKILL.md
+error: unable to write file skills/unreal-mcp/SKILL.md
+error: unable to write file skills/unreal-mcp/references/operations.md
+error: unable to write file skills/unreal-mcp/references/setup.md
+error: unable to write file skills/unreal-skill/SKILL.md
+fatal: unable to checkout working tree
+warning: Clone succeeded, but checkout failed.
+You can inspect what was checked out with 'git status'
+and retry with 'git restore --source=HEAD :/'
+

@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+DOC res://assets/nodes_only.glb append_err=0
+DOC res://assets/nodes_only.glb state nodes=3 meshes=0 anims=0 skel=0
+DOCSCENE root=NodeScene:Node3D pos=(0.0, 0.0, 0.0)
+DOCSCENE TREE NodeScene:Node3D
+DOCSCENE TREE   PivotA:Node3D
+DOCSCENE TREE     ChildA:Node3D
+DOCSCENE TREE   PivotB:Node3D

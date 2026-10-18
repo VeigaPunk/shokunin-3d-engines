@@ -1,0 +1,9 @@
+M0 case=solv engine=blender-5.2.1
+M solv substeps1 substeps=1 iters=10 split=False h=4161bab53d2cbe73 last=(0.773845,0.195946,0.506597)
+M solv substeps40 substeps=40 iters=10 split=False h=898e0dd0a6c61fc4 last=(0.370623,-0.000001,0.500063)
+M solv iters1 substeps=10 iters=1 split=False h=6eae9b3b9a01a1dd last=(0.243452,0.005565,0.499976)
+M solv split1 substeps=10 iters=10 split=True h=a3657c2e88f737c2 last=(0.133979,-0.001840,0.500063)
+M DONE case=solv
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

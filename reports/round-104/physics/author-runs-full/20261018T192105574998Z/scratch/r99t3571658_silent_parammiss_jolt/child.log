@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+PM_GET_NOPE <null>
+PM_GET_AMOUNT_NOPE <null>
+PM_READ_BACK nope=<null> amount=<null>
+PM_AFTER_WRITES blend=0.5
+PM_ACTOR actor=(0.1667,0.1667,0.0000) tp=0.0833
+PM_END ok=true
+SILENT_DONE case=parammiss

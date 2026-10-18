@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+TRDOC res://assets/tri.glb append_err=0
+TR TriScene:Node3D pos=(0.0, 0.0, 0.0) rot=(0.0, 0.0, 0.0) scale=(1.0, 1.0, 1.0)
+TR   RootNode:Node3D pos=(0.0, 0.0, 0.0) rot=(0.0, 0.0, 0.0) scale=(1.0, 1.0, 1.0)
+TR     TriMesh:MeshInstance3D pos=(1.0, 2.0, 3.0) rot=(0.0, 0.0, 0.0) scale=(1.0, 1.0, 1.0)

@@ -1,0 +1,36 @@
+serial rep 1 rc=134  sha=fa5ad6370c46a7cc
+serial rep 2 rc=0 DIFFERS
+serial rep 3 rc=134 DIFFERS
+serial rep 4 rc=134 DIFFERS
+serial rep 5 rc=134 DIFFERS
+childiso.sh: line 40: 3800377 Aborted                    timeout -s KILL 60 "$GODOT" --headless --path "$SRC" --script "$SCRIPT" -- "$CASE" > "$OUT/conc.$i.log" 2>&1
+childiso.sh: line 40: 3800380 Aborted                    timeout -s KILL 60 "$GODOT" --headless --path "$SRC" --script "$SCRIPT" -- "$CASE" > "$OUT/conc.$i.log" 2>&1
+childiso.sh: line 40: 3800382 Aborted                    timeout -s KILL 60 "$GODOT" --headless --path "$SRC" --script "$SCRIPT" -- "$CASE" > "$OUT/conc.$i.log" 2>&1
+childiso.sh: line 40: 3800383 Aborted                    timeout -s KILL 60 "$GODOT" --headless --path "$SRC" --script "$SCRIPT" -- "$CASE" > "$OUT/conc.$i.log" 2>&1
+concurrent 5 reps wall_ms=2027
+  conc rep 1 DIFFERS
+19c19
+< Load address: 5620a0dc3000
+---
+> Load address: 55e7486a9000
+  conc rep 2 DIFFERS
+19c19
+< Load address: 5620a0dc3000
+---
+> Load address: 5590fd8f1000
+  conc rep 3 DIFFERS
+19c19
+< Load address: 5620a0dc3000
+---
+> Load address: 556ee3813000
+  conc rep 4 DIFFERS
+19c19
+< Load address: 5620a0dc3000
+---
+> Load address: 55a217627000
+  conc rep 5 DIFFERS
+14,49c14,20
+< 
+< ================================================================
+< handle_crash: Program crashed with signal 11
+child-level: identical=0 differs=5 of 5

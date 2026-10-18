@@ -1,0 +1,4 @@
+M0 case=sync_full engine=cannon-es-0.20.0+three-0.186.1
+M sync_full full dPos=0.000e+0 dRotDeg=0.000e+0 objQ=3fddcabf50ed14893fe10857961829e3bfe108591bdfa2373fddcabfd4d37fa1 bodyQ=3fddcabf50ed14893fe10857961829e3bfe108591bdfa2373fddcabfd4d37fa1 qEq=true
+M sync_full mw matrixWorld[12,13,14]=0.750712862,0.499998137,-0.320141411 body=0.750712862,0.499998137,-0.320141411
+M DONE case=sync_full

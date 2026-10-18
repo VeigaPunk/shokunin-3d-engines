@@ -3,8 +3,8 @@
 # gate/run_gate.sh — self-contained, re-runnable close-out gate for the
 # r101 unreal-mcp subtree (corpus/knowledge/unreal-mcp).
 #
-# Exactly FOUR checks. Each prints one STEP=PASS / STEP=FAIL line.
-# Exit 0 only if all four pass; exit 1 otherwise (fail-closed).
+# Exactly FOUR checks. Each prints one STEP=PASS / STEP=FAIL / STEP=BLOCKED line.
+# Exit 0 PASS · 1 FAIL · 2 BLOCKED (CHECK 2 could not run) — see gate/README.md.
 #
 #   1  manifest byte-identity  sha256sum -c .manifest.d/audit-reference.sha256
 #   2  clone equivalence       vendored upstream/ vs a FRESH clone at the pin
@@ -19,7 +19,12 @@
 # Expected values are pinned in gate/README.md. Requires: bash, git, sha256sum,
 # grep, find, sort, comm, and network access for check 2 (fresh clone).
 #
+# Scratch location (r104, SEAT-12): both scratch sites live under
+# ${GATE_WORKDIR:-${TMPDIR:-/tmp}} — see the WORK_ROOT block below and the
+# "Running under quota pressure" section of gate/README.md.
+#
 # usage: corpus/knowledge/unreal-mcp/gate/run_gate.sh
+#        GATE_WORKDIR=/some/roomy/dir corpus/knowledge/unreal-mcp/gate/run_gate.sh
 # ---------------------------------------------------------------------------
 # shellcheck disable=SC2016  # check 4's pointer regexes use LITERAL backticks (markdown delimiters), not substitution
 set -u
@@ -28,8 +33,45 @@ for _t in git sha256sum grep find sort comm; do
   if ! command -v "$_t" >/dev/null 2>&1; then printf 'FAIL required tool missing: %s\n' "$_t"; exit 1; fi
 done
 
+# ---------------------------------------------------------------------------
+# Scratch root (r104, SEAT-12 GATE-WORKDIR-AUTHOR)
+#
+# ROOT CAUSE this exists for (r103 close, `reports/round-103/gate/close-runs.md`):
+# both of this gate's scratch sites — the manifest log and CHECK 2's clone
+# workdir — were plain `mktemp`, i.e. hardcoded to /tmp. On this host /tmp is a
+# 16G tmpfs shared with the user's other sessions under a per-user quota, and
+# under pressure `git clone` fails with `error: copy-fd: write returned: Disk
+# quota exceeded`. That failure used to be INDISTINGUISHABLE from an unreachable
+# upstream: CHECK 2 printed `BLOCKED (network)` and the run exited 2. A local
+# disk problem was reported as a network problem — the reader is sent to the
+# wrong subsystem, and a green gate becomes a coin flip.
+#
+# WORK_ROOT is the fix: scratch goes to ${GATE_WORKDIR:-${TMPDIR:-/tmp}}, so a
+# caller under quota pressure points the gate at a roomy filesystem without
+# editing it. Precedence is GATE_WORKDIR > TMPDIR > /tmp; /tmp stays the default
+# so every existing caller behaves exactly as before.
+#
+# The chosen root is VALIDATED up front: an unset/typo'd GATE_WORKDIR used to
+# fail later and obscurely (mktemp prints to stderr and $WORK stays empty, so
+# every downstream "$WORK/..." path silently names the root). Here it is a hard,
+# named error before any check runs. Nothing is written into the root itself.
+# ---------------------------------------------------------------------------
+WORK_ROOT=${GATE_WORKDIR:-${TMPDIR:-/tmp}}
+if [ ! -d "$WORK_ROOT" ]; then
+  printf 'FAIL scratch root is not a directory: %s\n' "$WORK_ROOT"
+  printf '     set GATE_WORKDIR (or TMPDIR) to an existing writable directory\n'
+  exit 1
+fi
+if [ ! -w "$WORK_ROOT" ]; then
+  printf 'FAIL scratch root is not writable: %s\n' "$WORK_ROOT"
+  printf '     set GATE_WORKDIR (or TMPDIR) to an existing writable directory\n'
+  exit 1
+fi
+WORK_SRC=GATE_WORKDIR
+[ -n "${GATE_WORKDIR:-}" ] || { WORK_SRC=TMPDIR; [ -n "${TMPDIR:-}" ] || WORK_SRC=default; }
+
 PIN=a6aa73ada02a9fb1f5415bec491f9942c519b297
-REPO=https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin
+REPO=${REPO:-https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin}
 EXPECTED_MANIFEST_OK=12
 EXPECTED_TRACKED=12
 EXPECTED_CARDS=13
@@ -48,6 +90,10 @@ FAILS=0
 printf 'GATE unreal-mcp subtree\n'
 printf 'SUBTREE=%s\n' "$SUB"
 printf 'PIN=%s\n' "$PIN"
+printf 'WORK_ROOT=%s (from %s)\n' "$WORK_ROOT" "$WORK_SRC"
+if command -v df >/dev/null 2>&1; then
+  printf 'WORK_ROOT_FREE=%s\n' "$(df -Ph "$WORK_ROOT" 2>/dev/null | awk 'NR==2{print $4" of "$2" ("$5" used)"}')"
+fi
 if command -v git >/dev/null 2>&1 && git -C "$SUB" rev-parse --show-toplevel >/dev/null 2>&1; then
   printf 'LANE_HEAD=%s\n' "$(git -C "$SUB" rev-parse HEAD)"
 fi
@@ -71,21 +117,46 @@ printf 'MANIFEST_FILES=%s\n' "$MANIFEST_COUNT"
 # without that directory the redirect failed, sha256sum never ran, and the gate
 # printed `FAIL per-seat manifest sweep` + exit 1 on a CLEAN tree — a spurious
 # fail-closed, not a real one. mktemp keeps the check host-independent.
-MANLOG=$(mktemp)
-if ! (cd "$SUB" && sha256sum --strict -c .manifest.d/*.sha256 >"$MANLOG" 2>&1); then
-  printf 'FAIL per-seat manifest sweep (--strict) failed:\n'
-  sed 's/^/  /' "$MANLOG"
+# r104 (SEAT-12): mktemp is rooted at WORK_ROOT, and its failure is now LOUD. A
+# bare `MANLOG=$(mktemp)` under quota pressure leaves MANLOG empty, the redirect
+# `>"$MANLOG"` then fails, and the check silently reports the manifest sweep as
+# broken — the same misleading-failure class this seat exists to close.
+MANLOG=$(mktemp -p "$WORK_ROOT" 2>/dev/null) || MANLOG=''
+if [ -z "$MANLOG" ]; then
+  printf 'FAIL cannot create scratch file under %s (quota? permissions?)\n' "$WORK_ROOT"
+  printf '     set GATE_WORKDIR (or TMPDIR) to a writable directory with room\n'
   FAILS=$((FAILS+1))
+else
+  if ! (cd "$SUB" && sha256sum --strict -c .manifest.d/*.sha256 >"$MANLOG" 2>&1); then
+    printf 'FAIL per-seat manifest sweep (--strict) failed:\n'
+    sed 's/^/  /' "$MANLOG"
+    FAILS=$((FAILS+1))
+  fi
+  rm -f "$MANLOG"
 fi
-rm -f "$MANLOG"
 
 # HARDENING H (SEAT-20): CRLF in a manifest is accepted silently by sha256sum -c.
 CRFILES=$(grep -lU $'\r' "$SUB"/.manifest.d/*.sha256 2>/dev/null)
 [ -n "$CRFILES" ] && { printf 'FAIL CR byte in manifest:\n%s\n' "$CRFILES"; FAILS=$((FAILS+1)); }
 
-WORK=$(mktemp -d)
-cleanup() { rm -rf "$WORK"; }
+# Scratch dir for CHECK 2's clone (the gate's largest scratch consumer: ~1 MB of
+# git objects). Rooted at WORK_ROOT; a failure here is reported by name rather
+# than surfacing later as an unexplained BLOCKED clone.
+WORK=$(mktemp -d -p "$WORK_ROOT" 2>/dev/null) || WORK=''
+cleanup() { [ -n "$WORK" ] && rm -rf "$WORK"; return 0; }
+# EXIT covers every exit path (0 PASS / 1 FAIL / 2 BLOCKED); the signal traps make
+# the same guarantee when the run is interrupted, so a killed gate cannot leave a
+# clone behind to deepen the very quota pressure that broke it.
 trap cleanup EXIT
+trap 'cleanup; trap - EXIT; exit 130' INT
+trap 'cleanup; trap - EXIT; exit 143' TERM
+trap 'cleanup; trap - EXIT; exit 129' HUP
+if [ -z "$WORK" ]; then
+  printf 'FAIL cannot create scratch dir under %s (quota? permissions?)\n' "$WORK_ROOT"
+  printf '     set GATE_WORKDIR (or TMPDIR) to a writable directory with room\n'
+  printf 'GATE RESULT: FAIL (checks failed: 1)\n'
+  exit 1
+fi
 
 # ---------------------------------------------------------------------------
 # CHECK 1 — manifest byte-identity
@@ -127,7 +198,7 @@ fi
 #     it set no network is touched and the check is scored normally.
 # ---------------------------------------------------------------------------
 printf 'CHECK 2 clone-equivalence\n'
-C2_PASS=1; C2_BLOCKED=0
+C2_PASS=1; C2_BLOCKED=0; C2_LOG=''
 C2_REF=${GATE_REF:-}
 [ -n "$C2_REF" ] && printf 'GATE_REF=%s (offline reference; no clone attempted)\n' "$C2_REF"
 if ! command -v git >/dev/null 2>&1; then
@@ -144,8 +215,15 @@ else
       C2_PASS=0; C2_CLONE_RC=1
     fi
   else
-    timeout 180 git clone --quiet "$REPO" "$CLONE" >"$WORK/clone.log" 2>&1
+    # r104 (SEAT-12): capture the clone's stderr IN MEMORY first. Writing it
+    # straight to "$WORK/clone.log" put the diagnostic on the same filesystem
+    # that just filled up, so under quota pressure the log was created empty and
+    # the gate printed `BLOCKED (network)` with no cause line at all — the
+    # evidence destroyed precisely when it was needed. The variable survives the
+    # full filesystem; the on-disk copy is best-effort only.
+    C2_LOG=$(timeout 180 git clone --quiet "$REPO" "$CLONE" 2>&1)
     C2_CLONE_RC=$?
+    printf '%s\n' "$C2_LOG" >"$WORK/clone.log" 2>/dev/null || true
   fi
   if [ "$C2_PASS" -eq 1 ] && [ "$C2_CLONE_RC" -eq 0 ]; then
     C2_HEAD=$(git -C "$CLONE" rev-parse HEAD)
@@ -176,10 +254,27 @@ else
     # A4: unreachable upstream — a distinct BLOCKED state, exit 2, never folded
     # into FAILS. (Reached only when no GATE_REF was supplied; a bad GATE_REF
     # has already set C2_PASS=0 and is a genuine FAIL.)
-    printf 'CHECK 2 BLOCKED (network)\n'
-    printf 'BLOCKED fresh clone could not complete — upstream unreachable, nothing compared\n'
+    #
+    # r104 (SEAT-12): classify the cause before printing the header. The r103 root
+    # cause was a LOCAL disk failure (scratch quota) being reported as a NETWORK
+    # failure, sending the reader to the wrong subsystem. When the clone log shows
+    # a local resource error the header says so and names the fix; the A4 contract
+    # string `CHECK 2 BLOCKED (network)` is unchanged for a genuine network block,
+    # so the r103 A4a control still matches verbatim. Exit code is 2 either way —
+    # the A4 contract (BLOCKED ⇒ 2) is not renegotiated here.
+    # Matched against the in-memory $C2_LOG: the on-disk copy can be truncated or
+    # absent exactly when the cause is a full filesystem.
+    if printf '%s' "$C2_LOG" | grep -qiE 'disk quota exceeded|no space left|out of diskspace|write error|quota exceeded'; then
+      printf 'CHECK 2 BLOCKED (local-resource)\n'
+      printf 'BLOCKED fresh clone could not complete — scratch filesystem full or quota-exhausted\n'
+      printf 'BLOCKED the network may be fine: this is a DISK failure, not an unreachable upstream\n'
+      printf 'BLOCKED retry with GATE_WORKDIR (or TMPDIR) on a roomy filesystem — see gate/README.md\n'
+    else
+      printf 'CHECK 2 BLOCKED (network)\n'
+      printf 'BLOCKED fresh clone could not complete — upstream unreachable, nothing compared\n'
+    fi
     printf 'BLOCKED exit 2 is not a verdict: the vendored bytes are UNCHECKED, not divergent\n'
-    sed -n '1,5p' "$WORK/clone.log"
+    printf '%s\n' "$C2_LOG" | sed -n '1,5p'
     C2_BLOCKED=1; C2_PASS=0
   fi
 fi

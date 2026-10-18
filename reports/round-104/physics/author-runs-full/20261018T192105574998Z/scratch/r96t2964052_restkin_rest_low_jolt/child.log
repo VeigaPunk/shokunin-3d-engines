@@ -1,0 +1,45 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+R0 case=low engine=Jolt Physics drop=0.03 bounce=0.9/0.0
+R t=1 y=0.33 lv=0.0
+R t=2 y=0.327278 lv=-0.163333
+R t=3 y=0.321833 lv=-0.326667
+R t=4 y=0.313667 lv=-0.49
+R t=5 y=0.302778 lv=-0.653333
+R t=6 y=0.3 lv=-0.166664
+R t=7 y=0.3 lv=-0.000002
+R t=8 y=0.3 lv=0.0
+R t=9 y=0.3 lv=0.0
+R t=10 y=0.3 lv=0.0
+R t=11 y=0.3 lv=0.0
+R t=12 y=0.3 lv=0.0
+R t=13 y=0.3 lv=0.0
+R t=14 y=0.3 lv=0.0
+R t=15 y=0.3 lv=0.0
+R t=16 y=0.3 lv=0.0
+R t=17 y=0.3 lv=0.0
+R t=18 y=0.3 lv=0.0
+R t=19 y=0.3 lv=0.0
+R t=20 y=0.3 lv=0.0
+R t=21 y=0.3 lv=0.0
+R t=22 y=0.3 lv=0.0
+R t=23 y=0.3 lv=0.0
+R t=24 y=0.3 lv=0.0
+R t=25 y=0.3 lv=0.0
+R t=26 y=0.3 lv=0.0
+R t=27 y=0.3 lv=0.0
+R t=28 y=0.3 lv=0.0
+R t=29 y=0.3 lv=0.0
+R t=30 y=0.3 lv=0.0
+R t=40 y=0.3 lv=0.0
+R t=60 y=0.3 lv=0.0
+R t=80 y=0.3 lv=0.0
+R t=100 y=0.3 lv=0.0
+R t=120 y=0.3 lv=0.0
+R t=140 y=0.3 lv=0.0
+R t=160 y=0.3 lv=0.0
+R t=180 y=0.3 lv=0.0
+R t=200 y=0.3 lv=0.0
+R t=220 y=0.3 lv=0.0
+R t=240 y=0.3 lv=0.0
+RSUM case=low v_in=-0.653333 v_out=0.0 e_vel=0.0 apex=-1000000000.0 e_apex=0.0

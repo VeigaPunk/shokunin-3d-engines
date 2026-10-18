@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT sl_wake_plain_backend=DEFAULT
+CHILD_RESULT sl_wake_plain_slept=41
+CHILD_RESULT sl_wake_plain_if_calls=42
+CHILD_RESULT sl_wake_plain_same_lv=0.0000,0.0000,2.0000
+CHILD_RESULT sl_wake_plain_same_hdl=false
+CHILD_RESULT sl_wake_plain_srv_sleep=false
+CHILD_RESULT sl_wake_plain_moved=true

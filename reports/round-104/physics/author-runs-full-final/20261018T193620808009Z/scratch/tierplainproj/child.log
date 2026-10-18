@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT plain_backend=DEFAULT
+CHILD_RESULT plain_dss_class=GodotPhysicsDirectSpaceState3D
+CHILD_NOTE plain_area base=(0.0, -9.8, 0.0)/0.100000 override=(0.0, 20.0, 0.0)/2.000000 area_readback=20.0
+CHILD_RESULT plain_area_override=honors
+CHILD_NOTE plain_margin m0=[0.14453125, 0.150390625] m004=[0.14453125, 0.150390625] m05=[0.14453125, 0.150390625]
+CHILD_RESULT plain_margin=inert
+CHILD_NOTE plain_sepray data={ "length": 2.0, "slide_on_slope": false } type=1 cast=[0.197265625, 0.203125]
+CHILD_RESULT plain_sepray=same-signature

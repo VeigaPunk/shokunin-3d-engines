@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=empty_track engine=DEFAULT
+M empty_track pre pos=(0.0000,1.9973,0.0000) srv=(0.0000,1.9973,0.0000) lv=(0.0000,-0.1633,0.0000)
+M empty_track E pf=3 pos=(0.0000,0.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=(0.0000,0.3920,0.0000)
+M empty_track post pos=(0.0000,0.3920,0.0000) srv=(0.0000,0.3920,0.0000) lv=(0.0000,0.0000,0.0000)
+M DONE case=empty_track

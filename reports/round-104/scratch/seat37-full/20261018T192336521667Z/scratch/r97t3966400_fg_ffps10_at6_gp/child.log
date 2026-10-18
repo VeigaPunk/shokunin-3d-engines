@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+FR setup at=6 jrid=true
+FR t=5 ff=0 alive=true jrid=true b=0.25,1.9728,0.0
+FR freeing at t=6 ff=1
+FR t=6 ff=1 alive=true jrid=true b=0.25,1.9593,0.0
+FR t=7 ff=1 alive=false jrid=gone b=0.25,1.943,0.0
+FR t=8 ff=1 alive=false jrid=gone b=0.25,1.924,0.0
+FR t=9 ff=1 alive=false jrid=gone b=0.25,1.9024,0.0
+FR t=10 ff=1 alive=false jrid=gone b=0.25,1.878,0.0
+FR t=11 ff=1 alive=false jrid=gone b=0.25,1.851,0.0
+FR t=12 ff=2 alive=false jrid=gone b=0.25,1.8213,0.0
+FR t=30 ff=5 alive=false jrid=gone b=0.25,0.834,0.0
+FRSUM at=6

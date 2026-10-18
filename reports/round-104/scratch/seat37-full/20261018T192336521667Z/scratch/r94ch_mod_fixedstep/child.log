@@ -1,0 +1,4 @@
+M0 case=mod_fixedstep engine=cannon-es-0.20.0+three-0.186.1
+# fixedstep measured stepnumber=1 ph=a3ec872defc812b2
+M mod_fixedstep fixedstep calls=240 class=wallclock mode_ok=1 ticks_lt_calls=true
+M DONE case=mod_fixedstep

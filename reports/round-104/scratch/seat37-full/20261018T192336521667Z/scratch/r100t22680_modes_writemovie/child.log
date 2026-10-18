@@ -1,0 +1,24 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+Movie Maker mode enabled, recording movie in 1152×648 @ 60 FPS...
+BM_BOOT tps=60 ip=false maxfps=0 ts=1.000000 jit=0.500 cap=8 ds=true argz=2 userz=0
+BM_ARGV engine=--script|res://r100b_modes.gd user=
+BM_WF n=1 wus=356
+ERROR: Parameter "t" is null.
+   at: texture_2d_get (./servers/rendering/dummy/storage/texture_storage.h:110)
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 55b63c5b5000
+
+[1] 7f97e043e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7f97e043e6f0]
+[2] 55b63d7a0319 (main+11eb319) - /usr/bin/godot(+0x11eb319) [0x55b63d7a0319]
+[3] 55b63d611062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x55b63d611062]
+[4] 7f97e0427781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7f97e0427781]
+[5] 7f97e04278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7f97e04278b9]
+[6] 55b63d6856d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x55b63d6856d5]
+-- END OF C++ BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

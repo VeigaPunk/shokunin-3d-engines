@@ -1,0 +1,14 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE mo_dummy cm=-1.0000,-1.0000 pen=-1.0000,-1.0000 away=-1.0000,-1.0000 shared=-1.0000,-1.0000 cs=0/0 ri=0/0 is=0/0
+CHILD_RESULT mo_dummy_backend=Dummy
+CHILD_RESULT mo_dummy_cm=empty
+CHILD_RESULT mo_dummy_cm_bracket=drift
+CHILD_RESULT mo_dummy_cm_pen=empty
+CHILD_RESULT mo_dummy_cm_shared=empty
+CHILD_RESULT mo_dummy_cm_away=empty
+CHILD_RESULT mo_dummy_cm_zero=empty
+CHILD_RESULT mo_dummy_cm_short=empty
+CHILD_RESULT mo_dummy_cs=floor
+CHILD_RESULT mo_dummy_ri=floor
+CHILD_RESULT mo_dummy_is=floor

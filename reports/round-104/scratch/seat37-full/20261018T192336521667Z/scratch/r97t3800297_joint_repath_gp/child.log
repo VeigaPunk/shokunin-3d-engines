@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+NJ setup case=repath jrid=true
+NJ t=8 a=-0.221,1.9122,0.0 b=0.221,1.6359,0.0 avb=0.0,0.0,-1.9344 jrid=true
+NJ rebind to C
+NJ t=12 a=-0.2033,1.8093,0.0 b=0.2037,1.5353,0.0 avb=0.0,0.0,-1.9215 jrid=true
+NJ t=30 a=-0.125,0.8217,0.0 b=0.1274,0.5572,0.0 avb=0.0,0.0,-1.8647 jrid=true
+NJ t=50 a=-0.0406,-1.2594,0.0 b=0.0452,-1.5144,0.0 avb=0.0,0.0,-1.8035 jrid=true
+NJSUM case=repath

@@ -1,0 +1,39 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M rid j1_valid=true type=5
+ERROR: Parameter "joint" is null.
+   at: joint_get_type (modules/godot_physics_3d/godot_physics_server_3d.cpp:1459)
+   GDScript backtrace (most recent call first):
+       [0] jt (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:38)
+       [1] _initialize (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:236)
+M rid j1_after_free valid=true type=0
+M rid j2_eq_j1=false j2_valid=true type=5
+ERROR: Parameter "prev_joint" is null.
+   at: joint_make_pin (modules/godot_physics_3d/godot_physics_server_3d.cpp:1281)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:243)
+ERROR: Parameter "joint" is null.
+   at: joint_get_type (modules/godot_physics_3d/godot_physics_server_3d.cpp:1459)
+   GDScript backtrace (most recent call first):
+       [0] jt (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:38)
+       [1] _initialize (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:248)
+M rid remake_freed type=0
+M rid fresh type=0
+ERROR: Parameter "joint" is null.
+   at: joint_get_type (modules/godot_physics_3d/godot_physics_server_3d.cpp:1459)
+   GDScript backtrace (most recent call first):
+       [0] jt (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:38)
+       [1] _initialize (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:257)
+M rid j1_alias_type=0 j1_eq_j2=false
+ERROR: Parameter "joint" is null.
+   at: joint_get_type (modules/godot_physics_3d/godot_physics_server_3d.cpp:1459)
+   GDScript backtrace (most recent call first):
+       [0] jt (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:38)
+       [1] _initialize (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-all-final/20261018T193514246257Z/scratch/r90_child.gd:260)
+M rid after j2free j1_type=0
+M rid j3_eq=false,false
+M DONE case=rid engine=DEFAULT
+M0 case=rid engine=DEFAULT
+ERROR: 1 RID allocations of type 'P12GodotJoint3D' were leaked at exit.
+ERROR: 4 RID allocations of type 'P11GodotBody3D' were leaked at exit.
+ERROR: 4 RID allocations of type 'P12GodotShape3D' were leaked at exit.

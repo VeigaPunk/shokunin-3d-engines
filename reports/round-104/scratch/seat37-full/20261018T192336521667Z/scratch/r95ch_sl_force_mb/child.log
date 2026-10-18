@@ -1,0 +1,5 @@
+M0 case=sl_force_mb engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_force_mb sleep-force-mb 1:an=i-1/n1/it1,z=4.91566855,v=-1.26263146 2:an=i-1/n1/it1,z=4.91023908,v=-1.30307198 5:an=i-1/n1/it1,z=4.89294068,v=-1.42424722 30:an=i-1/n1/it1,z=4.69026842,v=-2.42374526 60:an=i-1/n1/it1,z=4.31149208,v=-3.59098136 120:an=i-1/n1/it1,z=3.13138128,v=-5.77575112
+M sl_force_mb sleep-force forcedRest z=0.49998583 velwrite z+1=0.510221593 z+31=0.735970268
+M DONE case=sl_force_mb
+# pybullet build time: Oct 15 2026 03:47:36

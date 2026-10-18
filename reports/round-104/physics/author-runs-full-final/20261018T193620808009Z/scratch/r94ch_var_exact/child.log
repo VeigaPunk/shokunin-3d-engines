@@ -1,0 +1,5 @@
+M0 case=var_exact engine=cannon-es-0.20.0+three-0.186.1
+M var_exact exact fixed=0e24fb5aca619253 elapsed=dt b95c69cacf7f74c7 eq=false physEq=true
+M var_exact counts fixed stepnumber=240 time=4.000000000 var stepnumber=240 time=4.000000000
+M var_exact interp var interpPos.y=1.499985072545 pos.y=1.499985072545 fixed interpPos.y=5.000000000000
+M DONE case=var_exact

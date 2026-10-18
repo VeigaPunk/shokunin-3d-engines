@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+NJ setup case=bindnode jrid=true
+NJ t=4 a=-0.25,1.9837,0.0 b=0.25,1.6837,0.0 avb=0.0,0.0,0.0 jrid=true
+NJ t=8 a=-0.25,1.924,0.0 b=0.25,1.624,0.0 avb=0.0,0.0,0.0 jrid=true
+NJ t=20 a=-0.25,1.4879,0.0 b=0.25,1.1879,0.0 avb=0.0,0.0,0.0 jrid=true
+NJ t=40 a=-0.25,-0.0792,0.0 b=0.25,-0.3792,0.0 avb=0.0,0.0,0.0 jrid=true
+NJ t=60 a=-0.25,-2.6667,0.0 b=0.25,-2.9667,0.0 avb=0.0,0.0,0.0 jrid=true
+NJSUM case=bindnode

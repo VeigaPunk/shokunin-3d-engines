@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+VH setup case=drive susp=50.0 wheels=4
+VH t=10 pos=0.0,0.878,0.0 v=1.4602 yawdeg=0.0 contact=0 rpm=0.0 skid=1.0
+VH t=30 pos=0.1008,0.7486,0.2212 v=1.4974 yawdeg=21.6919 contact=2 rpm=37.0551 skid=1.0
+VH t=60 pos=1.0724,0.5934,0.8055 v=2.3033 yawdeg=-162.1501 contact=0 rpm=49.4 skid=1.0
+VH t=120 pos=1.0711,0.5162,0.9574 v=0.4398 yawdeg=132.6618 contact=0 rpm=48.0273 skid=1.0
+VHSUM case=drive

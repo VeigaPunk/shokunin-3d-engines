@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+WIRE_A_CALL connect_node("anim", 0, "output")
+ERROR: Condition "p_output_node == SceneStringNames::get_singleton()->output" is true.
+   at: connect_node (scene/animation/animation_blend_tree.cpp:1615)
+   GDScript backtrace (most recent call first):
+       [0] c_wire (res://r99b_core.gd:161)
+       [1] _run (res://r99b_core.gd:51)
+WIRE_A_FRAME1 actor=(0.0000,0.0000,0.0000) tp=0.0000
+WIRE_A_END actor=(0.0000,0.0000,0.0000) tp=0.0000
+WIRE_B_FRAME1 actor=(0.0667,0.0000,0.0000) tp=0.0167
+WIRE_B_END actor=(0.6000,0.0000,0.0000) tp=0.1500
+CORE_DONE case=wire

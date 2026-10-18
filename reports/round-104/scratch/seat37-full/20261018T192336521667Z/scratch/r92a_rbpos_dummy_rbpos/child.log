@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=rbpos engine=Dummy
+M rbpos pre freeze=false pos=(0.0000,2.0000,0.0000) srv=nil lv=(0.0000,0.0000,0.0000)
+M rbpos E pf=2 pos=(0.0000,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos E pf=3 pos=(0.0500,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos E pf=4 pos=(0.1000,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos E pf=5 pos=(0.1500,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos E pf=6 pos=(0.2000,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos E pf=7 pos=(0.2500,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos E pf=8 pos=(0.3000,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos E pf=9 pos=(0.3500,2.0000,0.0000) lv=(0.0000,0.0000,0.0000) srv=nil
+M rbpos post freeze=false pos=(0.4000,2.0000,0.0000) srv=nil lv=(0.0000,0.0000,0.0000) playing=true
+M rbpos tp_imm node=(0.0000,9.0000,0.0000) srv=nil
+M rbpos tp_next node=(0.0000,9.0000,0.0000) srv=nil
+M DONE case=rbpos

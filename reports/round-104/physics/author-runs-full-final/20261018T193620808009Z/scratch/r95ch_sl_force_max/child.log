@@ -1,0 +1,4 @@
+M0 case=sl_force_max engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_force_max sleep-force-max 1:an=EMPTY,z=4.92072396,v=0 2:an=EMPTY,z=4.92072396,v=0 5:an=EMPTY,z=4.92072396,v=0 30:an=EMPTY,z=4.92072396,v=0 60:an=EMPTY,z=4.92072396,v=0 120:an=EMPTY,z=4.92072396,v=0
+M DONE case=sl_force_max
+# pybullet build time: Oct 15 2026 03:47:36

@@ -1,0 +1,24 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+LF_BOOT case=noquit_bound
+LF_TICK n_e=1 pf=1
+LF_TICK n_e=2 pf=2
+LF_TICK n_e=3 pf=3
+LF_TICK n_e=4 pf=4
+LF_TICK n_e=5 pf=5
+LF_TICK n_e=6 pf=6
+LF_TICK n_e=7 pf=7
+LF_TICK n_e=8 pf=8
+LF_TICK n_e=9 pf=9
+LF_TICK n_e=10 pf=10
+LF_TICK n_e=11 pf=11
+LF_TICK n_e=12 pf=12
+LF_TICK n_e=13 pf=13
+LF_TICK n_e=14 pf=14
+LF_TICK n_e=15 pf=15
+LF_TICK n_e=16 pf=16
+LF_TICK n_e=17 pf=17
+LF_TICK n_e=18 pf=18
+LF_TICK n_e=19 pf=19
+LF_TICK n_e=20 pf=20
+LF_END case=noquit_bound n_e=20 n_f=20

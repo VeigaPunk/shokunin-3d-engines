@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CB t=2 pos=0.0,0.662,0.0 rv=0.0,2.5415,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=1 pvel=0.0,2.0,0.0
+CB t=10 pos=0.0,0.93,0.0 rv=0.0,2.0,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=0 pvel=0.0,2.0,0.0
+CB t=20 pos=0.0,1.2633,0.0 rv=0.0,2.0,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=0 pvel=0.0,2.0,0.0
+CB t=30 pos=0.0,1.5967,0.0 rv=0.0,2.0,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=0 pvel=0.0,2.0,0.0
+CB t=45 pos=0.0,2.0967,0.0 rv=0.0,2.0,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=0 pvel=0.0,2.0,0.0
+CB t=60 pos=0.0,2.5967,0.0 rv=0.0,2.0,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=0 pvel=0.0,2.0,0.0
+CB t=90 pos=0.0,3.5967,0.0 rv=0.0,2.0,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=0 pvel=0.0,2.0,0.0
+CB t=120 pos=0.0,4.5967,0.0 rv=0.0,2.0,0.0 v=0.0,0.0,0.0 fl=1 wlo=0 ce=0 n=0 pvel=0.0,2.0,0.0
+CBSUM case=plat_ride

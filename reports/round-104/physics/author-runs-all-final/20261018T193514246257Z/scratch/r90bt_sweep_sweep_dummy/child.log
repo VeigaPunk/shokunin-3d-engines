@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M sweep rt=-2:0;-1:0;0:0;1:0;2:0;4:0;8:0;32:0;64:0;65:0;128:0
+M unmade get0=0
+M unmade set32 get1=0
+M unmade setneg get2=0
+M DONE case=sweep engine=Dummy
+M0 case=sweep engine=Dummy

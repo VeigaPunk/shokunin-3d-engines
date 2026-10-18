@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=reset engine=Jolt Physics
+M reset list ["RESET", "travel"] ros=true
+M reset pre pos=(0.0000,2.0000,0.0000) anim=
+M reset after_travel pos=(0.1500,2.0000,0.0000) t=0.0500
+M reset after_reset pos=(7.0000,0.0000,0.0000) t=0.0000 anim=RESET playing=true
+M reset travel2 pos=(0.1500,2.0000,0.0000) t=0.0500
+M reset seek0 pos=(0.0500,2.0000,0.0000) t=0.0167
+M DONE case=reset

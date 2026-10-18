@@ -1,0 +1,5 @@
+M0 case=det_neutral engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_neutral erp def:h=02309c52da41ef33,z=1.49997782 0.9:h=02309c52da41ef33,z=1.49997782
+M det_neutral warmstart def:h=02309c52da41ef33,z=1.49997782 0.0:h=02309c52da41ef33,z=1.49997782
+M DONE case=det_neutral
+# pybullet build time: Oct 15 2026 03:47:36

@@ -1,0 +1,4 @@
+M0 case=pile_lattice engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M pile_lattice pile default:h=daf67ba7bdfb7f80,cc=128 det0:h=daf67ba7bdfb7f80,cc=128 det1:h=a272ef21dd510162,cc=128 rev:h=38cb12317d6644da,cc=128 mb:h=99d3fdf650620da5,cc=128
+M DONE case=pile_lattice
+# pybullet build time: Oct 15 2026 03:47:36

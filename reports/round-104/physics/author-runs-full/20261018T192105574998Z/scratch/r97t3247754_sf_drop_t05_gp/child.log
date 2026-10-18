@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+SF setup case=drop thick=0.5 mass=1.0 prec=-1 pins=deferred pin=top
+SF t=10 v4=0.0,2.88071,0.0 v0=-0.5,2.88071,-0.5 top=0.0,0.05,0.0 below=0 ball=-
+SF t=30 v4=0.0,1.91926,0.0 v0=-0.5,1.91926,-0.5 top=0.0,0.05,0.0 below=0 ball=-
+SF t=60 v4=0.02673,0.12446,0.10291 v0=-0.47397,0.26199,-0.38275 top=0.0,0.05,0.0 below=0 ball=-
+SF t=120 v4=0.06371,0.09762,0.20894 v0=-0.45298,0.10073,-0.2738 top=0.0,0.05,0.0 below=0 ball=-
+SFSUM case=drop thick=0.5

@@ -1,0 +1,9 @@
+[application]
+
+config/name="HangDummy"
+
+[physics]
+
+common/physics_ticks_per_second=60
+3d/physics_engine="Dummy"
+3d/run_on_separate_thread=true

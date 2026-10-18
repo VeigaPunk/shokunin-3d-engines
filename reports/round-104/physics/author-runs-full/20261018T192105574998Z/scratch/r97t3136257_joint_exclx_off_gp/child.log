@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+NJ setup case=exclx_off jrid=true
+NJ t=4 a=-0.2511,1.9749,0.0 b=-0.0989,1.6925,0.0 avb=0.0,0.0,7.3458 jrid=true
+NJ t=8 a=-0.2165,1.9079,0.0 b=-0.1335,1.6401,0.0 avb=0.0,0.0,0.911 jrid=true
+NJ t=20 a=-0.1313,1.4771,0.0 b=-0.2187,1.1987,0.0 avb=0.0,0.0,-0.3166 jrid=true
+NJ t=40 a=-0.0281,-0.1462,0.0 b=-0.3219,-0.3122,0.0 avb=0.0,0.0,2.3978 jrid=true
+NJ t=60 a=-0.0498,-2.8624,0.0 b=-0.3002,-2.771,0.0 avb=0.0,0.0,-2.4278 jrid=true
+NJSUM case=exclx_off

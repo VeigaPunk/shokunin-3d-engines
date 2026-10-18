@@ -1,0 +1,48 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freeb_ops engine=DEFAULT
+M freeb_ops freed
+M freeb_ops get_type=0
+M freeb_ops get_prio=8
+M freeb_ops pin_param=0.5
+ERROR: Parameter "body" is null.
+   at: body_remove_collision_exception (modules/godot_physics_3d/godot_physics_server_3d.cpp:871)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/serial/r90_child.gd:104)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/serial/r90_child.gd:22)
+M freeb_ops isdis=false
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 556e98f57000
+
+[1] 7f5ef503e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7f5ef503e6f0]
+[2] 556e9acc1919 (main+1d6a919) - /usr/bin/godot(+0x1d6a919) [0x556e9acc1919]
+[3] 556e9acd10c2 (main+1d7a0c2) - /usr/bin/godot(+0x1d7a0c2) [0x556e9acd10c2]
+[4] 556e9ac94892 (main+1d3d892) - /usr/bin/godot(+0x1d3d892) [0x556e9ac94892]
+[5] 556e9ef1170f (main+5fba70f) - /usr/bin/godot(+0x5fba70f) [0x556e9ef1170f]
+[6] 556e9a8a1d4c (main+194ad4c) - /usr/bin/godot(+0x194ad4c) [0x556e9a8a1d4c]
+[7] 556e9a720106 (main+17c9106) - /usr/bin/godot(+0x17c9106) [0x556e9a720106]
+[8] 556e9f7aae9e (main+6853e9e) - /usr/bin/godot(+0x6853e9e) [0x556e9f7aae9e]
+[9] 556e9f4784ca (main+65214ca) - /usr/bin/godot(+0x65214ca) [0x556e9f4784ca]
+[10] 556e9a8ad8af (main+19568af) - /usr/bin/godot(+0x19568af) [0x556e9a8ad8af]
+[11] 556e9a720106 (main+17c9106) - /usr/bin/godot(+0x17c9106) [0x556e9a720106]
+[12] 556e9d02c40d (main+40d540d) - /usr/bin/godot(+0x40d540d) [0x556e9d02c40d]
+[13] 556e9f7b0927 (main+6859927) - /usr/bin/godot(+0x6859927) [0x556e9f7b0927]
+[14] 556e9d0a7031 (main+4150031) - /usr/bin/godot(+0x4150031) [0x556e9d0a7031]
+[15] 556e9d0a893b (main+415193b) - /usr/bin/godot(+0x415193b) [0x556e9d0a893b]
+[16] 556e9d09af33 (main+4143f33) - /usr/bin/godot(+0x4143f33) [0x556e9d09af33]
+[17] 556e9a141278 (main+11ea278) - /usr/bin/godot(+0x11ea278) [0x556e9a141278]
+[18] 556e99fb3062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x556e99fb3062]
+[19] 7f5ef5027781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7f5ef5027781]
+[20] 7f5ef50278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7f5ef50278b9]
+[21] 556e9a0276d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x556e9a0276d5]
+-- END OF C++ BACKTRACE --
+================================================================
+GDScript backtrace (most recent call first):
+    [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/serial/r90_child.gd:109)
+    [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/serial/r90_child.gd:22)
+-- END OF GDSCRIPT BACKTRACE --
+================================================================

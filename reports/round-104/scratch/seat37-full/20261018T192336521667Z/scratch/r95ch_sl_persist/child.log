@@ -1,0 +1,4 @@
+M0 case=sl_persist engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_persist sleep-contact-persist froze~101 s10:cc=0/d=/nf= s120:cc=1/d=-1e-05/nf=9.82 s480:cc=1/d=-1e-05/nf=9.82 s720:cc=1/d=-1e-05/nf=9.82 s960:cc=1/d=-1e-05/nf=9.82 s1200:cc=1/d=-1e-05/nf=9.82 s1400:cc=1/d=-1e-05/nf=9.82
+M DONE case=sl_persist
+# pybullet build time: Oct 15 2026 03:47:36

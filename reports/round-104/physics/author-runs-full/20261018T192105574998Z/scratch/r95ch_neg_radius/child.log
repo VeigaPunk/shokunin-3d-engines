@@ -1,0 +1,9 @@
+M0 case=neg_radius engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M neg_radius neg-radius ctrl r=0.5 z=-1.58273451
+M neg_radius neg-radius refused=3 infAccepted=True
+# pybullet build time: Oct 15 2026 03:47:36
+# b3Warning[examples/SharedMemory/PhysicsDirect.cpp,1066]:
+# createCollisionShape failedb3Warning[examples/SharedMemory/PhysicsDirect.cpp,1066]:
+# createCollisionShape failedb3Warning[examples/SharedMemory/PhysicsDirect.cpp,1066]:
+# createCollisionShape failed
+NEGATIVE REJECTED: r95_bullet neg_radius neg-radius radius<={-0.5,0,nan} refused (pybullet.error) while radius=+inf accepted id=1

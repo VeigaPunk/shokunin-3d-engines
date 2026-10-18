@@ -1,0 +1,4 @@
+M0 case=det_restore engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_restore restore-state hRestored=d724b9280dbb31a2 h120=d724b9280dbb31a2 eqRestore=True hPost=8627a9d5062f1396 h240=8627a9d5062f1396 eqPost=True
+M DONE case=det_restore
+# pybullet build time: Oct 15 2026 03:47:36

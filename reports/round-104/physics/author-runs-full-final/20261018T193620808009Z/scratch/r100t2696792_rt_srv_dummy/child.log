@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+SRV_S0 node=O=(0.0000,0.0000,0.0000) srv=<null>
+SRV_S1_IMMEDIATE node=O=(0.0000,0.0000,0.0000) srv=<null>
+SRV_S2_AFTERPHYS pf=3 ff=2 node=O=(5.0000,0.0000,0.0000) ray=miss
+SRV_S3_AFTERIDLE pf=3 ff=2 node=O=(5.0000,0.0000,0.0000)
+RT_DONE case=srv

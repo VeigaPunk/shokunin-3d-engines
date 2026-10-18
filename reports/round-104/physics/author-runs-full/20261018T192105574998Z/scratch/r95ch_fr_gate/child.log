@@ -1,0 +1,6 @@
+M0 case=fr_gate engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M fr_gate fric-neg g-0.5/b0.5:stored=0.5,0.5,x=4.08354903 g0.5/b-0.5:stored=0.5,0.5,x=4.08354903 g-0.5/b-0.5:stored=0.5,0.5,x=4.08354903 g11/b1:stored=11,1,x=0.993892628 g-0.3/b0.9:stored=0.5,0.9,x=2.47307853
+M fr_gate fric-zero x=9.72455029
+M fr_gate fric-zero-mech mu0:x=9.72455029[60:vx=4.71540065|300:vx=3.82297219|600:vx=3.06464232] mu0+damp0:x=12.5[60:vx=5|300:vx=5|600:vx=5] mu0+g0:x=9.72455241[60:vx=4.71540119|300:vx=3.82297325|600:vx=3.06464304] mu0+g0+damp0:x=12.5[60:vx=5|300:vx=5|600:vx=5]
+M DONE case=fr_gate
+# pybullet build time: Oct 15 2026 03:47:36

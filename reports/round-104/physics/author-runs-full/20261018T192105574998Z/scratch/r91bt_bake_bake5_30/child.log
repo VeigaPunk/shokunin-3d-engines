@@ -1,0 +1,34 @@
+M0 case=bake5_30 engine=blender-5.2.1
+M bake5_30 before pc_fs=5 pc_fe=30 scene_fs=1 scene_fe=60 info=
+M bake5_30 after baked=True info=26 frames in memory (4 KiB). outdated=False
+M bake5_30 read f20=(0.000000,0.000000,3.087401) f40=(0.074437,-0.000000,0.555247) h=716f28903f84bea4
+M DONE case=bake5_30
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+bake: frame 5 :: 30
+bake: frame 6 :: 30
+bake: frame 7 :: 30
+bake: frame 8 :: 30
+bake: frame 9 :: 30
+bake: frame 10 :: 30
+bake: frame 11 :: 30
+bake: frame 12 :: 30
+bake: frame 13 :: 30
+bake: frame 14 :: 30
+bake: frame 15 :: 30
+bake: frame 16 :: 30
+bake: frame 17 :: 30
+bake: frame 18 :: 30
+bake: frame 19 :: 30
+bake: frame 20 :: 30
+bake: frame 21 :: 30
+bake: frame 22 :: 30
+bake: frame 23 :: 30
+bake: frame 24 :: 30
+bake: frame 25 :: 30
+bake: frame 26 :: 30
+bake: frame 27 :: 30
+bake: frame 28 :: 30
+bake: frame 29 :: 30
+bake: frame 30 :: 30
+
+Blender quit

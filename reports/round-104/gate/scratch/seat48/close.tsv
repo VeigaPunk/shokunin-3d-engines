@@ -1,0 +1,7 @@
+run	ts_utc	tmp_avail	rc	verdict	steps	pointers	secs
+1	2026-10-18T19:20:26Z	3.1G	2	BLOCKED (checks failed: 0; CHECK 2 could not run)	3/1	101	0.86
+2	2026-10-18T19:20:27Z	3.1G	0	PASS (checks failed: 0)	4/0	101	1.02
+3	2026-10-18T19:20:28Z	3.1G	0	PASS (checks failed: 0)	4/0	101	0.95
+4	2026-10-18T19:20:29Z	3.1G	2	BLOCKED (checks failed: 0; CHECK 2 could not run)	3/1	101	0.82
+5	2026-10-18T19:20:30Z	3.1G	0	PASS (checks failed: 0)	4/0	101	0.87
+6	2026-10-18T19:20:31Z	3.1G	2	BLOCKED (checks failed: 0; CHECK 2 could not run)	3/1	101	0.87

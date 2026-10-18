@@ -1,0 +1,29 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freeb_dyn engine=DEFAULT
+M freeb_dyn t=1 b=0.0000,2.0000,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freeb_dyn t=2 b=0.0000,2.1473,0.0000 lv=0.0000,8.8367,0.0000 jtype=0
+M freeb_dyn t=3 b=0.0000,2.0658,0.0000 lv=0.0000,-0.3264,0.0000 jtype=0
+M freeb_dyn t=4 b=0.0000,2.0425,0.0000 lv=0.0000,-0.4892,0.0000 jtype=0
+M freeb_dyn t=5 b=0.0000,2.0286,0.0000 lv=0.0000,-0.6517,0.0000 jtype=0
+M freeb_dyn t=6 b=0.0000,2.0144,0.0000 lv=0.0000,-0.8139,0.0000 jtype=0
+M freeb_dyn freed post jtype=0
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 560c5be40000
+
+[1] 7f8ec6a3e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7f8ec6a3e6f0]
+[2] 560c5dbbc797 (main+1d7c797) - /usr/bin/godot(+0x1d7c797) [0x560c5dbbc797]
+[3] 560c5dbbc837 (main+1d7c837) - /usr/bin/godot(+0x1d7c837) [0x560c5dbbc837]
+[4] 560c5db916d3 (main+1d516d3) - /usr/bin/godot(+0x1d516d3) [0x560c5db916d3]
+[5] 560c5d02a43a (main+11ea43a) - /usr/bin/godot(+0x11ea43a) [0x560c5d02a43a]
+[6] 560c5ce9c062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x560c5ce9c062]
+[7] 7f8ec6a27781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7f8ec6a27781]
+[8] 7f8ec6a278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7f8ec6a278b9]
+[9] 560c5cf106d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x560c5cf106d5]
+-- END OF C++ BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

@@ -1,0 +1,51 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+IT0 case=pin rest=1.0000 spawn_err=-0.3000
+IT t=1 gap=0.3 lv=0.0 y=1.7
+IT t=2 gap=0.21 lv=2.7 y=1.79
+IT t=3 gap=0.147 lv=1.89 y=1.853
+IT t=4 gap=0.1029 lv=1.322999 y=1.8971
+IT t=5 gap=0.07203 lv=0.9261 y=1.92797
+IT t=6 gap=0.050421 lv=0.648271 y=1.949579
+IT t=7 gap=0.035295 lv=0.453789 y=1.964705
+IT t=8 gap=0.024706 lv=0.317651 y=1.975294
+IT t=9 gap=0.017294 lv=0.222357 y=1.982706
+IT t=10 gap=0.012106 lv=0.15565 y=1.987894
+IT t=15 gap=0.002035 lv=0.026159 y=1.997965
+IT t=20 gap=0.000342 lv=0.004397 y=1.999658
+IT t=25 gap=0.000058 lv=0.00074 y=1.999942
+IT t=30 gap=0.000028 lv=0.000363 y=1.999972
+IT t=35 gap=0.000028 lv=0.000363 y=1.999972
+IT t=40 gap=0.000028 lv=0.000363 y=1.999972
+IT t=45 gap=0.000028 lv=0.000363 y=1.999972
+IT t=50 gap=0.000028 lv=0.000363 y=1.999972
+IT t=55 gap=0.000028 lv=0.000363 y=1.999972
+IT t=60 gap=0.000028 lv=0.000363 y=1.999972
+IT t=65 gap=0.000028 lv=0.000363 y=1.999972
+IT t=70 gap=0.000028 lv=0.000363 y=1.999972
+IT t=75 gap=0.000028 lv=0.000363 y=1.999972
+IT t=80 gap=0.000028 lv=0.000363 y=1.999972
+IT t=85 gap=0.000028 lv=0.000363 y=1.999972
+IT t=90 gap=0.000028 lv=0.000363 y=1.999972
+IT t=95 gap=0.000028 lv=0.000363 y=1.999972
+IT t=100 gap=0.000028 lv=0.000363 y=1.999972
+IT t=105 gap=0.000028 lv=0.000363 y=1.999972
+IT t=110 gap=0.000028 lv=0.000363 y=1.999972
+IT t=115 gap=0.000028 lv=0.000363 y=1.999972
+IT t=120 gap=0.000028 lv=0.000363 y=1.999972
+IT t=125 gap=0.000028 lv=0.000363 y=1.999972
+IT t=130 gap=0.000028 lv=0.000363 y=1.999972
+IT t=135 gap=0.000028 lv=0.000363 y=1.999972
+IT t=140 gap=0.000028 lv=0.000363 y=1.999972
+IT t=145 gap=0.000028 lv=0.000363 y=1.999972
+IT t=150 gap=0.000028 lv=0.000363 y=1.999972
+IT t=155 gap=0.000028 lv=0.000363 y=1.999972
+IT t=160 gap=0.000028 lv=0.000363 y=1.999972
+IT t=165 gap=0.000028 lv=0.000363 y=1.999972
+IT t=170 gap=0.000028 lv=0.000363 y=1.999972
+IT t=175 gap=0.000028 lv=0.000363 y=1.999972
+IT t=180 gap=0.000028 lv=0.000363 y=1.999972
+ITSUM case=pin ticks=180 last_gap=0.000028 last_lv=0.000363 last_over=0.0 last_pen0=0.0 last_sum=0.0 last_xz4=0.0 last_y2=0.0 last_y4=0.0 max_gap=0.3 max_over=-1000000000.0 max_sum=-1000000000.0 max_vmax=-1000000000.0 min_pen0=1000000000.0
+ERROR: 1 RID allocations of type 'P12GodotJoint3D' were leaked at exit.
+ERROR: 2 RID allocations of type 'P11GodotBody3D' were leaked at exit.
+ERROR: 2 RID allocations of type 'P12GodotShape3D' were leaked at exit.

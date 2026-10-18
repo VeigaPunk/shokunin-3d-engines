@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+XR singleton=<XRServer#3422552243> inst=<XRServer#26390562249> identical=false
+XR DONE case=same
+ERROR: Interface not found.
+   at: remove_interface (servers/xr/xr_server.cpp:295)
+ERROR: Interface not found.
+   at: remove_interface (servers/xr/xr_server.cpp:295)
+WARNING: 1 ObjectDB instance was leaked at exit (run with `--verbose` for details).
+   at: cleanup (core/object/object.cpp:2536)

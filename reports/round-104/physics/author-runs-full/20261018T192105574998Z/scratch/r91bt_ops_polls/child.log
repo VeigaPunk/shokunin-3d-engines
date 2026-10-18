@@ -1,0 +1,11 @@
+M0 case=polls engine=blender-5.2.1
+M polls env background=True version=5.2.1
+M polls ptcache_polls bake=False bake_all=True free_bake=False free_bake_all=True bake_from_cache=False
+M polls rigidbody_polls bake_to_keyframes=True world_remove=True
+M polls bake_call err=RuntimeError msg=Operator bpy.ops.ptcache.bake.poll() failed, context is incorrect
+M polls free_call err=RuntimeError msg=Operator bpy.ops.ptcache.free_bake.poll() failed, context is incorrect
+M polls from_cache_call err=RuntimeError msg=Operator bpy.ops.ptcache.bake_from_cache.poll() failed, context is incorrect
+M DONE case=polls
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

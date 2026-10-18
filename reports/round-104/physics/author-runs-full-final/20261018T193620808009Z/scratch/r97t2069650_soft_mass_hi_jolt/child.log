@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+SB setup case=mass mass=10.0 prec=-1 idx=1
+SB t=10 v4=0.0,2.88734,0.0 v0=-0.5,2.88734,-0.5 pinned=false,false ball=-
+SB t=30 v4=0.0,1.84923,0.0 v0=-0.5,1.84923,-0.5 pinned=false,false ball=-
+SB t=60 v4=0.0,-1.73856,0.0 v0=-0.5,-1.73856,-0.5 pinned=false,false ball=-
+SB t=120 v4=0.0,-16.17986,0.0 v0=-0.5,-16.17986,-0.5 pinned=false,false ball=-
+SBSUM case=mass

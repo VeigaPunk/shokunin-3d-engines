@@ -1,0 +1,4 @@
+M0 case=var_bailout engine=cannon-es-0.20.0+three-0.186.1
+M var_bailout bailout dt=1e-5 elapsed=1e-3 maxSubSteps=1000 stepnumber=1 time=1.000000e-3 accumulator=1.000000e-5 ball.y=4.999999999018
+M var_bailout control dt=1e-5 elapsed=1e-3 maxSubSteps=1 stepnumber=1 time=1.000000e-3 ball.y=4.999999999018
+M DONE case=var_bailout

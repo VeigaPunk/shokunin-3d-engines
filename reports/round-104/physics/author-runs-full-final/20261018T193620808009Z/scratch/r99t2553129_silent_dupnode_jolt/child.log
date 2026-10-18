@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Condition "nodes.has(p_name)" is true.
+   at: add_node (scene/animation/animation_blend_tree.cpp:1506)
+   GDScript backtrace (most recent call first):
+       [0] c_dupnode (res://r99b_silent.gd:158)
+       [1] _run (res://r99b_silent.gd:50)
+DN_DUP before=[&"anim", &"output"] after=[&"anim", &"output"] same_list=true kept_anim='a'
+DN_END ok=true
+SILENT_DONE case=dupnode

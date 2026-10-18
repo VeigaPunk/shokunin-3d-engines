@@ -1,0 +1,206 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=multi engine=DEFAULT
+PRE case=multi engine=DEFAULT threaded=false a_mon=true a_monable=true balls=2
+E pf=1 seq=1 t=1 by=2.6000+2.6000 ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=1 seq=2 ovA=0/0
+IF pf=2 seq=3 body=b1
+IF pf=2 seq=4 body=b2
+E pf=2 seq=5 t=2 by=2.5973+2.5973 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=2 seq=6 ovA=0/0
+IF pf=3 seq=7 body=b1
+IF pf=3 seq=8 body=b2
+E pf=3 seq=9 t=3 by=2.5918+2.5918 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=3 seq=10 ovA=0/0
+IF pf=4 seq=11 body=b1
+IF pf=4 seq=12 body=b2
+E pf=4 seq=13 t=4 by=2.5837+2.5837 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=4 seq=14 ovA=0/0
+IF pf=5 seq=15 body=b1
+IF pf=5 seq=16 body=b2
+E pf=5 seq=17 t=5 by=2.5728+2.5728 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=5 seq=18 ovA=0/0
+IF pf=6 seq=19 body=b1
+IF pf=6 seq=20 body=b2
+E pf=6 seq=21 t=6 by=2.5593+2.5593 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=6 seq=22 ovA=0/0
+IF pf=7 seq=23 body=b1
+IF pf=7 seq=24 body=b2
+E pf=7 seq=25 t=7 by=2.5430+2.5430 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=7 seq=26 ovA=0/0
+IF pf=8 seq=27 body=b1
+IF pf=8 seq=28 body=b2
+E pf=8 seq=29 t=8 by=2.5240+2.5240 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=8 seq=30 ovA=0/0
+IF pf=9 seq=31 body=b1
+IF pf=9 seq=32 body=b2
+E pf=9 seq=33 t=9 by=2.5024+2.5024 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=9 seq=34 ovA=0/0
+IF pf=10 seq=35 body=b1
+IF pf=10 seq=36 body=b2
+E pf=10 seq=37 t=10 by=2.4780+2.4780 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=10 seq=38 ovA=0/0
+IF pf=11 seq=39 body=b1
+IF pf=11 seq=40 body=b2
+E pf=11 seq=41 t=11 by=2.4510+2.4510 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=11 seq=42 ovA=0/0
+IF pf=12 seq=43 body=b1
+IF pf=12 seq=44 body=b2
+E pf=12 seq=45 t=12 by=2.4213+2.4213 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=12 seq=46 ovA=0/0
+IF pf=13 seq=47 body=b1
+IF pf=13 seq=48 body=b2
+E pf=13 seq=49 t=13 by=2.3890+2.3890 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=13 seq=50 ovA=0/0
+IF pf=14 seq=51 body=b1
+IF pf=14 seq=52 body=b2
+E pf=14 seq=53 t=14 by=2.3539+2.3539 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=14 seq=54 ovA=0/0
+IF pf=15 seq=55 body=b1
+IF pf=15 seq=56 body=b2
+E pf=15 seq=57 t=15 by=2.3162+2.3162 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=15 seq=58 ovA=0/0
+IF pf=16 seq=59 body=b1
+IF pf=16 seq=60 body=b2
+E pf=16 seq=61 t=16 by=2.2759+2.2759 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=16 seq=62 ovA=0/0
+IF pf=17 seq=63 body=b1
+IF pf=17 seq=64 body=b2
+E pf=17 seq=65 t=17 by=2.2328+2.2328 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=17 seq=66 ovA=0/0
+IF pf=18 seq=67 body=b1
+IF pf=18 seq=68 body=b2
+E pf=18 seq=69 t=18 by=2.1872+2.1872 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=18 seq=70 ovA=0/0
+IF pf=19 seq=71 body=b1
+IF pf=19 seq=72 body=b2
+E pf=19 seq=73 t=19 by=2.1389+2.1389 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=19 seq=74 ovA=0/0
+IF pf=20 seq=75 body=b1
+IF pf=20 seq=76 body=b2
+E pf=20 seq=77 t=20 by=2.0879+2.0879 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=20 seq=78 ovA=0/0
+IF pf=21 seq=79 body=b1
+IF pf=21 seq=80 body=b2
+SIG sig=A.body_entered pf=21 seq=81 body=b2 ovA=1/0 ovn=b2 mon=true
+SIG sig=A.body_shape_entered pf=21 seq=82 body=b2 bsi=0 lsi=0 ovA=1/0 ovn=b2 mon=true
+SIG sig=A.body_entered pf=21 seq=83 body=b1 ovA=2/0 ovn=b2,b1 mon=true
+SIG sig=A.body_shape_entered pf=21 seq=84 body=b1 bsi=0 lsi=0 ovA=2/0 ovn=b2,b1 mon=true
+E pf=21 seq=85 t=21 by=2.0343+2.0343 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=21 seq=86 ovA=2/0
+IF pf=22 seq=87 body=b1
+IF pf=22 seq=88 body=b2
+E pf=22 seq=89 t=22 by=1.9781+1.9781 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=22 seq=90 ovA=2/0
+IF pf=23 seq=91 body=b1
+IF pf=23 seq=92 body=b2
+E pf=23 seq=93 t=23 by=1.9192+1.9192 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=23 seq=94 ovA=2/0
+IF pf=24 seq=95 body=b1
+IF pf=24 seq=96 body=b2
+E pf=24 seq=97 t=24 by=1.8578+1.8578 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=24 seq=98 ovA=2/0
+IF pf=25 seq=99 body=b1
+IF pf=25 seq=100 body=b2
+E pf=25 seq=101 t=25 by=1.7937+1.7937 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=25 seq=102 ovA=2/0
+IF pf=26 seq=103 body=b1
+IF pf=26 seq=104 body=b2
+E pf=26 seq=105 t=26 by=1.7270+1.7270 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=26 seq=106 ovA=2/0
+IF pf=27 seq=107 body=b1
+IF pf=27 seq=108 body=b2
+E pf=27 seq=109 t=27 by=1.6576+1.6576 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=27 seq=110 ovA=2/0
+IF pf=28 seq=111 body=b1
+IF pf=28 seq=112 body=b2
+E pf=28 seq=113 t=28 by=1.5857+1.5857 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=28 seq=114 ovA=2/0
+IF pf=29 seq=115 body=b1
+IF pf=29 seq=116 body=b2
+E pf=29 seq=117 t=29 by=1.5112+1.5112 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=29 seq=118 ovA=2/0
+IF pf=30 seq=119 body=b1
+IF pf=30 seq=120 body=b2
+E pf=30 seq=121 t=30 by=1.4340+1.4340 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=30 seq=122 ovA=2/0
+IF pf=31 seq=123 body=b1
+IF pf=31 seq=124 body=b2
+E pf=31 seq=125 t=31 by=1.3543+1.3543 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=31 seq=126 ovA=2/0
+IF pf=32 seq=127 body=b1
+IF pf=32 seq=128 body=b2
+E pf=32 seq=129 t=32 by=1.2720+1.2720 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=32 seq=130 ovA=2/0
+IF pf=33 seq=131 body=b1
+IF pf=33 seq=132 body=b2
+E pf=33 seq=133 t=33 by=1.1871+1.1871 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=33 seq=134 ovA=2/0
+IF pf=34 seq=135 body=b1
+IF pf=34 seq=136 body=b2
+ACT OUT idx=0 ball=-1.0000,5.0000,0.0000 pf=34 seq=137
+ACT OUT idx=1 ball=1.0000,5.0000,0.0000 pf=34 seq=138
+E pf=34 seq=139 t=34 by=5.0000+5.0000 ovA=2/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=34 seq=140 ovA=2/0
+IF pf=35 seq=141 body=b1
+IF pf=35 seq=142 body=b2
+SIG sig=A.body_exited pf=35 seq=143 body=b1 ovA=1/0 ovn=b2 mon=true
+SIG sig=A.body_shape_exited pf=35 seq=144 body=b1 bsi=0 lsi=0 ovA=1/0 ovn=b2 mon=true
+SIG sig=A.body_exited pf=35 seq=145 body=b2 ovA=0/0 ovn=- mon=true
+SIG sig=A.body_shape_exited pf=35 seq=146 body=b2 bsi=0 lsi=0 ovA=0/0 ovn=- mon=true
+E pf=35 seq=147 t=35 by=4.9099+4.9099 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=35 seq=148 ovA=0/0
+IF pf=36 seq=149 body=b1
+IF pf=36 seq=150 body=b2
+E pf=36 seq=151 t=36 by=4.8173+4.8173 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=36 seq=152 ovA=0/0
+IF pf=37 seq=153 body=b1
+IF pf=37 seq=154 body=b2
+E pf=37 seq=155 t=37 by=4.7221+4.7221 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=37 seq=156 ovA=0/0
+IF pf=38 seq=157 body=b1
+IF pf=38 seq=158 body=b2
+E pf=38 seq=159 t=38 by=4.6244+4.6244 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=38 seq=160 ovA=0/0
+IF pf=39 seq=161 body=b1
+IF pf=39 seq=162 body=b2
+E pf=39 seq=163 t=39 by=4.5240+4.5240 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=39 seq=164 ovA=0/0
+IF pf=40 seq=165 body=b1
+IF pf=40 seq=166 body=b2
+E pf=40 seq=167 t=40 by=4.4212+4.4212 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=40 seq=168 ovA=0/0
+IF pf=41 seq=169 body=b1
+IF pf=41 seq=170 body=b2
+E pf=41 seq=171 t=41 by=4.3158+4.3158 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=41 seq=172 ovA=0/0
+IF pf=42 seq=173 body=b1
+IF pf=42 seq=174 body=b2
+E pf=42 seq=175 t=42 by=4.2078+4.2078 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=42 seq=176 ovA=0/0
+IF pf=43 seq=177 body=b1
+IF pf=43 seq=178 body=b2
+E pf=43 seq=179 t=43 by=4.0973+4.0973 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+F pf=43 seq=180 ovA=0/0
+IF pf=44 seq=181 body=b1
+IF pf=44 seq=182 body=b2
+E pf=44 seq=183 t=44 by=3.9842+3.9842 ovA=0/0 ovB=0/0 ifc=2 monA=true monB=true
+DONE case=multi engine=DEFAULT nif=86 nsig=8 ne=44 nf=43 seq=183
+DONE_ALL case=multi seq=183
+M multi e20 by=2.0879+2.0879 ovA=0/0 ovB=0/0 ifc=2
+M multi e21 by=2.0343+2.0343 ovA=2/0 ovB=0/0 ifc=2
+M multi e34 by=5.0000+5.0000 ovA=2/0 ovB=0/0 ifc=2
+M multi e35 by=4.9099+4.9099 ovA=0/0 ovB=0/0 ifc=2
+M multi e44 by=3.9842+3.9842 ovA=0/0 ovB=0/0 ifc=2
+M multi s1 pf=21 cls=in_step sig=A.body_entered body=b1
+M multi s2 pf=21 cls=in_step sig=A.body_entered body=b2
+M multi s3 pf=21 cls=in_step sig=A.body_shape_entered body=b1 bsi=0 lsi=0
+M multi s4 pf=21 cls=in_step sig=A.body_shape_entered body=b2 bsi=0 lsi=0
+M multi s5 pf=35 cls=in_step sig=A.body_exited body=b1
+M multi s6 pf=35 cls=in_step sig=A.body_exited body=b2
+M multi s7 pf=35 cls=in_step sig=A.body_shape_exited body=b1 bsi=0 lsi=0
+M multi s8 pf=35 cls=in_step sig=A.body_shape_exited body=b2 bsi=0 lsi=0
+# multi order pf21=[A.body_entered@b2,A.body_shape_entered@b2,A.body_entered@b1,A.body_shape_entered@b1] pf35=[A.body_exited@b1,A.body_shape_exited@b1,A.body_exited@b2,A.body_shape_exited@b2]
+M multi facts entry_bodies=b1,b2 grow=1,2 shrink=1,0 seteq=1 seqeq=0 pairs=1
+M multi census in_step=8 no_if=0 post_e=0 pre_if=0 idle=0 other=0 teardown=0 nif=86 ne=44 nf=43 nsig=8
+M DONE case=multi

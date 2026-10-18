@@ -1,0 +1,2 @@
+M0 case=neg_steps_early engine=cannon-es-0.20.0+three-0.186.1
+NEGATIVE REJECTED: r94_cannon neg-steps-early 120 vs 240 moves the hash 0e24fb5aca619253->ce7a6080f3d7329c ball.y=1.499985073

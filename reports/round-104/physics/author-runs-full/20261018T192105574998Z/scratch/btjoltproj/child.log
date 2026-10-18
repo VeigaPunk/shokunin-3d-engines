@@ -1,0 +1,17 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Index p_contact_idx = 9 is out of bounds ((int)body->get_contact_count() = 4).
+   at: get_contact_local_shape (modules/jolt_physics/objects/jolt_physics_direct_body_state_3d.cpp:201)
+   GDScript backtrace (most recent call first):
+       [0] _child_body_tier (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5003)
+ERROR: Failed to apply central impulse to '<unknown>'. Doing so without a physics space is not supported when using Jolt Physics. If this relates to a node, try adding the node to a scene tree first.
+   at: apply_central_impulse (modules/jolt_physics/objects/jolt_body_3d.cpp:924)
+   GDScript backtrace (most recent call first):
+       [0] _child_body_tier (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:5026)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:400)
+CHILD_NOTE bt_jolt first_i=12 cc=4 impulse=-0.006821907,0.647047877,0.013493819 lshape_oob=0 sleep_lv=zeroed detach_write=done
+CHILD_RESULT bt_jolt_backend=Jolt Physics
+CHILD_RESULT bt_jolt_cc=4
+CHILD_RESULT bt_jolt_impulse=real
+CHILD_RESULT bt_jolt_lshape_oob=0
+CHILD_RESULT bt_jolt_sleep_lv=zeroed

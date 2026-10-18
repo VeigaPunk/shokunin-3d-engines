@@ -1,0 +1,4 @@
+M0 case=det_iters0 engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_iters0 iters0 h=5c1f78b5e4aaabb1 z=-10.6855237 contacts=0 nan=False inf=False where=none
+M DONE case=det_iters0
+# pybullet build time: Oct 15 2026 03:47:36

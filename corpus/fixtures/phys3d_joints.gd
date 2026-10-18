@@ -27,6 +27,7 @@ extends SceneTree
 
 var arm := ""
 const BOUND_S := 20
+const BATCH_BOUND_S := 16
 const BACKENDS := [["gp", ""], ["jolt", "Jolt Physics"], ["dummy", "Dummy"]]
 
 const ARM_CASES := {
@@ -84,13 +85,26 @@ func _initialize() -> void:
 
 func _run() -> void:
 	if not ARM_CASES.has(arm):
-		_fail("unknown_arm")
+		return _fail("unknown_arm")
+	var jobs: Array = []
 	for case in ARM_CASES[arm]:
 		for bk in BACKENDS:
-			var d := _run_child(case, bk[0], bk[1])
-			if d.has("err"):
-				return _fail("%s@%s %s" % [case, bk[0], d["err"]])
-			_emit(case, bk[0], d)
+			var j := _spawn_child(case, bk[0], bk[1])
+			if j.has("err"):
+				return _fail("%s@%s %s" % [case, bk[0], j["err"]])
+			jobs.append(j)
+	var deadline := Time.get_ticks_msec() + BATCH_BOUND_S * 1000
+	for j in jobs:
+		while OS.is_process_running(j["pid"]) \
+				and Time.get_ticks_msec() < deadline:
+			OS.delay_msec(5)
+		if OS.is_process_running(j["pid"]):
+			OS.kill(j["pid"])
+			return _fail("%s@%s batch_timeout" % [j["case"], j["bk"]])
+		var d := _collect_child(j)
+		if d.has("err"):
+			return _fail("%s@%s %s" % [j["case"], j["bk"], d["err"]])
+		_emit(j["case"], j["bk"], d)
 	_finish()
 
 
@@ -114,7 +128,10 @@ func _project_body(name: String, engine: String) -> String:
 	return body
 
 
-func _run_child(case: String, bk: String, engine: String) -> Dictionary:
+# r104 R3 — spawn every (case, backend) child first, then collect in the
+# original nested-loop order. The emitted stream stays a pure function of the
+# per-child logs; only the wall clock changes.
+func _spawn_child(case: String, bk: String, engine: String) -> Dictionary:
 	var dirname := "r90bt_%s_%s_%s" % [arm, case, bk]
 	var dir := ProjectSettings.globalize_path("res://" + dirname)
 	if DirAccess.make_dir_recursive_absolute(dir) != OK:
@@ -132,7 +149,17 @@ func _run_child(case: String, bk: String, engine: String) -> Dictionary:
 			+ " --script \"%s\" -- %s > \"%s\" 2>&1") % [
 			BOUND_S, OS.get_executable_path(), dir, script_path, case,
 			logpath]
-	var code := OS.execute("/bin/sh", ["-c", cmd], [], false)
+	var pid := OS.create_process("/bin/sh", ["-c", cmd], false)
+	if pid <= 0:
+		return {"err": "spawn failed"}
+	return {"case": case, "bk": bk, "pid": pid, "log": logpath}
+
+
+func _collect_child(j: Dictionary) -> Dictionary:
+	while OS.is_process_running(j["pid"]):
+		OS.delay_msec(5)
+	var code := OS.get_process_exit_code(j["pid"])
+	var logpath: String = j["log"]
 	var lf := FileAccess.open(logpath, FileAccess.READ)
 	if lf == null:
 		return {"err": "child log missing"}

@@ -1,0 +1,11 @@
+M0 case=shm_step engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M shm_step shm-step cid=0 rt=0 h=02309c52da41ef33 eqPin=True
+M DONE case=shm_step
+# pybullet build time: Oct 15 2026 03:47:36
+# startThreads creating 1 threads.
+# starting thread 0
+# started thread 0
+# MotionThreadFunc thread started
+# PosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory
+# PosixSharedMemory::releaseSharedMemory removed shared memoryPosixSharedMemory::releaseSharedMemory detached shared memory

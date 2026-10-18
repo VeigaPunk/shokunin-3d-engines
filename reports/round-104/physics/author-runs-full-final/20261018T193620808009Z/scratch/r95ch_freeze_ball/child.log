@@ -1,0 +1,4 @@
+M0 case=freeze_ball engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M freeze_ball freeze-ball steps=1400 changes=79 freezeStep=80
+M DONE case=freeze_ball
+# pybullet build time: Oct 15 2026 03:47:36

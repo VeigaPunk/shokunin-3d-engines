@@ -1,0 +1,8 @@
+M0 case=be_broadphase engine=cannon-es-0.20.0+three-0.186.1
+M be_broadphase naive h=0e24fb5aca619253 ph=0c58591a5347866e eqBase=true ball.y=1.499985073
+M be_broadphase sap_default h=0b0f249979097645 ph=7b75f65fb12ebdd9 eqBase=false ball.y=1.499985073
+M be_broadphase sap_axis0 h=0b0f249979097645 ph=7b75f65fb12ebdd9 eqBase=false ball.y=1.499985073
+M be_broadphase sap_axis1 h=0b0f249979097645 ph=7b75f65fb12ebdd9 eqBase=false ball.y=1.499985073
+M be_broadphase sap_axis2 h=0b0f249979097645 ph=7b75f65fb12ebdd9 eqBase=false ball.y=1.499985073
+M be_broadphase grid1 step=1 y=4.997272222 naiveY=4.997272222 eq=true
+M DONE case=be_broadphase

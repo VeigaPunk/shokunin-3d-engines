@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=idlemode engine=Jolt Physics
+M idlemode pre mode=1 pos=(0.0000,1.9973,0.0000)
+M idlemode post x=0.2778 y=2.0000 z=0.0000 lv=(0.0000,-1.1376,0.0000) srv=(0.2778,2.0000,0.0000) playing=true
+M DONE case=idlemode

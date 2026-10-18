@@ -1,0 +1,3 @@
+M0 case=det_tol1e3 engine=cannon-es-0.20.0+three-0.186.1
+M det_tol1e3 tol1e-3 base=0e24fb5aca619253 variant=b0737aa3df868fbc eq=false ball.y=1.499985068692
+M DONE case=det_tol1e3

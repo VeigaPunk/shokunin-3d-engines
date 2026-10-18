@@ -1,0 +1,2 @@
+FAIL scratch root is not a directory: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/gate/scratch/seat13/final-td
+     set GATE_WORKDIR (or TMPDIR) to an existing writable directory

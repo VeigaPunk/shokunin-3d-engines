@@ -1,0 +1,20 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+MA_PRE tree_cb=2 active=true actor=(0.0000,0.0000,0.0000) pf=1
+F seq=1 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+E pf=2 seq=2 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+F seq=3 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+E pf=3 seq=4 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+F seq=5 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+E pf=4 seq=6 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+F seq=7 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+E pf=5 seq=8 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+F seq=9 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+E pf=6 seq=10 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+F seq=11 x=0.0000 actor=(0.0000,0.0000,0.0000) tp=0.0000
+MA_IDLE actor=(0.0000,0.0000,0.0000) t=0.0000
+MA_ADV1 actor=(0.0000,0.0000,0.0000) t=0.0000
+MA_ADV1_FRAME actor=(0.0000,0.0000,0.0000) t=0.0000
+MA_ADV2 actor=(1.0000,0.0000,0.0000) t=0.0000
+MODE_SUM case=manual tag=manual watcher=pre tree_cb=2 player_cb=0 x_pf10=- x_pf20=- x_pf30=- t_pf30=- x_idle10=- x_idle20=- idle_rows=7 pf_rows=6 lead_zero=5 pf_first_live=2 pf_first_move=-1 active=true pactive=true
+MODE_DONE case=manual

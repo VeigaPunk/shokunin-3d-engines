@@ -1,0 +1,48 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+AR_BOOT case=exit tps=60
+AR p=E pf=1 ff=0 seq=1 ovA=0 by=5.0000
+AR p=E pf=2 ff=1 seq=2 ovA=0 by=5.0000
+AR p=E pf=3 ff=2 seq=3 ovA=0 by=5.0000
+AR p=E pf=4 ff=3 seq=4 ovA=0 by=5.0000
+AR p=E pf=5 ff=4 seq=5 ovA=0 by=5.0000
+AR p=E pf=6 ff=5 seq=6 ovA=0 by=5.0000
+AR p=E pf=7 ff=6 seq=7 ovA=0 by=5.0000
+AR p=E pf=8 ff=7 seq=8 ovA=0 by=5.0000
+AR p=E pf=9 ff=8 seq=9 ovA=0 by=5.0000
+AR p=E pf=10 ff=9 seq=10 ovA=0 by=5.0000
+AR p=E pf=11 ff=10 seq=11 ovA=0 by=5.0000
+AR p=E pf=12 ff=11 seq=12 ovA=0 by=5.0000
+AR p=E pf=13 ff=12 seq=13 ovA=0 by=5.0000
+AR p=E pf=14 ff=13 seq=14 ovA=0 by=5.0000
+AR p=E pf=15 ff=14 seq=15 ovA=0 by=5.0000
+AR p=E pf=16 ff=15 seq=16 ovA=0 by=5.0000
+AR p=E pf=17 ff=16 seq=17 ovA=0 by=5.0000
+AR p=E pf=18 ff=17 seq=18 ovA=0 by=5.0000
+AR p=E pf=19 ff=18 seq=19 ovA=0 by=5.0000
+AR p=E pf=20 ff=19 seq=20 ovA=0 by=5.0000
+AR p=E pf=21 ff=20 seq=21 ovA=0 by=5.0000
+AR p=E pf=22 ff=21 seq=22 ovA=0 by=5.0000
+AR p=E pf=23 ff=22 seq=23 ovA=0 by=5.0000
+AR p=E pf=24 ff=23 seq=24 ovA=0 by=5.0000
+AR p=E pf=25 ff=24 seq=25 ovA=0 by=5.0000
+AR p=E pf=26 ff=25 seq=26 ovA=0 by=5.0000
+AR p=E pf=27 ff=26 seq=27 ovA=0 by=5.0000
+AR p=E pf=28 ff=27 seq=28 ovA=0 by=5.0000
+AR p=E pf=29 ff=28 seq=29 ovA=0 by=5.0000
+AR p=E pf=30 ff=29 seq=30 ovA=0 by=5.0000
+AR p=E pf=31 ff=30 seq=31 ovA=0 by=5.0000
+AR p=E pf=32 ff=31 seq=32 ovA=0 by=5.0000
+AR p=E pf=33 ff=32 seq=33 ovA=0 by=5.0000
+AR p=MUT pf=34 ff=33 seq=33 teleport_to_y=8
+AR p=E pf=34 ff=33 seq=34 ovA=0 by=8.0000
+AR p=E pf=35 ff=34 seq=35 ovA=0 by=8.0000
+AR p=E pf=36 ff=35 seq=36 ovA=0 by=8.0000
+AR p=E pf=37 ff=36 seq=37 ovA=0 by=8.0000
+AR p=E pf=38 ff=37 seq=38 ovA=0 by=8.0000
+AR p=E pf=39 ff=38 seq=39 ovA=0 by=8.0000
+AR p=E pf=40 ff=39 seq=40 ovA=0 by=8.0000
+AR p=E pf=50 ff=49 seq=50 ovA=0 by=8.0000
+AR_END case=exit n_e=60 first=-1 last=-1 ovA=0
+AR_TIME t=0
+AR p=E pf=60 ff=59 seq=60 ovA=0 by=8.0000

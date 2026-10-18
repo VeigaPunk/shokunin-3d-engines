@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE jp_dummy types={ "pin": "0", "soft0": "0", "soft1": "0", "clamp2": "0", "nomake": "0", "g6dof": "0" } traces={ "pin": "0.0000,0.0000", "soft0": "0.0000,0.0000", "soft1": "0.0000,0.0000", "clamp2": "0.0000,0.0000", "nomake": "0.0000,0.0000", "g6dof": "0.0000,0.0000" } lvs={ "pin": "0.0000", "soft0": "0.0000", "soft1": "0.0000", "clamp2": "0.0000", "nomake": "0.0000", "g6dof": "0.0000" } rb={ "pin": "0.0000,0.0000,0.0000", "soft0": "0.0000,0.0000,0.0000", "soft1": "0.0000,0.0000,0.0000", "clamp2": "0.0000,0.0000,0.0000" } coll=false
+CHILD_RESULT jp_dummy_backend=Dummy
+CHILD_RESULT jp_dummy_pin_gap=0.0000,0.0000
+CHILD_RESULT jp_dummy_pin_lv=0.0000
+CHILD_RESULT jp_dummy_pin_type=0
+CHILD_RESULT jp_dummy_soft0_gap=0.0000,0.0000
+CHILD_RESULT jp_dummy_soft0_lv=0.0000
+CHILD_RESULT jp_dummy_soft0_type=0
+CHILD_RESULT jp_dummy_soft1_gap=0.0000,0.0000
+CHILD_RESULT jp_dummy_soft1_lv=0.0000
+CHILD_RESULT jp_dummy_soft1_type=0
+CHILD_RESULT jp_dummy_clamp2_gap=0.0000,0.0000
+CHILD_RESULT jp_dummy_clamp2_lv=0.0000
+CHILD_RESULT jp_dummy_clamp2_type=0
+CHILD_RESULT jp_dummy_nomake_gap=0.0000,0.0000
+CHILD_RESULT jp_dummy_nomake_lv=0.0000
+CHILD_RESULT jp_dummy_nomake_type=0
+CHILD_RESULT jp_dummy_g6dof_gap=0.0000,0.0000
+CHILD_RESULT jp_dummy_g6dof_lv=0.0000
+CHILD_RESULT jp_dummy_g6dof_type=0
+CHILD_RESULT jp_dummy_pin_rb=0.0000,0.0000,0.0000
+CHILD_RESULT jp_dummy_soft0_rb=0.0000,0.0000,0.0000
+CHILD_RESULT jp_dummy_soft1_rb=0.0000,0.0000,0.0000
+CHILD_RESULT jp_dummy_clamp2_rb=0.0000,0.0000,0.0000
+CHILD_RESULT jp_dummy_coll_default=false
+CHILD_RESULT jp_dummy_g6dof_eq_nomake=true

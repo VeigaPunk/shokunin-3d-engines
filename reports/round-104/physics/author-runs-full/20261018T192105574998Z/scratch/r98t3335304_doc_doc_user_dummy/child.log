@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+MODE user://tri.glb append_err=0
+MODE user://tri.glb nodes=2 meshes=1 anims=0 skel=0
+MODESCENE TriScene:Node3D
+MODESCENE   RootNode:Node3D
+MODESCENE     TriMesh:MeshInstance3D mesh=ArrayMesh tris=1

@@ -1,0 +1,7 @@
+[application]
+
+config/name="SsPlain"
+
+[physics]
+
+common/physics_ticks_per_second=60

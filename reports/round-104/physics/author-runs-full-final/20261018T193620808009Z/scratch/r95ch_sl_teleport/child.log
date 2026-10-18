@@ -1,0 +1,4 @@
+M0 case=sl_teleport engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sl_teleport sleep-teleport zBefore=0.49999 postTeleport 1:2.99982951 2:2.99948857 10:2.99062891 30:2.92092951 60:2.69026842 120:1.78969868
+M DONE case=sl_teleport
+# pybullet build time: Oct 15 2026 03:47:36

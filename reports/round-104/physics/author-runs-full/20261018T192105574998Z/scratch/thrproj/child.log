@@ -1,0 +1,48 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+ERROR: Space state is inaccessible right now, wait for iteration or physics process notification.
+   at: space_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:194)
+   GDScript backtrace (most recent call first):
+       [0] _child_threaded (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/phys3d_events.gd:4138)
+CHILD_NOTE early_null=false
+CHILD_RESULT pp_edge0=true proc_dss_refused=true srv_ok=true

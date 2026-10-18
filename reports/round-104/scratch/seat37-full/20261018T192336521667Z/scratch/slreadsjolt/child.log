@@ -1,0 +1,11 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_RESULT sl_reads_jolt_backend=Jolt Physics
+CHILD_RESULT sl_reads_jolt_slept=41
+CHILD_RESULT sl_reads_jolt_if_calls=42
+CHILD_RESULT sl_reads_jolt_cc=1
+CHILD_RESULT sl_reads_jolt_imp=0.1633
+CHILD_RESULT sl_reads_jolt_lv=0.0000,0.0000,0.0000
+CHILD_RESULT sl_reads_jolt_hdl_sleep=true
+CHILD_RESULT sl_reads_jolt_awake_ticks=0
+CHILD_RESULT sl_reads_jolt_if_calls_after=42

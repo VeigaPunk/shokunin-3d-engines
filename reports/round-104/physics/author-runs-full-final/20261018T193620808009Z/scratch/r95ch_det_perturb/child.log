@@ -1,0 +1,4 @@
+M0 case=det_perturb engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_perturb perturb-track mag=1e-9 20:1.000e-09 60:1.000e-09 120:1.000e-09 240:4.466e-14 360:3.479e-13 480:6.804e-13 heq=False
+M DONE case=det_perturb
+# pybullet build time: Oct 15 2026 03:47:36

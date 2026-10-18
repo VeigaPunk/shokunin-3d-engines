@@ -1,0 +1,188 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+PHASEMK IF 2
+PHASEMK E 2
+PHASEMK IF 3
+PHASEMK E 3
+PHASEMK IF 4
+PHASEMK E 4
+PHASEMK IF 5
+PHASEMK E 5
+PHASEMK F 5
+PHASEMK IF 6
+PHASEMK E 6
+PHASEMK F 6
+PHASEMK F 6
+PHASEMK F 6
+PHASEMK IF 7
+PHASEMK E 7
+PHASEMK F 7
+PHASEMK F 7
+PHASEMK IF 8
+PHASEMK E 8
+PHASEMK F 8
+PHASEMK F 8
+PHASEMK F 8
+PHASEMK IF 9
+PHASEMK E 9
+PHASEMK F 9
+PHASEMK F 9
+PHASEMK IF 10
+PHASEMK E 10
+PHASEMK F 10
+PHASEMK F 10
+PHASEMK F 10
+PHASEMK IF 11
+PHASEMK E 11
+PHASEMK F 11
+PHASEMK F 11
+PHASEMK IF 12
+PHASEMK E 12
+PHASEMK F 12
+PHASEMK F 12
+PHASEMK F 12
+PHASEMK IF 13
+PHASEMK E 13
+PHASEMK F 13
+PHASEMK F 13
+PHASEMK IF 14
+PHASEMK E 14
+PHASEMK F 14
+PHASEMK F 14
+PHASEMK F 14
+PHASEMK IF 15
+PHASEMK E 15
+PHASEMK F 15
+PHASEMK F 15
+PHASEMK IF 16
+PHASEMK E 16
+PHASEMK F 16
+PHASEMK F 16
+PHASEMK F 16
+PHASEMK IF 17
+PHASEMK E 17
+PHASEMK F 17
+PHASEMK F 17
+PHASEMK IF 18
+PHASEMK E 18
+PHASEMK F 18
+PHASEMK F 18
+PHASEMK F 18
+PHASEMK IF 19
+PHASEMK E 19
+PHASEMK F 19
+PHASEMK F 19
+PHASEMK IF 20
+PHASEMK E 20
+PHASEMK F 20
+PHASEMK F 20
+PHASEMK F 20
+PHASEMK IF 21
+PHASEMK E 21
+PHASEMK F 21
+PHASEMK F 21
+PHASEMK IF 22
+PHASEMK E 22
+PHASEMK F 22
+PHASEMK F 22
+PHASEMK F 22
+PHASEMK IF 23
+PHASEMK E 23
+PHASEMK F 23
+PHASEMK F 23
+PHASEMK IF 24
+PHASEMK E 24
+PHASEMK F 24
+PHASEMK F 24
+PHASEMK F 24
+PHASEMK IF 25
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_local_position (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:198)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6702)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_local_normal (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:203)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6703)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_impulse (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:208)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6704)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_local_shape (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:218)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6705)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_local_velocity_at_position (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:213)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6706)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_collider (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:223)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6707)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_collider_position (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:228)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6708)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_collider_id (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:233)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6709)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_collider_id (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:233)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6710)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_collider_shape (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:238)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6711)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_collider_velocity_at_position (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:243)
+   GDScript backtrace (most recent call first):
+       [0] _phase_get (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6712)
+       [1] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6884)
+       [2] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+ERROR: Index p_contact_idx = 1 is out of bounds (body->contact_count = 1).
+   at: get_contact_local_shape (modules/godot_physics_3d/godot_body_direct_state_3d.cpp:218)
+   GDScript backtrace (most recent call first):
+       [0] _child_if_phase (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:6887)
+       [1] _frames (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:400)
+CHILD_NOTE ip_plain first=13 if_rows=24 e_rows=23 f_rows=49 if_eq_e=true f_eq_next=true seq=true idx=11/-1 cc_after=1 cc_max=1
+CHILD_RESULT ip_plain_backend=DEFAULT
+CHILD_RESULT ip_plain_if_fires=24
+CHILD_RESULT ip_plain_cc_max=1
+CHILD_RESULT ip_plain_first_pf=13
+CHILD_RESULT ip_plain_if_eq_e=true
+CHILD_RESULT ip_plain_f_eq_next_if=true
+CHILD_RESULT ip_plain_seq_order=true
+CHILD_RESULT ip_plain_if_cc_first=0
+CHILD_RESULT ip_plain_e_cc_first=0
+CHILD_RESULT ip_plain_f_cc_first=1
+CHILD_RESULT ip_plain_if_cc_next=1
+CHILD_RESULT ip_plain_imp_first=zero
+CHILD_RESULT ip_plain_imp_first_mag=0.0000
+CHILD_RESULT ip_plain_imp_next_mag=2.1022
+CHILD_RESULT ip_plain_lvloc_first_mag=2.1022
+CHILD_RESULT ip_plain_oob_calls=11
+CHILD_RESULT ip_plain_oob_shape=-1
+CHILD_RESULT ip_plain_cc_after=1

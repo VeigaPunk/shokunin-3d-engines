@@ -1,0 +1,2 @@
+M0 case=neg_dt engine=cannon-es-0.20.0+three-0.186.1
+NEGATIVE REJECTED: r94_cannon neg-dt dt=1/59.9 moves the hash 0e24fb5aca619253->fef95d480950e291 ball.y=1.499975357

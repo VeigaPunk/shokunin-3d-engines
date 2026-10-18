@@ -1,0 +1,7 @@
+[application]
+
+config/name="R97Scout"
+
+[physics]
+
+common/physics_ticks_per_second=60

@@ -1,0 +1,11 @@
+M0 case=be_solver engine=cannon-es-0.20.0+three-0.186.1
+M be_solver gs_default h=0e24fb5aca619253 ph=0c58591a5347866e eqBase=true ball.y=1.499985073 contacts=0 fric=0
+M be_solver gs_iters1 h=a87c85c948341344 ph=97b549897a363bfe eqBase=false ball.y=1.480328572 contacts=12 fric=24
+M be_solver gs_iters5 h=89b292ca9c60f52b ph=c280438320fe650f eqBase=false ball.y=1.499672620 contacts=0 fric=0
+M be_solver gs_iters20 h=d3fda7808f2de666 ph=ed7be6f59bbec67b eqBase=false ball.y=1.499995948 contacts=0 fric=0
+M be_solver split_gs_default h=40aeebd22b384e32 ph=12b80737098c34e5 eqBase=false ball.y=1.499960573 contacts=0 fric=0
+M be_solver split_gs_iters1 h=ccf8afd9a2a23512 ph=d822658a7e58c4d1 eqBase=false ball.y=1.450330013 contacts=13 fric=26
+M be_solver split_gs_iters20 h=b38f8eccf89e71e0 ph=86f98c7d4361f6aa eqBase=false ball.y=1.499995782 contacts=0 fric=0
+M be_solver split_subsolver_iters1 h=97af821da9944daf ph=29c64866a85f5895 eqBase=false ball.y=1.499975200 contacts=0 fric=0
+M be_solver summary variants=8 distinctHashes=8 gsEqBase=true
+M DONE case=be_solver

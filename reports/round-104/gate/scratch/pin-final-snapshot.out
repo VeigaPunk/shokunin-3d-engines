@@ -1,0 +1,12 @@
+TIME=2026-10-18T19:25:07Z
+run_gate.sh=e55213049db7538d
+README.md=acbbf0e54286478e
+LIVE=POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+INDEPENDENT POINTERS=103 POINTER_STRINGS=41 SKIPPED=0 UNRESOLVED=0
+--- README pin sites ---
+42:> correction note). The r104 scanner sha256 is `e5521304…` and the current pin is `POINTERS=103`
+248:**Expected (re-measured 2026-10-18T19:24Z at lane HEAD `88c3b2c`, scanner `run_gate.sh` sha256 `e5521304…`, subtree `adaptation-kimi.md` sha256 `084a34cd…`):** `POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0`, then `STEP=PASS` (pass A = 47 endpoints from 41 strings, pass B = 56).
+271:POINTERS=102 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+357:| **C0** | none (unmodified copy) | **0** | `POINTERS=101 … UNRESOLVED=0` — the harness itself is not producing the reds |
+377:| **W0** | none (default `/tmp`) | **0** | `WORK_ROOT=/tmp (from default)`; `POINTERS=102 … UNRESOLVED=0`; `STEP=PASS` — the default path is unchanged |
+401:POINTERS=101 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0

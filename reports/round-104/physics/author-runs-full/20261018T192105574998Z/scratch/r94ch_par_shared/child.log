@@ -1,0 +1,3 @@
+M0 case=par_shared engine=cannon-es-0.20.0+three-0.186.1
+M par_shared shape_shared sameObject=true yBefore=0.499998,0.499998 yAfter=0.249998,0.249998 sharedRadius=0.25
+M DONE case=par_shared

@@ -1,0 +1,28 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Cannot get class 'JoltPhysicsServer3D'.
+   at: can_instantiate (core/object/class_db.cpp:850)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/r90_child.gd:271)
+M api cls JoltPhysicsServer3D exists=false can_inst=false meth=0
+ERROR: Cannot get class 'GodotPhysicsServer3D'.
+   at: can_instantiate (core/object/class_db.cpp:850)
+   GDScript backtrace (most recent call first):
+       [0] _initialize (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full/20261018T192105574998Z/scratch/r90_child.gd:271)
+M api cls GodotPhysicsServer3D exists=false can_inst=false meth=0
+M api cls PhysicsServer3DDummy exists=true can_inst=false meth=0
+M api cls PhysicsServer3D exists=true can_inst=false meth=175
+M api cls PhysicsDirectBodyState3D exists=true can_inst=false meth=50
+M api ps_joint_methods=32
+M api has joint_set_enabled=false
+M api has joint_get_enabled=false
+M api has joint_set_solver_velocity_iterations=false
+M api has joint_set_solver_position_iterations=false
+M api has pin_joint_get_applied_force=false
+M api has hinge_joint_get_jolt_flag=false
+M api has generic_6dof_joint_set_jolt_flag=false
+M api has joint_set_breakable=false
+M api has joint_make_hinge_simple=false
+M api callv_guarded=ABSENT
+M DONE case=api engine=Dummy
+M0 case=api engine=Dummy

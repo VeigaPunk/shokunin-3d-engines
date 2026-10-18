@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+WRITE mkdir_err=0
+WRITE append_err=0 nodes=2 meshes=1
+WRITE gen_bytes=2692
+WRITE write_glb_err=0
+WRITE file_bytes=2692 equal_to_gen=true head=676c544602000000840a0000c4050000
+WRITE reimport_err=0
+WRITESCENE WRoot:Node3D
+WRITESCENE   WBox:MeshInstance3D mesh=ArrayMesh tris=12
+WRITE write_gltf_err=0
+WRITE gltf_bytes=1500 head=7b226163636573736f7273223a5b7b22

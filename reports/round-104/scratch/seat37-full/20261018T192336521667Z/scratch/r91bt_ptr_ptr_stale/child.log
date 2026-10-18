@@ -1,0 +1,6 @@
+M0 case=ptr_stale engine=blender-5.2.1
+M ptr_stale reset mode=stale b_ok=True ts_b=1.0
+M ptr_stale pre_write alive=True
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+Writing: /tmp/blender.crash.txt
+timeout: the monitored command dumped core

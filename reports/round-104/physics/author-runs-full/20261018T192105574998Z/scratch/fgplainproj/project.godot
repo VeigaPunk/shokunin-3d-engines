@@ -1,0 +1,7 @@
+[application]
+
+config/name="FgPlain"
+
+[physics]
+
+common/physics_ticks_per_second=60

@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+NJ setup case=freeb jrid=true
+NJ t=8 a=-0.2196,1.9049,0.0 b=0.2196,1.6431,0.0 avb=0.0,0.0,0.0 jrid=true
+NJ freeing body B node
+NJ t=12 a=-0.2196,1.8022,0.0 b=gone avb=- jrid=true
+NJ t=30 a=-0.2196,0.815,0.0 b=gone avb=- jrid=true
+NJSUM case=freeb

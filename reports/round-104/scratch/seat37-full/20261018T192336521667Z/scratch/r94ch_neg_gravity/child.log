@@ -1,0 +1,2 @@
+M0 case=neg_gravity engine=cannon-es-0.20.0+three-0.186.1
+NEGATIVE REJECTED: r94_cannon neg-gravity g=-9.83 moves the hash 0e24fb5aca619253->bbd0b5e36f1bb4f2 ball.y=1.499983079

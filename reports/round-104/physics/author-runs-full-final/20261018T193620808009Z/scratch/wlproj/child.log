@@ -1,0 +1,40 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+ERROR: Body state is inaccessible right now, wait for iteration or physics process notification.
+   at: body_get_direct_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:952)
+   GDScript backtrace (most recent call first):
+       [0] _child_write_loss (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/author-runs-full-final/20261018T193620808009Z/scratch/phys3d_events.gd:4946)
+CHILD_NOTE wl_plain reps=8 refused=8 same_turn=8 landed=8 lost=0 rows=["0:T>true", "1:T>true", "2:T>true", "3:T>true", "4:T>true", "5:T>true", "6:T>true", "7:T>true"]
+CHILD_RESULT wl_plain_backend=DEFAULT
+CHILD_RESULT wl_plain_gate=refused
+CHILD_RESULT wl_plain_same_turn=8
+CHILD_RESULT wl_plain_landed=8
+CHILD_RESULT wl_plain_lost=0

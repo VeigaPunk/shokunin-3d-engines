@@ -1,0 +1,46 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freeb engine=DEFAULT
+M freeb t=1 b=0.0000,2.0000,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freeb t=2 b=0.0000,2.3000,0.0000 lv=0.0000,18.0000,0.0000 jtype=0
+M freeb t=3 b=0.0000,2.1480,0.0000 lv=0.0000,-0.0000,0.0000 jtype=0
+M freeb t=4 b=0.0000,2.1176,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freeb t=5 b=0.0000,2.1115,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freeb t=6 b=0.0000,2.1103,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freeb freed post jtype=0
+ERROR: Parameter "body" is null.
+   at: body_get_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:689)
+   GDScript backtrace (most recent call first):
+       [0] st (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:42)
+       [1] wit (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:66)
+       [2] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:82)
+       [3] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:22)
+ERROR: Parameter "body" is null.
+   at: body_get_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:689)
+   GDScript backtrace (most recent call first):
+       [0] st (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:42)
+       [1] wit (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:67)
+       [2] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:82)
+       [3] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:22)
+M freeb t=7 b=null lv=null jtype=0
+ERROR: Parameter "body" is null.
+   at: body_get_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:689)
+   GDScript backtrace (most recent call first):
+       [0] st (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:42)
+       [1] wit (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:66)
+       [2] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:82)
+       [3] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:22)
+ERROR: Parameter "body" is null.
+   at: body_get_state (modules/godot_physics_3d/godot_physics_server_3d.cpp:689)
+   GDScript backtrace (most recent call first):
+       [0] st (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:42)
+       [1] wit (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:67)
+       [2] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:82)
+       [3] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:22)
+M freeb t=8 b=null lv=null jtype=0
+M DONE case=freeb engine=DEFAULT
+ERROR: Invalid ID.
+   at: free_rid (modules/godot_physics_3d/godot_physics_server_3d.cpp:1662)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:197)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/conc/r90_child.gd:22)

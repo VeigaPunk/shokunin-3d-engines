@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: Condition "states.has(p_name)" is true.
+   at: add_node (scene/animation/animation_node_state_machine.cpp:1304)
+   GDScript backtrace (most recent call first):
+       [0] c_dupstate (res://r99b_silent.gd:175)
+       [1] _run (res://r99b_silent.gd:51)
+DS_DUP before=[&"End", &"Start", &"a"] after=[&"End", &"Start", &"a"] same_list=true
+DS_END ok=true
+SILENT_DONE case=dupstate

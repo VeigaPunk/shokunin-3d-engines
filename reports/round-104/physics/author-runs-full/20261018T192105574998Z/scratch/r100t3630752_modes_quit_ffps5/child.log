@@ -1,0 +1,30 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+BM_BOOT tps=60 ip=false maxfps=0 ts=1.000000 jit=0.500 cap=8 ds=true argz=2 userz=1
+BM_ARGV engine=--script|res://r100b_modes.gd user=--ticks=100000
+BM_WF n=1 wus=702
+BM_HEAD_BEGIN
+BM_PR n=1 pf=11 d=0.200000000 ifr=1.000000 ts=1.000000
+BM_PH n=1 pf=1 d=0.016666667 y=5.000000 vy=0.000000 ifr=1.000000
+BM_PH n=2 pf=2 d=0.016666667 y=4.997278 vy=-0.163333 ifr=1.000000
+BM_PH n=3 pf=3 d=0.016666667 y=4.991838 vy=-0.326394 ifr=1.000000
+BM_PH n=4 pf=4 d=0.016666667 y=4.983685 vy=-0.489184 ifr=1.000000
+BM_PH n=5 pf=5 d=0.016666667 y=4.972823 vy=-0.651702 ifr=1.000000
+BM_PH n=6 pf=6 d=0.016666667 y=4.959257 vy=-0.813949 ifr=1.000000
+BM_PH n=7 pf=7 d=0.016666667 y=4.942992 vy=-0.975926 ifr=1.000000
+BM_PH n=8 pf=8 d=0.016666667 y=4.924031 vy=-1.137632 ifr=1.000000
+BM_TAIL_BEGIN
+BM_PR n=1 pf=11 d=0.200000000 ifr=1.000000 ts=1.000000
+BM_PH n=4 pf=4 d=0.016666667 y=4.983685 vy=-0.489184 ifr=1.000000
+BM_PH n=5 pf=5 d=0.016666667 y=4.972823 vy=-0.651702 ifr=1.000000
+BM_PH n=6 pf=6 d=0.016666667 y=4.959257 vy=-0.813949 ifr=1.000000
+BM_PH n=7 pf=7 d=0.016666667 y=4.942992 vy=-0.975926 ifr=1.000000
+BM_PH n=8 pf=8 d=0.016666667 y=4.924031 vy=-1.137632 ifr=1.000000
+BM_PH n=9 pf=9 d=0.016666667 y=4.902380 vy=-1.299070 ifr=1.000000
+BM_PH n=10 pf=10 d=0.016666667 y=4.878043 vy=-1.460238 ifr=1.000000
+BM_PH n=11 pf=11 d=0.016666667 y=4.851024 vy=-1.621137 ifr=1.000000
+BM_TAIL_END
+BM_END n_pr=1 n_ph=11 pf=11 ff=1 fpt=[0:11] steps_max=11 traj=6950f4baa639eb8d
+BM_WALL n=1 min_us=702 med_us=702 max_us=702 hist=[0ms:1]
+BM_FPS real=1
+BM_TIME t=0

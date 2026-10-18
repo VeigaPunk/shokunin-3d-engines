@@ -1,0 +1,66 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=prio engine=Dummy
+PRE case=prio engine=Dummy threaded=false a_mon=true a_monable=true balls=1
+E pf=1 seq=1 t=1 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=1 seq=2 ovA=0/0
+E pf=2 seq=3 t=2 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=2 seq=4 ovA=0/0
+E pf=3 seq=5 t=3 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=3 seq=6 ovA=0/0
+E pf=4 seq=7 t=4 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=4 seq=8 ovA=0/0
+E pf=5 seq=9 t=5 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=5 seq=10 ovA=0/0
+E pf=6 seq=11 t=6 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=6 seq=12 ovA=0/0
+E pf=7 seq=13 t=7 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=7 seq=14 ovA=0/0
+E pf=8 seq=15 t=8 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=8 seq=16 ovA=0/0
+E pf=9 seq=17 t=9 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=9 seq=18 ovA=0/0
+E pf=10 seq=19 t=10 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=10 seq=20 ovA=0/0
+E pf=11 seq=21 t=11 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=11 seq=22 ovA=0/0
+ACT PRIO swap A=5 B=0 pf=12 seq=23
+E pf=12 seq=24 t=12 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=12 seq=25 ovA=0/0
+E pf=13 seq=26 t=13 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=13 seq=27 ovA=0/0
+E pf=14 seq=28 t=14 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=14 seq=29 ovA=0/0
+E pf=15 seq=30 t=15 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=15 seq=31 ovA=0/0
+E pf=16 seq=32 t=16 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=16 seq=33 ovA=0/0
+E pf=17 seq=34 t=17 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=17 seq=35 ovA=0/0
+E pf=18 seq=36 t=18 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=18 seq=37 ovA=0/0
+E pf=19 seq=38 t=19 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=19 seq=39 ovA=0/0
+E pf=20 seq=40 t=20 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=20 seq=41 ovA=0/0
+E pf=21 seq=42 t=21 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=21 seq=43 ovA=0/0
+E pf=22 seq=44 t=22 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=22 seq=45 ovA=0/0
+E pf=23 seq=46 t=23 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+F pf=23 seq=47 ovA=0/0
+E pf=24 seq=48 t=24 by=n/a ovA=0/0 ovB=0/0 ifc=0 monA=true monB=true
+DONE case=prio engine=Dummy nif=0 nsig=0 ne=24 nf=23 seq=48
+DONE_ALL case=prio seq=48
+M prio e1 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M prio e2 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M prio e3 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M prio e11 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M prio e12 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M prio e13 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M prio e23 by=n/a ovA=0/0 ovB=0/0 ifc=0
+M prio e24 by=n/a ovA=0/0 ovB=0/0 ifc=0
+# prio order 
+M prio facts swap_t=12 dby3=0.0000 dby11=0.0000 dby13=0.0000 dby14=0.0000
+M prio census in_step=0 no_if=0 post_e=0 pre_if=0 idle=0 other=0 teardown=0 nif=0 ne=24 nf=23 nsig=0
+M DONE case=prio

@@ -1,0 +1,5 @@
+M0 case=ms_mutate engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M ms_mutate margin-change margin 0.001->0.45 zBefore=0.499988605 zSameTick=0.499988605 1:z=0.499988605 2:z=0.499988605 5:z=0.499988605 30:z=0.499988605
+M ms_mutate gravity-change v0=-2.42374526 vAfter1Step=-2.42236221 vAfter2=-2.42098051
+M DONE case=ms_mutate
+# pybullet build time: Oct 15 2026 03:47:36

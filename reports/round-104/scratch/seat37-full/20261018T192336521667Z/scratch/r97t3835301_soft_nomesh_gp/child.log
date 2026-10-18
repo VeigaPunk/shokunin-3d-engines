@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+SB t=10 v4=0.0,0.0,0.0 v0=0.0,0.0,0.0 pinned=false,false ball=-
+SB t=30 v4=0.0,0.0,0.0 v0=0.0,0.0,0.0 pinned=false,false ball=-
+SB t=60 v4=0.0,0.0,0.0 v0=0.0,0.0,0.0 pinned=false,false ball=-
+SB t=120 v4=0.0,0.0,0.0 v0=0.0,0.0,0.0 pinned=false,false ball=-
+SBSUM case=nomesh

@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE pq_jolt pure=6/6 prec=1,0,1 fresh=3
+CHILD_RESULT pq_jolt_backend=Jolt Physics
+CHILD_RESULT pq_jolt_pure=6/6
+CHILD_RESULT pq_jolt_prec=1,0,1
+CHILD_RESULT pq_jolt_fresh=3/3

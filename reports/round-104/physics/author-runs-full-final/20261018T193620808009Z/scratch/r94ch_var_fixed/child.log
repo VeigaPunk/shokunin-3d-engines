@@ -1,0 +1,5 @@
+M0 case=var_fixed engine=cannon-es-0.20.0+three-0.186.1
+M var_fixed fixed stepnumber=240 time=4.000000000 ball.y=1.499985072545
+M var_fixed interp interpPos=0.000000,5.000000,0.000000 pos=0.001539,1.499985,0.002550 eq=false
+M var_fixed interpQ prevPos=1.499985 interpQuat=0000000000000000000000000000000000000000000000003ff0000000000000 quat=bf6fb53159d64eadbea7a2d6e869c6033f64dfa14688e7c13fefffe97b9d0b4f qeq=false
+M DONE case=var_fixed

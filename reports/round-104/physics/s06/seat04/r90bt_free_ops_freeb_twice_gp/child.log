@@ -1,0 +1,48 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freeb_twice engine=DEFAULT
+M freeb_twice free1 done
+ERROR: Invalid ID.
+   at: free_rid (modules/godot_physics_3d/godot_physics_server_3d.cpp:1662)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/seat04/r90_child.gd:137)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/seat04/r90_child.gd:22)
+M freeb_twice free2 done
+M DONE case=freeb_twice engine=DEFAULT
+
+================================================================
+handle_crash: Program crashed with signal 11
+Engine version: Godot Engine v4.7.2.stable.arch_linux (ed1daf0bf001b61586d9930840f2f1394092c079)
+Dumping the backtrace. Please include this when reporting the bug on: https://github.com/godotengine/godot/issues
+Load address: 559c80168000
+
+[1] 7fa17ea3e6f0 (libc.so.6+3e6f0) - /usr/lib/libc.so.6(+0x3e6f0) [0x7fa17ea3e6f0]
+[2] 559c81ed2919 (main+1d6a919) - /usr/bin/godot(+0x1d6a919) [0x559c81ed2919]
+[3] 559c81ee20c2 (main+1d7a0c2) - /usr/bin/godot(+0x1d7a0c2) [0x559c81ee20c2]
+[4] 559c81eafc85 (main+1d47c85) - /usr/bin/godot(+0x1d47c85) [0x559c81eafc85]
+[5] 559c8612283f (main+5fba83f) - /usr/bin/godot(+0x5fba83f) [0x559c8612283f]
+[6] 559c81f78b83 (main+1e10b83) - /usr/bin/godot(+0x1e10b83) [0x559c81f78b83]
+[7] 559c81aa8dd9 (main+1940dd9) - /usr/bin/godot(+0x1940dd9) [0x559c81aa8dd9]
+[8] 559c81931106 (main+17c9106) - /usr/bin/godot(+0x17c9106) [0x559c81931106]
+[9] 559c869bbe9e (main+6853e9e) - /usr/bin/godot(+0x6853e9e) [0x559c869bbe9e]
+[10] 559c866894ca (main+65214ca) - /usr/bin/godot(+0x65214ca) [0x559c866894ca]
+[11] 559c81abe8af (main+19568af) - /usr/bin/godot(+0x19568af) [0x559c81abe8af]
+[12] 559c81931106 (main+17c9106) - /usr/bin/godot(+0x17c9106) [0x559c81931106]
+[13] 559c8423d40d (main+40d540d) - /usr/bin/godot(+0x40d540d) [0x559c8423d40d]
+[14] 559c869c1927 (main+6859927) - /usr/bin/godot(+0x6859927) [0x559c869c1927]
+[15] 559c842b8031 (main+4150031) - /usr/bin/godot(+0x4150031) [0x559c842b8031]
+[16] 559c842b993b (main+415193b) - /usr/bin/godot(+0x415193b) [0x559c842b993b]
+[17] 559c842abf33 (main+4143f33) - /usr/bin/godot(+0x4143f33) [0x559c842abf33]
+[18] 559c81352278 (main+11ea278) - /usr/bin/godot(+0x11ea278) [0x559c81352278]
+[19] 559c811c4062 (main+105c062) - /usr/bin/godot(+0x105c062) [0x559c811c4062]
+[20] 7fa17ea27781 (libc.so.6+27781) - /usr/lib/libc.so.6(+0x27781) [0x7fa17ea27781]
+[21] 7fa17ea278b9 (libc.so.6+278b9) - /usr/lib/libc.so.6(__libc_start_main+0x89) [0x7fa17ea278b9]
+[22] 559c812386d5 (main+10d06d5) - /usr/bin/godot(+0x10d06d5) [0x559c812386d5]
+-- END OF C++ BACKTRACE --
+================================================================
+GDScript backtrace (most recent call first):
+    [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/seat04/r90_child.gd:197)
+    [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/s06/seat04/r90_child.gd:22)
+-- END OF GDSCRIPT BACKTRACE --
+================================================================
+timeout: the monitored command dumped core

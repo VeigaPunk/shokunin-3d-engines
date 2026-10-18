@@ -1,0 +1,4 @@
+M0 case=det_rebuild engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_rebuild rebuild h1=02309c52da41ef33 h2=02309c52da41ef33 eq=True ids1=0,1,2,3,4 ids2=0,1,2,3,4
+M DONE case=det_rebuild
+# pybullet build time: Oct 15 2026 03:47:36

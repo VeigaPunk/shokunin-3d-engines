@@ -1,0 +1,5 @@
+M0 case=ms_contacts engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M ms_contacts contact-rest s10:cc=0,z=0.990628909 s60:cc=0,z=0.690268416 s120:cc=1,z=0.49999 s300:cc=1,z=0.49999 s480:cc=1,z=0.49999 s720:cc=1,z=0.49999 s1000:cc=1,z=0.49999 s1400:cc=1,z=0.49999
+M ms_contacts contact-order pairs=0-1,0-1,0-1,0-1,0-2,0-2,0-2,0-2,0-3,0-3,0-3,0-3 cc=12
+M DONE case=ms_contacts
+# pybullet build time: Oct 15 2026 03:47:36

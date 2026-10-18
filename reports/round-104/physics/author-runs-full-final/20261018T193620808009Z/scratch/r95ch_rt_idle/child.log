@@ -1,0 +1,4 @@
+M0 case=rt_idle engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M rt_idle rt-idle flag=1 z0=5 z_after_0.6s_idle=5 z_after_120_api_calls=5
+M DONE case=rt_idle
+# pybullet build time: Oct 15 2026 03:47:36

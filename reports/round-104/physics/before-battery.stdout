@@ -1,0 +1,6 @@
+FAIL phys3d_joints_free_ops: exit=None expected=0 reasons=['TIMEOUT after 20 seconds', 'no exit code (process killed or timed out)', 'exact stdout marker missing']
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+FAIL     phys3d_joints_free_ops             phys3d_joints.gd           --arm=free_ops     None/0    ordinary
+totals: cases=1 pass=0 fail=1 ordinary=1 negative_controls=0 probes=0
+FAIL battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-104/physics/runs/20261018T191620117114Z/verdicts.json

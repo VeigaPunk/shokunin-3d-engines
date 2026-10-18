@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+LF_BOOT case=err
+LF_ERR_PRE pf=3
+SCRIPT ERROR: Invalid call. Nonexistent function 'no_such_method_at_all' in base 'RigidBody3D'.
+          at: _physics_process (res://r100b_life.gd:68)
+          GDScript backtrace (most recent call first):
+              [0] _physics_process (res://r100b_life.gd:68)
+LF_ERR_END pf=6
+LF_END case=err n_e=6 n_f=6

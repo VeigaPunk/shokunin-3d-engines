@@ -1,0 +1,5 @@
+M0 case=det_order_swap engine=cannon-es-0.20.0+three-0.186.1
+M det_order_swap order forward=0e24fb5aca619253 reverse=0e24fb5aca619253 eq=true
+M det_order_swap fwd y@1=4.997272 y@30=3.733635 y@60=1.561085 y@120=1.499985 y@240=1.499985
+M det_order_swap rev y@1=4.997272 y@30=3.733635 y@60=1.561085 y@120=1.499985 y@240=1.499985
+M DONE case=det_order_swap

@@ -1,0 +1,5 @@
+M0 case=sv_tps engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M sv_tps tps 1/60:h=b7fd8f6b58763ddb 1/120:h=d3a2bd84a2a6d25f 1/240:h=02309c52da41ef33 1/480:h=0282277d82fd76ff 1/1000:h=4a1d38fd622019aa
+M sv_tps substep-equiv dt480x960:h=0282277d82fd76ff nsub2x480:h=0282277d82fd76ff eq=True
+M DONE case=sv_tps
+# pybullet build time: Oct 15 2026 03:47:36

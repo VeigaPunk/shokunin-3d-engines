@@ -1,0 +1,13 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: glTF: Error parsing .gltf JSON data: Expected 'true', 'false', or 'null', got 'XXXX' at line: 0
+   at: _parse (modules/gltf/gltf_document.cpp:6696)
+   GDScript backtrace (most recent call first):
+       [0] _file (res://r98b_mode.gd:62)
+       [1] _run (res://r98b_mode.gd:20)
+ERROR: Condition "err != OK" is true. Returning: err
+   at: append_from_file (modules/gltf/gltf_document.cpp:7355)
+   GDScript backtrace (most recent call first):
+       [0] _file (res://r98b_mode.gd:62)
+       [1] _run (res://r98b_mode.gd:20)
+MODE res://assets/badmagic_badjson.glb append_err=43

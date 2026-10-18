@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=detachb engine=Dummy
+M detachb t=1 b=null lv=null jtype=0
+M detachb t=2 b=null lv=null jtype=0
+M detachb t=3 b=null lv=null jtype=0
+M detachb t=4 b=null lv=null jtype=0
+M detachb t=5 b=null lv=null jtype=0
+M detachb detached jtype=0
+M detachb t=6 b=null lv=null jtype=0
+M detachb t=7 b=null lv=null jtype=0
+M detachb t=8 b=null lv=null jtype=0
+M detachb t=9 b=null lv=null jtype=0
+M detachb reattached jtype=0
+M detachb t=10 b=null lv=null jtype=0
+M detachb t=11 b=null lv=null jtype=0
+M detachb t=12 b=null lv=null jtype=0
+M DONE case=detachb engine=Dummy

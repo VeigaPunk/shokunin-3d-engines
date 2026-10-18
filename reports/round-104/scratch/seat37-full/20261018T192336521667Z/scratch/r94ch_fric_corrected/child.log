@@ -1,0 +1,10 @@
+M0 case=fric_corrected engine=cannon-es-0.20.0+three-0.186.1
+M fric_corrected s0 base_mu0.3_m1_v5 slideX=0.279647 vx=0.000000 fricEqMax=2 a=44.699 aOverMuG=15.173
+M fric_corrected s1 m0.25 slideX=0.279647 vx=0.000000 fricEqMax=2 a=44.699 aOverMuG=15.173
+M fric_corrected s2 m2 slideX=0.279649 vx=0.000000 fricEqMax=2 a=44.699 aOverMuG=15.173
+M fric_corrected s3 m10 slideX=0.279658 vx=0.000000 fricEqMax=2 a=44.697 aOverMuG=15.172
+M fric_corrected s4 mu0.05 slideX=8.337526 vx=0.000000 fricEqMax=2 a=1.499 aOverMuG=3.053
+M fric_corrected s5 mu0.9 slideX=0.090271 vx=0.000000 fricEqMax=2 a=138.471 aOverMuG=15.668
+M fric_corrected s6 v0_1 slideX=0.018759 vx=0.000000 fricEqMax=2 a=26.654 aOverMuG=9.048
+M fric_corrected s7 v0_20 slideX=3.930294 vx=0.000000 fricEqMax=2 a=50.887 aOverMuG=17.273
+M DONE case=fric_corrected

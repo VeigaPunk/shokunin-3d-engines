@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE ss_plain pre=0.0010000000475/zero/0.0 off=0 on=4 post=0.0166666675359/0.10000000149012 stale=4,0
+CHILD_RESULT ss_plain_backend=DEFAULT
+CHILD_RESULT ss_plain_step_pre=0.0010000000475
+CHILD_RESULT ss_plain_grav_pre=zero
+CHILD_RESULT ss_plain_damp_pre=0.0
+CHILD_RESULT ss_plain_step_post=0.0166666675359
+CHILD_RESULT ss_plain_damp_post=0.10000000149012
+CHILD_RESULT ss_plain_cc_off=0
+CHILD_RESULT ss_plain_cc_on=4
+CHILD_RESULT ss_plain_last_step=4,0

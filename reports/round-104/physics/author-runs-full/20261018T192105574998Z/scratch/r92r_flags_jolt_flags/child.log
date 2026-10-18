@@ -1,0 +1,15 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=flags engine=Jolt Physics
+M flags g111 pos=true rot=true scl=true glob=true O=(2.0000,1.0000,-3.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M flags g011 pos=false rot=true scl=true glob=true O=(0.0000,0.0000,0.0000) X=(-0.0000,0.0000,-3.0000) S=(3.0000,3.0000,3.0000)
+M flags g101 pos=true rot=false scl=true glob=true O=(2.0000,1.0000,-3.0000) X=(3.0000,0.0000,0.0000) S=(3.0000,3.0000,3.0000)
+M flags g110 pos=true rot=true scl=false glob=true O=(2.0000,1.0000,-3.0000) X=(-0.0000,0.0000,-1.0000) S=(1.0000,1.0000,1.0000)
+M flags g001 pos=false rot=false scl=true glob=true O=(0.0000,0.0000,0.0000) X=(3.0000,0.0000,0.0000) S=(3.0000,3.0000,3.0000)
+M flags g010 pos=false rot=true scl=false glob=true O=(0.0000,0.0000,0.0000) X=(-0.0000,0.0000,-1.0000) S=(1.0000,1.0000,1.0000)
+M flags g100 pos=true rot=false scl=false glob=true O=(2.0000,1.0000,-3.0000) X=(1.0000,0.0000,0.0000) S=(1.0000,1.0000,1.0000)
+M flags g000 pos=false rot=false scl=false glob=true O=(0.0000,0.0000,0.0000) X=(1.0000,0.0000,0.0000) S=(1.0000,1.0000,1.0000)
+M flags l111 pos=true rot=true scl=true glob=false O=(1.0000,2.0000,3.0000) X=(4.0000,0.0000,0.0000) S=(4.0000,4.0000,4.0000) src_glob=O=(11.0000,2.0000,3.0000) X=(4.0000,0.0000,0.0000) S=(4.0000,4.0000,4.0000)
+M flags l100 pos=true rot=false scl=false glob=false O=(1.0000,2.0000,3.0000) X=(1.0000,0.0000,0.0000) S=(1.0000,1.0000,1.0000) src_glob=O=(11.0000,2.0000,3.0000) X=(4.0000,0.0000,0.0000) S=(4.0000,4.0000,4.0000)
+M flags l000 pos=false rot=false scl=false glob=false O=(0.0000,0.0000,0.0000) X=(1.0000,0.0000,0.0000) S=(1.0000,1.0000,1.0000) src_glob=O=(11.0000,2.0000,3.0000) X=(4.0000,0.0000,0.0000) S=(4.0000,4.0000,4.0000)
+M DONE case=flags

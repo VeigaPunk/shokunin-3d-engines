@@ -1,0 +1,12 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+CHILD_NOTE ss_jolt pre=0.0/real/0.10000000149012 off=0 on=4 post=0.0166666675359/0.10000000149012 stale=4,0
+CHILD_RESULT ss_jolt_backend=Jolt Physics
+CHILD_RESULT ss_jolt_step_pre=0.0
+CHILD_RESULT ss_jolt_grav_pre=real
+CHILD_RESULT ss_jolt_damp_pre=0.10000000149012
+CHILD_RESULT ss_jolt_step_post=0.0166666675359
+CHILD_RESULT ss_jolt_damp_post=0.10000000149012
+CHILD_RESULT ss_jolt_cc_off=0
+CHILD_RESULT ss_jolt_cc_on=4
+CHILD_RESULT ss_jolt_last_step=4,0

@@ -1,0 +1,36 @@
+M0 case=mat_all engine=cannon-es-0.20.0+three-0.186.1
+M mat_all no_material slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=none apex=0.520553278 bounces=0
+M mat_all no_material_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all mat_defaults slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=none apex=0.520553278 bounces=0
+M mat_all mat_defaults_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all mat_pair_05 slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=none apex=0.520553278 bounces=0
+M mat_all mat_pair_05_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all mat_one_sided slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=none apex=0.520553278 bounces=0
+M mat_all mat_one_sided_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all mat_pair_rest05 slideX=1.107635797 slideVx=-0.000080369 fricEqMax=8 defaultCm=f0.3/r0 pairCm=none apex=0.751545694 bounces=1
+M mat_all mat_pair_rest05_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all cm_pair_09 slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=f0.9/r0 apex=0.520553278 bounces=0
+M mat_all cm_pair_09_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all cm_pair_09_rev slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=f0.9/r0 apex=0.520553278 bounces=0
+M mat_all cm_pair_09_rev_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all cm_pair_rest09 slideX=1.134735883 slideVx=-0.000130707 fricEqMax=8 defaultCm=f0.3/r0 pairCm=f0.3/r0.9 apex=2.728244191 bounces=1
+M mat_all cm_pair_rest09_fr slideX=0.104141371 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all cm_and_mat_fric slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=f0.9/r0 apex=0.520553278 bounces=0
+M mat_all cm_and_mat_fric_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all cm_and_mat_rest slideX=1.107635797 slideVx=-0.000080369 fricEqMax=8 defaultCm=f0.3/r0 pairCm=f0.3/r0.9 apex=0.751545694 bounces=1
+M mat_all cm_and_mat_rest_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all cm_rest_one_sided slideX=1.134735883 slideVx=-0.000130707 fricEqMax=8 defaultCm=f0.3/r0 pairCm=f0.3/r0.9 apex=2.728244191 bounces=1
+M mat_all cm_rest_one_sided_fr slideX=0.104141371 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all default_cm_rest06 slideX=1.134942138 slideVx=-0.000079003 fricEqMax=8 defaultCm=f0.3/r0.6 pairCm=none apex=1.594171507 bounces=1
+M mat_all default_cm_rest06_fr slideX=0.096668344 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all fric_zero slideX=14.777510652 slideVx=4.854406205 fricEqMax=0 defaultCm=f0.3/r0 pairCm=none apex=0.520553278 bounces=0
+M mat_all fric_zero_fr slideX=14.774885616 vx=4.851495000 profile=15:4.9875 30:4.9749 60:4.9500 120:4.9005
+M mat_all shape_material slideX=1.087853297 slideVx=-0.000080018 fricEqMax=8 defaultCm=f0.3/r0 pairCm=none apex=0.520553278 bounces=0
+M mat_all shape_material_fr slideX=0.090261397 vx=0.000000000 profile=15:0.0000 30:0.0000 60:0.0000 120:0.0000
+M mat_all friction_gravity slideX=14.774885616 slideVx=4.851495000 fricEqMax=0 defaultCm=f0.3/r0 pairCm=none apex=-1.000000000 bounces=0
+M mat_all friction_gravity_fr slideX=14.774885616 vx=4.851495000 profile=15:4.9875 30:4.9749 60:4.9500 120:4.9005
+M mat_all sum_slideX no_material:1.087853 mat_defaults:1.087853 mat_pair_05:1.087853 mat_one_sided:1.087853 mat_pair_rest05:1.107636 cm_pair_09:1.087853 cm_pair_09_rev:1.087853 cm_pair_rest09:1.134736 cm_and_mat_fric:1.087853 cm_and_mat_rest:1.107636 cm_rest_one_sided:1.134736 default_cm_rest06:1.134942 fric_zero:14.777511 shape_material:1.087853 friction_gravity:14.774886
+M mat_all sum_fixedRotX no_material:0.090261 mat_defaults:0.090261 mat_pair_05:0.090261 mat_one_sided:0.090261 mat_pair_rest05:0.090261 cm_pair_09:0.090261 cm_pair_09_rev:0.090261 cm_pair_rest09:0.104141 cm_and_mat_fric:0.090261 cm_and_mat_rest:0.090261 cm_rest_one_sided:0.104141 default_cm_rest06:0.096668 fric_zero:14.774886 shape_material:0.090261 friction_gravity:14.774886
+M mat_all sum_apex no_material:0.520553 mat_defaults:0.520553 mat_pair_05:0.520553 mat_one_sided:0.520553 mat_pair_rest05:0.751546 cm_pair_09:0.520553 cm_pair_09_rev:0.520553 cm_pair_rest09:2.728244 cm_and_mat_fric:0.520553 cm_and_mat_rest:0.751546 cm_rest_one_sided:2.728244 default_cm_rest06:1.594172 fric_zero:0.520553 shape_material:0.520553 friction_gravity:-1.000000
+M mat_all sum_fricEqMax no_material:8.000000 mat_defaults:8.000000 mat_pair_05:8.000000 mat_one_sided:8.000000 mat_pair_rest05:8.000000 cm_pair_09:8.000000 cm_pair_09_rev:8.000000 cm_pair_rest09:8.000000 cm_and_mat_fric:8.000000 cm_and_mat_rest:8.000000 cm_rest_one_sided:8.000000 default_cm_rest06:8.000000 fric_zero:0.000000 shape_material:8.000000 friction_gravity:0.000000
+M DONE case=mat_all

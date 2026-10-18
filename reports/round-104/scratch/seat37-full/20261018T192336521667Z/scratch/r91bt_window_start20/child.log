@@ -1,0 +1,8 @@
+M0 case=start20 engine=blender-5.2.1
+M start20 setup pc_fs=20 pc_fe=250 scene_fs=1 scene_fe=60
+M start20 head20 f20=(0.000000,0.000000,5.000000)
+M start20 tail f21=(0.000000,0.000000,4.990638) f25=(0.000000,0.000000,4.783453) f30=(0.000000,0.000000,4.144729) f40=(0.000000,0.000000,1.615016) frozen=False h=3a72772535e85419
+M DONE case=start20
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

@@ -1,0 +1,49 @@
+M0 case=presweep20 engine=blender-5.2.1
+M presweep20 pre info=40 frames in memory (7 KiB). pc_fe=20
+M presweep20 before pc_fs=1 pc_fe=20 scene_fs=1 scene_fe=60 info=40 frames in memory (7 KiB).
+M presweep20 after baked=True info=40 frames in memory (7 KiB). outdated=False
+M presweep20 read f20=(0.000000,0.000000,1.942529) f40=(0.000000,0.000000,1.942529) h=cfb45aff07e749b5
+M DONE case=presweep20
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+bake: frame 1 :: 40
+bake: frame 2 :: 40
+bake: frame 3 :: 40
+bake: frame 4 :: 40
+bake: frame 5 :: 40
+bake: frame 6 :: 40
+bake: frame 7 :: 40
+bake: frame 8 :: 40
+bake: frame 9 :: 40
+bake: frame 10 :: 40
+bake: frame 11 :: 40
+bake: frame 12 :: 40
+bake: frame 13 :: 40
+bake: frame 14 :: 40
+bake: frame 15 :: 40
+bake: frame 16 :: 40
+bake: frame 17 :: 40
+bake: frame 18 :: 40
+bake: frame 19 :: 40
+bake: frame 20 :: 40
+bake: frame 21 :: 40
+bake: frame 22 :: 40
+bake: frame 23 :: 40
+bake: frame 24 :: 40
+bake: frame 25 :: 40
+bake: frame 26 :: 40
+bake: frame 27 :: 40
+bake: frame 28 :: 40
+bake: frame 29 :: 40
+bake: frame 30 :: 40
+bake: frame 31 :: 40
+bake: frame 32 :: 40
+bake: frame 33 :: 40
+bake: frame 34 :: 40
+bake: frame 35 :: 40
+bake: frame 36 :: 40
+bake: frame 37 :: 40
+bake: frame 38 :: 40
+bake: frame 39 :: 40
+bake: frame 40 :: 40
+
+Blender quit

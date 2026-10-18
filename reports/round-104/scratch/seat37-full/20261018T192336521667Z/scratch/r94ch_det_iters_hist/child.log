@@ -1,0 +1,5 @@
+M0 case=det_iters_hist engine=cannon-es-0.20.0+three-0.186.1
+M det_iters_hist tol0 tol=1e-7 steps=240 mean=4.125 hist=0x141,10x99
+M det_iters_hist tol1 tol=0.001 steps=240 mean=3.521 hist=0x141,5x2,6x4,7x19,8x30,9x2,10x42
+M det_iters_hist tol2 tol=0 steps=240 mean=4.125 hist=0x141,10x99
+M DONE case=det_iters_hist

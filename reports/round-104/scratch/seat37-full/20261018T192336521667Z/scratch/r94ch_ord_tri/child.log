@@ -1,0 +1,6 @@
+M0 case=ord_tri engine=cannon-es-0.20.0+three-0.186.1
+M ord_tri forward h=f1a92e83a9cbee79 ph=eb46ab050f7d64b4
+M ord_tri reverse h=a8ad93a17b3fc7f4 ph=765c9ac6669b44da
+M ord_tri eq h=false ph=false contacts=30:n=4/8 60:n=6/12 120:n=2/4 240:n=1/2
+M ord_tri solver rows=240/240 rawSame=false sortedSame=false
+M DONE case=ord_tri

@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+DOC res://assets/tri.gltf append_err=0
+DOC res://assets/tri.gltf state nodes=2 meshes=1 anims=0 skel=0
+DOCSCENE root=TriScene:Node3D pos=(0.0, 0.0, 0.0)
+DOCSCENE TREE TriScene:Node3D
+DOCSCENE TREE   RootNode:Node3D
+DOCSCENE TREE     TriMesh:MeshInstance3D mesh=ArrayMesh tris=1

@@ -1,0 +1,8 @@
+M0 case=nan_dt engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M nan_dt neg-dt set=ok z=5 v=0 nan=False inf=False where=none
+M nan_dt zero-dt set=ok z=5 v=0 nan=False inf=False where=none
+M nan_dt nan-dt set=ok z=nan nan=True inf=False where=0.p+0.q+1.p+1.q
+M nan_dt inf-dt set=ok z=nan nan=True inf=False where=0.p+0.q+0.v+0.w+1.p+1.q+1.v+1.w
+M nan_dt numsubsteps-neg set=ok z=4.69026842 h=ae21935ec081b2e4
+M DONE case=nan_dt
+# pybullet build time: Oct 15 2026 03:47:36

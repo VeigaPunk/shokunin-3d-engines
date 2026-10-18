@@ -1,0 +1,4 @@
+M0 case=det_sap engine=cannon-es-0.20.0+three-0.186.1
+M det_sap broadphase naive=0e24fb5aca619253 sap=0b0f249979097645 eq=false
+M det_sap axis axis0=0b0f249979097645 axis1=0b0f249979097645 axis2=0b0f249979097645 eqSap=true
+M DONE case=det_sap

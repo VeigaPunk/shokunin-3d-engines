@@ -1,0 +1,7 @@
+M0 case=det_contacts_rev engine=cannon-es-0.20.0+three-0.186.1
+M det_contacts_rev s0 step=60 n=8 fric=16 0-4/0-7 0-4/0-7 0-4/0-7 0-4/0-7 0-3/0-5 0-3/0-5 0-3/0-5 0-3/0-5
+M det_contacts_rev s1 step=61 n=8 fric=16 0-4/0-7 0-4/0-7 0-4/0-7 0-4/0-7 0-3/0-5 0-3/0-5 0-3/0-5 0-3/0-5
+M det_contacts_rev s2 step=62 n=8 fric=16 0-4/0-7 0-4/0-7 0-4/0-7 0-4/0-7 0-3/0-5 0-3/0-5 0-3/0-5 0-3/0-5
+M det_contacts_rev s3 step=120 n=5 fric=10 0-2/0-3 0-2/0-3 0-2/0-3 0-2/0-3 1-4/2-7
+M det_contacts_rev max order=reverse maxN=13 rows=4
+M DONE case=det_contacts_rev

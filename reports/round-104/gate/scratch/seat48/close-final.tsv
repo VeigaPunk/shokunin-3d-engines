@@ -1,0 +1,7 @@
+run	sha12	harness_sha12	tmp_avail	rc	verdict	steps	pointers	unresolved	secs
+1	e55213049db7	1aeec7000878	3.2G	0	PASS (checks failed: 0)	4/0	103	0	1.13
+2	e55213049db7	1aeec7000878	3.2G	0	PASS (checks failed: 0)	4/0	103	0	1.41
+3	e55213049db7	1aeec7000878	3.2G	0	PASS (checks failed: 0)	4/0	103	0	1.27
+4	e55213049db7	1aeec7000878	3.2G	0	PASS (checks failed: 0)	4/0	103	0	1.03
+5	e55213049db7	1aeec7000878	3.1G	2	BLOCKED (checks failed: 0; CHECK 2 could not run)	3/1	103	0	0.90
+6	e55213049db7	1aeec7000878	3.1G	0	PASS (checks failed: 0)	4/0	103	0	1.35

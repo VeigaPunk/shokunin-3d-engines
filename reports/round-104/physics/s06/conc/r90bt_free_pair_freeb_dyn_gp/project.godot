@@ -1,0 +1,7 @@
+[application]
+
+config/name="r90bt_free_pair_freeb_dyn_gp"
+
+[physics]
+
+common/physics_ticks_per_second=60

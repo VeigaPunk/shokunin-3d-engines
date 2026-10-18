@@ -1,0 +1,9 @@
+M0 case=partial engine=blender-5.2.1
+M partial head20 f20=(0.000000,0.000000,1.942529) h=c3af015e07cdf24e
+M partial mutate ts=0.25 outdated=True
+M partial tail f21=(0.000000,0.000000,1.862350) f25=(0.000000,0.000000,1.531338) f30=(0.000000,0.000000,1.094436) f40=(0.009188,-0.000000,0.504694) h=393edd37abcaef22
+M partial head_reread eq_head=False f20=(0.000000,0.000000,4.807371)
+M DONE case=partial
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

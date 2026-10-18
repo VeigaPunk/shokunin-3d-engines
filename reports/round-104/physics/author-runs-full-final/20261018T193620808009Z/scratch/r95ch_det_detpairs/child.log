@@ -1,0 +1,4 @@
+M0 case=det_detpairs engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M det_detpairs detpairs scene=5body d0:h=02309c52da41ef33 d1:h=02309c52da41ef33 eq=True
+M DONE case=det_detpairs
+# pybullet build time: Oct 15 2026 03:47:36

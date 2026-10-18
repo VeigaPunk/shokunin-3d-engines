@@ -1,0 +1,23 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+ERROR: glTF: Binary file not found: res://assets/res://assets/ext.bin
+   at: _parse_buffers (modules/gltf/gltf_document.cpp:787)
+   GDScript backtrace (most recent call first):
+       [0] _file (res://r98b_mode.gd:62)
+       [1] _run (res://r98b_mode.gd:23)
+ERROR: Condition "err != OK" is true. Returning: ERR_PARSE_ERROR
+   at: _parse_gltf_state (modules/gltf/gltf_document.cpp:7111)
+   GDScript backtrace (most recent call first):
+       [0] _file (res://r98b_mode.gd:62)
+       [1] _run (res://r98b_mode.gd:23)
+ERROR: Condition "err != OK" is true. Returning: err
+   at: _parse (modules/gltf/gltf_document.cpp:6717)
+   GDScript backtrace (most recent call first):
+       [0] _file (res://r98b_mode.gd:62)
+       [1] _run (res://r98b_mode.gd:23)
+ERROR: Condition "err != OK" is true. Returning: err
+   at: append_from_file (modules/gltf/gltf_document.cpp:7355)
+   GDScript backtrace (most recent call first):
+       [0] _file (res://r98b_mode.gd:62)
+       [1] _run (res://r98b_mode.gd:23)
+MODE res://assets/ext_resuri.gltf append_err=43

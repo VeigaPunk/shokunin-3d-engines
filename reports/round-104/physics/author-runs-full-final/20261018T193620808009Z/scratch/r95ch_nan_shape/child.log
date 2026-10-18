@@ -1,0 +1,20 @@
+M0 case=nan_shape engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M nan_shape zero-box z=-1.58273451 nan=False inf=False where=none contacts=0
+M nan_shape neg-box z=-1.58273451 nan=False inf=False where=none contacts=0
+M nan_shape inf-radius accepted=True
+M nan_shape nan-halfextents accepted=True
+M nan_shape coincident i0 cc=1 n=[1,0,0/d=-1] sep=0.0799992 aX=0.0399996 bX=-0.0399996
+M nan_shape coincident i1 cc=1 n=[1,0,0/d=-0.9200008] sep=0.159857069 aX=0.0799285347 bX=-0.0799285347
+M nan_shape coincident i5 cc=1 n=[1,0,0/d=-0.601412564] sep=0.477884713 aX=0.238942356 bX=-0.238942356
+M nan_shape coincident i30 cc=0 n=[] sep=2.41632072 aX=1.20816036 bX=-1.20816036
+M nan_shape coincident i120 cc=0 n=[] sep=8.77316007 aX=4.38658004 bX=-4.38658004
+M nan_shape coincG i0 sep=0.0799992 a=(0.0399996,0,2.99982951) b=(-0.0399996,0,2.99982951)
+M nan_shape coincG i1 sep=0.159857068 a=(0.0799285341,0,2.99948884) b=(-0.0799285341,0,2.99948884)
+M nan_shape coincG i10 sep=0.87229429 a=(0.436147145,0,2.98881347) b=(-0.436147145,0,2.98881347)
+M nan_shape coincG i60 sep=4.63605714 a=(2.31802857,0,2.68832481) b=(-2.31802857,0,2.68832481)
+M nan_shape coincG i240 sep=14.9745787 a=(7.48728934,-1.64613705e-15,0.49999) b=(-7.48728934,-2.85634668e-15,0.49999)
+M nan_shape teleport-into-ground zBefore=0.49999 1:z=0.2239992,v=5.759808 2:z=0.247800876,v=5.71240213 3:z=0.271405437,v=5.66509481 5:z=0.318024842,v=5.57077199 10:z=0.431151846,v=5.33662363 20:z=0.642903637,v=4.87504988 60:z=1.30258519,v=3.10316239
+M nan_shape ccd-off z=0.110300828
+M nan_shape ccd-on z=0.110300828
+M DONE case=nan_shape
+# pybullet build time: Oct 15 2026 03:47:36

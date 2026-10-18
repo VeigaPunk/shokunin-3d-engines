@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=srv engine=Dummy
+M srv s0 node_o=(0.0000,0.0000,0.0000) srv_o=null
+M srv s1_imm node_o=(0.0000,0.0000,0.0000) srv_o=null
+M srv s2_afterphys node_o=(5.0000,0.0000,0.0000) srv_o=null ray=miss
+M srv s3_afteridle node_o=(5.0000,0.0000,0.0000) srv_o=null
+M DONE case=srv

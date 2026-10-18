@@ -1,0 +1,8 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=animatable engine=Jolt Physics
+M animatable pre sync=true ab=(0.0000,2.0000,0.0000) srv=(0.0000,2.0000,0.0000) rider=(0.0000,3.0000,0.0000)
+M animatable post sync=true ab=(0.5000,2.0000,0.0000) srv=(0.5000,2.0000,0.0000) rider=(0.0407,3.0000,0.0000) ray=hit@0.500,3.198,0.000 t=0.0833
+M animatable pre sync=false ab=(0.0000,2.0000,0.0000) srv=(0.0000,2.0000,0.0000) rider=(0.0000,3.0000,0.0000)
+M animatable post sync=false ab=(0.5000,2.0000,0.0000) srv=(0.5000,2.0000,0.0000) rider=(0.0407,3.0000,0.0000) ray=hit@0.500,3.198,0.000 t=0.0833
+M DONE case=animatable

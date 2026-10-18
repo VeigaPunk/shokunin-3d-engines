@@ -1,0 +1,5 @@
+M0 case=rest_all engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build="Oct 15 2026 03:47:36"
+M rest_all rest-combine g0/b0:apex=0,bounced=False g0.9/b0.9:apex=0.851578572,bounced=True g0.81/b1:apex=0.851578572,bounced=True g0.9/b1:apex=1.02005302,bounced=True g0.5/b0.5:apex=0.500280505,bounced=True
+M rest_all rest-bitexact g0.9/b0.9:z=0.514804005:h=0f0edc29d1a48f22 g0.81/b1.0:z=0.514804005:h=0f0edc29d1a48f22 g0.9/b1.0:z=0.814814593:h=b29bcd4686ea096a g0.5/b0.5:z=0.49999:h=3212060bf6dabef8 g0.0/b0.0:z=0.49999:h=3212060bf6dabef8
+M DONE case=rest_all
+# pybullet build time: Oct 15 2026 03:47:36

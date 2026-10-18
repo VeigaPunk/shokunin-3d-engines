@@ -1,0 +1,4 @@
+M0 case=sync_nested engine=cannon-es-0.20.0+three-0.186.1
+M sync_nested nested naiveWorld=9.679859,0.499998,-0.750713 bodyWorld=0.750713,0.499998,-0.320141 naiveErr=8.939521
+M sync_nested nested_fix local=0.320141,0.499998,-9.249287 fixedWorld=0.750713,0.499998,-0.320141 fixedErr=0.000e+0
+M DONE case=sync_nested
