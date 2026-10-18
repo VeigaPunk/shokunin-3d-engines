@@ -1365,3 +1365,43 @@ corpus/knowledge/seed.md).
   reports-index stale frame).
 - L0: Epic account linking / 26.8GB wukakuki image / Lutris — all
   unchanged, all operator-owned.
+
+- ROUND 103 (2026-10-18): gate hardening A1-A4 + adaptation freshness
+  note + B2 dead-root ruling + physics-row investigation. 64-seat swarm
+  (devin/deepseek-v4.1-flash). A1 range-endpoints (LINE-OOR), A2
+  declaration-anchored labels, A3 pinned card-name set, A4 BLOCKED +
+  exit 2 (attack-verified at close against the final script); 11/11 r102
+  suite still detected; clean PASS x6. Note: adaptation table lines 1-363
+  byte-stable, appended dated correction note ([[hooks]] ruled at line
+  3290, drift-proof citation form). B2: three READMEs repaired
+  (glb-r12 3->0, unity-r19 2->0, three 17->0 dead roots); 167->164
+  total hits, survivors = historical quotes. Physics row
+  phys3d_joints_free_ops ruled INTRINSIC_WALL_COST: 21 serial Godot
+  boots x ~0.9s floor ~= 19s vs CASE_TIMEOUT_SECONDS=20; arm correct
+  (marker byte-identical at 120s; 26/26 stored receipts FAIL at the
+  shipped bound). ADMIT at 8c9d9ad + report-last.
+- LAWS: a bare line-number citation rots (config.toml line moved twice
+  between rounds) — cite by structural description + dated parenthetical.
+  Attack seats racing an author's file read STALE INTERMEDIATES —
+  falsification verdicts must name the target's hash (SEAT-14 hit a
+  249-line intermediate; final 347-line gate passed the same attack).
+  Serial-child arms scale wall-clock by boot floor, not core count —
+  21 boots concurrent measured 15x faster than serial. /tmp is a shared
+  16G tmpfs near quota — mktemp/clone workdirs there flake silently;
+  gate workdir resilience routed.
+- ROUTED (r104+): physics fix R3 concurrent children (preferred) or R2
+  per-case bound; R1 global cap 20->60 as operator fallback; gate
+  workdir resilience (GATE_WORKDIR/TMPDIR); flake-reproduction harness;
+  stray r90bt_* dirs hazard (--path . against seed tree) — fixture
+  write-isolation proposal; kimi-surfaces: adaptation-kimi.md:6 cites a
+  404 repo URL (missing -plugin suffix; PROVENANCE correct); the
+  curiosity of empty jolt cells matching the pinned marker
+  (investigate.md §5.1); battery cannon node markers (carried).
+- CONFORMANCE DEFECT (recorded, ruled accepted): the B2 repair edited
+  corpus/fixtures/three/README.md although the r103 template marked
+  corpus/fixtures/** protected — the ruling seat named a fixtures doc
+  path; edit is doc-only, substantively correct, battery code bytes
+  untouched (battery-consistency PASS). r104+ templates must distinguish
+  fixture CODE (pinned) from fixture DOCS (repairable).
+- L0: Epic link / docker image / lutris / side-by-side node v24 pin —
+  unchanged, operator-owned.
