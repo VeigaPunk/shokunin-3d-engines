@@ -283,3 +283,13 @@ Rows enter only through a round that demonstrates the capability running (`AXES.
 ## Saturation
 
 The lane's saturation line and stagnation window N are to be declared by the lane on its next round per `AXES.md` §The stagnation nudge; not asserted by this conformance change.
+
+## Round 101 verdict — 2026-10-18
+
+| axis | verdict | evidence |
+|---|---|---|
+| coverage | **improved** | 0→12 upstream files vendored byte-identical @ pin `a6aa73ad`; `cd corpus/knowledge/unreal-mcp && sha256sum -c .manifest.d/audit-reference.sha256` → 12×OK rc=0 (re-run on committed `1659c036`); path-set equality vs `git ls-files` clean; non-author `r101-reviewer-c1.md` CONFIRMED across 4 transports + negative control; mutation gate proven (11/11 caught, `r101-mutation-tester.md`). Claim scoped: all files tracked at the pin; out-of-pin surface recorded `PROVENANCE.md` §8. |
+| depth | **improved** | 13 executability cards: 12 `static-only` / 1 `unproven-runtime` (`actors-scene.md:5`) / 0 `verified-here` — `label-scan.sh` PASS on committed tree; prereq matrix (39 rows: 10 present / 21 missing / 8 operator-wall) independently reproduced by non-author `r101-reviewer-c2.md`; engine-install wall confirmed 4 ways (404 / gh api / SSH / AUR recipes); unproven unlock path recorded (`wukakuki/unreal-engine:dev-slim-5.8.3`, operator decision). |
+| calibration | **improved** | Binary proven/unproven policy + ternary→binary mapping (`corpus/knowledge/unreal-mcp/README.md:12-48`); adaptation table 15 rows, 17 upstream pointers, 0 unresolvable — non-author `r101-reviewer-c3.md` CONFIRMED with biting negative controls; whole-round pointer sweep `POINTERS=78 UNRESOLVED=0` on committed tree; folds landed at close: meshes-textures F1 line-cites corrected (`:213-227`/`:209`), assets-content F4 word count 17→13 (wc -w re-measured). |
+
+Non-author: `r101-reviewer-c{1,2,3}.md` CONFIRMED all three claims; critics filed findings — 2 in-scope folds landed this round, 6 pre-existing lane defects routed (see LOG.md ROUND 101 ROUTED). Bounded: no live-editor claim exists or can exist on this host (editor absent; install operator-gated); C3 `verified-here` rows are Kimi-side probes, not Unreal. Work `1659c036`; report-last follows.

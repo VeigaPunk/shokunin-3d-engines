@@ -1306,3 +1306,27 @@ corpus/knowledge/seed.md).
   Evidence: the org's Devin wiki index lists this repo's generated wiki;
   sibling lane READMEs carry the same `**Wiki:**` header.
   Documentation-only change; no round run, no axis moved.
+- ROUND 101 (2026-10-18): Unreal Engine skills integration. EpicGames
+  unreal-engine-skills-for-claude-code-plugin vendored @ a6aa73ad (12/12
+  tracked files byte-identical, 3-way sha256 + non-author 4-transport
+  confirm); 13 executability cards (12 static-only / 1 unproven-runtime /
+  0 verified-here); Claude->Kimi adaptation 15 rows, 0 unresolvable
+  pointers; 64-seat swarm on devin/deepseek-v4.1-flash. ADMIT at 1659c036
+  + report-last.
+- LAWS: C1 scope = all files tracked AT THE PIN; out-of-pin surface (5
+  PR-only paths + history-only toolsets.md) recorded PROVENANCE.md §8.
+  Engine install wall = Epic-account gate (repo 404; AUR PKGBUILD line 280
+  SSH check; Lutris operator-gated). Docker image wukakuki/unreal-engine:
+  dev-slim-5.8.3 (26.8 GB) recorded as UNPROVEN unlock path — operator
+  decision. Verification policy is binary proven/unproven; ternary card
+  labels map onto it (subtree README.md:31-48).
+- INSTALLS: shellcheck 0.11.0 via pacman (hook lint). UE editor: BLOCKED
+  pending operator Epic-account linking.
+- ROUTED (future rounds): r22 README/lesson path drift (exit=2); r22
+  lesson cites absent verdicts.json; run_battery.py cited-sha drift;
+  engines.md three.js command fails from clean tree; rea.md JADX/Binwalk/
+  Unblob now present; battery digest map covers 0 corpus/knowledge files
+  (connector IP-2); sentinel S-5 PATH-shadowed basename + S-8 .mcp.json
+  auto-load Origin:null; 6 pre-existing defects per r101-critic-c3.md.
+- L0: (1) link Epic account for engine source? (2) pull 26.8 GB
+  wukakuki image? (3) Lutris+launcher path? — operator-owned all.
