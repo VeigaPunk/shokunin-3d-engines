@@ -1405,3 +1405,36 @@ corpus/knowledge/seed.md).
   fixture CODE (pinned) from fixture DOCS (repairable).
 - L0: Epic link / docker image / lutris / side-by-side node v24 pin —
   unchanged, operator-owned.
+
+- ROUND 104 (2026-10-18): physics wall-cost fix (concurrent child batch +
+  fail-closed BATCH_BOUND_S=16) + gate workdir resilience (GATE_WORKDIR/
+  TMPDIR, documented REPO override implemented) + SKILL.md landed (first
+  edition: Unreal-content claim-discipline decision table, error-pattern
+  registry, checklist, open P/C precedence ruling). 48-seat swarm
+  (devin/deepseek-v4.1-flash). free_ops 21-25s -> 2.9s at the shipped 20s
+  bound, marker byte-identical; full battery 336/14 -> 337/13 (13 cannon
+  node-marker rows unchanged, 336 previously-passing rows unbroken,
+  seeds_unchanged). Gate: GATE_WORKDIR verified end-to-end; A4 BLOCKED
+  exit 2 via REPO override; attack regression all detected. SKILL.md:
+  reviewer REVISE (2 mechanical) + critic REVISE (5 label overreaches) —
+  all seven folds landed at close, acceptance greps 0/1/2/0. ADMIT at
+  <WORK> + report-last.
+- LAWS: a serial-child arm's wall time scales with boot floor x child
+  count, not core count — concurrent spawns measured 15x faster; every
+  batch needs a fail-closed deadline one notch below the per-case bound.
+  A documented override that the code does not implement is a defect
+  class (REPO) — grep the script for the override before citing the doc.
+  /tmp quota exhaustion on a shared host fails mktemp/clone silently —
+  default-workdir gates are load-sensitive; deterministic runs need
+  GATE_WORKDIR. The P/C label precedence ruling is still owed (stated in
+  SKILL.md §4, not resolved by this lane alone).
+- ROUTED (r105+): cannon node markers pin node=v24.21.0 (13 rows) —
+  operator: side-by-side node v24 pin or re-baseline; SHONEN box 1 needs
+  a named non-author verifier for the landed SKILL.md table (artifact
+  half satisfied); P/C precedence ruling (needs subtree-owner seats);
+  fixture-runtime sixth row for the SKILL table (critic O5b, recommended);
+  the empty-jolt-cells curiosity (r103 investigate.md §5.1); stray r90bt_*
+  dirs hazard — fixture write-isolation proposal; kimi-404 carry
+  (adaptation-kimi.md:6 repo URL missing -plugin suffix).
+- L0: Epic link / docker image / lutris / node-v24 side-by-side —
+  unchanged, operator-owned.
