@@ -1438,3 +1438,34 @@ corpus/knowledge/seed.md).
   (adaptation-kimi.md:6 repo URL missing -plugin suffix).
 - L0: Epic link / docker image / lutris / node-v24 side-by-side —
   unchanged, operator-owned.
+
+- ROUND 105 (2026-10-18): lifecycle lesson + pinned-env matrix + P/C ruling
+  package. 64-seat swarm (openai-codex/gpt-6-luna-max). Node-24 discovery:
+  the r94 cannon markers' pinned toolchain was on the host all along (fnm
+  v24.21.0); mise v26 shadowed PATH. Full battery under the pinned env:
+  350/350 PASS, seeds_unchanged (durable receipts reports/round-105/n24/runs/;
+  first attempt failed on a concurrent seat's mid-run fixture write — rerun
+  clean). PINNED-ENV.md runbook documents the two-state model. P/C: full
+  package (analysts both sides, card extracts, impact diffs, ruling proposal,
+  3 independent reviews REVISE x2 + distiller amendments) — PROPOSED to the
+  operator, nothing applied to byte-pinned files. SKILL.md gained row F
+  (fixture-runtime claims; folded at close to require aggregate PASS +
+  seeds_unchanged + named non-author replay, and to stop writing receipts
+  into frozen round dirs). kimi-404 URL fixed (200 verified). ADMIT at
+  3634bc0 + report-last.
+- LAWS: a toolchain pin that fails is often SHADOWING, not absence — check
+  the version-manager resolution order (type -a) before declaring drift.
+  A battery integrity FAIL from a mid-run seed change means a concurrent
+  WRITER, not a broken row — rerun on a quiet tree before believing it.
+  A ruling package is calibration work: both sides at strength, impact
+  diffs computed, reviews independent, and the ruling itself left to the
+  authority that owns the pinned files.
+- ROUTED (r106+): P/C operator ruling (package + queue in reports/round-105/
+  pc/); fixture write-isolation proposal (second sighting of mid-run seed
+  churn); row-F non-author replay precedent to be maintained; the
+  empty-jolt-cells curiosity; operator L0 as assembled in operator-package.md.
+- PROCESS: a verifier ran git checkout in an isolated /dev/shm clone
+  (disclosed; lane worktree untouched) — permissible, now named; future
+  templates should say "no checkout anywhere" to remove the ambiguity.
+- L0: Epic link / docker image / lutris + NEW: which side of the P/C
+  precedence ruling binds?
