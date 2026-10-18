@@ -4,7 +4,7 @@
 
 ## Source and cited format
 
-Epic Games, [Plugins in Unreal Engine](https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine), sections “Plugin Descriptor Files,” “Descriptor File Format,” and “Module Descriptors” (retrieved HTTP 200 on 2026-10-13), says `.uplugin` is JSON; `FileVersion` is the **only required descriptor field**, with current recommended value **3** (older values supported for compatibility). A plugin with code has module descriptors with required `Name` and `Type`; documented Type options: `Runtime`, `RuntimeNoCommandlet`, `Developer`, `Editor`, `EditorNoCommandlet`, `Program`. Epic's example contains `Version`, `VersionName`, `FriendlyName`, `Description`, `Category`, `CanContainContent` and module `LoadingPhase: Default`. I checked `.shokunin/game-dev-3d/LOG.md` round 22, `PROVINCE.md`, and `corpus/artifacts/unreal-r22/README.md`. The source has `FileVersion: 3`, one `Headless3DFixture` module with `Type: Runtime`; it has no actual plugin source/binary.
+Epic Games, [Plugins in Unreal Engine](https://dev.epicgames.com/documentation/en-us/unreal-engine/plugins-in-unreal-engine), sections “Plugin Descriptor Files,” “Descriptor File Format,” and “Module Descriptors” (retrieved HTTP 200 on 2026-10-13), says `.uplugin` is JSON; `FileVersion` is the **only required descriptor field**, with current recommended value **3** (older values supported for compatibility). A plugin with code has module descriptors with required `Name` and `Type`; documented Type options: `Runtime`, `RuntimeNoCommandlet`, `Developer`, `Editor`, `EditorNoCommandlet`, `Program`. Epic's example contains `Version`, `VersionName`, `FriendlyName`, `Description`, `Category`, `CanContainContent` and module `LoadingPhase: Default`. I checked `LOG.md` round 22, `PROVINCE.md`, and `corpus/artifacts/unreal-r22/README.md`. The source has `FileVersion: 3`, one `Headless3DFixture` module with `Type: Runtime`; it has no actual plugin source/binary.
 
 SHA-256 (byte-for-byte files):
 
@@ -20,13 +20,13 @@ Both descriptor files parse with standard Python `json.loads` into dictionaries.
 ## Exact replay (repository root)
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/artifacts/unreal-r22/verify_descriptor.py
+python3 corpus/artifacts/unreal-r22/verify_descriptor.py
 # exit 0: PASS local-static actual=accept expected=accept; one fixed-scope Unreal-style Runtime module descriptor
-python3 .shokunin/game-dev-3d/corpus/artifacts/unreal-r22/verify_descriptor.py .shokunin/game-dev-3d/corpus/artifacts/unreal-r22/Headless3DFixture.bad-type.uplugin --expect-reject
+python3 corpus/artifacts/unreal-r22/verify_descriptor.py corpus/artifacts/unreal-r22/Headless3DFixture.bad-type.uplugin --expect-reject
 # exit 0: PASS local-static actual=reject expected=reject; unsupported module Type: 'Unknown'
 ```
 
-I privately copied the source into `/tmp/r22-unreal-review-y5dqvv0d` and applied one control at a time; command form was `python3 .shokunin/game-dev-3d/corpus/artifacts/unreal-r22/verify_descriptor.py /tmp/r22-unreal-review-y5dqvv0d/<name>.uplugin --expect-reject`:
+I privately copied the source into `/tmp/r22-unreal-review-y5dqvv0d` and applied one control at a time; command form was `python3 corpus/artifacts/unreal-r22/verify_descriptor.py /tmp/r22-unreal-review-y5dqvv0d/<name>.uplugin --expect-reject`:
 
 | `<name>` | Change | Exit; actual result/reason | SHA-256 of private copy |
 |---|---|---|---|
@@ -39,12 +39,45 @@ The duplicate-key control is syntactically parseable by ordinary last-wins JSON 
 ## Existing execution baselines
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py
+python3 corpus/fixtures/run_battery.py
 # exit 0, Godot 4.7.2.stable.arch_linux.ed1daf0bf; 29/29 PASS (14 ordinary, 15 negative), zero failures; seeds_unchanged=true; probes=0
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_cases.mjs
+node corpus/fixtures/three/run_cases.mjs
 # exit 0, PASS positive (0), negative_wrong_order (2), mutation (1); 3/3; seeds_unchanged=true
 ```
 
-Godot receipt `corpus/live/runs/20261013T053632289732Z/verdicts.json`, SHA-256 `a806b9e4d2928ac2c01ba463804ad55f7e14086b72d7846a458f91e271e3d8fc`; fixture `run_battery.py` seed SHA `a065a56db193228d2c5f3d0760c02972aee69d59c5c86480d7f9cf444a582570`. Three.js runner SHA `f9f40d4763748223a40e761c09c01e4762f21218744f09aeefe74f069a547d7f`, scene source SHA `e4bb0a136391cb42baafcbab4905e1c4004d316cec44f5f67519f37a2ab075af`, pinned package lock SHA `1a8e6ee2341eb4e3bcf764ad0c14973c89afee0a613bb14d41ea2fa5851c19b8`. A separate direct `node .shokunin/game-dev-3d/corpus/fixtures/three/scene_graph.mjs` exited 0 and printed its positive case only; the three-case runner above is the actual 3/3 evidence.
+Godot receipt `corpus/live/runs/20261013T053632289732Z/verdicts.json`, SHA-256 `a806b9e4d2928ac2c01ba463804ad55f7e14086b72d7846a458f91e271e3d8fc`; fixture `run_battery.py` seed SHA `a065a56db193228d2c5f3d0760c02972aee69d59c5c86480d7f9cf444a582570`. Three.js runner SHA `f9f40d4763748223a40e761c09c01e4762f21218744f09aeefe74f069a547d7f`, scene source SHA `e4bb0a136391cb42baafcbab4905e1c4004d316cec44f5f67519f37a2ab075af`, pinned package lock SHA `1a8e6ee2341eb4e3bcf764ad0c14973c89afee0a613bb14d41ea2fa5851c19b8`. A separate direct `node corpus/fixtures/three/scene_graph.mjs` exited 0 and printed its positive case only; the three-case runner above is the actual 3/3 evidence.
+
+> **Correction note (r102, 2026-10-18).** The paragraph above is left verbatim as the r22 record; some of its digests do not resolve against today's tree, and one never resolved from a clone at all:
+>
+> - `corpus/live/runs/20261013T053632289732Z/verdicts.json` (SHA-256 `a806b9e4…3d8fc`) is a **non-resolvable live receipt**. `corpus/.gitignore:1` is `live/`, so nothing under `corpus/live/` was ever tracked; `git ls-files corpus/live` and `git log --all -- corpus/live` are both empty, and no commit ever added the path. The file is absent from this working tree and from the machine (`find /home/vgpnk -maxdepth 8 -name 20261013T053632289732Z` → no hits). The digest `a806b9e4d2928ac2c01ba463804ad55f7e14086b72d7846a458f91e271e3d8fc` survives **only as text** in this lesson and in `reports/round-101/r101-critic-c3.md:181`; no file in the repo hashes to it (`git ls-files -z | xargs -0 sha256sum | grep -i ^a806b9e4` → no match). It is uncheckable by construction; a fresh battery run writes a new timestamped receipt with a different digest, so this r22 number cannot be re-derived.
+> - Three digests are **r21/r22-era blobs**, reproducible from history but not from the tree: the `run_battery.py` seed `a065a56d…` (tree now `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`; `git show 490e710d|8b21cae|7804a69:corpus/fixtures/run_battery.py` → `a065a56d…`) and the `run_cases.mjs` runner `f9f40d47…` (tree now `97eca1b2e26db106e5ab7efe71767b533d99abdc1ee9ff80156ac402e11458e5`; those same three commits → `f9f40d47…`). The `scene_graph.mjs` source `e4bb0a13…` and the pinned `package-lock.json` `1a8e6ee2…` still match the tree.
+> - In the digest table above, the `Headless3DFixture.uplugin`, `Headless3DFixture.bad-type.uplugin` and `verify_descriptor.py` rows still reproduce exactly; the `README.md` row (`1460` bytes, `26a12604…`) is the r22 blob — that file was re-rooted in r102 by the sibling artifact-README repair, so it is now `1394` bytes, `1c0d30355b34a76dc45ff27e9e684e9fe9595973e09bbc48519ad3618fea574b`.
+> - The two command blocks in this lesson were re-rooted in r102 from a never-existent `.shokunin/game-dev-3d/` prefix to repo-relative paths (mechanical conformance fix, not a factual change). Re-run at r102 from repo root: the two `verify_descriptor.py` arms exit 0, `run_cases.mjs` exits 0 with 3/3, and `scene_graph.mjs` exits 0. The documented Godot line is **r22-era and does not reproduce as written**: `run_battery.py` now defines 350 cases (not 29), and a 2026-10-18 re-run returned `totals: cases=350 pass=335 fail=15` / exit 1. The 15 failures are 13 `r94_cannon_*` cases whose markers pin `node=v24.21.0` while this machine runs node v26.12.0, one 20-second timeout under heavy concurrent load, and one `r98_gltflat_doc` marker/diagnostic mismatch — none of them caused by this lesson or by the Unreal work, and `seeds_unchanged=true`. Treat the `29/29 PASS` line as the r22 record only. Evidence: `reports/round-102/repairs/F1b-F2-r22-lesson.md`.
 
 **Per-axis judgment:** coverage improved, narrowly, by adding a cited Unreal-style **static JSON descriptor and discriminating local negative controls**; depth unchanged, calibration unchanged. No tested Unreal plugin loading, binary resolution, UBT compilation, rendering, gameplay, full schema conformance, arbitrary plugin descriptors, or cross-engine behavioral inference. Local acceptance is not engine acceptance. No optional Godot probes were run in this review; default 29/29 is the sole Godot regression result.
+
+## F3 correction — 2026-10-18 (r102)
+
+Appended by r102 SEAT-09 (F3 repair). Deliberately narrow in scope: the sibling note above already tabulates the drifted digests and their current values, and this seat independently confirms every value in it. Nothing above this heading was rewritten — the digests and counts in the "Existing execution baselines" block are the **r22 snapshot** and stand as that round's record.
+
+The one claim the note above does not cover is the **pass count**, which is stale in exactly the way the digests are:
+
+```sh
+$ python3 -c "import ast; t=ast.parse(open('/tmp/rb_r22.py').read()); print([(n.lineno, len(n.value.elts)) for n in t.body if isinstance(n,ast.Assign) and any(getattr(x,'id',None)=='CASES' for x in n.targets)])"
+[(34, 29)]
+$ python3 -c "import ast; t=ast.parse(open('corpus/fixtures/run_battery.py').read()); print([(n.lineno, len(n.value.elts)) for n in t.body if isinstance(n,ast.Assign) and any(getattr(x,'id',None)=='CASES' for x in n.targets)])"
+[(39, 350)]
+```
+
+The `CASES` list held **29** rows at `8b21cae` — exactly the `29/29 PASS (14 ordinary, 15 negative)` above — and holds **350** rows today, so 29/29 no longer describes a current run of the same command. The engine string `4.7.2.stable.arch_linux.ed1daf0bf` and the pinned `package-lock.json` digest `1a8e6ee2341eb4e3bcf764ad0c14973c89afee0a613bb14d41ea2fa5851c19b8` are still exact.
+
+On provenance, this seat confirms the r21/r22 reading above and pins it to three consecutive commits rather than one — all three carry the identical blob:
+
+```sh
+$ for c in 490e710d 8b21cae 7804a69; do git show "$c:corpus/fixtures/run_battery.py" | sha256sum; done | sort -u | wc -l
+1
+```
+
+The r22-era blob is 34239 bytes against the current 346248, and all 78 commits touching the fixture rewrote it, so no tree path will ever hash to the r22 value again; the re-derivation command, not the number, is the durable citation.
+
+No Unreal runtime claim is added or implied here. The Unreal Editor and UnrealBuildTool are not installed on this host; every value above is a file-level hash, byte count, path, or count fact.

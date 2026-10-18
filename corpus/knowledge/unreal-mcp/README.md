@@ -166,8 +166,8 @@ per-seat manifests. What each file is:
 
 ## `.manifest.d/` — byte-identity manifests
 
-`sha256sum -c .manifest.d/*.sha256` → all `OK`, exit `0` (run here; output
-reproduced below). Manifests are relative to `corpus/knowledge/unreal-mcp/`.
+`sha256sum -c .manifest.d/audit-reference.sha256` → **12** `OK` lines, exit `0`; the
+full glob `*.sha256` → **24** (same 12 files twice). Manifests are relative to `corpus/knowledge/unreal-mcp/`.
 
 | manifest | covers | sha256 (short) |
 |---|---|---|
@@ -184,7 +184,7 @@ reproduced below). Manifests are relative to `corpus/knowledge/unreal-mcp/`.
 | `seat10.sha256` | `upstream/skills/unreal-skill/SKILL.md` | `7a0af781…f435087` |
 | `seat11.sha256` | `upstream/CODEOWNERS` + `upstream/.gitignore` | `653d3725…`, `0fad2f57…` |
 
-Observed output of the sweep (12 lines, all `OK`):
+Observed output of `sha256sum -c .manifest.d/audit-reference.sha256` (12 lines, all `OK`; the `*.sha256` glob prints 24 — the same 12 paths, each covered twice):
 
 ```
 upstream/.claude-plugin/plugin.json: OK

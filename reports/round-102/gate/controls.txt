@@ -1,0 +1,110 @@
+### CONTROL C1 byte-flip
+$ printf "\n" >> upstream/README.md
+exit=1
+MANIFEST_OK=11 EXPECTED=12 FAILED=1 RC=1
+STEP=FAIL
+PATH_EXTRA=0 PATH_MISSING=0
+BLOB-DIFF README.md
+BLOB_DIFFS=1
+STEP=FAIL
+CARDS=13 EXPECTED=13 BAD=0
+CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+STEP=PASS
+POINTERS=40 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+STEP=PASS
+GATE RESULT: FAIL (checks failed: 2)
+
+### CONTROL C2 delete vendored file
+$ rm upstream/LICENSE
+exit=1
+MANIFEST_OK=11 EXPECTED=12 FAILED=0 RC=1
+STEP=FAIL
+PATH_EXTRA=0 PATH_MISSING=1
+FAIL upstream file not vendored
+BLOB-DIFF LICENSE
+BLOB_DIFFS=1
+STEP=FAIL
+CARDS=13 EXPECTED=13 BAD=0
+CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+STEP=PASS
+POINTERS=40 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+STEP=PASS
+GATE RESULT: FAIL (checks failed: 2)
+
+### CONTROL C3 out-of-range pointer
+$ printf "\nsee upstream/README.md:200\n" >> README.md
+exit=1
+MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
+STEP=PASS
+PATH_EXTRA=0 PATH_MISSING=0
+BLOB_DIFFS=0
+STEP=PASS
+CARDS=13 EXPECTED=13 BAD=0
+CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+STEP=PASS
+LINE-OOR /tmp/tmp.8LmfPHyefS/sub/README.md :: upstream/README.md:200 (max 112)
+POINTERS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=1
+STEP=FAIL
+GATE RESULT: FAIL (checks failed: 1)
+
+### CONTROL C4 duplicate label token
+$ sed -i "4s/.*/**Label:** \`static-only\` and not \`verified-here\`/" executability/blueprints.md
+exit=1
+MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
+STEP=PASS
+PATH_EXTRA=0 PATH_MISSING=0
+BLOB_DIFFS=0
+STEP=PASS
+FAIL multi-label    /tmp/tmp.HMMCU9gzH5/sub/executability/blueprints.md :: **Label:** `static-only` and not `verified-here`
+CARDS=13 EXPECTED=13 BAD=1
+CENSUS static-only=11 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+STEP=FAIL
+POINTERS=40 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+STEP=PASS
+GATE RESULT: FAIL (checks failed: 1)
+
+### CONTROL C5 census drift
+$ sed -i "4s/.*/**Label:** \`unproven-runtime\`/" executability/blueprints.md
+exit=1
+MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
+STEP=PASS
+PATH_EXTRA=0 PATH_MISSING=0
+BLOB_DIFFS=0
+STEP=PASS
+CARDS=13 EXPECTED=13 BAD=0
+CENSUS static-only=11 unproven-runtime=2 verified-here=0 EXPECTED=12/1/0
+STEP=FAIL
+POINTERS=40 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+STEP=PASS
+GATE RESULT: FAIL (checks failed: 1)
+
+### CONTROL C6 remove card
+$ rm executability/sequencer.md
+exit=1
+MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
+STEP=PASS
+PATH_EXTRA=0 PATH_MISSING=0
+BLOB_DIFFS=0
+STEP=PASS
+CARDS=12 EXPECTED=13 BAD=0
+CENSUS static-only=11 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+STEP=FAIL
+POINTERS=33 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+STEP=PASS
+GATE RESULT: FAIL (checks failed: 1)
+
+### CONTROL C7 exact sentinels only (positive control)
+$ printf "\nsee upstream/nope.md:3 and upstream/README.md:9999\n" >> README.md
+exit=0
+MANIFEST_OK=12 EXPECTED=12 FAILED=0 RC=0
+STEP=PASS
+PATH_EXTRA=0 PATH_MISSING=0
+BLOB_DIFFS=0
+STEP=PASS
+CARDS=13 EXPECTED=13 BAD=0
+CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+STEP=PASS
+POINTERS=40 SKIPPED_CONTROL_SENTINELS=2 UNRESOLVED=0
+STEP=PASS
+GATE RESULT: PASS (checks failed: 0)
+
