@@ -1330,3 +1330,38 @@ corpus/knowledge/seed.md).
   auto-load Origin:null; 6 pre-existing defects per r101-critic-c3.md.
 - L0: (1) link Epic account for engine source? (2) pull 26.8 GB
   wukakuki image? (3) Lutris+launcher path? — operator-owned all.
+
+- ROUND 102 (2026-10-18): unreal-mcp close-out gate + routed-defect
+  repair lattice. 64-seat swarm (devin/deepseek-v4.1-flash). Gate
+  run_gate.sh landed 4/4 checks green with discriminating controls;
+  adversary seats demonstrated 11 false-pass classes on the first
+  landing (symlinks, 14th card, substring labels, CRLF manifests,
+  unread seat shards, shadowed/absent tools) — r102 close adopted the
+  seat-verified hardened gate + L1 tool-requirement guard + extensionless
+  pointer pattern; 11/11 attacks now DETECTED, comm-absent fails closed.
+  Five routed defects repaired with dated correction notes (r22 path
+  root, verdicts.json pointer, run_battery sha/pass-count drift,
+  engines.md three.js command, rea.md tool census) + F8 wording fold.
+  Lesson r102-unreal-integration landed (critic: ADMIT-WITH-CORRECTIONS;
+  D1 + stale "two remain live" folds landed at close). ADMIT at c6f655d
+  + report-last.
+- LAWS: pointer counts are SCANNER-RELATIVE — three scanners read
+  40/41/43 on the same tree; never cite a bare POINTERS number without
+  its scanner. A bare grep cannot distinguish "fixed" from "fixed and
+  documented" (r102 lesson D1). A new gate is only as strong as its
+  attack suite — run adversary seats before trusting green. Battery
+  r94_cannon markers pin node=v24.21.0 while the host runs v26.12.0;
+  fresh full runs are red on those rows — pinned-env markers are
+  host-version receipts, not timeless truths.
+- ROUTED (r103+): fold-spec A1 (range-tail-blind pointer regex), A2
+  (prose-hijackable first-token rule), A3 (card names never compared),
+  A4 (network-blocked indistinguishable from byte mismatch); kimi-
+  surfaces freshness note for adaptation-kimi.md (3 stale citations,
+  proposed text reports/round-102/kimi-surfaces.md §4); battery node
+  marker drift (re-baseline or side-by-side node pin); B2 dead
+  .shokunin root in 3 more runnable READMEs (glb-r12 exit=2,
+  unity-r19 exit=2, three exit=1) — systemic ruling, 142 files scanned;
+  math-audit 2 wrong rows (battery-integrity count label,
+  reports-index stale frame).
+- L0: Epic account linking / 26.8GB wukakuki image / Lutris — all
+  unchanged, all operator-owned.
