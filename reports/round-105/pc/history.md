@@ -1,0 +1,28 @@
+# P/C label-precedence history — SEAT-56, r105
+
+**Status: still open; no precedence ruling made.** The record below follows the collision from the first F7 finding through the r104 skill text. Historical commands and outputs are identified as receipts already recorded by those rounds; the last section is this seat's fresh check.
+
+## Round-by-round trace
+
+- **r101 — F7 first names the semantic collision.** The critic contrasts `README.md:41` (`unproven-runtime` means the claim needs the live editor and nothing was observed) with six cards saying that same label is wrong when the runtime path is unidentified and assigning `static-only`; `actors-scene.md` uses `unproven-runtime` for the editor-dependent case. This is a cross-card vocabulary conflict, not merely a missing label. Receipt: `reports/round-101/r101-critic-c3.md:317-361`; its recorded ``grep -rln 'Not `unproven-runtime`' corpus/knowledge/unreal-mcp/executability/*.md | wc -l`` returned `6` (`:338-347`).
+
+- **r102 — the collision becomes lesson Law 3 and next-iteration hook 1.** The lesson preserves F7 as the training point: same epistemic situation, opposite labels, so labels cannot be compared across cards (`corpus/lessons/r102-unreal-integration.md:84-93`). Hook 1 explicitly says to resolve it by amending either the README definition or the six cards, and warns that until then the cross-card census proves nothing (`:168-174`). Independent lesson verification recorded six dissenters by name—`animation-controlrig`, `blueprints`, `editor-general`, `gameplay-gas`, `materials`, `meshes-textures`—plus the colliding README definition and `blueprints.md:113` witness (`reports/round-102/lesson-verify.md:172-185`; recorded count command/output at `:178-180`). The lesson treats the ruling as open, not as settled.
+
+- **r103 — the six-card census is carried, not ruled.** The consistency record labels F7 “CARRIED (named, not ruled)” and records ``grep -rln 'Not `unproven-runtime`' corpus/knowledge/unreal-mcp/executability/*.md | wc -l → 6`` alongside the README definition (`reports/round-103/consistency.md:154-178`). The skill-table review remeasures six, retains the conditional F7 clause, and says the gate/census does not close the collision (`reports/round-103/skill-table-review.md:168-187`). It also records the subtree README hash as unchanged (`:179-182`).
+
+- **r104 — `SKILL.md` §4 states the issue and refuses to resolve it.** Section 4 names the overlapping vocabularies, the README definition, and the six dissenting cards; it calls F7 carried from r101 through the r102 lesson and r103 remeasurement, says the ruling “is still owed,” and identifies interim text rather than choosing the winning definition (`SKILL.md:114-136`). The author receipt independently records a six-card count (`reports/round-104/skill/author.md:135-141`), and the round report says the README hash remained unchanged and the ruling stayed open (`reports/round-104/r104-report.md:398-400`).
+
+## Fresh r105 confirmation
+
+- ``Grep(pattern="Not `unproven-runtime`", path="corpus/knowledge/unreal-mcp/executability", output_mode="content")`` returned exactly these six dissent lines: `animation-controlrig.md:170`, `blueprints.md:113`, `editor-general.md:46`, `gameplay-gas.md:149`, `materials.md:192`, `meshes-textures.md:243`. All six reject `unproven-runtime` as the card label; editor-general explicitly scopes its rejection to the card label while allowing it for the live-call sub-claim, and the other five say the path is unidentified or not specified.
+- Recount command actually run:
+
+  ```sh
+  python3 -c 'from pathlib import Path; import re; p=Path("corpus/knowledge/unreal-mcp/executability"); pat=re.compile(r"Not `unproven-runtime`"); rows=[(f.name, next((i for i,line in enumerate(f.read_text().splitlines(),1) if pat.search(line)), None)) for f in sorted(p.glob("*.md"))]; hits=[(n,i) for n,i in rows if i]; print("count=%d" % len(hits)); [print("%s:%d" % x) for x in hits]'
+  ```
+
+  Observed: `count=6`; `animation-controlrig.md:170`, `blueprints.md:113`, `editor-general.md:46`, `gameplay-gas.md:149`, `materials.md:192`, `meshes-textures.md:243`.
+- Command actually run: `sha256sum corpus/knowledge/unreal-mcp/README.md && git status --short -- corpus/knowledge/unreal-mcp/README.md corpus/knowledge/unreal-mcp/executability SKILL.md && git diff --quiet HEAD -- corpus/knowledge/unreal-mcp/README.md corpus/knowledge/unreal-mcp/executability SKILL.md; printf 'tracked_diff_rc=%s\n' "$?"`. Observed README SHA-256 `c79d8dd1d7c0c7bc934700187ee322d6d1cb20fc03cc974fa62ee2d95b8ee721` (matching the hash carried in r103/r104); status produced no output for the target paths; `tracked_diff_rc=0`. That command's snapshot showed no worktree changes to the listed paths. The corpus-only check was then rerun: it again returned the same README SHA, no status lines for the README/cards, and `corpus_diff_rc=0`.
+- Later wrap-up command actually run: `git status --short -- reports/round-105/pc/history.md corpus/knowledge/unreal-mcp/README.md corpus/knowledge/unreal-mcp/executability SKILL.md`. Observed ` M SKILL.md` and `?? reports/round-105/pc/history.md`; the SKILL edit is concurrent work outside this seat's write scope. Current `SKILL.md:118-140` still says the ruling is owed; `git diff -- SKILL.md` showed concurrent changes in other sections, not §4. The six card dissent lines and README definition therefore still collide; no precedence change is recorded here.
+
+**Disposition:** carry the P/C collision as open. This history records evidence only; it does not amend byte-pinned corpus files or decide precedence.

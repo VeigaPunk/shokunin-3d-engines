@@ -1,0 +1,46 @@
+# SEAT-24 PC-REVIEWER-1 — independent review of the r105 P/C packet
+
+**Seat:** SEAT-24 PC-REVIEWER-1 · **Round:** r105 · **Axis:** calibration (with depth and coverage checks)
+**Written path:** `reports/round-105/pc/review-1.md` only.
+**Reviewed snapshot:** `distiller.md` SHA-256 `d337efd2dd32bd853e91497b5e08b51ffc48c7ff695a01af9ecec2914df55e24`; `ruling-draft.md` SHA-256 `0dc0340a35a028944765ad855aaf481dc6acb3286565afcd23ebb718d582dd30`. The packet was changing during review; this verdict covers these exact versions only.
+
+## Verdict
+
+**REVISE — P-narrow is a defensible, conservative candidate, but the package is not yet operator-ready or review-complete.** Its honest core is to keep runtime behavior binary `unproven`, distinguish a card's documented evidence from an atomic behavior claim, and reserve `unproven-runtime` for a concrete operation identified in the cited material but not observed. That retains the current 12/1/0 card census and avoids overclaiming that an unknown operation is merely waiting to be run. It is a substantive amendment to the README's broader current wording, not an application of that wording unchanged.
+
+The present packet still needs a single frozen proposal identity, a branch-consistent amendment set, and three independent reviews of that same identity. I observed `review-3.md` in the packet but did not read another review's argument; I cannot verify its reviewed hash or count it as same-hash approval. This report is one review of the hashes above.
+
+## Findings
+
+1. **The semantic recommendation is plausible and mostly minimal.** `README.md:40-45` already separates static document facts from unproven behavior; `editor-general.md:46-52` demonstrates a `static-only` whole-card label alongside an `unproven-runtime` live-call subclaim; `actors-scene.md:12-16` is the positive identified-path contrast. P-narrow preserves those distinctions instead of relabeling six cards. The README's present row 41, however, says only “needs the live editor and nothing was observed”; adding the identified-operation condition changes the shared definition and must be presented as an operator decision. Do not describe the current README as already containing the proposed threshold.
+
+2. **Make “identified operation” an observable decision test.** `ruling-draft.md:17-18` and `distiller.md:97-100` use “explicit/concrete” or “identified” but do not define the minimum evidence that crosses that boundary. Require an operational test that rejects a domain/toolset name alone and names what the cited source must establish (for example, a specific operation and its dispatch/call contract or an equivalent path). Apply it to the four cases the distiller names: static-document fact; undocumented/unknown path with no observation; identified path with no observation; bounded runtime receipt. For each, state the card label and binary claim status separately. The gate/census cannot establish this semantic test.
+
+3. **Align branch names across the packet.** The current distiller calls P-narrow different from analyst-1's broad runtime-subclaim predicate (`distiller.md:92, 96-100`); `ruling-draft.md:10, 17` calls the identified-operation proposal “Option P”; the ledger's P branch is also identified-path (`ledger.md:29`), while its C branch makes each card authoritative (`:31`). Historical r102 P/C options likewise retained the six labels and differed on what a future author cites (`reports/round-102/skill-decision-table-draft.md:267-279`). This can be reconciled, but the final packet must label the alternatives consistently: explicitly name the selected proposal **P-narrow**, distinguish it from analyst-1's unqualified P, and state the exact rejected C authority rule. Otherwise reviewers can agree to different meanings of “P.”
+
+4. **The impact diff is not yet complete against the queue.** The distiller's P-narrow matrix (`distiller.md:104-113`) is useful and correctly marks changes as proposed only, but it does not show the C branch's path-by-path impact although the ledger requires both branches in the proposal and impact diff (`ledger.md:27-33`). Add a paired P-narrow/C matrix with each changed path, old/new semantic text, owner, census effect, and the reason for retaining or changing that path. Also reconcile the ledger's durable `label-precedence.md` proposal (`ledger.md:37`) with the ruling draft's implementation list: state whether that is the canonical rule or whether the README itself is the single durable rule.
+
+5. **Avoid unnecessary edits to the six witnesses.** The six cards' current headers are `static-only`, and their path-unknown rationale is consistent with P-narrow once its shared predicate is explicit. The proposed requirement to remove all six dissent-marker sentences (`distiller.md:119`) is not itself evidence of semantic correctness. Prefer preserving the evidence/rationale, or scope each sentence explicitly as “not this card's label”; only rewrite a card where a non-author audit shows an actual contradiction. Keep a separately enumerated 13-card semantic audit; do not treat a marker-count change or gate PASS as closure.
+
+6. **The byte-pin is respected in the measured tree; keep the boundary exact.** `audit-reference.sha256` contains 12 paths, all under `upstream/`, and does not list the outer `corpus/knowledge/unreal-mcp/README.md`. `git diff --name-only HEAD -- corpus/knowledge/unreal-mcp/upstream corpus/knowledge/unreal-mcp/.manifest.d` produced no paths (rc 0), and the scoped status was empty. No P/C source edit is authorized by this review. Any later README/card/SKILL/lesson change still needs operator approval and its path owner; do not broaden “byte-pinned” to mean every file in the knowledge directory.
+
+## Required amendments before acceptance
+
+1. Freeze the proposal and impact matrix; publish its full hash in every review. Recompute the hash after any edit. The captured proposal hash here is `0dc0340a35a028944765ad855aaf481dc6acb3286565afcd23ebb718d582dd30`.
+2. Use one branch vocabulary in `distiller.md`, `ruling-draft.md`, and `ledger.md`: name P-narrow as a narrowed shared-policy proposal, compare it with the exact C rule, and explain why analyst-1's broad P is not the selected predicate.
+3. Add the explicit “identified operation” test and a four-case truth table showing whole-card label versus binary claim state.
+4. Supply both branches' path-level impact, including whether the accepted rule lives in `label-precedence.md` or the README, and justify every proposed card/lesson/SKILL edit. Preserve card evidence unless an audited contradiction requires changing it.
+5. Complete three distinct non-author reviews of that identical frozen proposal/diff hash. At this snapshot, the inventory command reported `review-3.md` only; this report supplies one review, and I did not verify the peer review's hash or verdict. Do not call the package complete until all three match.
+6. Keep all implementation pending operator approval. After an authorized landing, run the listed gate and the independent 13-card semantic audit; neither is a substitute for the operator's precedence decision.
+
+## Evidence actually run
+
+**Proposal identity and packet inventory.** Commands: `sha256sum reports/round-105/pc/distiller.md reports/round-105/pc/ruling-draft.md reports/round-105/pc/analyst-1.md reports/round-105/pc/analyst-2.md`; then a Python `Path.glob('*.md')` inventory. Observed: distiller `d337efd2…df55e24`; ruling draft `0dc0340a…d582dd30`; analyst-1 `bb29882b…3f89733`; analyst-2 `17c5d655…f8540c624`; packet files included `analyst-1.md, analyst-2.md, cards.md, distiller.md, history.md, ledger.md, review-3.md, ruling-draft.md`; review files: `review-3.md`.
+
+**Current label facts.** Command: Python scan of each card's first 35 lines for the declaration forms plus a Python scan for the exact dissent marker. Observed: `CARDS=13 COUNTS={'verified-here': 0, 'static-only': 12, 'unproven-runtime': 1}`; dissenters `animation-controlrig`, `blueprints`, `editor-general`, `gameplay-gas`, `materials`, `meshes-textures` (6). A separate `sha256sum corpus/knowledge/unreal-mcp/README.md` returned `c79d8dd1d7c0c7bc934700187ee322d6d1cb20fc03cc974fa62ee2d95b8ee721`.
+
+**Byte-pin scope.** Command: Python inspection of `.manifest.d/audit-reference.sha256`; observed `AUDIT_ROWS=12 ALL_UPSTREAM=True README_INCLUDED=False`. Command: `git diff --name-only HEAD -- corpus/knowledge/unreal-mcp/upstream corpus/knowledge/unreal-mcp/.manifest.d`; observed empty path list and `PINNED_DIFF_RC=0`.
+
+**Branch and source-text check.** Command: Python line extraction of `distiller.md:90-126`, `ruling-draft.md:6-26`, `ledger.md:27-33`, and r102 draft `:267-279`. Observed: the current distiller explicitly calls its proposal P-narrow and rejects analyst-1's broader predicate; the ruling draft requests Option P with the identified-operation condition; ledger P/C and historical r102 P/C distinguish shared-policy authority from card authority. This is why the proposal needs a common branch name and one matching impact/review target.
+
+No Unreal Editor/runtime command was run for this review; no runtime behavior is claimed. No source, pinned subtree, manifest, fixture, root status, or other seat's path was written.

@@ -3,7 +3,7 @@
 Seat SEAT-13 (r101). Every Claude-Code-specific mechanism in the vendored plugin is mapped to its
 Kimi Code CLI equivalent, or to `NONE-FOUND` with the search that failed.
 
-- Upstream: `https://github.com/EpicGames/unreal-engine-skills-for-claude-code` pinned at
+- Upstream: `https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin` pinned at
   `a6aa73ada02a9fb1f5415bec491f9942c519b297` (clone at `/tmp/ue-skills-ref`, `git rev-parse HEAD`
   returned exactly that SHA).
 - Kimi side: CLI `2.2.0` (`/home/vgpnk/.kimi-code/bin/kimi`, BuildID

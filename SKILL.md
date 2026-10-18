@@ -17,14 +17,15 @@ runtime claim about an engine that is not installed.
 
 ---
 
-## 1. Unreal-content claim discipline — decision table
+## 1. Unreal-content and lane-fixture claim discipline — decision table
 
-**This table decides, before an Unreal-content claim is written, which label it
-may carry and what evidence it must cite.** It is a decision procedure over
-claim *types*, not a summary of any round. Four claim types are exhaustive over
-the pinned subtree (`corpus/knowledge/unreal-mcp/`); a fifth row covers the
-lane's own authored static artifacts, which the r102 draft left out
-(`reports/round-103/skill-table-review.md` §3.1).
+**This table decides, before an Unreal-content or lane fixture runtime claim is
+written, which label it may carry and what evidence it must cite.** It is a
+decision procedure over claim *types*, not a summary of any round. Four claim
+types are exhaustive over the pinned subtree (`corpus/knowledge/unreal-mcp/`);
+a fifth row covers the lane's own authored static artifacts, which the r102
+draft left out (`reports/round-103/skill-table-review.md` §3.1), and a sixth row
+covers lane fixture runtime results.
 
 **Two vocabularies exist and both are stated where they apply**
 (`corpus/knowledge/unreal-mcp/README.md` §Verification policy, §How the binary
@@ -32,7 +33,8 @@ policy maps onto the ternary card labels):
 
 - the **binary policy** — `proven` / `unproven` — governs *claims*;
 - the **ternary card label** — `verified-here` / `static-only` /
-  `unproven-runtime` — governs *subsystem cards*.
+  `unproven-runtime` — governs *subsystem cards*; row F's `verified-here` is a
+  separate lane-fixture-result label, not a card label.
 
 The two collide without a precedence rule; §3 states the collision and the
 open ruling. Until it lands, a row states both labels where both apply.
@@ -44,6 +46,7 @@ open ruling. Until it lands, a row states both labels where both apply.
 | **C** | **Runtime behavior** — any `list_toolsets` / `describe_toolset` / `call_tool` / actor mutation / Live Coding / automation-test / Niagara / Sequencer / Control Rig statement | **`unproven`**; the card label is **`unproven-runtime`** only where a runtime path is identified (`README.md:41`'s definition). Where the runtime path is not even identified — the six dissenting cards — the label is `static-only` **and the claim must cite the card it contradicts** (§1 row B's F7 clause). `verified-here` is permissible **only** with a saved receipt of a bounded run on this host — which cannot exist here. Never the indicative mood. | none is sufficient on this host. The row must be **labeled**, and must state what would settle it. A connected MCP client, a cached tool catalog, or a successful `unreal_mcp_status` is **not** evidence of reachability. | `which UnrealEditor UnrealEditor-Cmd` → `no … in (…)`, rc 2; `ls /opt/UnrealEngine` → `No such file or directory`, rc 2; `git ls-remote https://github.com/EpicGames/unreal-engine HEAD` → `Repository not found`, rc 128. | `corpus/knowledge/unreal-mcp/README.md` §Host reality (receipts) + §Verification policy; `corpus/knowledge/unreal-mcp/adaptation-kimi.md` §6 (unproven-runtime register) and its live-editor rule; `corpus/lessons/r102-unreal-integration.md` Law 2 (binary policy) + Law 4 (install-wall classes); r104 re-derivation `reports/round-104/skill/author.md` §2 |
 | **D** | **Kimi-side adaptation** — "Claude mechanism X maps to Kimi mechanism Y" | `verified-here` **iff** a probe ran on this host with output pasted. **Disambiguation (required, in-cell):** this is the *row-probe* sense — "reproduced by a command run on this host, output pasted in the row". It is **not** the card sense ("a bounded run of the subsystem happened here with a saved receipt"). A row-D `verified-here` says nothing about any Unreal subsystem. Else `static-only` if read from a shipped artifact with a resolvable pointer; `unproven-runtime` if it needs a live editor or a live MCP server. | the probe's command **and** observed output, or a resolvable artifact pointer (config path + structural description, docs page). `NONE-FOUND` requires the exact search that returned 0. A "binary strings line N" pointer is a **re-derivation**, never a citation — it dies on a CLI upgrade. | `/home/vgpnk/.kimi-code/bin/kimi --version` → `2.2.0`; `strings -n 6 /home/vgpnk/.kimi-code/bin/kimi \| grep -c additionalContext` → `0`; `… grep -c CLAUDE_PLUGIN_ROOT` → `0`; `… grep -c enabledPlugins` → `0`. Valid only for BuildID `5e67bdf95c7646325b62decd0ca8d375d325ea19`. | `corpus/knowledge/unreal-mcp/adaptation-kimi.md` §1 (adaptation table), §5 (verification policy: promotion / invalidation / negative-claim rules), §6 (register); two-sense witness `reports/round-103/skill-table-review.md` §2 row D; r104 re-derivation `reports/round-104/skill/author.md` §2 |
 | **E** | **Lane-authored static descriptor** — "the lane wrote a `.uplugin` its own checker accepts" | `static-only`. **Never** `verified-here`, and never a statement about Unreal accepting it: the checker is the lane's, so the claim is only about the lane's own writing. | the checker's command and its `PASS … reason=…` line, **plus** its paired reject control. The row must state what the evidence does *not* reach. | `python3 corpus/artifacts/unreal-r22/verify_descriptor.py` → `PASS local-static actual=accept … reason=one fixed-scope Unreal-style Runtime module descriptor (local static JSON)`, rc 0. **+NC:** `python3 corpus/artifacts/unreal-r22/verify_descriptor.py corpus/artifacts/unreal-r22/Headless3DFixture.bad-type.uplugin --expect-reject` → `PASS local-static actual=reject … reason=unsupported module Type: 'Unknown'`, rc 0. | `corpus/artifacts/unreal-r22/README.md`; `corpus/knowledge/engines.md` Unreal row (evidence class (a)); `reports/round-103/skill-table-review.md` §3.1 (the missing E-row); r104 re-derivation `reports/round-104/skill/author.md` §2 |
+| **F** | **Lane fixture runtime result** — e.g. a named battery row reports `PASS` | `verified-here` only for a saved, bounded execution on this host; include the receipt path and bounded-run disclosure. This label concerns that lane fixture run only: it does not establish an engine generally or promote an engine-census row. | saved `verdicts.json` whose aggregate line reads `PASS battery` (`cases=N pass=N fail=0`) with the named row's `verdict=PASS`, `actual_exit=0`, `reasons=[]`, **and** `seeds_unchanged=true`; the exact invocation command; the receipt path, scope, and bound (including timeout), with seed digests identifying the runner and fixture. **A named non-author replay** (independent re-run producing a matching receipt — e.g. the r104 author run corroborated by the r104 full-regression seat) is required; the row label claims reproducibility, not an independent oracle. | `python3 corpus/fixtures/run_battery.py --only phys3d_joints_free_ops` → the runner's timestamped receipt under `corpus/live/runs/<ts>/verdicts.json`: `cases=1 pass=1 fail=0`, row `PASS actual_exit=0 reasons=[]`, `seeds_unchanged=true`; `--only` one row, `case_timeout_seconds=20`. (Historical example receipt from the r104 fix, frozen: `reports/round-104/physics/author-runs-final/20261018T193509710404Z/verdicts.json` — never write new receipts into a frozen round directory.) | `reports/round-104/physics/author.md` §§3.1, 7 and the saved receipt, both stamped in §6; runner and target fixture digests are recorded in the receipt |
 
 **Citation rule for mutable files.** Cite a mutable artifact by **section heading
 plus a sha256 stamp**, not by bare line number; cite a frozen artifact
@@ -75,11 +78,11 @@ the search key.
 
 ---
 
-## 3. Checklist — before writing any Unreal-content claim
+## 3. Checklist — before writing any Unreal-content or lane-fixture runtime claim
 
 Run the commands; the claim is admissible only when the relevant line holds.
 
-- [ ] **Which row is this?** Pick A / B / C / D / E from §1. If it fits none, the
+- [ ] **Which row is this?** Pick A / B / C / D / E / F from §1. If it fits none, the
       claim is outside this table's authority — narrow it or open a row.
 - [ ] **A-row:** `(cd corpus/knowledge/unreal-mcp && sha256sum -c .manifest.d/audit-reference.sha256)`
       → 12 × `OK`, rc 0, **and** `bash corpus/knowledge/unreal-mcp/gate/run_gate.sh`
@@ -94,6 +97,8 @@ Run the commands; the claim is admissible only when the relevant line holds.
 - [ ] **D-row:** the probe command and its output are pasted; if it rests on a
       binary string, the re-derivation search is pasted instead of a line number.
 - [ ] **E-row:** the checker's `PASS` line **and** its reject control are both pasted.
+- [ ] **F-row:** saved `verdicts.json` + exact command; name the receipt path and
+      bounded scope/timeout, and do not generalize the fixture result to an engine.
 - [ ] **Label:** exactly one label, drawn from the vocabulary §1 names for that
       row — and both labels stated where both apply.
 - [ ] **F7:** if the claim touches one of the six dissenting cards
@@ -161,25 +166,31 @@ Stated as decisions, because a table that only permits is not a discipline.
 
 ## 6. Re-deriving this file
 
-Every command in §1 is re-run and its output pasted in
-`reports/round-104/skill/author.md` §2, on lane HEAD `88c3b2c` (2026-10-18).
-Artifact stamps at that revision (re-hash before acting on any of them). The two
-`gate/` rows are marked **worktree** because both moved *during* this seat's run —
-re-read them, never trust the stamp alone:
+Rows A–E's command outputs are pasted in `reports/round-104/skill/author.md` §2,
+on lane HEAD `88c3b2c` (2026-10-18). Row F's exact command/output and bounded
+receipt are preserved in `reports/round-104/physics/author.md` §§3.1, 7 and the
+saved receipt path stamped below. The hashes below were re-run from the r105
+worktree at lane HEAD `1eaa568`; the exact `sha256sum` command and output are in
+`reports/round-105/skill6/stamps.md`. Re-hash before acting on any stamp.
 
-| artifact | role in this file | sha256 (at write time) |
+| artifact | role in this file | sha256 (r105 worktree re-hash) |
 |---|---|---|
-| `corpus/knowledge/unreal-mcp/gate/run_gate.sh` | CHECK 1–4, the standing close-out gate — **worktree, uncommitted** (HEAD still carries `577c8b54…`; it took ≥5 identities during r104) | `e55213049db7538d2c126f02b7e6d91bfb38af77ff5f8b375b521b400d7b9c08` |
-| `corpus/knowledge/unreal-mcp/gate/README.md` | the gate's own contract, pin notes, quota-pressure controls — **worktree, uncommitted** | `e3bc66b7f5d981a1128dc60ae910ec7c53dac85107c67802134e32bc7c0e98bf` |
+| `corpus/knowledge/unreal-mcp/gate/run_gate.sh` | CHECK 1–4, the standing close-out gate | `390a25ae4e389a00c4c5147efd451e21303ae501abe2523ad713b6d88e57b2cf` |
+| `corpus/knowledge/unreal-mcp/gate/README.md` | the gate's own contract, pin notes, quota-pressure controls | `e3bc66b7f5d981a1128dc60ae910ec7c53dac85107c67802134e32bc7c0e98bf` |
 | `corpus/knowledge/unreal-mcp/README.md` | binary policy + ternary mapping + host reality | `c79d8dd1d7c0c7bc934700187ee322d6d1cb20fc03cc974fa62ee2d95b8ee721` |
 | `corpus/knowledge/unreal-mcp/PROVENANCE.md` | pin + byte-identity + install receipts | `36938c71a0f5b1296b60ed505274d0b19fd87308eac61983525c2b2b44387f01` |
-| `corpus/knowledge/unreal-mcp/adaptation-kimi.md` | rows D's source; table, policy, register | `084a34cd94806caa497de1ab80df84f95876114048ead83bc158b4d50de8c879` |
+| `corpus/knowledge/unreal-mcp/adaptation-kimi.md` | rows D's source; table, policy, register | `a2db1d283ef3d277309322245fbf3614d066e35ca3e440d85efe39365f2223a1` |
 | `corpus/lessons/r102-unreal-integration.md` | Laws 1–4, counting traps, hooks | `cf237b8831560c58a3d6d045a9a93e00e1993f798984c08b1abef8a19f9a8ea2` |
 | `corpus/knowledge/engines.md` | the no-promotion rule §5.1 restates | `d03907d3d63771c10558a2bc276d62c50bcdea1d02150d78e6d1a720a0c3bddf` |
-| `corpus/artifacts/unreal-r22/` | row E's subject (descriptor + checker + reject control) | per file |
-| `reports/round-101/r101-reviewer-c{1,2,3}.md`, `reports/round-101/r101-mutation-tester.md`, `reports/round-101/r101-critic-c3.md` | non-author confirmations; F7 witness | frozen |
+| `corpus/artifacts/unreal-r22/` | row E's subject (descriptor + checker + reject control) | per file; all file hashes in `reports/round-105/skill6/stamps.md` |
+| `reports/round-101/r101-reviewer-c{1,2,3}.md`, `reports/round-101/r101-mutation-tester.md`, `reports/round-101/r101-critic-c3.md` | non-author confirmations; F7 witness | frozen; all file hashes in `reports/round-105/skill6/stamps.md` |
 | `reports/round-102/skill-decision-table-draft.md` | the draft this section's table descends from | `fa360bde7f44de1078edef7d1555492a112f6c56ca443066ccbc3c6b1fb317c2` |
 | `reports/round-103/skill-table-review.md` | the review whose landing conditions §1–§5 apply | `95d40d92432252f66d6edf886ac99bf60e190461f075db3d7936bf94527d6815` |
+| `reports/round-104/skill/author.md` | §1 command/output re-derivation | `454ad5b6a215ea5ddfe01b8a6ebc69d91cc9c34c72e79f4fead8cc9e01ae5933` |
+| `corpus/fixtures/run_battery.py` | row F's bounded fixture runner; read-only | `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f` |
+| `corpus/fixtures/phys3d_joints.gd` | row F's fixture seed; read-only | `80bf44c53255a0a33b2282ca4e6278d42d82be4f616252925e128c928eca81e6` |
+| `reports/round-104/physics/author.md` | row F evidence, §§3.1 and 7 | `4b3cbbf04ec35960b5d4a4362d596eb4c3c3ab291a9e2ea6c32749a637f02b81` |
+| `reports/round-104/physics/author-runs-final/20261018T193509710404Z/verdicts.json` | row F bounded one-row receipt | `17b037d5154b7cf51a55df197a142f09ce3ea0fb9b4471f75a74a028f508397c` |
 
 **Scope of this file's authority.** Landing this table satisfies the *artifact*
 half of `SHONEN.md` box 1. It does **not** close box 1: the box is a promotion

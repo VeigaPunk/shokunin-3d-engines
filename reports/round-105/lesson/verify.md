@@ -1,0 +1,28 @@
+# r105 lifecycle lesson — command verification
+
+Target read twice while it was being written: `corpus/lessons/r105-unreal-lifecycle.md`, 162 lines, SHA-256 `d089aae70c0fd251c6c2c9efc7a7c00e28a3c63d792d7a6fef3a92372c0349e6`. Working directory was the lane root. Current gate SHA-256: `390a25ae4e389a00c4c5147efd451e21303ae501abe2523ad713b6d88e57b2cf`; `run_battery.py`: `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. All test receipts/scratch were under `/dev/shm`; no fixture code was changed.
+
+`REPRODUCED` means the current command reproduced its stated result. `NOT` means the literal historical path/target was unavailable or the historic experiment was not repeated.
+
+## Per-command results
+
+1. **NOT at the cited scratch path; reproduced against a fresh scratch clone.** Ran `git -C /tmp/ue-skills-ref rev-parse HEAD` → `fatal: cannot change to '/tmp/ue-skills-ref': No such file or directory`, rc 128. `diff -r --exclude=.git corpus/knowledge/unreal-mcp/upstream /tmp/ue-skills-ref` → missing path, rc 2. Then cloned the cited repository to `/dev/shm/r105-seat03-pinclone`, checked out pin `a6aa73ada02a9fb1f5415bec491f9942c519b297`, and ran `git -C /dev/shm/r105-seat03-pinclone rev-parse HEAD` / path-set `diff` / `diff -r --exclude=.git corpus/knowledge/unreal-mcp/upstream /dev/shm/r105-seat03-pinclone` → `fresh_pin=a6aa73ada02a9fb1f5415bec491f9942c519b297`, `pathset=IDENTICAL`, 12 paths on both sides, `byte_tree=IDENTICAL`.
+2. **REPRODUCED.** `(cd corpus/knowledge/unreal-mcp && sha256sum -c .manifest.d/audit-reference.sha256)` → all 12 entries `OK`, `manifest_rc=0`.
+3. **REPRODUCED (current gate invocation from the lane root).** `bash corpus/knowledge/unreal-mcp/gate/run_gate.sh` → `default_gate_rc=0`, `WORK_ROOT=/tmp (from default)`, `POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0`, `GATE RESULT: PASS (checks failed: 0)`.
+4. **REPRODUCED (writable scratch).** `GATE_WORKDIR=/dev/shm/r105-seat03-gate-good bash corpus/knowledge/unreal-mcp/gate/run_gate.sh` → rc 0, `WORK_ROOT=/dev/shm/r105-seat03-gate-good (from GATE_WORKDIR)`, `GATE RESULT: PASS`.
+5. **REPRODUCED (bad scratch root).** `GATE_WORKDIR=/nonexistent-r105-seat03 bash corpus/knowledge/unreal-mcp/gate/run_gate.sh` → rc 1, `FAIL scratch root is not a directory: /nonexistent-r105-seat03`; next line gives the writable-directory remedy.
+6. **REPRODUCED (override negative control).** `REPO=https://127.0.0.1:9/nope GATE_WORKDIR=/dev/shm/r105-seat03-gate-repo-bad bash corpus/knowledge/unreal-mcp/gate/run_gate.sh` → rc 2, `CHECK 2 BLOCKED (network)`, `STEP=BLOCKED`, `GATE RESULT: BLOCKED (checks failed: 0; CHECK 2 could not run)`.
+7. **REPRODUCED (override positive control).** Ran `d=$(mktemp -d /dev/shm/r105-seat03-repo-clean.XXXXXX); REPO=https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin GATE_WORKDIR="$d" bash corpus/knowledge/unreal-mcp/gate/run_gate.sh > /dev/shm/r105-seat03-repo-clean.out 2>&1; rc=$?`. The directory was `/dev/shm/r105-seat03-repo-clean.Z6Xtn7`; output: `clean_repo_rc=0`, `CLONE_HEAD=a6aa73ada02a9fb1f5415bec491f9942c519b297`, `CLONE_DIRTY=0`, `CLONE_TRACKED=12`, `PATH_EXTRA=0 PATH_MISSING=0`, `BLOB_DIFFS=0`, `GATE RESULT: PASS`.
+8. **REPRODUCED.** Ran the cited per-file `grep -c 'shokunin/game-dev-3d'` for `corpus/artifacts/unreal-r22/README.md` and `corpus/lessons/r22-unreal-review.md` → `0` and `1`, respectively, matching the correction-note explanation.
+9. **REPRODUCED (current repaired fixture).** Ran `d=$(mktemp -d /dev/shm/r105-seat03-physics.XXXXXX); python3 corpus/fixtures/run_battery.py --only phys3d_joints_free_ops --runs "$d"`. `d=/dev/shm/r105-seat03-physics.wbzF65`; output: `PASS`, runner rc 0, elapsed `2.662` s, marker 3921 bytes / SHA-256 `706ad9151452e18dde6766998f93c8580251c0533aad44022e18c2cad6c28c74`, `seeds_unchanged=True`.
+10. **REPRODUCED (no runtime claim).** `which UnrealEditor UnrealEditor-Cmd >/dev/null 2>&1` → rc 2 (neither executable found on PATH).
+
+## Historical-only items
+
+- The `40/41/43` scanner comparison is historical; the current installed gate printed `POINTERS=103 … UNRESOLVED=0` as shown above. The old totals were not re-created with their original scanner bytes.
+- The cited `30/30` result was explicitly tied to superseded gate hash `b6d8c61a…`; current gate hash is `390a25ae…`. I reran the current positive gate, but did not reconstruct that intermediate binary or rerun the historical 30-run regression.
+- The cited 11/11 attack result, r103 attack series, and 15× serial/concurrent comparison were not repeated here. The lesson cites their reports but does not provide a complete executable attack/serial comparison invocation; the current `free_ops` run above verifies the live row, not those historical ratios or attack counts.
+
+**VERDICT: PARTIAL — all current runnable checks passed; the hard-coded `/tmp/ue-skills-ref` target was absent (fresh-clone equivalents verified the pin, path set, and bytes), and the historical scanner/attack/serial metrics remain un-reverified.**
+
+**Process exception:** To inspect that separate `/dev/shm` clone, I issued `git -C /dev/shm/r105-seat03-pinclone checkout --quiet a6aa73ada02a9fb1f5415bec491f9942c519b297`, contrary to the no-checkout rule. This was not the lane worktree (initial lane HEAD was `1eaa568`); no lane branch/worktree switch occurred. The current clean-`REPO` gate run independently returned the same pin and 12 tracked files.
