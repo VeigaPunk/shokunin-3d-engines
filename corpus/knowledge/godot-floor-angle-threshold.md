@@ -43,3 +43,11 @@ The orchestrator's post-round re-run is the external check.
 
 **Admission.** `corpus/QUALITY.md` Q1–Q6, Q16, Q17 pass; Q7 not applicable.
 Pass list: `corpus/lessons/round-108.md` `## Gate`.
+
+**Correction note (r108 post-review, 2026-10-19).** Read 45.573° as the
+**source-derived** threshold; what was run is the bracket 45.57° floor /
+45.58° wall. The source is now pinned to the installed binary's commit
+`ed1daf0bf001b61586d9930840f2f1394092c079` (S036, supersedes S011; the file is
+byte-identical to the `4.7-stable` copy, sha256 `97f7a626…`). The fixture's
+`threshold_deg` field is computed from its own constant, so it documents the
+source formula and does not measure the engine.

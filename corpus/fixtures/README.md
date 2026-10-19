@@ -1082,3 +1082,7 @@ run reports `ordinary=294 negative_controls=61`
 (`reports/round-108/battery/full-run.stdout.txt`). r108 added the five
 `slope3d_bound_*` rows (`slope3d_boundary.gd`, floor/wall boundary at a 45°
 limit). Re-run the count; never copy it (`corpus/QUALITY.md` Q17).
+
+**Post-review note (r108, 2026-10-19).** Line 5's "235 registered cases" is
+stale. The current registered count is 355 (`grep -cE '^\s+\("'
+corpus/fixtures/run_battery.py`): 294 ordinary and 61 negative controls.
