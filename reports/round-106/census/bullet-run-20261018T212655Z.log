@@ -1,0 +1,69 @@
+=== pre env 2026-10-18T21:26:55Z ===
+HEAD=0cc3f4162f8c319f8d01a69a174fe939f36701bd
+PWD=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin
+node_version=v26.12.0
+node_path=/home/vgpnk/.local/share/mise/installs/node/latest/bin/node
+node_real=/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node
+python_path=/usr/bin/python3
+python_version=Python 3.14.7
+godot_path=/usr/bin/godot
+4.7.2.stable.arch_linux.ed1daf0bf
+sha256 node_real:
+caa24debe02770c92a70677e2a62ca98890150e7ac1c17bcfe31bcc98cc89943  /home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node
+sha256 pins:
+f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f  corpus/fixtures/run_battery.py
+f988ba86fdef62a03a59c91e000a94288a4610f9ef9c92c5e56db967515f1447  corpus/fixtures/r95_bullet.gd
+8821ebd50459dd1371a6484a68abc79e0decb8aa50a8c416636f644baddf5b6b  corpus/fixtures/r95_child.py
+eca749a0d9b53964dca06764300c3481f328dc4cd1499a60e287393972be3693  corpus/fixtures/r95vendor/pybullet.cpython-314-x86_64-linux-gnu.so
+pinned node still present:
+v24.21.0
+=== battery ===
+PASS r95_bullet_det: exit=0 expected=0
+PASS r95_bullet_freeze: exit=0 expected=0
+PASS r95_bullet_rt: exit=0 expected=0
+PASS r95_bullet_shm: exit=0 expected=0
+PASS r95_bullet_sleep: exit=0 expected=0
+PASS r95_bullet_sleep2: exit=0 expected=0
+PASS r95_bullet_nan: exit=0 expected=0
+PASS r95_bullet_nan2: exit=0 expected=0
+PASS r95_bullet_fric: exit=0 expected=0
+PASS r95_bullet_rest: exit=0 expected=0
+PASS r95_bullet_knobs: exit=0 expected=0
+PASS r95_bullet_solver: exit=0 expected=0
+PASS r95_bullet_pile: exit=0 expected=0
+PASS r95_bullet_misc: exit=0 expected=0
+PASS r95_bullet_neg_dt: exit=2 expected=2
+PASS r95_bullet_neg_order: exit=2 expected=2
+PASS r95_bullet_neg_radius: exit=2 expected=2
+PASS r95_bullet_neg_simtime: exit=2 expected=2
+PASS r95_bullet_neg_badid: exit=2 expected=2
+PASS r95_bullet_neg_shm_rt: exit=2 expected=2
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+PASS     r95_bullet_det                     r95_bullet.gd              --arm=det          0/0       ordinary
+PASS     r95_bullet_freeze                  r95_bullet.gd              --arm=freeze       0/0       ordinary
+PASS     r95_bullet_rt                      r95_bullet.gd              --arm=rt           0/0       ordinary
+PASS     r95_bullet_shm                     r95_bullet.gd              --arm=shm          0/0       ordinary
+PASS     r95_bullet_sleep                   r95_bullet.gd              --arm=sleep        0/0       ordinary
+PASS     r95_bullet_sleep2                  r95_bullet.gd              --arm=sleep2       0/0       ordinary
+PASS     r95_bullet_nan                     r95_bullet.gd              --arm=nan          0/0       ordinary
+PASS     r95_bullet_nan2                    r95_bullet.gd              --arm=nan2         0/0       ordinary
+PASS     r95_bullet_fric                    r95_bullet.gd              --arm=fric         0/0       ordinary
+PASS     r95_bullet_rest                    r95_bullet.gd              --arm=rest         0/0       ordinary
+PASS     r95_bullet_knobs                   r95_bullet.gd              --arm=knobs        0/0       ordinary
+PASS     r95_bullet_solver                  r95_bullet.gd              --arm=solver       0/0       ordinary
+PASS     r95_bullet_pile                    r95_bullet.gd              --arm=pile         0/0       ordinary
+PASS     r95_bullet_misc                    r95_bullet.gd              --arm=misc         0/0       ordinary
+PASS     r95_bullet_neg_dt                  r95_bullet.gd              --arm=neg_dt       2/2       negative
+PASS     r95_bullet_neg_order               r95_bullet.gd              --arm=neg_order    2/2       negative
+PASS     r95_bullet_neg_radius              r95_bullet.gd              --arm=neg_radius   2/2       negative
+PASS     r95_bullet_neg_simtime             r95_bullet.gd              --arm=neg_simtime  2/2       negative
+PASS     r95_bullet_neg_badid               r95_bullet.gd              --arm=neg_badid    2/2       negative
+PASS     r95_bullet_neg_shm_rt              r95_bullet.gd              --arm=neg_shm_rt   2/2       negative
+totals: cases=20 pass=20 fail=0 ordinary=14 negative_controls=6 probes=0
+PASS battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/verdicts.json
+COMMAND_EXIT=0
+=== post env 2026-10-18T21:27:23Z ===
+node_version=v26.12.0
+node_path=/home/vgpnk/.local/share/mise/installs/node/latest/bin/node
+git status fixtures:

@@ -7,9 +7,9 @@
 From repository root:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
 # exit 0; 37/37 (17 ordinary, 20 negative); four opt-ins PASS; seeds_unchanged=true
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only slope3d_travel,slope3d_travel_level
+python3 corpus/fixtures/run_battery.py --only slope3d_travel,slope3d_travel_level
 # exit 0; 2/2 (one ordinary, one negative); seeds_unchanged=true
 ```
 
@@ -26,7 +26,7 @@ The slope run exits 0 and prints exact `PASS slope3d_travel downhill_x=-0.0810 y
 Private ignored copy `corpus/live/r28-private-slope-review/angle/slope3d_travel.gd` changed only `const SLOPE_ANGLE := 30.0` → `40.0` (mutant SHA-256 `055e67c704b07fcbcdd2b956b627fb5ca9181322a36bbc99b2f29d1ddd28e781`):
 
 ```sh
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/r28-private-slope-review/angle --script res://slope3d_travel.gd
+/usr/bin/godot --headless --path corpus/live/r28-private-slope-review/angle --script res://slope3d_travel.gd
 # exit 1; banner only; stderr ERROR: slope3d_travel: slope travel failed x=-0.1347 y=1.4605 grounded=60 normal=(-0.642788, 0.766044, 0.0)
 ```
 
@@ -35,9 +35,19 @@ The observed angle is 40°, normal matches rotated up at 40°, and measured X/Y/
 A separate private ignored copy `corpus/live/r28-private-slope-review/policy/slope3d_travel.gd` changed only `actor.floor_stop_on_slope = false` → `true` in behavior, plus a pre-guard diagnostic print (mutant SHA-256 `b1f7ee79e71a609c91cb988ebf85a46d04390cfe9c0dca12e9b95c93929ba658`):
 
 ```sh
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/r28-private-slope-review/policy --script res://slope3d_travel.gd
+/usr/bin/godot --headless --path corpus/live/r28-private-slope-review/policy --script res://slope3d_travel.gd
 # exit 1; stdout POLICY_OBSERVED x=0.0000 y=1.3662 grounded_ticks=52 normal=(-0.5, 0.866025, 0.0) rotation=30.0 stop=true
 # stderr ERROR: slope3d_travel: floor/policy setup lost
 ```
 
 The original guard rejects true policy before the X assertion; the diagnostic was necessary to measure X≈0. Captured `policy.stdout` SHA-256 `79e4d443df808412093454a964224d446c7de010c1a5de59c941f2605ec83e39`, `policy.stderr` `5ea4f506ffc2bebb4cfd8831eb75cebf9ca500b1890a7a242bf72a7f47f41d6f`. No PASS marker, parse/script error or leak. This reproduces the LOG's adverse default-policy finding and separates it from explicit-policy travel; it does not prove a general friction or acceleration law, universal slope behavior, all-tick grounding, or rendered motion. Reviewer altered only ignored private copies; no tracked fixture constant changed.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; the README, runner, and new-slope digests on the r27-comparison line match historical git blobs and do not match live bytes. Live `sha256sum`: `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1`; `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`; `corpus/fixtures/slope3d_travel.gd` `c18a285ec1b30edddc2fa524c8d560c76c1282241a21bdf42942467aef47ef44` (quoted new-slope `ad553688c2213e2a64a3296051fe5b51d5cdcb40f0a5b8059a4de32d24b78e5c` is the r28 blob, not today's file). Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T060433692579Z/verdicts.json`
+> - `corpus/live/runs/20261013T060433692552Z/verdicts.json`
+> - `corpus/live/runs/20261013T055914266533Z/verdicts.json`

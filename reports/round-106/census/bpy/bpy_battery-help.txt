@@ -1,0 +1,46 @@
+usage: bpy_battery.py [-h] [--blender BLENDER] [--runs RUNS]
+
+r79 bpy battery: run bpy_sync_probe.py under `blender -b -P` and pin the
+measured two-layer lattice (Blender 5.2.1 LTS headless, this host).
+
+Sibling runner to run_battery.py -- the Godot battery stays untouched (prior
+rows byte-stable); this runner owns the bpy runtime surface only.
+
+Case model differs from the godot CASES tuples: one blender invocation emits
+all ARM lines; each CASES row asserts a (arm, point, layer) line carries the
+pinned key=value assignments. A case FAILs if the line is missing or any
+pinned key disagrees. `non_signal=True` rows pin the measured
+evaluated-visibility quirk for determinism -- they are observations, never
+staleness witnesses (see fixture docstring).
+
+r80 adds the evalcat cases: per-mutation-class EDGE rows pinning the
+frontier eval-event catalogue, incl. the closed-set `violations=0` row.
+
+r81 adds: (a) six evalcat extension rows (ext_*) folded per r80-critic
+guidance -- they run inside arm_evalcat before `closed`, so they stay
+under the closed-set falsifier; (b) the fd1-inheritance reorder arm --
+CASES pin per-cell attribution of reordered bytes and an order_checks
+block on raw stdout pins the discriminating topology (child bytes
+physically precede the parent's pre-spawn-emitted row) plus the splice
+boundary (a glued line must be dropped, not misattributed).
+
+r82 adds: (a) six more evalcat bare classes (ext2_*: update_tag,
+matrix_world custom setter, libraries.load, instance_collection,
+batch_remove, evaluated_get on a stale ID) plus two documentary DEG side
+cells, folded per the r80-critic remainder list -- all inside arm_evalcat
+before `closed`, under the closed-set falsifier; (b) parser-hazard
+CONTRACT pins (xconnector X6): a live forged violations=0 row injected
+mid-stream (absorbed by physical last-wins -- the genuine trailing
+closed row keeps the cell), a live dup_flush same-key row (later forged
+value wins -- pinned as the contract), and hazard_checks on raw stdout +
+subprocess capture pinning the demonstrated resolutions: forgery landing
+physically LAST does mask a real violation (parser detects nothing),
+non-UTF-8 fd1 bytes raise UnicodeDecodeError unhandled out of
+run_process, and a detached descendant holding fd1 makes run_process
+return only via the TIMEOUT branch. These document measured behavior --
+never "the parser is safe".
+
+options:
+  -h, --help         show this help message and exit
+  --blender BLENDER
+  --runs RUNS

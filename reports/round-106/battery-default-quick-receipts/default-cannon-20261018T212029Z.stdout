@@ -1,0 +1,6 @@
+FAIL r94_cannon_nan: exit=0 expected=0 reasons=['exact stdout marker missing']
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+FAIL     r94_cannon_nan                     r94_cannon.gd              --arm=nan          0/0       ordinary
+totals: cases=1 pass=0 fail=1 ordinary=1 negative_controls=0 probes=0
+FAIL battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat87/runs-default-20261018T212029Z/20261018T212029481284Z/verdicts.json

@@ -9,3 +9,10 @@ Reviewed work commit `3cb98a01fcb8df63f238c2fa8b1e3dfbc9620f34` and round-59 pre
 - `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing`: exit 0, Godot `4.7.2.stable.arch_linux.ed1daf0bf`, 83/83 cases (41 ordinary, 42 negative) and all four optional probes PASS. Receipt `corpus/live/runs/20261013T124431943795Z/verdicts.json` SHA-256 `1858f42ebd23eb60274936b0f0d828f1ba90b663e876e94bd2c9f3dc6af424ce`. Against r58 `corpus/live/runs/20261013T123903480026Z/verdicts.json`, all 83 case names and stable raw fields (`script`, `flags`, exits, error, kind, marker, verdict, reasons, stdout, stderr) match; excluded run-specific command scratch paths and elapsed times. All 50 Godot seed SHA-256 values match and `seeds_unchanged=true`.
 
 **Reviewer finding:** The bounded r59 near-plane claim is supported under Node three.js math, with a live near mutation and unchanged old controls; no regression found in the replayed Godot corpus. This proves neither rendered pixels nor WebGL/browser/GPU behavior, nor a general precision-boundary guarantee or another engine's semantics. No renderer was instantiated. No commit, push, merge, or implementation edit by this reviewer.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T124431943795Z/verdicts.json`
+> - `corpus/live/runs/20261013T123903480026Z/verdicts.json`

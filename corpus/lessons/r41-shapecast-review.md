@@ -37,3 +37,21 @@ godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r41-shapecast-rev
 `adjust-setup` also changed **only** the setup readback expectation `box_shape.size != Vector3(2, 2, 2)`→`box_shape.size != Vector3(2, 2, 4)`; left contact/fraction literals and markers unchanged. Copied source SHA-256 `a1f3fd72def693dfaaa0491d726bea537615dab4d5fa6d474b8ad16dbf39ec82`. It exits 1 at line 44's measured hit assertion, stderr exact diagnostic `ERROR: shapecast3d_sphere: sphere cast hit mismatch point=(0.0, 0.0, 2.0) normal=(0.0, 0.0, 1.0) safe=0.244141 unsafe=0.250000`. This shows live box front contact shifted from z1 to z2, with fraction change from ~0.414062/~0.417969 to ~0.244141/~0.250000; the compound assertion does **not** independently isolate point from fraction predicates. Each stdout contains only the Godot banner and blank line; no PASS/negative marker. Neither stderr contains `SCRIPT ERROR:`, `Parse Error:`, or ObjectDB leak. Raw `mutation.stdout`/`mutation.stderr` are beside each copied script; hashes of stderr size-only `2568e595282e61659c93269e90f2fcce6a70faa78b193d681e6cce19626ced70`, adjusted `91702f1d691696ac593619de8b6c0404af6e4bf6b45cb2f5ab7f83ed6ca59fb8`. The changed setup expectation is required to pass the earlier guard; the second failure is the observed physics result, not setup or a parser/classifier leak.
 
 Verdict for non-author replay: **coverage improved** by a bounded live `ShapeCast3D` finite-volume sweep beyond existing ray/CharacterBody cases; **depth unchanged**, **calibration unchanged**. No observed harm to prior case fields or seed hashes other than the planned three seed-file additions/updates.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `README.md` and `run_battery.py` digests match historical git blobs, not live `sha256sum` `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `shapecast3d_sphere.gd` digest `7a9f5f3efeb6…` still matches the live fixture. The campaign HEAD `703068933ddff24eb51e9cf8e1afff0c9a27099b` is not an object in this repo (`git cat-file -t` fails); it is left as the review's before-state citation. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T071906657777Z/verdicts.json`
+> - `corpus/live/runs/20261013T071906657777Z/tree-timeout-verdicts.json`
+> - `corpus/live/runs/20261013T071906657777Z/crash-exit-verdicts.json`
+> - `corpus/live/runs/20261013T071906657777Z/stream-attribution-verdicts.json`
+> - `corpus/live/runs/20261013T071906657777Z/mutation-verdicts.json`
+> - `corpus/live/runs/20261013T071906657777Z/battery-output.txt`
+> - `corpus/live/runs/20261013T071906657842Z/verdicts.json`
+> - `corpus/live/runs/20261013T071241922851Z/verdicts.json`
+> - `corpus/live/runs/r41-shapecast-review-private/{size-only`
+> - `corpus/live/runs/r41-shapecast-review-private/size-only`
+> - `corpus/live/runs/r41-shapecast-review-private/adjust-setup`

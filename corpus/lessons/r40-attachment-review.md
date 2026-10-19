@@ -33,3 +33,19 @@ Both private executions: stdout SHA `1fb0f12cefe41f881cb436e6731d981084b95f8db9b
 ## Independent verdict and limits
 
 **Depth improved**: an attached live Node3D and offset marker follow the bone pose under root rotation, beyond r39's skeletal pose-only readback. **Coverage unchanged** (same skeletal family); **calibration unchanged** (existing battery classification and four probes). Evidence is bounded to one two-bone headless Godot setup and sampled frames; no mesh deformation, skinned vertex, GPU rendering/pixels, arbitrary animation, other driver or other-engine generalization. The negative arm is the fixture's intact unrotated control (exit 2); private angle changes deliberately reject (exit 1), never count as passing cases.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `README.md` and `run_battery.py` digests match historical git blobs, not live `sha256sum` `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `skeleton3d_attachment.gd` digest `25851f8ccd47…` still matches the live fixture. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T071241922851Z/verdicts.json`
+> - `corpus/live/runs/20261013T071241922851Z/tree-timeout-verdicts.json`
+> - `corpus/live/runs/20261013T071241922851Z/crash-exit-verdicts.json`
+> - `corpus/live/runs/20261013T071241922851Z/stream-attribution-verdicts.json`
+> - `corpus/live/runs/20261013T071241922851Z/mutation-verdicts.json`
+> - `corpus/live/runs/20261013T071241922851Z/battery-output.txt`
+> - `corpus/live/runs/20261013T071241923315Z/verdicts.json`
+> - `corpus/live/runs/20261013T070607019182Z/verdicts.json`
+> - `corpus/live/runs/r40-attachment-review-private/{angle-only`

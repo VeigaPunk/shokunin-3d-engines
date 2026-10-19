@@ -1,0 +1,62 @@
+{
+  "node": "v26.12.0",
+  "three": "0.186.1",
+  "seedsUnchanged": true,
+  "seedDigests": {
+    "scene_graph.mjs": "e4bb0a136391cb42baafcbab4905e1c4004d316cec44f5f67519f37a2ab075af",
+    "run_cases.mjs": "97eca1b2e26db106e5ab7efe71767b533d99abdc1ee9ff80156ac402e11458e5",
+    "package.json": "799216c1e1574c14848ba79c752e11ef63ed208a73954dc7024f4866b45367fe",
+    "package-lock.json": "1a8e6ee2341eb4e3bcf764ad0c14973c89afee0a613bb14d41ea2fa5851c19b8"
+  },
+  "results": [
+    {
+      "name": "positive",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/scene_graph.mjs"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0,
+      "signal": null,
+      "error": null,
+      "expectedLine": "PASS three3d scene_graph world=-1.000,0.000,0.000 parent_intact=true reverse_rejected=true",
+      "stdout": "PASS three3d scene_graph world=-1.000,0.000,0.000 parent_intact=true reverse_rejected=true\n",
+      "stderr": "",
+      "verdict": "PASS"
+    },
+    {
+      "name": "negative_wrong_order",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/scene_graph.mjs",
+        "--wrong-order"
+      ],
+      "expectedExit": 2,
+      "actualExit": 2,
+      "signal": null,
+      "error": null,
+      "expectedLine": "NEGATIVE REJECTED: three3d wrong_order expected=-1,0,0 reversed=2.000,0.000,-3.000 parent_intact=true",
+      "stdout": "NEGATIVE REJECTED: three3d wrong_order expected=-1,0,0 reversed=2.000,0.000,-3.000 parent_intact=true\n",
+      "stderr": "",
+      "verdict": "PASS"
+    },
+    {
+      "name": "mutation",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/scene_graph.mjs",
+        "--mutate-offset"
+      ],
+      "expectedExit": 1,
+      "actualExit": 1,
+      "signal": null,
+      "error": null,
+      "expectedLine": "ERROR: three3d world origin mismatch observed=-2.000,0.000,-0.000 expected=-1,0,0",
+      "stdout": "",
+      "stderr": "ERROR: three3d world origin mismatch observed=-2.000,0.000,-0.000 expected=-1,0,0\n",
+      "verdict": "PASS"
+    }
+  ],
+  "verdict": "PASS",
+  "boundedClaim": "three.js Object3D scene-graph math under Node, no renderer, GL context, pixels, or browser."
+}

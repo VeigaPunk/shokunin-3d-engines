@@ -1,0 +1,11 @@
+CENSUS_IMPORT_START
+bpy.app.version 5.2.1
+bpy.app.version_string 5.2.1 LTS
+bpy.app.build_hash 9e2066aef7ef
+bpy.app.background True
+bpy.app.binary_path /usr/bin/blender
+python 3.14.7
+CENSUS_IMPORT_OK
+Blender 5.2.1 LTS (hash 9e2066aef7ef built 2026-09-01 00:24:57)
+
+Blender quit

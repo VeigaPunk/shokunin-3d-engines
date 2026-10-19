@@ -130,9 +130,21 @@ promised branch.
   (`reports/round-103/r103-report.md:269,484-499`; adversarial measurement,
   `reports/round-103/physics/adversary.md:58-69,139-156`). r104 switched to
   concurrent children with an in-bound fail-closed batch deadline; the row moved
-  from timeout to **2.9 s PASS**, with its marker unchanged (L1 close receipt `corpus/live/runs/20261018T201215739340Z/verdicts.json` — full battery 337/350 corroboration — and the r104 author runs under `reports/round-104/physics/author-runs-final/`; per SKILL.md row F, a fixture-runtime claim carries its receipt)
+  from timeout to **2.9 s PASS**, with its marker unchanged (L1 close receipt `corpus/live/runs/20261018T201215739340Z/verdicts.json` — full battery 337/350 corroboration under the default environment, mise Node v26.12.0, not the pinned fnm Node v24.21.0 total — and the r104 author runs under `reports/round-104/physics/author-runs-final/`; per SKILL.md row F, a fixture-runtime claim carries its receipt)
   (`reports/round-104/r104-report.md:700-713`). Measure spawn count × boot floor
   before blaming the engine or loosening a shared timeout.
+
+  **Environment pairing (r106, 2026-10-18).** The `337/350` in the bullet above
+  is the default-environment total only. Plain `node` resolves to mise
+  `v26.12.0` at `/home/vgpnk/.local/share/mise/installs/node/latest/bin/node`.
+  The cited receipt parses to `cases=350 pass=337 fail=13`, `verdict=FAIL`,
+  `seeds_unchanged=true`; all 13 failures are `r94_cannon_*` with observed
+  `node=v26.12.0`. It is not the pinned-environment result. The clean pinned
+  receipt, fnm Node `v24.21.0` prepended on `PATH`, is
+  `reports/round-105/n24/runs/node24-full-rerun-20261018T204240Z.verdicts.json`
+  (byte-identical to `corpus/live/runs/20261018T204240718894Z/verdicts.json`):
+  `cases=350 pass=350 fail=0`, `verdict=PASS`, `seeds_unchanged=true`, positive
+  cannon rows `node=v24.21.0`.
 
 ## Next-iteration hooks
 
@@ -160,3 +172,34 @@ promised branch.
    the precedence ruling as owed (`reports/round-102/r102-report.md:358-366`;
    `reports/round-104/r104-report.md:615-618,727-735`). Do not treat this lesson
    as authority to edit the byte-pinned subtree.
+
+## Correction note — r106, 2026-10-18
+
+The environment-pairing note above is left as written. This note only splits
+the `2.9 s` figure from the file it must not be read out of.
+
+> **`2.9 s` is not the elapsed in the 337/350 file.** The bullet's `2.9 s
+> PASS` is the figure in `reports/round-104/r104-report.md:706` (L1 `--only
+> phys3d_joints_free_ops`). Parsed this seat,
+> `corpus/live/runs/20261018T201215739340Z/verdicts.json` has `only=None`,
+> aggregate `verdict=FAIL`, `cases=350 pass=337 fail=13`,
+> `seeds_unchanged=true`, and `phys3d_joints_free_ops` `verdict=PASS`,
+> `actual_exit=0`, `reasons=[]`, `elapsed_seconds=2.607`. It corroborates the
+> row's PASS and the default-environment 337/350 total. It is not the 2.9 s
+> measurement. Among `reports/round-104/physics/author-runs-final/`,
+> `20261018T195013600353Z/verdicts.json` is the `--only` receipt with
+> `elapsed_seconds=2.907`, `totals cases=1 pass=1 fail=0`, `verdict=PASS`,
+> `seeds_unchanged=true`. The other author receipt,
+> `20261018T193509710404Z/verdicts.json`, is also `--only` PASS, elapsed
+> `2.669`. SKILL.md row F's aggregate `PASS` / `fail=0` is that `--only`
+> shape, not the 337/350 file. This note does not add a `verified-here`
+> label. No Unreal runtime is claimed.
+
+> **Digest correction (r106, 2026-10-18).** The r104 sentence that calls `e5521304…` the landed gate hash is left verbatim; it cites `reports/round-104/r104-report.md:350-356,622-629`, and that report's full form is `e55213049db7538d2c126f02b7e6d91bfb38af77ff5f8b375b521b400d7b9c08` (`:88`). That digest is not a blob of `run_gate.sh` in `git rev-list --all` (3 commits). Live and HEAD content hash is `390a25ae4e389a00c4c5147efd451e21303ae501abe2523ad713b6d88e57b2cf` (25178 bytes, commit `2ca87e8`). The other two historical blobs are `577c8b54…` (19347 bytes, `8c9d9ad`) and `412d1b84…` (13106 bytes, `c6f655d`). Do not treat `e5521304…` as the live gate digest. Pin `a6aa73ada02a9fb1f5415bec491f9942c519b297` still matches `corpus/knowledge/unreal-mcp/README.md` and `PROVENANCE.md`. `sha256sum -c .manifest.d/audit-reference.sha256` from `corpus/knowledge/unreal-mcp` still prints 12 × `OK`.
+>
+> ```
+> $ sha256sum corpus/knowledge/unreal-mcp/gate/run_gate.sh
+> 390a25ae4e389a00c4c5147efd451e21303ae501abe2523ad713b6d88e57b2cf  corpus/knowledge/unreal-mcp/gate/run_gate.sh
+> $ git rev-list --all -- corpus/knowledge/unreal-mcp/gate/run_gate.sh
+> 2ca87e846981c4e0c3e0e0e0  # abbreviated in the seat note; full ids recorded in reports/round-106/consistency/chunk-01.md
+> ```

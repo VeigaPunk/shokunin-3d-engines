@@ -1,0 +1,3217 @@
+{
+  "godot": "/usr/bin/godot",
+  "godot_version": "4.7.2.stable.arch_linux.ed1daf0bf",
+  "godot_version_exit": 0,
+  "godot_version_error": null,
+  "started_utc": "20261018T212139347975Z",
+  "seed": "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures",
+  "scratch": "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+  "case_timeout_seconds": 20,
+  "only": "navagent3d_retarget,navagent3d_retarget_fixed,navagent3d_follow,navagent3d_follow_stationary,navagent3d_next,navagent3d_next_alternate,navagent3d_distance,navagent3d_distance_wide_reach,navagent3d_detour,navagent3d_detour_straight,navagent3d_detour_assert_pathsum,navagent3d_detour_post_edgecentered,navagent3d_detour_post_none,navagent3d_detour_pop_lo,navagent3d_detour_pop_hi,navagent3d_detour_pop_sat,navagent3d_detour_mid_lo,navagent3d_detour_mid_hi,navagent3d_detour_vert_pop_eq,navagent3d_detour_vert_pop_above,navagent3d_detour_tp_mid,navagent3d_detour_tp_eq,navagent3d_detour_gap2_pop_basis,navagent3d_detour_fin_unr_lo,navagent3d_detour_fin_unr_hi,navagent3d_detour_vert_fin_eq,navagent3d_detour_vert_fin_above,navagent3d_detour_fin_reach_eq,navagent3d_detour_fin_reach_above,navagent3d_detour_edge_unr,navagent3d_detour_edge_eq,navagent3d_detour_edge_above,navagent3d_detour_fin_idx_gate,navagent3d_detour_fin_wall,navagent3d_detour_fin_latch,navagent3d_detour_link_shortcut,navagent3d_detour_link_meta_types,navagent3d_detour_link_meta_rids,navagent3d_detour_link_meta_owners,navagent3d_detour_link_meta,navagent3d_detour_link_layers_off,navagent3d_detour_link_layers_on,navagent3d_detour_link_oneway_fwd,navagent3d_detour_link_oneway_rev,navagent3d_detour_link_disabled,navagent3d_detour_link_travelcost,navagent3d_detour_link_entercost,navagent3d_detour_link_gap,navagent3d_detour_link_pop_bank,navagent3d_detour_link_pop_void,navagent3d_detour_mv_walk,navagent3d_detour_mv_live,navagent3d_detour_mv_popback,navagent3d_detour_mv_popstrict,navagent3d_detour_mv_void,navagent3d_detour_mv_pmd_edge,navagent3d_detour_mv_pmd_offmesh,navagent3d_detour_mv_pmd2,navagent3d_detour_mv_latch,navagent3d_detour_mv_unlatch,navagent3d_detour_mv_reanchor,navagent3d_detour_mv_reanchor_same,navagent3d_detour_mv_reanchor_bank,navagent3d_detour_mv_reanchor_void,navagent3d_detour_mv_popskip,navagent3d_detour_mv_reanchor_lazy,navagent3d_detour_mv_reanchor_force,navagent3d_detour_mv_bridge_walk,navagent3d_detour_mut_link_kill,navagent3d_detour_mut_link_drop,navagent3d_detour_mut_link_layers,navagent3d_detour_mut_layers_agent,navagent3d_detour_mut_layers_region,navagent3d_detour_mut_region_move,navagent3d_detour_mut_region_off,navagent3d_detour_mut_region_renew,navagent3d_detour_mut_link_revive,navagent3d_detour_mut_lazy,navagent3d_detour_mut_latch_zombie,navagent3d_detour_mut_win_link,navagent3d_detour_mut_win_region,navagent3d_detour_mut_map_off,navagent3d_detour_mut_map_cycle,navagent3d_detour_mut_same_link,navagent3d_detour_mut_same_region,navagent3d_detour_mut_same_agent,navagent3d_detour_mut_ord_renew_xform,navagent3d_detour_mut_ord_xform_renew,navagent3d_detour_mut_ord_link_offmv,navagent3d_detour_mut_ord_link_mvoff,navagent3d_detour_mut_ord_kill_mapoff,navagent3d_detour_mut_ord_mapoff_kill,navagent3d_detour_mut_force_link,navagent3d_detour_mut_force_ctl,navagent3d_detour_mut_ladder_link,navagent3d_detour_mut_ladder_region,navagent3d_detour_mut_mapoff_ladder,navagent3d_detour_mut_ctx_resume,navagent3d_detour_mut_ctx_phys",
+  "probe_failing": false,
+  "probe_crash_exit": false,
+  "crash_probe_ok": true,
+  "probe_stream_attribution": false,
+  "stream_probe_ok": true,
+  "probe_tree_timeout": false,
+  "tree_probe_ok": true,
+  "seeds_unchanged": true,
+  "seed_digests": {
+    "PINNED-ENV.md": "90b15152654331ee98ef8a7644f8daa2a6363927a386328a16da55b33e22eb9f",
+    "README.md": "347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1",
+    "animation3d_blend.gd": "4638ecc8c64891872594391bc1db38ac1d1ccb5145f21f56766fc87629d22925",
+    "animation3d_keys.gd": "5c4cec8830aff171cd2ac8981c226f55036d6fea4c1f37435829ff29d0e4121b",
+    "animation3d_playback.gd": "1f6027cf153fe7b95721c0a5f02fa7ef61b8d12e0f6fc4f9c7f30e2d04affe38",
+    "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+    "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+    "bpy_battery.py": "045102a8514df96bda0c2268841ec0751de87f678f34cbdf981c3a7c6ff882ec",
+    "bpy_rbw3d.gd": "b35909d13f487ca276188c88fcb1fc29b15b9e60a1060736380e1924f951b61c",
+    "bpy_sync_probe.py": "07ec83e33512b6430b085dee9029163b41594b4e6e8608aab8b98d6c6c483a48",
+    "camera3d_depth.gd": "a34f38e862fd6947fe9c6cca2121592a145710b0abac15476175b4f818669ed9",
+    "camera3d_ortho.gd": "4b9ae949e536947f8a924049588cd1a2d597f25f74217e4ffe9e15ba3d2cd19d",
+    "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+    "crash_exit3d.gd": "efee43b93070f838d4174cfceacec98b056fb34c60525f0479e8e6e1e4c38f99",
+    "curve3d_path.gd": "7e9a71a07a9c76bd063b7d2da74369744230de43adc638fdbd3ba686b3128b7e",
+    "floor3d_ground.gd": "b30c116b522e2e5e7347584e0b68f5dfcf1d10aaf453f5eca7652533f5d82e29",
+    "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+    "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+    "jump3d_gravity.gd": "27730ed5c9c63bc9b1495807159db8c1e280de0bdeb22627052411876a0a48d0",
+    "mesh3d_array.gd": "8dcbf29d6739d43787f47a221645e6226853b369ec38a47d721df06e66bae6cd",
+    "mesh3d_faces_hit.gd": "566e290f9a2e112e8e20921edcbeba04139c40fb0259a986e369372bbd174310",
+    "mesh3d_indexed.gd": "14ce1bae6d7b6a4cfea2aa01a5aa7e4e0a5a10cf58f537339b3e229c738f40a6",
+    "mesh3d_trimesh_hit.gd": "bae284fe0cafb162284d14072a0846897994d9cef725d014fbb9aedbcce27c93",
+    "navagent3d_detour.gd": "66c097e4e5398481bbc9956038e8bd83b32fd879e8ee7071490f4c4ff34d2cec",
+    "navagent3d_distance.gd": "b820e469c35e68cf60d3f87bda94c1968cbc9b943b78513a6bf61bd0761c803a",
+    "navagent3d_follow.gd": "2bdcca4a08bd290bdcb097155c2299ae0fa6b5ac4893f68c2a04b073b782830c",
+    "navagent3d_next.gd": "f0ea0fbb0c8400b7b6fd4b5e5139ae02d0487a1ddedfe483e1fd3c3f6ac5e94f",
+    "navagent3d_retarget.gd": "6ad8584642edf8b1c41fb7116f39bf0e2d9513a2d73a99f0ea83d5cd4e1059d0",
+    "navfollow3d_driver.gd": "ec094e7f7baa317636b093d622687cae4f30928df417a547900406f759d28bbf",
+    "navigation3d_path.gd": "914f08956be5e5b94457876263a13c57c97760e552e8e515472fb2e2fe678710",
+    "navretarget3d_driver.gd": "310a1419c878f13b973b7fff895f5f1d536c7d69bcfb6e5faab98a9f2e7b0102",
+    "pathfollow3d_callback.gd": "991fdb9a59fec593fbf59aa603d6fcb881f5de710510a23816ac50ee692ccc7b",
+    "pathfollow3d_curve.gd": "1a7259fbc3b84b2584f341cc8a75b2a5629736631551f4b9fa3de67e9e40629d",
+    "pathfollow3d_driver.gd": "5fefa9c7fb58da75227312e5b98b61ce07e15ec8aea58076906aa56ba78567a2",
+    "pathfollow3d_paced.gd": "4215453f9eb7e4cae1f56748b2cd2640efe35d14148ef8eb0e87464aa491f8b0",
+    "phys3d_events.gd": "df1cde494cce9575dee78a25259f24cebb7e8523bb32d166d4196f9ad23ec6de",
+    "phys3d_joints.gd": "80bf44c53255a0a33b2282ca4e6278d42d82be4f616252925e128c928eca81e6",
+    "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+    "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+    "r100_fpslat.gd": "da11495de7a24703a911bb1c8fef15ba62481e5f492bda1efd56fc3b1950b537",
+    "r100_probe_r100b_area.gd": "a577d6265f78f1ff337b09a7169a236044b0bd2b16ddfdf416d90e9364d4469d",
+    "r100_probe_r100b_cls.gd": "0adf98aadd38cdc62b60742e3fb393566586cc531706edc3b3ebb98df2a45e03",
+    "r100_probe_r100b_life.gd": "427fc7d159f524da345c0b684b13c6d66690aa59f7e9afc6f73bbab1fb1ad760",
+    "r100_probe_r100b_modes.gd": "249c0caf8ac4a1d5270beccadd65d99d0083a1db77264d56958a8ec0ac884896",
+    "r100_probe_r100b_rt.gd": "8bfd76adf5ae5551eb870524c7677ea24755ac068f71b1d1936e1fd298cb2585",
+    "r100_probe_r100b_sched.gd": "c61025594deff49dfbd7819376a9e6379dca6efb5c6d7b0aa149aa79cbc86849",
+    "r90_child.gd": "84f6241de590b5810357dde7714a19ec37e3072526e165e4c3ac8a8010d9aaa7",
+    "r91_child.py": "ab63245b1b29c5c647444ba6f062695679b795383db8b417f08a4df2ba1a6b56",
+    "r92_animphys.gd": "460e9b6f9ab7fb49ac7954bce5b0613b35fd73628696c4af7a0bfe346134d675",
+    "r92_child.gd": "0e54df34f5f052213447a07bf37ab3064105c5b8d9dd2bc82aef4b3c92b0c937",
+    "r92_remote.gd": "795b093f6e733b3cb676b89a6c3e49d4b263e483c3dbd12abb09a3d959628fdf",
+    "r92_timing.gd": "6082898c197f878039e5fd7c2d6bf5c903431578535c635e4636af801b883a8b",
+    "r93_areasig.gd": "e4b040068a52f55fbcd021c6c58c4f87e4a90e22c17f1e22659158f18e546034",
+    "r93_child.gd": "fac6b4399e4db1de9d4a316e70e317b249d5860556c6ca1625200915a9fd7d3e",
+    "r94_cannon.gd": "d40a1f75739626778d13115eced5202bf9bd6ab5643e46e92a8973b495a05c77",
+    "r94_child.mjs": "c84a8e8a9bb18af1b1846d367b97d15de8138410180ffb5790a30cee972d7508",
+    "r94vendor/cannon-es.js": "f0700cbd3a482954949b9d58c1b0f76dcc74767750297647a39d8c40dd63d37c",
+    "r94vendor/package.json": "75310bff016b194c22167683f733bcd0991ba7d1d2a288c77763698eafecf4e8",
+    "r94vendor/three.core.js": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+    "r94vendor/three.module.js": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+    "r95_bullet.gd": "f988ba86fdef62a03a59c91e000a94288a4610f9ef9c92c5e56db967515f1447",
+    "r95_child.py": "8821ebd50459dd1371a6484a68abc79e0decb8aa50a8c416636f644baddf5b6b",
+    "r95vendor/pybullet.cpython-314-x86_64-linux-gnu.so": "eca749a0d9b53964dca06764300c3481f328dc4cd1499a60e287393972be3693",
+    "r96_joltdet.gd": "8a77ecb4c29ab8b69b7e95efb4f7c9f54bb6edcff333153ba77167589719cf33",
+    "r96_probe_damp.gd": "d6ce9067499c1c5f3b5156dab7adeb39bbf2b025b2d7d2e8359dbc4622e32568",
+    "r96_probe_iters.gd": "06d80e50ac6fadc2ef73e859ad3d60079d9d8312a15b987bd9887e5200692e15",
+    "r96_probe_kin.gd": "ddc50d993d0ca6e56903e1e122c0ac7b15d68dbf61444593fd4c7dd021e375c5",
+    "r96_probe_pen.gd": "762e11b47552aa41d633b957f8de16acd7846165a1beb540af4fd0ef38658857",
+    "r96_probe_rest.gd": "1d7bd6e7e46139162fac418f0919f482bcf8df33ffbd9917272bffbdd5fba981",
+    "r96_probe_settings.gd": "e190adff97ac1d80612f8b6e932959cc86b0b1f9687f397f8f7bb6876316556e",
+    "r96_probe_srvjoint.gd": "db3447f6a94c5094a97441893173ce1c5d9d1afe4836634ad5820e35f310ee82",
+    "r96_probe_warm.gd": "4228f7aee4d68cb5138612992e40ddab3c016463b7660835c9098d93184bc47a",
+    "r97_nodelat.gd": "c30aca993686733f43b4b0088f3613131cc25f2c65c7157bd6da3011907b36c5",
+    "r97_probe_cbedge.gd": "3a2697d97cbd52d49877a0cf86e8fb51f8680e437af03ad1e11153e6bb7e7488",
+    "r97_probe_classdb.gd": "61a0a7028a5420e1ebe4e1d6420868eac6c14cb9e170e3753fabac4f3100f188",
+    "r97_probe_crashiso.gd": "89bc3a7f586d82a75ab4cc53d21503377b0c7220104b3100bacad636d057aa1e",
+    "r97_probe_dssparam.gd": "9a7e61f1dfa62dca6029657435a28561f0251bae53e9d3396f47fdf42de1523e",
+    "r97_probe_njoint.gd": "3df22045c2e67d28580c9d98cbd91818cabe2c7804e5444daf239619dbabf7bd",
+    "r97_probe_r97b_free.gd": "3fa05680ebbff930eca265ebe840954681f481288e074c00f2ff97ed814d1ef4",
+    "r97_probe_r97b_softfloor.gd": "d6988ea7ce55865e4f40a7fb7cbf47dc81393b74d98fdb10481430a3d5cac82d",
+    "r97_probe_soft.gd": "0a2625455d6b1cb79966e4aade59e7ed9f797526804eb6c9842b0287bb830255",
+    "r97_probe_vehicle.gd": "9c190acea4e13acdf4d0015266af341fbc7494ee94b972c820751307165b87b4",
+    "r97_probe_xrkeep.gd": "487ca4d375d8d11701889e46b7216d3eb94a3a1117a879b91a1ef4984200652b",
+    "r98_gltflat.gd": "47998a95bb0401f7f8475bb0baf0828fa8f8559d2b2b3c174eff8221ab2835db",
+    "r98_probe_gltf.gd": "18ba68b7065afdceff51b92a42605696b06662dae5a61e1e7d1320e2c62f29ca",
+    "r98_probe_gltf_tr.gd": "4736126f3c148fb29d9b234400adf27a1d9d1dac63815fc074612977b29f3d5e",
+    "r98_probe_r98b_inv.gd": "31cd69c1988b8cbe4c7d70b3e8ed2aaf2879cfcf9dc53d8b1fa5791bd4b83454",
+    "r98_probe_r98b_mode.gd": "fadcf86c0c9dbd71b23d2e2087c3166e117a9f37f4bad865da97e928102cda60",
+    "r98assets/badjson.gltf": "a06195cbbc7cc1fe999acefb0721157f6a54db21522c312e7820da5f478908f4",
+    "r98assets/badmagic.glb": "8870f37ff2e34c6051495eed7c8fb9990ade3f1a14c42229f62233cef796f943",
+    "r98assets/badmagic_badjson.glb": "6e813b4c3cc0afad2a2146ad8c54635ab21f5aa902e9c3e95dc40221e23a1747",
+    "r98assets/empty.glb": "91fe8daafe862cbe1d3c562ca01eba1403dac59a7b6be880946be6b691316102",
+    "r98assets/ext.bin": "8dd47db8f27c21d7b67e478e07f022c5c7087b63b3bde704252de6bfa077200f",
+    "r98assets/ext_bin.gltf": "479676d9ed5a923ec68dd4ef1012ff78a2b121afc3d87ae55322c82b94240753",
+    "r98assets/ext_resuri.gltf": "20d04909634121180b4547f9776834f0529f5899dc607bd2215c581d84286130",
+    "r98assets/glb_as_gltf.gltf": "1116006c57a3c4e2a8e0d586531281d793dfa853557f3610088e7a8fbab91611",
+    "r98assets/glb_version3.glb": "cc0239dbe6106ff823c3cdd9f113d9aa873af0407617ce1eb78a3de68c32c9e9",
+    "r98assets/json_as_glb.glb": "999e2c0883437dfcdb2e57de745c943b190f74dbb23b6e82f374c86f15f9e393",
+    "r98assets/magic_badjson.glb": "35631cf9a6abbcb4f6f925b7850f8daf4b086653fece6ba1a43e338dc954f1f2",
+    "r98assets/magic_only.glb": "54267b825b3110a5cdaba82e19d4a7a89a2fa1fc73f37efa0b56e496120e22f6",
+    "r98assets/magic_truncated.glb": "05f153fe23c2c0d13c91aec47ac3e4785a007364e6bff815f89a49b57f70ab64",
+    "r98assets/nodes_only.glb": "e28f6f147382b80942c6fffb6e48dc7300aea55174ac8e488aeb28507fd0388c",
+    "r98assets/tri.glb": "1116006c57a3c4e2a8e0d586531281d793dfa853557f3610088e7a8fbab91611",
+    "r98assets/tri.gltf": "999e2c0883437dfcdb2e57de745c943b190f74dbb23b6e82f374c86f15f9e393",
+    "r98assets/tri_upper.GLB": "1116006c57a3c4e2a8e0d586531281d793dfa853557f3610088e7a8fbab91611",
+    "r99_animtree.gd": "75d63cbed8ac76efeafc460deb8c081f62f300f03d1634d9dbcac111877c8bc2",
+    "r99_probe_r99b_core.gd": "6683aba10439885d08488fd36275fabbb938895f04a853cb2650e4e10db0ff51",
+    "r99_probe_r99b_life.gd": "2eb2e2428a317934aa88682e1f3477352771243413fc5201df001b37e4724df8",
+    "r99_probe_r99b_modes.gd": "f6d23bb1f69e2c4f27d5904d846d3394edb83e73ae1386c25624f00ea6195ff5",
+    "r99_probe_r99b_silent.gd": "de0fd54e2ed5dbed8912f0848cb99d7775314510638a4802dc85571d54b645ee",
+    "r99_probe_r99b_sm.gd": "a8d41a1b1fd5c624d2f5501bbc4a1ba19cba15679ee5f01284120bcc8b229081",
+    "r99_probe_r99b_untracked.gd": "5981275d176f1fc06c5d644165ab3293cd079a54d9a700c7c2bca7eefb745afd",
+    "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+    "remote3d_transform.gd": "65422bef734af4f8f50dc269c09853f3e7c9c8aa74225ecf4d3fe853f4b9fed4",
+    "run_battery.py": "f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f",
+    "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+    "scene3d_disk.gd": "95f53495cbcf2aab082af23b75fa0d9ba5db344f3f858352c3364a115c41c207",
+    "scene3d_instance.gd": "bf47af512df4e9e7750ebed024c65ccdede38c65e6cdc4c49aacfd1b655385cb",
+    "scene3d_resource.gd": "7bbd986c1bc22921a7a2b85c43f0a06530efdafb35eb411494a1eecbb718181c",
+    "scene3d_resource_disk.gd": "996514bf30214bb2f7363bcb033bfe73a658c49fed1d3ba336871e89d452070f",
+    "shapecast3d_graze.gd": "e26a0304aced8c9cab7b2ec54edc1497cc3a2c8a8b608c11b63d4bd13298e8f2",
+    "shapecast3d_sphere.gd": "7a9f5f3efeb606501dbc228b43e76b65faa65ed97c0ba171886833c5e0de5ce9",
+    "skeleton3d_attachment.gd": "25851f8ccd4711c0e5be848716211c7c52ed19f0d00ba888ef5d96fcc5125cb5",
+    "skeleton3d_pose.gd": "dd6a3b3b2bb72d68debc66429cc211a327a2dde8cf3892aefab5ab44809ad9cc",
+    "skeleton3d_rotation.gd": "5eee57aa24f71118d9e1a613013eab524b7eba3722013fc59d6a2318eb404153",
+    "slope3d_angle.gd": "0833050b4581738aaf7c784db3b473455ee3bb429eb11a0ed9b4f13f2bce4ccc",
+    "slope3d_travel.gd": "c18a285ec1b30edddc2fa524c8d560c76c1282241a21bdf42942467aef47ef44",
+    "stream_attribution3d.gd": "ab923ceeac3797f1d0fabfd6695238f88529ef69fb9f452c45ec61b76eefa796",
+    "timeout_descendant.py": "c3a52834c19bf6c6ed8bf177b59bbfd541f08192141786d35c8303bed181e460",
+    "timeout_tree3d.gd": "403a2e3e5f4a49fda283a147fd51577eda18a10a2d791cebb60be8d9d0712210",
+    "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+  },
+  "results": [
+    {
+      "case": "navagent3d_retarget",
+      "script": "navagent3d_retarget.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_retarget.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_retarget callbacks=120 before=1.730676,0.000,1.730676 after_end=1.000,0.000,3.000 final=1.000,0.000,3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 2.975,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_retarget callbacks=120 before=1.730676,0.000,1.730676 after_end=1.000,0.000,3.000 final=1.000,0.000,3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_retarget_fixed",
+      "script": "navagent3d_retarget.gd",
+      "flags": [
+        "--fixed"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_retarget.gd",
+        "--",
+        "--fixed"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_retarget fixed callbacks=120 after_end=3.000,0.000,3.000 final=3.000,0.000,3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 2.919,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_retarget fixed callbacks=120 after_end=3.000,0.000,3.000 final=3.000,0.000,3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_follow",
+      "script": "navagent3d_follow.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_follow.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_follow callbacks=90 first=1.612825,0.000,1.612825 final=3.000,0.000,3.000 reached=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 2.503,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_follow callbacks=90 first=1.612825,0.000,1.612825 final=3.000,0.000,3.000 reached=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_follow_stationary",
+      "script": "navagent3d_follow.gd",
+      "flags": [
+        "--stationary"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_follow.gd",
+        "--",
+        "--stationary"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_follow stationary callbacks=90 final=1.000,0.000,1.000 reached=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 2.439,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_follow stationary callbacks=90 final=1.000,0.000,1.000 reached=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_next",
+      "script": "navagent3d_next.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_next.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_next path_end=3.000,0.000,3.000 next=3.000,0.000,3.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.361,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_next path_end=3.000,0.000,3.000 next=3.000,0.000,3.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_next_alternate",
+      "script": "navagent3d_next.gd",
+      "flags": [
+        "--alternate"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_next.gd",
+        "--",
+        "--alternate"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_next alternate path_end=3.000,0.000,1.000 next=3.000,0.000,1.000",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.326,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_next alternate path_end=3.000,0.000,1.000 next=3.000,0.000,1.000"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_distance",
+      "script": "navagent3d_distance.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_distance.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_distance distance=2.828427 final=3.000,0.000,3.000 next=3.000,0.000,3.000 reached=false reachable=true finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.341,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_distance distance=2.828427 final=3.000,0.000,3.000 next=3.000,0.000,3.000 reached=false reachable=true finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_distance_wide_reach",
+      "script": "navagent3d_distance.gd",
+      "flags": [
+        "--wide-reach"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_distance.gd",
+        "--",
+        "--wide-reach"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_distance wide_reach distance=2.828427 reached=true finished=true reachable=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.297,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_distance wide_reach distance=2.828427 reached=true finished=true reachable=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour",
+      "script": "navagent3d_detour.gd",
+      "flags": [],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,1.000 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.463,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,1.000 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_straight",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--straight"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--straight"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_detour straight distance=2.828427 euclid=2.828427 pathlen=2.828427 discriminates=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.443,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_detour straight distance=2.828427 euclid=2.828427 pathlen=2.828427 discriminates=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_assert_pathsum",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--assert-pathsum"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--assert-pathsum"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: navagent3d_detour assert_pathsum distance=3.605551 expected_pathsum=4.130649 euclid=3.605551",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.487,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: navagent3d_detour assert_pathsum distance=3.605551 expected_pathsum=4.130649 euclid=3.605551"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_post_edgecentered",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--post-edgecentered"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--post-edgecentered"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour post_edgecentered distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,0.500 pathlen=4.707107 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.406,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour post_edgecentered distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,0.500 pathlen=4.707107 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_post_none",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--post-none"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--post-none"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour post_none distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,0.500 pathlen=4.549510 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.339,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour post_none distance=3.605551 semantic=euclidean final=2.500,0.000,3.500 next=2.000,0.000,0.500 pathlen=4.549510 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_pop_lo",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=pop_lo"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=pop_lo"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour pop_lo idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.405,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour pop_lo idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_pop_hi",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=pop_hi"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=pop_hi"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour pop_hi idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.465,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour pop_hi idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_pop_sat",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=pop_sat"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=pop_sat"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour pop_sat idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.47,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour pop_sat idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mid_lo",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mid_lo"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mid_lo"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mid_lo idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.476,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mid_lo idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mid_hi",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mid_hi"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mid_hi"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mid_hi idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.351,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mid_hi idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_vert_pop_eq",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=vert_pop_eq"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=vert_pop_eq"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour vert_pop_eq idx=1 next=2.000000,0.000000,1.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.525,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour vert_pop_eq idx=1 next=2.000000,0.000000,1.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_vert_pop_above",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=vert_pop_above"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=vert_pop_above"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour vert_pop_above idx=2 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.515,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour vert_pop_above idx=2 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_tp_mid",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=tp_mid"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=tp_mid"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour tp_mid before_idx=1 after_idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.036445 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.527,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour tp_mid before_idx=1 after_idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.036445 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_tp_eq",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=tp_eq"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=tp_eq"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour tp_eq before_idx=1 after_idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.535534 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.51,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour tp_eq before_idx=1 after_idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.535534 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_gap2_pop_basis",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=gap2_pop_basis"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=gap2_pop_basis"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour gap2_pop_basis idx=3 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.52,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour gap2_pop_basis idx=3 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_fin_unr_lo",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=fin_unr_lo"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=fin_unr_lo"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour fin_unr_lo idx=3 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.338,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour fin_unr_lo idx=3 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_fin_unr_hi",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=fin_unr_hi"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=fin_unr_hi"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour fin_unr_hi idx=3 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=false reached=false finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.309,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour fin_unr_hi idx=3 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=false reached=false finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_vert_fin_eq",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=vert_fin_eq"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=vert_fin_eq"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour vert_fin_eq idx=2 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.401,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour vert_fin_eq idx=2 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_vert_fin_above",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=vert_fin_above"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=vert_fin_above"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour vert_fin_above idx=2 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.298,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour vert_fin_above idx=2 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=3.354102 pathlen=3.000000 reachable=false reached=false finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_fin_reach_eq",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=fin_reach_eq"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=fin_reach_eq"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour fin_reach_eq idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.158,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour fin_reach_eq idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_fin_reach_above",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=fin_reach_above"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=fin_reach_above"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour fin_reach_above idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.196,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour fin_reach_above idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=2.500000 pathlen=4.581139 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_edge_unr",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=edge_unr"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=edge_unr"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour edge_unr idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=false reached=false finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.15,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour edge_unr idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=false reached=false finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_edge_eq",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=edge_eq"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=edge_eq"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour edge_eq idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.402,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour edge_eq idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_edge_above",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=edge_above"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=edge_above"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour edge_above idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.333,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour edge_above idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_fin_idx_gate",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=fin_idx_gate"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=fin_idx_gate"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour fin_idx_gate before_idx=1 after_idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=1.500000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.497,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour fin_idx_gate before_idx=1 after_idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=1.500000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_fin_wall",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=fin_wall"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=fin_wall"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour fin_wall before_idx=1 after_idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=0.500000 reachable=false reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.283,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour fin_wall before_idx=1 after_idx=1 next=2.000000,0.000000,0.000000 final=2.000000,0.000000,3.000000 dist=0.500000 reachable=false reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_fin_latch",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=fin_latch"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=fin_latch"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour fin_latch before_idx=1 after_idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.233,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour fin_latch before_idx=1 after_idx=1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=2.500000 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_shortcut",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_shortcut"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_shortcut"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_shortcut idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=0 types=- ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.187,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_shortcut idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=0 types=- ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_meta_types",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_meta_types"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_meta_types"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_meta_types idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=1 types=0,1,0,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.19,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_meta_types idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=1 types=0,1,0,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_meta_rids",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_meta_rids"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_meta_rids"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_meta_rids idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=2 types=- ridat=1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.179,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_meta_rids idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=2 types=- ridat=1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_meta_owners",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_meta_owners"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_meta_owners"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_meta_owners idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=node meta=4 types=- ridat=-1 own=NavigationLink3D@1",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.29,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_meta_owners idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=node meta=4 types=- ridat=-1 own=NavigationLink3D@1"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_meta",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_meta"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_meta"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_meta idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=node meta=7 types=0,1,0,0 ridat=1 own=NavigationLink3D@1",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.332,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_meta idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=node meta=7 types=0,1,0,0 ridat=1 own=NavigationLink3D@1"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_layers_off",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_layers_off"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_layers_off"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_layers_off idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.39,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_layers_off idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_layers_on",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_layers_on"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_layers_on"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_layers_on idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=1 types=0,1,0,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.101,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_layers_on idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=1 types=0,1,0,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_oneway_fwd",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_oneway_fwd"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_oneway_fwd"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_oneway_fwd idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false link=server meta=1 types=0,0,1,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.289,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_oneway_fwd idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false link=server meta=1 types=0,0,1,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_oneway_rev",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_oneway_rev"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_oneway_rev"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_oneway_rev idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.119,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_oneway_rev idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_disabled",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_disabled"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_disabled"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_disabled idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.242,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_disabled idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_travelcost",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_travelcost"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_travelcost"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_travelcost idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.245,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_travelcost idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false link=server meta=1 types=0,0,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_entercost",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_entercost"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_entercost"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_entercost idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=1 types=0,1,0,0 ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.346,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_entercost idx=1 next=1.500000,0.000000,0.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.192582 reachable=true reached=false finished=false link=server meta=1 types=0,1,0,0 ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_gap",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_gap"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_gap"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_gap idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false link=none meta=0 types=- ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.229,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_gap idx=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false link=none meta=0 types=- ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_pop_bank",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_pop_bank"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_pop_bank"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_pop_bank idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false link=server meta=0 types=- ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.249,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_pop_bank idx=2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false link=server meta=0 types=- ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_link_pop_void",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=link_pop_void"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=link_pop_void"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour link_pop_void idx=3 next=2.500000,0.000000,5.500000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false link=server meta=0 types=- ridat=-1 own=-",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.139,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour link_pop_void idx=3 next=2.500000,0.000000,5.500000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false link=server meta=0 types=- ridat=-1 own=-"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_walk",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_walk"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_walk"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_walk steps=3 idxs=1,2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=0.500000 pathlen=4.130649 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.355,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_walk steps=3 idxs=1,2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=0.500000 pathlen=4.130649 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_live",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_live"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_live"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_live steps=2 idxs=2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=2.692582 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.376,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_live steps=2 idxs=2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=2.692582 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_popback",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_popback"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_popback"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_popback steps=2 idxs=2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.406,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_popback steps=2 idxs=2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_popstrict",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_popstrict"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_popstrict"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_popstrict steps=2 idxs=1,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.525635 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.4,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_popstrict steps=2 idxs=1,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.525635 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_void",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_void"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_void"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_void steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=1.000000 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.352,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_void steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=1.000000 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_pmd_edge",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_pmd_edge"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_pmd_edge"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_pmd_edge steps=2 idxs=1,0 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,3.500000 dist=2.500000 pathlen=0.500000 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.302,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_pmd_edge steps=2 idxs=1,0 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,3.500000 dist=2.500000 pathlen=0.500000 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_pmd_offmesh",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_pmd_offmesh"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_pmd_offmesh"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_pmd_offmesh steps=2 idxs=0,0 next=3.000000,0.000000,4.000000 final=2.500000,0.000000,3.500000 dist=3.354102 pathlen=0.707107 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.328,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_pmd_offmesh steps=2 idxs=0,0 next=3.000000,0.000000,4.000000 final=2.500000,0.000000,3.500000 dist=3.354102 pathlen=0.707107 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_pmd2",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_pmd2"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_pmd2"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_pmd2 steps=1 idxs=0 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,3.500000 dist=2.000000 pathlen=0.500000 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.348,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_pmd2 steps=1 idxs=0 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,3.500000 dist=2.000000 pathlen=0.500000 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_latch",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_latch"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_latch"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_latch steps=2 idxs=1,1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=11.800424 pathlen=0.000000 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.321,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_latch steps=2 idxs=1,1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=11.800424 pathlen=0.000000 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_unlatch",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_unlatch"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_unlatch"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_unlatch steps=2 idxs=1,0 next=3.000000,0.000000,4.000000 final=2.000000,0.000000,3.000000 dist=11.800424 pathlen=1.414214 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.351,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_unlatch steps=2 idxs=1,0 next=3.000000,0.000000,4.000000 final=2.000000,0.000000,3.000000 dist=11.800424 pathlen=1.414214 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_reanchor",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_reanchor"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_reanchor"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_reanchor steps=2 idxs=2,1 next=0.500000,0.000000,0.500000 final=0.500000,0.000000,0.500000 dist=1.000000 pathlen=1.000000 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.3,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_reanchor steps=2 idxs=2,1 next=0.500000,0.000000,0.500000 final=0.500000,0.000000,0.500000 dist=1.000000 pathlen=1.000000 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_reanchor_same",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_reanchor_same"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_reanchor_same"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_reanchor_same steps=2 idxs=2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.365,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_reanchor_same steps=2 idxs=2,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_reanchor_bank",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_reanchor_bank"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_reanchor_bank"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_reanchor_bank steps=2 idxs=1,2 next=2.500000,0.000000,5.500000 final=2.500000,0.000000,5.500000 dist=1.600000 pathlen=2.400002 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.429,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_reanchor_bank steps=2 idxs=1,2 next=2.500000,0.000000,5.500000 final=2.500000,0.000000,5.500000 dist=1.600000 pathlen=2.400002 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_reanchor_void",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_reanchor_void"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_reanchor_void"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_reanchor_void steps=2 idxs=1,1 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=1.600000 pathlen=0.099998 reachable=false reached=false finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.401,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_reanchor_void steps=2 idxs=1,1 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=1.600000 pathlen=0.099998 reachable=false reached=false finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_popskip",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_popskip"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_popskip"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_popskip steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=0.707107 pathlen=4.130649 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.382,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_popskip steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=0.707107 pathlen=4.130649 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_reanchor_lazy",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_reanchor_lazy"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_reanchor_lazy"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_reanchor_lazy steps=2 idxs=2,1 next=2.900000,0.000000,3.900002 final=2.900000,0.000000,3.900002 dist=1.923539 pathlen=1.923540 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.315,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_reanchor_lazy steps=2 idxs=2,1 next=2.900000,0.000000,3.900002 final=2.900000,0.000000,3.900002 dist=1.923539 pathlen=1.923540 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_reanchor_force",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_reanchor_force"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_reanchor_force"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_reanchor_force steps=3 idxs=2,2,2 next=2.900000,0.000000,3.900002 final=2.900000,0.000000,3.900002 dist=1.923539 pathlen=3.743553 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.557,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_reanchor_force steps=3 idxs=2,2,2 next=2.900000,0.000000,3.900002 final=2.900000,0.000000,3.900002 dist=1.923539 pathlen=3.743553 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mv_bridge_walk",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mv_bridge_walk"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mv_bridge_walk"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mv_bridge_walk steps=3 idxs=2,3,3 next=2.500000,0.000000,5.500000 final=2.500000,0.000000,5.500000 dist=0.100000 pathlen=6.130649 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.506,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mv_bridge_walk steps=3 idxs=2,3,3 next=2.500000,0.000000,5.500000 final=2.500000,0.000000,5.500000 dist=0.100000 pathlen=6.130649 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_link_kill",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_link_kill"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_link_kill"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_link_kill steps=3 idxs=2,3,1 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=2.100000 pathlen=0.600001 reachable=false reached=false finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.392,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_link_kill steps=3 idxs=2,3,1 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=2.100000 pathlen=0.600001 reachable=false reached=false finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_link_drop",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_link_drop"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_link_drop"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_link_drop steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=1.600000 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.409,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_link_drop steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=1.600000 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_link_layers",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_link_layers"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_link_layers"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_link_layers steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.391,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_link_layers steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_layers_agent",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_layers_agent"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_layers_agent"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_layers_agent steps=2 idxs=0,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.33,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_layers_agent steps=2 idxs=0,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_layers_region",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_layers_region"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_layers_region"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_layers_region steps=1 idxs=0 next=0.500000,0.000000,0.500000 final=0.000000,0.000000,0.000000 dist=3.605551 pathlen=0.000000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.186,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_layers_region steps=1 idxs=0 next=0.500000,0.000000,0.500000 final=0.000000,0.000000,0.000000 dist=3.605551 pathlen=0.000000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_region_move",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_region_move"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_region_move"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_region_move steps=1 idxs=0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.185,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_region_move steps=1 idxs=0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_region_off",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_region_off"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_region_off"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_region_off steps=2 idxs=0,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.349,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_region_off steps=2 idxs=0,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_region_renew",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_region_renew"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_region_renew"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_region_renew steps=2 idxs=0,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.235,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_region_renew steps=2 idxs=0,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_link_revive",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_link_revive"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_link_revive"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_link_revive steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.331,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_link_revive steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_lazy",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_lazy"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_lazy"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_lazy steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.356,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_lazy steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_latch_zombie",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_latch_zombie"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_latch_zombie"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_latch_zombie steps=2 idxs=1,1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=true reached=true finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.351,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_latch_zombie steps=2 idxs=1,1 next=2.000000,0.000000,3.000000 final=2.000000,0.000000,3.000000 dist=1.500000 pathlen=0.000000 reachable=true reached=true finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_win_link",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_win_link"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_win_link"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_win_link steps=4 idxs=2,3,3,1 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=2.100000 pathlen=0.600001 reachable=false reached=false finished=true",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.32,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_win_link steps=4 idxs=2,3,3,1 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=2.100000 pathlen=0.600001 reachable=false reached=false finished=true"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_win_region",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_win_region"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_win_region"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_win_region steps=4 idxs=1,1,1,0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.204,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_win_region steps=4 idxs=1,1,1,0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_map_off",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_map_off"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_map_off"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_map_off steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.394,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_map_off steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,5.500000 dist=5.385165 pathlen=6.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_map_cycle",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_map_cycle"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_map_cycle"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_map_cycle steps=4 idxs=1,1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.317,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_map_cycle steps=4 idxs=1,1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_same_link",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_same_link"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_same_link"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_same_link steps=3 idxs=2,2,2 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=5.099020 pathlen=3.748488 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.31,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_same_link steps=3 idxs=2,2,2 next=2.500000,0.000000,4.000000 final=2.500000,0.000000,4.000000 dist=5.099020 pathlen=3.748488 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_same_region",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_same_region"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_same_region"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_same_region steps=3 idxs=2,2,0 next=1.500000,0.000000,0.500000 final=0.000000,0.000000,0.000000 dist=3.162278 pathlen=0.000000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.379,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_same_region steps=3 idxs=2,2,0 next=1.500000,0.000000,0.500000 final=0.000000,0.000000,0.000000 dist=3.162278 pathlen=0.000000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_same_agent",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_same_agent"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_same_agent"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_same_agent steps=4 idxs=2,2,0,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.518,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_same_agent steps=4 idxs=2,2,0,2 next=2.500000,0.000000,3.500000 final=2.500000,0.000000,3.500000 dist=3.162278 pathlen=3.256617 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ord_renew_xform",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ord_renew_xform"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ord_renew_xform"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ord_renew_xform steps=1 idxs=0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.504,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ord_renew_xform steps=1 idxs=0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ord_xform_renew",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ord_xform_renew"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ord_xform_renew"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ord_xform_renew steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.452,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ord_xform_renew steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,3.500000 dist=3.605551 pathlen=4.130649 reachable=true reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ord_link_offmv",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ord_link_offmv"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ord_link_offmv"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ord_link_offmv steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.569,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ord_link_offmv steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ord_link_mvoff",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ord_link_mvoff"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ord_link_mvoff"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ord_link_mvoff steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.563,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ord_link_mvoff steps=1 idxs=1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ord_kill_mapoff",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ord_kill_mapoff"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ord_kill_mapoff"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ord_kill_mapoff steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.494,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ord_kill_mapoff steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ord_mapoff_kill",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ord_mapoff_kill"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ord_mapoff_kill"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ord_mapoff_kill steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.482,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ord_mapoff_kill steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_force_link",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_force_link"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_force_link"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_force_link steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.5,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_force_link steps=2 idxs=1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_force_ctl",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_force_ctl"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_force_ctl"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_force_ctl steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.476,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_force_ctl steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ladder_link",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ladder_link"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ladder_link"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ladder_link steps=4 idxs=1,1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=2 groups=2 sizes=2,2",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.432,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ladder_link steps=4 idxs=1,1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=2 groups=2 sizes=2,2"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ladder_region",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ladder_region"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ladder_region"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ladder_region steps=5 idxs=1,1,1,0,0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false bound=3 groups=2 sizes=3,2",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.401,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ladder_region steps=5 idxs=1,1,1,0,0 next=5.000000,0.000000,0.500000 final=5.000000,0.000000,1.000000 dist=3.605551 pathlen=0.500000 reachable=false reached=false finished=false bound=3 groups=2 sizes=3,2"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_mapoff_ladder",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_mapoff_ladder"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_mapoff_ladder"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_mapoff_ladder steps=6 idxs=1,1,1,1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=5 groups=2 sizes=5,1",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 6.503,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_mapoff_ladder steps=6 idxs=1,1,1,1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=5 groups=2 sizes=5,1"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ctx_resume",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ctx_resume"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ctx_resume"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ctx_resume steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=2 groups=2 sizes=2,1",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.451,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ctx_resume steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=2 groups=2 sizes=2,1"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "navagent3d_detour_mut_ctx_phys",
+      "script": "navagent3d_detour.gd",
+      "flags": [
+        "--arm=mut_ctx_phys"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/scratch",
+        "--script",
+        "res://navagent3d_detour.gd",
+        "--",
+        "--arm=mut_ctx_phys"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS navagent3d_detour mut_ctx_phys steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=1 groups=2 sizes=1,2",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.466,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS navagent3d_detour mut_ctx_phys steps=3 idxs=1,1,1 next=2.000000,0.000000,1.000000 final=2.500000,0.000000,4.000000 dist=5.385165 pathlen=4.622520 reachable=false reached=false finished=false bound=1 groups=2 sizes=1,2"
+      ],
+      "stderr": []
+    }
+  ],
+  "probe": null,
+  "totals": {
+    "cases": 99,
+    "pass": 99,
+    "fail": 0,
+    "ordinary": 93,
+    "negative_controls": 6
+  },
+  "verdict": "PASS"
+}

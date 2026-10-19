@@ -1,0 +1,18 @@
+Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org
+
+M0 case=freea engine=Jolt Physics
+M freea t=1 b=0.0000,2.0000,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freea t=2 b=0.0000,2.3600,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freea t=3 b=0.0000,2.5184,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freea t=4 b=0.0000,2.6198,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freea t=5 b=0.0000,2.6847,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freea t=6 b=0.0000,2.7262,0.0000 lv=0.0000,0.0000,0.0000 jtype=0
+M freea freed post jtype=0
+M freea t=7 b=0.0000,2.7235,0.0000 lv=0.0000,-0.1633,0.0000 jtype=0
+M freea t=8 b=0.0000,2.7180,0.0000 lv=0.0000,-0.3264,0.0000 jtype=0
+M DONE case=freea engine=Jolt Physics
+ERROR: Failed to free RID: The specified RID has no owner.
+   at: free_rid (modules/jolt_physics/jolt_physics_server_3d.cpp:1598)
+   GDScript backtrace (most recent call first):
+       [0] on_e (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/phys3d-joints/runs/20261018T212035512412Z/scratch/r90_child.gd:197)
+       [1] _physics_process (/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/phys3d-joints/runs/20261018T212035512412Z/scratch/r90_child.gd:22)

@@ -7,9 +7,9 @@
 From repository root:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
 # exit 0; 37/37 (17 ordinary, 20 negative), four probes PASS, seeds_unchanged=true
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only slope3d_travel,slope3d_travel_level
+python3 corpus/fixtures/run_battery.py --only slope3d_travel,slope3d_travel_level
 # exit 0; 2/2 (one ordinary, one negative), seeds_unchanged=true
 ```
 
@@ -22,10 +22,27 @@ Versus prior r28 full `corpus/live/runs/20261013T060433692579Z/verdicts.json`, a
 Ignored copies `corpus/live/runs/r29-private-sensitivity-review/{A,B}` contain the copied project and slope script only. Relative to seeded `slope3d_travel.gd`, **A** changes exactly `const SLOPE_ANGLE := 30.0` → `40.0` and the *rotation expression* `rad_to_deg(slab.rotation.z) - 30.0` → `- 40.0` (script SHA-256 `f2a686299bfb306a5408a79c1a2509bedabba5b902fd88cf72160c1725520cd7`). The rotation error text still says `expected=30.000` but is unreachable here; normal literal unchanged. **B** starts with A and changes exactly three additional assertion expressions: `actor.position.x + 0.0810` → `+ 0.1347`, `actor.position.y - 1.3203` → `- 1.4605`, `grounded_ticks != 52` → `!= 60` (script SHA-256 `c7cbbaab320396fe1c07941c613f372a7c05825fa56b74167d51a463beab0e4d`). No other code, diagnostic strings, normal literal `Vector3(-0.5, 0.8660254, 0)`, or fixed PASS marker changed. Hence diagnostic expected X text in B remains stale but X branch passes and is never printed.
 
 ```sh
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r29-private-sensitivity-review/A --script res://slope3d_travel.gd > .shokunin/game-dev-3d/corpus/live/runs/r29-private-sensitivity-review/A.stdout 2> .shokunin/game-dev-3d/corpus/live/runs/r29-private-sensitivity-review/A.stderr
+/usr/bin/godot --headless --path corpus/live/runs/r29-private-sensitivity-review/A --script res://slope3d_travel.gd > corpus/live/runs/r29-private-sensitivity-review/A.stdout 2> corpus/live/runs/r29-private-sensitivity-review/A.stderr
 # exit 1; ERROR: slope3d_travel: slope displacement mismatch x=-0.1347 expected=-0.0810
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r29-private-sensitivity-review/B --script res://slope3d_travel.gd > .shokunin/game-dev-3d/corpus/live/runs/r29-private-sensitivity-review/B.stdout 2> .shokunin/game-dev-3d/corpus/live/runs/r29-private-sensitivity-review/B.stderr
+/usr/bin/godot --headless --path corpus/live/runs/r29-private-sensitivity-review/B --script res://slope3d_travel.gd > corpus/live/runs/r29-private-sensitivity-review/B.stdout 2> corpus/live/runs/r29-private-sensitivity-review/B.stderr
 # exit 1; ERROR: slope3d_travel: slope normal mismatch normal=(-0.642788, 0.766044, 0.0)
 ```
 
 Both stdout files have only Godot banner and blank line, SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e`; A stderr SHA-256 `1a71b05b1d611d681ca73e086d716826c0b6bf76b8ef2ed4156823db0588a418`, B stderr `0dba5e190c9de1c5ebf3205bb0a5b8aa85137ee5379509d156b06df7bbb846d2`. Each includes its stated ERROR with `_run` branch backtrace, no PASS marker, `SCRIPT ERROR`, `Parse Error`, or ObjectDB leak. The X offset exceeds the original 0.003 tolerance by about 0.0537. B reaches the normal check because the adjusted rotation, X, and combined Y/count checks pass; normal differs visibly from the original `(-0.5,0.8660254,0)` and exceeds the original 0.0001 distance tolerance. The Y/count checks were adjusted together and not independently mutation-isolated; scratch constants derive from prior measured 40° values and do not establish all-regime or all-predicate sensitivity.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten. The prior `slope3d_travel.gd` digest `ad553688c221…` matches a historical blob and does not match live; the r29-side digest `c18a285ec1b30edddc2fa524c8d560c76c1282241a21bdf42942467aef47ef44` still matches `sha256sum corpus/fixtures/slope3d_travel.gd`. README digests on the comparison line likewise match historical blobs, not live `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1`. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T060936691334Z/verdicts.json`
+> - `corpus/live/runs/20261013T060936691923Z/verdicts.json`
+> - `corpus/live/runs/20261013T060433692579Z/verdicts.json`
+> - `corpus/live/runs/r29-private-sensitivity-review/{A`
+> - `corpus/live/runs/r29-private-sensitivity-review/A`
+> - `corpus/live/runs/r29-private-sensitivity-review/A.stdout`
+> - `corpus/live/runs/r29-private-sensitivity-review/A.stderr`
+> - `corpus/live/runs/r29-private-sensitivity-review/B`
+> - `corpus/live/runs/r29-private-sensitivity-review/B.stdout`
+> - `corpus/live/runs/r29-private-sensitivity-review/B.stderr`

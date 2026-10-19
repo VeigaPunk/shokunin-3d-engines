@@ -8,3 +8,12 @@
 - Private sensitivity check: copied fixture project to `.shokunin/game-dev-3d/corpus/live/runs/review-42702b14834f/private-floor-mutant`, changed **only** `const FLOOR_Y := 0.0` to `const FLOOR_Y := -1.0` in copied `floor3d_ground.gd`. Direct `/usr/bin/godot --headless --path <copy> --script res://floor3d_ground.gd` exited **1**, stdout only version/banner and blank line (no PASS), stderr begins exactly `ERROR: floor3d_ground: ground center mismatch y=0.000 expected=1.000` with Godot push_error backtrace. Seed digest remains identical; the observed failure is the authored center assertion, not a parse/setup error. This private control tests the grounded arm only; no separate mutant of the lower-floor arm.
 
 **Limits:** constant manually driven downward velocity, not a gravity or jump simulation; one axis-aligned flat floor and one far-below floor, no slope solver, general contact timing, friction, rendering or other engine claim. Printed success fields are literal markers after toleranced checks, not measured-value formatting. The grounded arm asserts `contacts >= 1` rather than an exact count. The setup check does not independently read back the lower floor's y transform; its y=-20 assignment and presence are verified from fixture source, while the live airborne trajectory and non-contact are checked by Godot. Frame-bound exit exists, but host scheduling/physics behavior outside this replay is not proved deterministic.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T042316520026Z/verdicts.json`
+> - `corpus/live/runs/review-42702b14834f/20261013T042325314385Z/verdicts.json`
+> - `corpus/live/runs/20261013T040039134066Z/verdicts.json`
+> - `corpus/live/runs/review-42702b14834f/private-floor-mutant`

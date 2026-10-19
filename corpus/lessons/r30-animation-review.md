@@ -31,3 +31,17 @@ Private ignored copy `corpus/live/runs/r30-private-animation-review/animation3d_
 Stdout SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e` has only Godot banner and blank line; stderr SHA-256 `f335689a1e20b1a1a078dfb3aaa69bd5531a4ab62ac60033a95657bf72ae54ed` has measured mismatch/backtrace, no `SCRIPT ERROR`, `Parse Error`, ObjectDB leak or PASS marker. This failure passes setup and reaches observed-position assertion, rather than merely detecting altered track setup.
 
 **Limits and guard caveat.** LOG records failed author guards for `current_animation == "travel"`/`current_animation_position == 1` at the exact endpoint despite correct observed transforms, including failure with only the exact-time check removed. The accepted fixture does not assert current-animation state after seeking exact end; its check `is_instance_valid(actor)` does not establish that state, and marker numbers are fixed text printed *after* measured assertions. Explicit seeks demonstrate two sampled evaluations only: no natural timed playback, blending, rendered pixels, arbitrary key paths/animations or portability beyond this headless Godot build. The still arm is an intact constant track, not an absent track. The private mutation shows the compound mid/end predicate rejects changed samples; it does not separately isolate midpoint and endpoint predicates.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `run_battery.py` digests match historical git blobs, not live `sha256sum` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `animation3d_keys.gd` digest `5c4cec8830af…` still matches the live fixture. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T061437321157Z/verdicts.json`
+> - `corpus/live/runs/20261013T061437322230Z/verdicts.json`
+> - `corpus/live/runs/20261013T060936691334Z/verdicts.json`
+> - `corpus/live/runs/r30-private-animation-review/animation3d_keys.gd`
+> - `corpus/live/runs/r30-private-animation-review`
+> - `corpus/live/runs/r30-private-animation-review/mutant.stdout`
+> - `corpus/live/runs/r30-private-animation-review/mutant.stderr`

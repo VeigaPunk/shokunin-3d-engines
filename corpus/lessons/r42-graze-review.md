@@ -30,3 +30,21 @@ godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r42-graze-review-
 It exits **1**, no PASS or negative marker. Stdout has only Godot banner/blank line (SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e`); stderr SHA-256 `ae8b0ffdedd42a5b8a80405de3a58103c7f15abd16e9cdadea39b5b5060f41bc` starts `ERROR: shapecast3d_graze: finite sphere missed grazing box count=0` at `_run` line 44; no `Parse Error:`, `SCRIPT ERROR:`, or ObjectDB leak. It passes the unchanged setup and same-path empty-ray tests; the ordinary arm has no direct positive radius guard, so failure is the **measured absent collision**, not a setup-only assertion. This mutation does not independently test point, normal or safe-fraction thresholds because hit-count fails first.
 
 Bounded conclusion: **depth improved** over r41's centered sphere hit/lateral miss because this one headless Godot configuration distinguishes finite radius from its same-path empty ray and radius-0.1 miss; coverage unchanged (same ShapeCast3D family), calibration unchanged (same classifier and tolerances). No observed harm to 59 prior case fields or unchanged seed hashes. Solver normal/safe estimates are sampled tolerances, not analytically exact time of impact, an edge-normal theorem, universal backend stability, continuous moving-body/tunneling prevention, rendering, pixels or GPU evidence.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `README.md` and `run_battery.py` digests match historical git blobs, not live `sha256sum` `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `shapecast3d_graze.gd` digest `e26a0304aced…` still matches the live fixture. Campaign HEAD `4a781d398ce40b2969caf685396951af77a1030f` is not an object in this repo and is left unrewritten. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T072547453626Z/verdicts.json`
+> - `corpus/live/runs/20261013T072547453626Z/tree-timeout-verdicts.json`
+> - `corpus/live/runs/20261013T072547453626Z/crash-exit-verdicts.json`
+> - `corpus/live/runs/20261013T072547453626Z/stream-attribution-verdicts.json`
+> - `corpus/live/runs/20261013T072547453626Z/mutation-verdicts.json`
+> - `corpus/live/runs/20261013T072547454619Z/verdicts.json`
+> - `corpus/live/runs/20261013T071906657777Z/verdicts.json`
+> - `corpus/live/runs/r42-graze-review-private/`
+> - `corpus/live/runs/r42-graze-review-private`
+> - `corpus/live/runs/r42-graze-review-private/mutation.stdout`
+> - `corpus/live/runs/r42-graze-review-private/mutation.stderr`

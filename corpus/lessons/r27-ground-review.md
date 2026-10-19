@@ -7,9 +7,9 @@
 From repository root:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
 # exit 0, 35/35 (16 ordinary, 19 negative), all four opt-in probes PASS, seeds_unchanged=true
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor
+python3 corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor
 # exit 0, 2/2 (one ordinary, one negative), seeds_unchanged=true
 ```
 
@@ -26,7 +26,7 @@ The two runs' seed maps agree and independently attest unchanged pre/post seed h
 A **private ignored scratch copy only** changed `floor_body.position.y = -20 if lower else 0` → `floor_body.position.y = -20 if lower else -1` in the normal arm; this puts the intact floor center at -1 (top -0.5), so the actor bottom 0.5 has a unit gap. Seed SHA-256 `27730ed5c9c63bc9b1495807159db8c1e280de0bdeb22627052411876a0a48d0`, mutant SHA-256 `2d422a8a54a3c39f4fe6e47c6100173fa42cf00cda04eed3e75bf1ab06ce5589`. Reproduction and captured streams:
 
 ```sh
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/r27-private-ground-review/scratch --script res://jump3d_gravity.gd
+/usr/bin/godot --headless --path corpus/live/r27-private-ground-review/scratch --script res://jump3d_gravity.gd
 # exit 1; stdout Godot banner only; stderr ERROR: jump3d_gravity: initial floor probe failed grounded=false y=0.9998 lower=false
 # streams: corpus/live/r27-private-ground-review/mutant.stdout and mutant.stderr
 ```
@@ -34,3 +34,13 @@ A **private ignored scratch copy only** changed `floor_body.position.y = -20 if 
 No PASS marker, apex or landing assertion, Parse Error, SCRIPT ERROR, or ObjectDB leak appears. The error backtrace points to `_run` at its precondition (line49), before the impulse. This tests one normal-arm floor relocation, not sensitivity to every possible floor change or solver revision.
 
 **Scope:** One engine version, grounded mode, this box arrangement, one -0.01 downward contact probe and +6 impulse at fixed 60 Hz. The normal and displaced arms prove opposite **post-probe, pre-impulse** floor flags, not initial unprobed flags, callback-driven physics, all trajectory samples, rendered motion, or general jump-controller behavior. Reviewer changed only the ignored mutant floor constant 0→-1; no tracked authored constant or implementation was edited.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; each drifted digest matches a historical git blob of the named path. Live `sha256sum` differs for `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. The r26-side `jump3d_gravity.gd` digest differs from live; the r27-side digest `27730ed5c9c63bc9b1495807159db8c1e280de0bdeb22627052411876a0a48d0` still matches. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T055914266533Z/verdicts.json`
+> - `corpus/live/runs/20261013T055922914638Z/verdicts.json`
+> - `corpus/live/runs/20261013T055425026403Z/verdicts.json`

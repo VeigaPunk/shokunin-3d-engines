@@ -1,0 +1,94 @@
+{
+  "node": "v26.12.0",
+  "three": "0.186.1",
+  "seedsUnchanged": true,
+  "seedDigests": {
+    "camera_frustum.mjs": "5201644570fb056c1916884135c0be1fa3577dd0b9431a7a6350d4387238bded",
+    "run_camera_cases.mjs": "b6aee605bf63fff2b3c5ee843bf4231c2f4c82bc3be80bbc252e359923bf8f6c",
+    "package.json": "799216c1e1574c14848ba79c752e11ef63ed208a73954dc7024f4866b45367fe",
+    "package-lock.json": "1a8e6ee2341eb4e3bcf764ad0c14973c89afee0a613bb14d41ea2fa5851c19b8"
+  },
+  "results": [
+    {
+      "name": "inside",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/camera_frustum.mjs"
+      ],
+      "expectedExit": 0,
+      "actualExit": 0,
+      "signal": null,
+      "error": null,
+      "expectedLine": "PASS three3d camera inside_depth=4.000 inside_frustum=true outside_frustum=false screen=550.000,225.000",
+      "stdout": "PASS three3d camera inside_depth=4.000 inside_frustum=true outside_frustum=false screen=550.000,225.000\n",
+      "stderr": "",
+      "verdict": "PASS"
+    },
+    {
+      "name": "far_outside",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/camera_frustum.mjs",
+        "--far-outside"
+      ],
+      "expectedExit": 2,
+      "actualExit": 2,
+      "signal": null,
+      "error": null,
+      "expectedLine": "NEGATIVE REJECTED: three3d camera_far outside_depth=12.000 outside_frustum=false inside_frustum=true shared_screen=550.000,225.000",
+      "stdout": "NEGATIVE REJECTED: three3d camera_far outside_depth=12.000 outside_frustum=false inside_frustum=true shared_screen=550.000,225.000\n",
+      "stderr": "",
+      "verdict": "PASS"
+    },
+    {
+      "name": "near_outside",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/camera_frustum.mjs",
+        "--near-outside"
+      ],
+      "expectedExit": 2,
+      "actualExit": 2,
+      "signal": null,
+      "error": null,
+      "expectedLine": "NEGATIVE REJECTED: three3d camera_near near_depth=0.500 near_frustum=false inside_frustum=true far_frustum=false shared_screen=550.000,225.000",
+      "stdout": "NEGATIVE REJECTED: three3d camera_near near_depth=0.500 near_frustum=false inside_frustum=true far_frustum=false shared_screen=550.000,225.000\n",
+      "stderr": "",
+      "verdict": "PASS"
+    },
+    {
+      "name": "mutate_far",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/camera_frustum.mjs",
+        "--mutate-far"
+      ],
+      "expectedExit": 1,
+      "actualExit": 1,
+      "signal": null,
+      "error": null,
+      "expectedLine": "ERROR: three3d far point entered frustum measured_outside=true far=20.000",
+      "stdout": "",
+      "stderr": "ERROR: three3d far point entered frustum measured_outside=true far=20.000\n",
+      "verdict": "PASS"
+    },
+    {
+      "name": "mutate_near",
+      "command": [
+        "/home/vgpnk/.local/share/mise/installs/node/26.12.0/bin/node",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures/three/camera_frustum.mjs",
+        "--mutate-near"
+      ],
+      "expectedExit": 1,
+      "actualExit": 1,
+      "signal": null,
+      "error": null,
+      "expectedLine": "ERROR: three3d near point entered frustum measured_near=true near=0.100",
+      "stdout": "",
+      "stderr": "ERROR: three3d near point entered frustum measured_near=true near=0.100\n",
+      "verdict": "PASS"
+    }
+  ],
+  "verdict": "PASS",
+  "boundedClaim": "three.js PerspectiveCamera/Frustum math under Node; no renderer, GL context, pixels or browser."
+}

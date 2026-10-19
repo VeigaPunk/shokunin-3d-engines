@@ -1,6 +1,6 @@
 # Round 5 — independent identified-witness timeout review
 
-Reviewer: `game-dev-3d-r5-timeout-review` (non-author). Host: Linux `/proc`, Godot `4.7.2.stable.arch_linux.ed1daf0bf`. I read the standing mission, r5 declaration/correction/failed-run LOG, `timeout_tree3d.gd`, `timeout_descendant.py`, runner and fixture README, then independently ran the default command and `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing`. I also repeated `--probe-tree-timeout` separately to inspect the witness **while live**. All three commands returned 0. Ignored, regenerable receipts:
+Reviewer: `game-dev-3d-r5-timeout-review` (non-author). Host: Linux `/proc`, Godot `4.7.2.stable.arch_linux.ed1daf0bf`. I read the standing mission, r5 declaration/correction/failed-run LOG, `corpus/fixtures/timeout_tree3d.gd`, `corpus/fixtures/timeout_descendant.py`, runner and fixture README, then independently ran the default command and `python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing`. I also repeated `--probe-tree-timeout` separately to inspect the witness **while live**. All three commands returned 0. Ignored, regenerable receipts:
 
 - `corpus/live/runs/20261013T031924810225Z/verdicts.json` — default PASS, 12/12 (six exit-0 ordinary, six exit-2 negative controls), all seeded stderr arrays empty.
 - `corpus/live/runs/20261013T031937513004Z/{verdicts,tree-timeout-verdicts,crash-exit-verdicts,stream-attribution-verdicts,mutation-verdicts}.json` — all PASS; seeded 12/12 and the three retained optional probes plus scratch mutation PASS.
@@ -13,3 +13,24 @@ The combined run retained r3 direct-child signal contrast: normal exit 1 classif
 **Verdict and scope.** Calibration improved for *one identified detached Godot-spawned witness*, with no observed default regression; depth and coverage unchanged. The original process-group premise was falsified: Godot's `OS.create_process` made this helper its **own PGID and SID**, so `killpg(Godot PID)` does not terminate it. The first author-run receipt (`20261013T031740265645Z/tree-timeout-verdicts.json`) was FAIL (`cleanup_exit=null`): the detached witness held inherited output pipes open while the runner waited on `communicate` before signaling it. The revised ordering signals the verified witness first, then drains/reaps Godot, and passed two independent replays; the earlier failure must not be represented as a pass. This is **not general tree cleanup**, detached-process discovery, a guarantee for other Godot-created children, cross-platform portability, or proof of long-run reliability.
 
 Safety limitations worth retaining: PID/cmdline/starttime and verified PPID/PGID checks reduce accidental signaling, but the runner does not retain a pidfd, so a narrow identity-check-to-`kill(pid)` race remains. If witness verification fails, the timeout-branch SIGTERM is skipped and the verdict fails, but the `finally` branch may still send SIGKILL if `same_live_witness()` matches PID, starttime and scratch cmdline **without requiring `witness_verified` or the originally checked PPID/PGID**. This weakens the claimed ownership gate; a malicious or unexpected pidfile could match a non-child command, so the `finally` signal should also require verified ownership before treating cleanup as safe. Conversely, a genuinely unverified descendant can remain alive and need operator inspection/cleanup. `killpg` addresses the started Godot session, not detached descendants; the fixture has exactly one known helper. A live witness counts as gone once `/proc` vanishes or becomes zombie; there is no `waitpid` for Godot's detached helper. This review confirms two finite successful timeout replays, not an intermittent-failure rate. Constants observed: timeout 3 s; witness SIGTERM grace 3 s, optional SIGKILL grace 3 s, Godot pipe/reap wait 3 s; helper and Godot hold timers 30 s. No source code was edited by this reviewer.
+
+## Correction note — 2026-10-18 (r106)
+
+Dated correction note, not a rewrite of the findings above. The runnable command in the opening paragraph cited `.shokunin/game-dev-3d/corpus/fixtures/run_battery.py`. That prefix does not exist at this repo root. That command string only was rewritten to `python3 corpus/fixtures/run_battery.py`. Exits, markers, and receipt paths are unchanged historical facts.
+
+Original fragment at HEAD `0cc3f4162f8c319f8d01a69a174fe939f36701bd`:
+
+```
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+```
+
+Measured the same day: dead-root form → rc 2. The four-probe command and the separate `--probe-tree-timeout` were not re-run. Cited receipts `20261013T031924810225Z`, `20261013T031937513004Z`, `20261013T032021292794Z`, and `20261013T031740265645Z` are absent. `/proc/1213689` and `/proc/1215978` are absent. Bare narrative names `timeout_tree3d.gd` and `timeout_descendant.py` do not exist at repo root; resolving paths are `corpus/fixtures/timeout_tree3d.gd` and `corpus/fixtures/timeout_descendant.py` (both exist). Those narrative names were not rewritten. The `finally`-branch ownership caveat in the paragraph above is the review-day finding; a later lesson (`corpus/lessons/r5-cleanup-review.md`) records the gate as subsequently closed. This note does not adjudicate that later claim. Ledger: `reports/round-106/sweep/chunk-07.md`.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T031924810225Z/verdicts.json`
+> - `corpus/live/runs/20261013T031937513004Z/{verdicts`
+> - `corpus/live/runs/20261013T032021292794Z/{verdicts`
+> - `corpus/live/runs/20261013T031740265645Z/tree-timeout-verdicts.json`

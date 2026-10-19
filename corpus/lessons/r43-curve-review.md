@@ -30,3 +30,17 @@ godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r43-curve-review-
 Private stdout SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e` contains only banner/blank line, no PASS or negative marker; stderr SHA-256 `0a359016a8282061c9d6abafe3a2ef8d961086f0a56b4d426b8f02823af5c2a1` begins `ERROR: curve3d_path: bent baked path mismatch length=7.580958 q=(0.881965, 1.61809, 0.440983) mid=(2.0, 3.0, 1.0) tq=(3.118034, 1.618091, 1.559017)`. No parse error, SCRIPT ERROR, or ObjectDB leak. The unchanged setup passes; the bent baked geometry predicate, not a source-literal or setup guard, rejects the mutant. Because length/quarter/middle/three-quarter are one compound predicate, this proves a measured geometry mismatch but does not isolate each subpredicate independently.
 
 Bounded conclusion: **coverage improved** for one live headless Godot authored/baked 3D curve against an intact straight control, beyond the prior navigation path query; depth and calibration unchanged. This does not prove a navigation agent traverses the curve, collision, a rendered line, pixels, GPU behavior or portability across Godot versions.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `README.md` and `run_battery.py` digests match historical git blobs, not live `sha256sum` `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `curve3d_path.gd` digest `7e9a71a07a9c…` still matches the live fixture. Campaign HEAD `50e44905a778d854a774aa7ece4f589b758558da` is not an object in this repo and is left unrewritten. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T073219874871Z/verdicts.json`
+> - `corpus/live/runs/20261013T073219875949Z/verdicts.json`
+> - `corpus/live/runs/20261013T072547453626Z/verdicts.json`
+> - `corpus/live/runs/r43-curve-review-private/`
+> - `corpus/live/runs/r43-curve-review-private`
+> - `corpus/live/runs/r43-curve-review-private/mutation.stdout`
+> - `corpus/live/runs/r43-curve-review-private/mutation.stderr`

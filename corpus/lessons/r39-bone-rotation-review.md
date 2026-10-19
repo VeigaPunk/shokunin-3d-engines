@@ -31,3 +31,20 @@ Second private copy `setter-and-guard/skeleton3d_rotation.gd` SHA-256 `75c738889
 ```
 
 `/usr/bin/godot --headless --path /home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/review-r39-private-rotation/setter-and-guard --script res://skeleton3d_rotation.gd --` → **exit 1**, stdout only version and blank line; stderr `ERROR: skeleton3d_rotation: child composed pose mismatch origin=(-2.598076, 1.5, 0.0) x=(0.5, 0.866025, 0.0) y=(-0.866025, 0.5, 0.0)` and ordinary push_error/backtrace `_run` line 32. This passes hierarchy/rest/local pose and adjusted measured root-quaternion checks, then rejects measured composed child global pose. Both mutation runs have **no PASS/NEGATIVE marker, Parse Error, SCRIPT ERROR or ObjectDB leak**. Raw stdout/stderr files reside in that ignored private directory. The child origin/X/Y are tested in one combined condition, **not individually mutation-isolated**; this single changed angle proves rejection of their combined changed measured pose, not arbitrary quaternion chains or axis-by-axis mutation coverage.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `README.md` and `run_battery.py` digests match historical git blobs, not live `sha256sum` `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `skeleton3d_rotation.gd` digest `5eee57aa24f7…` still matches the live fixture. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T070607019182Z/verdicts.json`
+> - `corpus/live/runs/20261013T070607019182Z/tree-timeout-verdicts.json`
+> - `corpus/live/runs/20261013T070607019182Z/crash-exit-verdicts.json`
+> - `corpus/live/runs/20261013T070607019182Z/stream-attribution-verdicts.json`
+> - `corpus/live/runs/20261013T070607019182Z/mutation-verdicts.json`
+> - `corpus/live/runs/20261013T070607019599Z/verdicts.json`
+> - `corpus/live/runs/20261013T065934752715Z/verdicts.json`
+> - `corpus/live/runs/review-r39-private-rotation/`
+> - `corpus/live/runs/review-r39-private-rotation/setter-only`
+> - `corpus/live/runs/review-r39-private-rotation/setter-and-guard`

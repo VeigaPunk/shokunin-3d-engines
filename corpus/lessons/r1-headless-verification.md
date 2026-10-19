@@ -12,7 +12,7 @@ negative controls**. Seeds: `corpus/fixtures/` (read-only at run time). Battery:
 python3 corpus/fixtures/run_battery.py                  # all 12 cases; exit 0 only if all pass
 python3 corpus/fixtures/run_battery.py --probe-failing  # + one adversarial mutation, must be detected
 python3 corpus/fixtures/run_battery.py --only <case>[,<case>]
-python3 run_battery.py --godot /usr/bin/godot --runs corpus/live/runs
+python3 corpus/fixtures/run_battery.py --godot /usr/bin/godot --runs corpus/live/runs
 ```
 
 The runner is path-independent (`HERE`-relative), verified from the lane root and
@@ -76,7 +76,7 @@ for path in sorted(fx.glob("*.gd")):
 PY
 ```
 
-Run it from the lane root (`.shokunin/game-dev-3d/`). At r1 it printed 12 `OK`
+Run it from the lane repo root. At r1 it printed 12 `OK`
 lines with no assertion failure: header comment, enforced `CASES` entry and
 recorded stdout agree for every case.
 
@@ -203,3 +203,16 @@ byte-identical per-case stdout markers (one digest) and one seed digest map
 - **Non-author verification is outstanding.** Everything above is author-run; the
   SHONEN box for a named non-author verifier stays unchecked until someone else
   replays it.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T025219873184Z/mutation-verdicts.json`
+>
+> Sibling JSON records under `corpus/lessons/r1/` cite the additional paths below. Those JSON bytes were not rewritten (inserting a note would change a historical receipt record). They are absent on the same check.
+>
+> - `corpus/live/runs/20261013T025219873184Z/control-crash-runtime.txt` (cited by `corpus/lessons/r1/adversarial-controls.json`)
+> - `corpus/live/runs/20261013T025219873184Z/control-silent-runtime.txt` (cited by `corpus/lessons/r1/adversarial-controls.json`)
+> - `corpus/live/runs/20261013T025210271414Z/scratch` (cited by `corpus/lessons/r1/clean-verdicts.json`)
+> - `corpus/live/runs/20261013T025219873184Z/mutation-scratch` (cited by `corpus/lessons/r1/mutation-verdicts.json`)

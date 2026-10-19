@@ -215,3 +215,52 @@ controls: sweeping `reports/round-101` wholesale reads `UNRESOLVED=2` /
    cheap invariant to re-check is `UNLABELED=0` on a live-editor-surface scan
    (`reports/round-101/r101-report.md:144`) — the denominator grows with each
    seat; the zero is the stable property.
+
+## Correction notes — r106, 2026-10-18
+
+Historical sentences above are left as the r102 record. These notes are the
+live reading. Do not silently retarget a line number that was true at authoring.
+
+> **`engines.md` line numbers moved (r106 census rewrite).** Hook 5 cites
+> `corpus/knowledge/engines.md:10` and `engines.md:13-16`. Those numbers were
+> the Unreal row and the promotion rule at r102 close
+> (`git show c6f655d:corpus/knowledge/engines.md`). r106 inserted a two-state
+> host section and kept writing the file during this check (116 lines on an
+> earlier read, 166 at the snapshot). Do not use `:10` or `:13-16`. Re-derive:
+> `grep -n '^| Unreal Engine |' corpus/knowledge/engines.md` and
+> `grep -n '^Rules:' corpus/knowledge/engines.md`. Snapshot
+> 2026-10-18T22:09:39Z, sha256
+> `501b30df1ca3ffc3b4d9239b80ec1ec633c3886188f63412bea0d7f77d21f933`: Unreal
+> row line 44, cells `no` / `no`; `Rules:` at line 48. The status cells did
+> not move. A later census write can move the line again; the grep is the
+> citation, not the number.
+
+> **`gate/README.md:40` does not pin the 24/12 counts.** The counting-trap
+> paragraph cites that line as pinning both counts. At r102 close (`c6f655d`)
+> line 40 was the upstream-repo constant, not the 24/12 pin. On this check it
+> is the A4 BLOCKED/exit-2 sentence (file sha256
+> `e3bc66b7f5d981a1128dc60ae910ec7c53dac85107c67802134e32bc7c0e98bf`). The
+> 24/12 statement is `corpus/knowledge/unreal-mcp/README.md:169-170` and
+> `:187`. Re-measured from the subtree cwd: `sha256sum -c
+> .manifest.d/audit-reference.sha256` → 12 × `OK`, rc 0; `sha256sum -c
+> .manifest.d/*.sha256` → 24 × `OK`, rc 0.
+
+> **In-repo gate `POINTERS=40` is the r102 observation.** The "Re-running the
+> gate" block records what that round's scanner printed
+> (`reports/round-102/r102-report.md:136`). Re-run 2026-10-18 r106:
+> `GATE_WORKDIR=reports/round-106/scratch/seat122/gate
+> corpus/knowledge/unreal-mcp/gate/run_gate.sh`, scanner sha256
+> `390a25ae4e389a00c4c5147efd451e21303ae501abe2523ad713b6d88e57b2cf`, rc 0,
+> stderr empty. Observed `POINTERS=103 POINTER_STRINGS=41
+> SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0`, `CARDS=13 EXPECTED=13 BAD=0`,
+> census `static-only=12 unproven-runtime=1 verified-here=0`, `GATE RESULT:
+> PASS (checks failed: 0)`. PASS and the card census still match. The pointer
+> total does not. `/tmp/r101-closeout` and `/tmp/ue-skills-ref` remain absent
+> (`ls` → No such file or directory). Prefer the in-repo gate, as the
+> paragraph already says. This is a static gate, not an Unreal runtime result.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T053632289732Z/verdicts.json`

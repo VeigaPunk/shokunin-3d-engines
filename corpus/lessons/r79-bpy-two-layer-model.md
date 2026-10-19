@@ -3,7 +3,7 @@
 New runtime first-contact (Blender 5.2.1 LTS headless, `blender -b -P`).
 The declared claim — "RNA synchronous, depsgraph lags by one evaluation" —
 was **half-confirmed, half-narrowed** by the scout lattice (promoted to
-`corpus/fixtures/bpy_sync_probe.py` + `bpy_battery.py`, 37/37):
+`corpus/fixtures/bpy_sync_probe.py` + `corpus/fixtures/bpy_battery.py`, 37/37):
 
 - The real split is **write-through vs evaluation-gated**, not
   RNA-vs-depsgraph: derived RNA props (`matrix_world`) lag at write+0

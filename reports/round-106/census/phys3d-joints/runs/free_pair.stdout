@@ -1,0 +1,6 @@
+PASS phys3d_joints_free_pair: exit=0 expected=0
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+PASS     phys3d_joints_free_pair            phys3d_joints.gd           --arm=free_pair    0/0       ordinary
+totals: cases=1 pass=1 fail=0 ordinary=1 negative_controls=0 probes=0
+PASS battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/phys3d-joints/runs/20261018T212035512412Z/verdicts.json

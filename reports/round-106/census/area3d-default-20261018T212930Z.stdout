@@ -1,0 +1,7 @@
+PASS r93_areasig_edges: exit=0 expected=0
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+PASS     r93_areasig_edges                  r93_areasig.gd             --arm=edges        0/0       ordinary
+totals: cases=1 pass=1 fail=0 ordinary=1 negative_controls=0 probes=0
+PASS battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat34-area3d/default/20261018T212930056533Z/verdicts.json
+COMMAND_EXIT=0

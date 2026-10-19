@@ -61,3 +61,12 @@ none is claimed; the authorized-use rules and the requirement that
 first REA use be its own declared falsifiable axis-move with a
 rejection control are unchanged. No Unreal runtime claim is made or
 implied anywhere in this file.
+
+## Correction note (r106, 2026-10-18)
+
+The r102 "Ghidra absent" clause is the r102 probe (`which`, plus
+`/opt`, `/usr/share`, `~/ghidra*`). That probe still fails. It misses
+`~/.local/opt/ghidra_12.1.4_PUBLIC` (`application.version=12.1.4`,
+present since 2026-09-21, not on PATH). Receipt:
+`reports/round-106/sweep/chunk-15.md`. No analysis was run. Other r102
+clauses were re-probed the same day and still match; not restated.

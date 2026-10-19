@@ -7,11 +7,11 @@
 From repository root:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_exact,camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_exact,camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside
 ```
 
-Both process exits were **0**. Full receipt: `/home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T122425975429Z/verdicts.json`: **82/82**, 40 ordinary/42 negatives, four uncounted probes PASS, `seeds_unchanged=true`. Focused receipt: `/home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T122432066745Z/verdicts.json`: **3/3**, two ordinary/one negative, no probes, `seeds_unchanged=true`. All 82 full raw records have `verdict=PASS`, actual exit equal to expected, exact marker as a stdout line after the engine banner, `stderr=[]`, `reasons=[]`, `error=null`. For the three focused cases, raw stdout/stderr and actual/expected exits are:
+Both process exits were **0**. Full receipt: `corpus/live/runs/20261013T122425975429Z/verdicts.json`: **82/82**, 40 ordinary/42 negatives, four uncounted probes PASS, `seeds_unchanged=true`. Focused receipt: `corpus/live/runs/20261013T122432066745Z/verdicts.json`: **3/3**, two ordinary/one negative, no probes, `seeds_unchanged=true`. All 82 full raw records have `verdict=PASS`, actual exit equal to expected, exact marker as a stdout line after the engine banner, `stderr=[]`, `reasons=[]`, `error=null`. For the three focused cases, raw stdout/stderr and actual/expected exits are:
 
 - exact: **0/0**, stdout `PASS camera3d_ortho near_boundary_exact depth=1.000 screen=550.000,225.000 in_frustum=true api_behind=false inside_control=true outside_control=false`; stderr empty.
 - inside: **0/0**, stdout `PASS camera3d_ortho near_boundary_inside depth=1.010 screen=550.000,225.000 in_frustum=true outside_control=false`; stderr empty.
@@ -19,7 +19,7 @@ Both process exits were **0**. Full receipt: `/home/vgpnk/Projects/prymeagnt/gam
 
 The other stdout lines are the Godot version banner and an empty line. All three records agree verbatim between full and focused receipts. Probe raw JSON in the full run directory reports: crash normal exit 1 accepted versus signaled -15 rejected; stream stdout-only exit 0 accepted versus stdout + `STREAM_3D_STDERR` exit 0 rejected; tree normal exit 0 accepted versus timed-out logical `actual_exit=null`, cleanup -9, rejected; intentional scratch `body3d_contact` mutant exit 1, measured contact-plane diagnostic, detected=true. Each probe JSON has `verdict=PASS`. Probe success is not a 3D camera assertion.
 
-Compared with the r55 non-author receipt `.shokunin/game-dev-3d/corpus/live/runs/20261013T120600873587Z/verdicts.json` cited by `corpus/lessons/r55-far-review.md`, all **81 previous cases** retain identical `script`, `flags`, `expected_exit`, `actual_exit`, `error`, `kind`, `marker`, `verdict`, `reasons`, `stdout`, `stderr`; the sole new case is the exact one. The full/focused maps contain the same **50 SHA-256 seed digests**; all match the present files on disk. Against r55, only the three authored seed files changed digests: `README.md` `a5a40c5e1fa40d721756d9a084bc844bfa233c0b579581be7eb6c9b46d7e842c` → `744e0fafd27a29490ccc38e991073096df18e5cd2cd4acc10b6cddc64dc9135f`, `camera3d_ortho.gd` `be5c8f9ea999e61d7eb3d5a62ec768cef604c3360c3e2bf25300d2230514c8e4` → `e81716583d0f0555a2404c4506b06b093b91d73c3d755739adfe7c69a812178a`, `run_battery.py` `925bda61a2f68d4e3ade54b19505712e1509ec2c48bfe2ed688619b9942cef20` → `404431bbfffef34be9cf75bee6bded5749e9b115598325ef9265da531cac771d`. This difference across commits is not runtime seed mutation.
+Compared with the r55 non-author receipt `corpus/live/runs/20261013T120600873587Z/verdicts.json` cited by `corpus/lessons/r55-far-review.md`, all **81 previous cases** retain identical `script`, `flags`, `expected_exit`, `actual_exit`, `error`, `kind`, `marker`, `verdict`, `reasons`, `stdout`, `stderr`; the sole new case is the exact one. The full/focused maps contain the same **50 SHA-256 seed digests**; all match the present files on disk. Against r55, only the three authored seed files changed digests: `README.md` `a5a40c5e1fa40d721756d9a084bc844bfa233c0b579581be7eb6c9b46d7e842c` → `744e0fafd27a29490ccc38e991073096df18e5cd2cd4acc10b6cddc64dc9135f`, `camera3d_ortho.gd` `be5c8f9ea999e61d7eb3d5a62ec768cef604c3360c3e2bf25300d2230514c8e4` → `e81716583d0f0555a2404c4506b06b093b91d73c3d755739adfe7c69a812178a`, `run_battery.py` `925bda61a2f68d4e3ade54b19505712e1509ec2c48bfe2ed688619b9942cef20` → `404431bbfffef34be9cf75bee6bded5749e9b115598325ef9265da531cac771d`. This difference across commits is not runtime seed mutation.
 
 ## Source predicate and private counterfactual
 
@@ -29,7 +29,7 @@ Only in an independent temporary directory (`/tmp/game-dev-3d-r56-exact-review-l
 
 ```sh
 mkdir -p /tmp/r56-near-review
-cp .shokunin/game-dev-3d/corpus/fixtures/project.godot .shokunin/game-dev-3d/corpus/fixtures/camera3d_ortho.gd /tmp/r56-near-review/
+cp corpus/fixtures/project.godot corpus/fixtures/camera3d_ortho.gd /tmp/r56-near-review/
 sed -i 's/const NEAR_EXACT := Vector3(2, 1, -1.0)/const NEAR_EXACT := Vector3(2, 1, -0.99)/' /tmp/r56-near-review/camera3d_ortho.gd
 godot --headless --path /tmp/r56-near-review --script res://camera3d_ortho.gd -- --near-boundary-exact > /tmp/r56-near-review.stdout 2> /tmp/r56-near-review.stderr
 ```
@@ -45,7 +45,22 @@ After the full battery/probe and first focused replay above, the author committe
 I reran from repository root on HEAD `69cf9b2`:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_exact,camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside
+python3 corpus/fixtures/run_battery.py --only camera3d_ortho_near_boundary_exact,camera3d_ortho_near_boundary_inside,camera3d_ortho_near_boundary_outside
 ```
 
-Process exit **0**; receipt `/home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T122710965811Z/verdicts.json`: **3/3 PASS** (ordinary 2, negative 1), exact 0/0, inside 0/0, outside 2/2. Each case retains the exact stdout marker, empty stderr, empty reasons and no runner error, with all compared raw case fields unchanged from my first focused receipt `/home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T122432066745Z/verdicts.json`. `seeds_unchanged=true`; 50 seed digests match the current files and only `README.md` differs from the prior focused digest: `744e0fafd27a29490ccc38e991073096df18e5cd2cd4acc10b6cddc64dc9135f` → `8ff28c04fa9ccf317288efecb23913f1178f152f753ad81ee4f580210c5eb7cf`. The 49 other seed digests are identical. I did **not** rerun all 82 cases/four probes after this README-only correction; the complete battery evidence remains specifically attributed to the preceding revision. Only this review file and ignored live receipts were written by the reviewer; no commit/push/merge.
+Process exit **0**; receipt `corpus/live/runs/20261013T122710965811Z/verdicts.json`: **3/3 PASS** (ordinary 2, negative 1), exact 0/0, inside 0/0, outside 2/2. Each case retains the exact stdout marker, empty stderr, empty reasons and no runner error, with all compared raw case fields unchanged from my first focused receipt `corpus/live/runs/20261013T122432066745Z/verdicts.json`. `seeds_unchanged=true`; 50 seed digests match the current files and only `README.md` differs from the prior focused digest: `744e0fafd27a29490ccc38e991073096df18e5cd2cd4acc10b6cddc64dc9135f` → `8ff28c04fa9ccf317288efecb23913f1178f152f753ad81ee4f580210c5eb7cf`. The 49 other seed digests are identical. I did **not** rerun all 82 cases/four probes after this README-only correction; the complete battery evidence remains specifically attributed to the preceding revision. Only this review file and ignored live receipts were written by the reviewer; no commit/push/merge.
+
+## r106 path-root conformance (2026-10-18)
+
+Mechanical re-root only (SEAT-08). Every `.shokunin/game-dev-3d/` prefix and every `/home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/` prefix above was removed so citations are repo-relative from this lane root. Historical totals, markers, and SHA-256 digests were not rewritten. This note is not a re-run of the 2026-10-13 review.
+
+Still non-resolvable (queued, not rewritten): cited `corpus/live/runs/20261013T…` receipts are gitignored (`corpus/.gitignore` `live/`) and absent; `/tmp/game-dev-3d-r56-exact-review-lt8t5zqm` and `/tmp/r56-near-review` are absent (the reproduce block says to choose your own temp directory; `/tmp` is quota-exhausted on this host). Commits `3f48f71` and `69cf9b2` resolve in `/home/vgpnk/Projects/prymeagnt/game-dev-3d`, not in this lane repo. Bare copy names `project.godot` and `camera3d_ortho.gd` in the prose are `corpus/fixtures/project.godot` and `corpus/fixtures/camera3d_ortho.gd`; the fenced `cp` already uses those paths. Seed-map keys were left as basenames. Sweep evidence: `reports/round-106/sweep/chunk-08.md`.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T122425975429Z/verdicts.json`
+> - `corpus/live/runs/20261013T122432066745Z/verdicts.json`
+> - `corpus/live/runs/20261013T120600873587Z/verdicts.json`
+> - `corpus/live/runs/20261013T122710965811Z/verdicts.json`

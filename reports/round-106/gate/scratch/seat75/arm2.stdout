@@ -1,0 +1,19 @@
+FLAKE HARNESS unreal-mcp gate
+GATE=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/knowledge/unreal-mcp/gate/run_gate.sh
+GATE_SHA256=390a25ae4e389a00c4c5147efd451e21303ae501abe2523ad713b6d88e57b2cf
+REPO_ROOT=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin
+RUNS=6 EXPECT=PASS
+GATE_WORKDIR=/home/vgpnk/tmp/r106seat75/gw (passed as GATE_WORKDIR and TMPDIR to each run)
+SCRATCH_PREFLIGHT=OK (0/20 probe writes failed in /home/vgpnk/tmp/r106seat75/gw)
+LOGDIR=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/gate/scratch/seat75/arm2
+
+run  1/6  rc=0  verdict=PASS       POINTERS=103   0.84s  run-1.log
+run  2/6  rc=0  verdict=PASS       POINTERS=103   0.82s  run-2.log
+run  3/6  rc=0  verdict=PASS       POINTERS=103   0.85s  run-3.log
+run  4/6  rc=0  verdict=PASS       POINTERS=103   0.93s  run-4.log
+run  5/6  rc=0  verdict=PASS       POINTERS=103   0.92s  run-5.log
+run  6/6  rc=0  verdict=PASS       POINTERS=103   0.89s  run-6.log
+
+TALLY runs=6 pass=6 fail=0 blocked=0 empty=0 truncated=0 unexpected=0
+HARNESS RESULT: STABLE (6/6 runs returned PASS with a matching exit code)
+NOTE: stability of a static gate is not evidence about Unreal Editor behaviour — the editor is not installed here.

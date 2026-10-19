@@ -1,0 +1,21 @@
+STAMP=20261018T212035Z
+HEAD=0cc3f4162f8c319f8d01a69a174fe939f36701bd
+PWD=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin
+--- node which/version under pinned PATH ---
+/home/vgpnk/.local/share/fnm/node-versions/v24.21.0/installation/bin/node
+v24.21.0
+--- runner sha ---
+f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f  corpus/fixtures/run_battery.py
+--- command ---
+PATH=/home/vgpnk/.local/share/fnm/node-versions/v24.21.0/installation/bin:$PATH python3 corpus/fixtures/run_battery.py --only r94_cannon_det --runs reports/round-106/scratch/seat28-cannon
+--- battery ---
+PASS r94_cannon_det: exit=0 expected=0
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+PASS     r94_cannon_det                     r94_cannon.gd              --arm=det          0/0       ordinary
+totals: cases=1 pass=1 fail=0 ordinary=1 negative_controls=0 probes=0
+PASS battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat28-cannon/20261018T212035892614Z/verdicts.json
+COMMAND_EXIT=0
+--- post node still default outside prefix ---
+/home/vgpnk/.local/share/mise/installs/node/latest/bin/node
+v26.12.0

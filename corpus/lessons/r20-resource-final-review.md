@@ -34,3 +34,30 @@ Copied that source only into ignored `corpus/live/runs/review-r20-final-mutant/s
 Both exit **1** before either marker and report `ERROR: scene3d_resource: initial mesh size mismatch first=(1.5, 1.0, 1.0) second=(1.5, 1.0, 1.0) source=(1.5, 1.0, 1.0)` with `_fail` push_error backtrace on stderr, banner only on stdout. Captured separated `mutant.stdout`, `mutant.stderr`, `mutant-shared.stdout`, `mutant-shared.stderr` in that ignored scratch. Neither arm shows a Parse Error, SCRIPT ERROR, ObjectDB warning or RID/geometry leak. This is a **literal** baseline rejection; modifying INITIAL_SIZE does not merely move the expected initial size.
 
 **Limits:** One in-memory headless Godot PackedScene/BoxMesh setup only. Shared branch mutates the original source resource by design; neither the source node nor packed scene is guaranteed semantically unchanged after shared mutation. These assertions do not validate rendered pixels, saved `.tscn` reload, other resource classes, generic scene ownership, other Godot versions or engines. Fixed markers are guarded by actual literal assertions but are not raw dimension telemetry. The four probes make only their documented bounded claims, not general crash/process-tree/mutation coverage.
+
+> **Digest correction (r106, 2026-10-18).** The "Current" hashes in the replay section are the r20 snapshot and are left verbatim. `scene3d_resource.gd` `7bbd986c…` still matches the tree (3316 bytes). `run_battery.py` `d9805b4f…` and `README.md` `92d8e7fb…` are the blobs at `2909e5e5` (33803 and 14412 bytes). The live files are `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f` (346248 bytes) and `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` (70687 bytes).
+>
+> ```
+> $ sha256sum corpus/fixtures/scene3d_resource.gd corpus/fixtures/run_battery.py corpus/fixtures/README.md
+> 7bbd986c1bc22921a7a2b85c43f0a06530efdafb35eb411494a1eecbb718181c  corpus/fixtures/scene3d_resource.gd
+> f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f  corpus/fixtures/run_battery.py
+> 347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1  corpus/fixtures/README.md
+> $ git show 2909e5e5bccf:corpus/fixtures/run_battery.py | sha256sum
+> d9805b4f9898b53a40c2c5eda5ca3b2aeedd4b0e298323eac3421a8c04680558  -
+> $ git show 2909e5e5bccf:corpus/fixtures/run_battery.py | wc -c
+> 33803
+> $ git show 2909e5e5bccf:corpus/fixtures/README.md | sha256sum
+> 92d8e7fb43972d5ededf55cab64580fe7532b16b17df283748266a0390aa1b9c  -
+> $ git show 2909e5e5bccf:corpus/fixtures/README.md | wc -c
+> 14412
+> ```
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T052850019973Z/verdicts.json`
+> - `corpus/live/runs/20261013T052854452725Z/verdicts.json`
+> - `corpus/live/runs/20261013T051450833462Z/verdicts.json`
+> - `corpus/live/runs/review-r20-final-mutant/scratch/scene3d_resource.gd`
+> - `corpus/live/runs/review-r20-final-mutant/scratch`

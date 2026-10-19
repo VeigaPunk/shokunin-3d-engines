@@ -1,0 +1,783 @@
+{
+  "godot": "/usr/bin/godot",
+  "godot_version": "4.7.2.stable.arch_linux.ed1daf0bf",
+  "godot_version_exit": 0,
+  "godot_version_error": null,
+  "started_utc": "20261018T212655497155Z",
+  "seed": "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/corpus/fixtures",
+  "scratch": "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+  "case_timeout_seconds": 20,
+  "only": "r95_bullet_det,r95_bullet_freeze,r95_bullet_rt,r95_bullet_shm,r95_bullet_sleep,r95_bullet_sleep2,r95_bullet_nan,r95_bullet_nan2,r95_bullet_fric,r95_bullet_rest,r95_bullet_knobs,r95_bullet_solver,r95_bullet_pile,r95_bullet_misc,r95_bullet_neg_dt,r95_bullet_neg_order,r95_bullet_neg_radius,r95_bullet_neg_simtime,r95_bullet_neg_badid,r95_bullet_neg_shm_rt",
+  "probe_failing": false,
+  "probe_crash_exit": false,
+  "crash_probe_ok": true,
+  "probe_stream_attribution": false,
+  "stream_probe_ok": true,
+  "probe_tree_timeout": false,
+  "tree_probe_ok": true,
+  "seeds_unchanged": true,
+  "seed_digests": {
+    "PINNED-ENV.md": "90b15152654331ee98ef8a7644f8daa2a6363927a386328a16da55b33e22eb9f",
+    "README.md": "347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1",
+    "animation3d_blend.gd": "4638ecc8c64891872594391bc1db38ac1d1ccb5145f21f56766fc87629d22925",
+    "animation3d_keys.gd": "5c4cec8830aff171cd2ac8981c226f55036d6fea4c1f37435829ff29d0e4121b",
+    "animation3d_playback.gd": "1f6027cf153fe7b95721c0a5f02fa7ef61b8d12e0f6fc4f9c7f30e2d04affe38",
+    "area3d_chain.gd": "c9270bea3462a116433bc05db48eb93c01ccda4da43073167360967744ec313c",
+    "body3d_slide.gd": "261ca23914290ad5bfcbff5e9fdc733e5dbe8390288b007041387c85c27b5518",
+    "bpy_battery.py": "045102a8514df96bda0c2268841ec0751de87f678f34cbdf981c3a7c6ff882ec",
+    "bpy_rbw3d.gd": "b35909d13f487ca276188c88fcb1fc29b15b9e60a1060736380e1924f951b61c",
+    "bpy_sync_probe.py": "07ec83e33512b6430b085dee9029163b41594b4e6e8608aab8b98d6c6c483a48",
+    "camera3d_depth.gd": "a34f38e862fd6947fe9c6cca2121592a145710b0abac15476175b4f818669ed9",
+    "camera3d_ortho.gd": "4b9ae949e536947f8a924049588cd1a2d597f25f74217e4ffe9e15ba3d2cd19d",
+    "camera3d_project.gd": "1124a082b6e39eef7a4226b6e532447a910f38793f10fa95d52087c57c40b5cb",
+    "crash_exit3d.gd": "efee43b93070f838d4174cfceacec98b056fb34c60525f0479e8e6e1e4c38f99",
+    "curve3d_path.gd": "7e9a71a07a9c76bd063b7d2da74369744230de43adc638fdbd3ba686b3128b7e",
+    "floor3d_ground.gd": "b30c116b522e2e5e7347584e0b68f5dfcf1d10aaf453f5eca7652533f5d82e29",
+    "input3d_move.gd": "b3174836be70302fecf4cab9c5cb3ea0e456f1c9bd2da5d5810f0dbcc1b5ea07",
+    "input_mover3d.gd": "983bbd1597019e699c8d6127f7e975c7067ddf5d68e51228d386d92e2ad03553",
+    "jump3d_gravity.gd": "27730ed5c9c63bc9b1495807159db8c1e280de0bdeb22627052411876a0a48d0",
+    "mesh3d_array.gd": "8dcbf29d6739d43787f47a221645e6226853b369ec38a47d721df06e66bae6cd",
+    "mesh3d_faces_hit.gd": "566e290f9a2e112e8e20921edcbeba04139c40fb0259a986e369372bbd174310",
+    "mesh3d_indexed.gd": "14ce1bae6d7b6a4cfea2aa01a5aa7e4e0a5a10cf58f537339b3e229c738f40a6",
+    "mesh3d_trimesh_hit.gd": "bae284fe0cafb162284d14072a0846897994d9cef725d014fbb9aedbcce27c93",
+    "navagent3d_detour.gd": "66c097e4e5398481bbc9956038e8bd83b32fd879e8ee7071490f4c4ff34d2cec",
+    "navagent3d_distance.gd": "b820e469c35e68cf60d3f87bda94c1968cbc9b943b78513a6bf61bd0761c803a",
+    "navagent3d_follow.gd": "2bdcca4a08bd290bdcb097155c2299ae0fa6b5ac4893f68c2a04b073b782830c",
+    "navagent3d_next.gd": "f0ea0fbb0c8400b7b6fd4b5e5139ae02d0487a1ddedfe483e1fd3c3f6ac5e94f",
+    "navagent3d_retarget.gd": "6ad8584642edf8b1c41fb7116f39bf0e2d9513a2d73a99f0ea83d5cd4e1059d0",
+    "navfollow3d_driver.gd": "ec094e7f7baa317636b093d622687cae4f30928df417a547900406f759d28bbf",
+    "navigation3d_path.gd": "914f08956be5e5b94457876263a13c57c97760e552e8e515472fb2e2fe678710",
+    "navretarget3d_driver.gd": "310a1419c878f13b973b7fff895f5f1d536c7d69bcfb6e5faab98a9f2e7b0102",
+    "pathfollow3d_callback.gd": "991fdb9a59fec593fbf59aa603d6fcb881f5de710510a23816ac50ee692ccc7b",
+    "pathfollow3d_curve.gd": "1a7259fbc3b84b2584f341cc8a75b2a5629736631551f4b9fa3de67e9e40629d",
+    "pathfollow3d_driver.gd": "5fefa9c7fb58da75227312e5b98b61ce07e15ec8aea58076906aa56ba78567a2",
+    "pathfollow3d_paced.gd": "4215453f9eb7e4cae1f56748b2cd2640efe35d14148ef8eb0e87464aa491f8b0",
+    "phys3d_events.gd": "df1cde494cce9575dee78a25259f24cebb7e8523bb32d166d4196f9ad23ec6de",
+    "phys3d_joints.gd": "80bf44c53255a0a33b2282ca4e6278d42d82be4f616252925e128c928eca81e6",
+    "pickup_orb3d.gd": "cb1f2a392f0aa7e34089f5bd07828bba68901739b534665e04c22ebdbb652de4",
+    "project.godot": "1fda90d46b0529aea0e75710a64f038cbf983adc8385285dd8bbe6202a8eac23",
+    "r100_fpslat.gd": "da11495de7a24703a911bb1c8fef15ba62481e5f492bda1efd56fc3b1950b537",
+    "r100_probe_r100b_area.gd": "a577d6265f78f1ff337b09a7169a236044b0bd2b16ddfdf416d90e9364d4469d",
+    "r100_probe_r100b_cls.gd": "0adf98aadd38cdc62b60742e3fb393566586cc531706edc3b3ebb98df2a45e03",
+    "r100_probe_r100b_life.gd": "427fc7d159f524da345c0b684b13c6d66690aa59f7e9afc6f73bbab1fb1ad760",
+    "r100_probe_r100b_modes.gd": "249c0caf8ac4a1d5270beccadd65d99d0083a1db77264d56958a8ec0ac884896",
+    "r100_probe_r100b_rt.gd": "8bfd76adf5ae5551eb870524c7677ea24755ac068f71b1d1936e1fd298cb2585",
+    "r100_probe_r100b_sched.gd": "c61025594deff49dfbd7819376a9e6379dca6efb5c6d7b0aa149aa79cbc86849",
+    "r90_child.gd": "84f6241de590b5810357dde7714a19ec37e3072526e165e4c3ac8a8010d9aaa7",
+    "r91_child.py": "ab63245b1b29c5c647444ba6f062695679b795383db8b417f08a4df2ba1a6b56",
+    "r92_animphys.gd": "460e9b6f9ab7fb49ac7954bce5b0613b35fd73628696c4af7a0bfe346134d675",
+    "r92_child.gd": "0e54df34f5f052213447a07bf37ab3064105c5b8d9dd2bc82aef4b3c92b0c937",
+    "r92_remote.gd": "795b093f6e733b3cb676b89a6c3e49d4b263e483c3dbd12abb09a3d959628fdf",
+    "r92_timing.gd": "6082898c197f878039e5fd7c2d6bf5c903431578535c635e4636af801b883a8b",
+    "r93_areasig.gd": "e4b040068a52f55fbcd021c6c58c4f87e4a90e22c17f1e22659158f18e546034",
+    "r93_child.gd": "fac6b4399e4db1de9d4a316e70e317b249d5860556c6ca1625200915a9fd7d3e",
+    "r94_cannon.gd": "d40a1f75739626778d13115eced5202bf9bd6ab5643e46e92a8973b495a05c77",
+    "r94_child.mjs": "c84a8e8a9bb18af1b1846d367b97d15de8138410180ffb5790a30cee972d7508",
+    "r94vendor/cannon-es.js": "f0700cbd3a482954949b9d58c1b0f76dcc74767750297647a39d8c40dd63d37c",
+    "r94vendor/package.json": "75310bff016b194c22167683f733bcd0991ba7d1d2a288c77763698eafecf4e8",
+    "r94vendor/three.core.js": "9edde002b066a9a05676a6127f67735b62baf399bdea529f2f7e31657da769e6",
+    "r94vendor/three.module.js": "9052042d676cb0fdc1ddfefe193053f34b7ac0513a616fdac4535d49987812ea",
+    "r95_bullet.gd": "f988ba86fdef62a03a59c91e000a94288a4610f9ef9c92c5e56db967515f1447",
+    "r95_child.py": "8821ebd50459dd1371a6484a68abc79e0decb8aa50a8c416636f644baddf5b6b",
+    "r95vendor/pybullet.cpython-314-x86_64-linux-gnu.so": "eca749a0d9b53964dca06764300c3481f328dc4cd1499a60e287393972be3693",
+    "r96_joltdet.gd": "8a77ecb4c29ab8b69b7e95efb4f7c9f54bb6edcff333153ba77167589719cf33",
+    "r96_probe_damp.gd": "d6ce9067499c1c5f3b5156dab7adeb39bbf2b025b2d7d2e8359dbc4622e32568",
+    "r96_probe_iters.gd": "06d80e50ac6fadc2ef73e859ad3d60079d9d8312a15b987bd9887e5200692e15",
+    "r96_probe_kin.gd": "ddc50d993d0ca6e56903e1e122c0ac7b15d68dbf61444593fd4c7dd021e375c5",
+    "r96_probe_pen.gd": "762e11b47552aa41d633b957f8de16acd7846165a1beb540af4fd0ef38658857",
+    "r96_probe_rest.gd": "1d7bd6e7e46139162fac418f0919f482bcf8df33ffbd9917272bffbdd5fba981",
+    "r96_probe_settings.gd": "e190adff97ac1d80612f8b6e932959cc86b0b1f9687f397f8f7bb6876316556e",
+    "r96_probe_srvjoint.gd": "db3447f6a94c5094a97441893173ce1c5d9d1afe4836634ad5820e35f310ee82",
+    "r96_probe_warm.gd": "4228f7aee4d68cb5138612992e40ddab3c016463b7660835c9098d93184bc47a",
+    "r97_nodelat.gd": "c30aca993686733f43b4b0088f3613131cc25f2c65c7157bd6da3011907b36c5",
+    "r97_probe_cbedge.gd": "3a2697d97cbd52d49877a0cf86e8fb51f8680e437af03ad1e11153e6bb7e7488",
+    "r97_probe_classdb.gd": "61a0a7028a5420e1ebe4e1d6420868eac6c14cb9e170e3753fabac4f3100f188",
+    "r97_probe_crashiso.gd": "89bc3a7f586d82a75ab4cc53d21503377b0c7220104b3100bacad636d057aa1e",
+    "r97_probe_dssparam.gd": "9a7e61f1dfa62dca6029657435a28561f0251bae53e9d3396f47fdf42de1523e",
+    "r97_probe_njoint.gd": "3df22045c2e67d28580c9d98cbd91818cabe2c7804e5444daf239619dbabf7bd",
+    "r97_probe_r97b_free.gd": "3fa05680ebbff930eca265ebe840954681f481288e074c00f2ff97ed814d1ef4",
+    "r97_probe_r97b_softfloor.gd": "d6988ea7ce55865e4f40a7fb7cbf47dc81393b74d98fdb10481430a3d5cac82d",
+    "r97_probe_soft.gd": "0a2625455d6b1cb79966e4aade59e7ed9f797526804eb6c9842b0287bb830255",
+    "r97_probe_vehicle.gd": "9c190acea4e13acdf4d0015266af341fbc7494ee94b972c820751307165b87b4",
+    "r97_probe_xrkeep.gd": "487ca4d375d8d11701889e46b7216d3eb94a3a1117a879b91a1ef4984200652b",
+    "r98_gltflat.gd": "47998a95bb0401f7f8475bb0baf0828fa8f8559d2b2b3c174eff8221ab2835db",
+    "r98_probe_gltf.gd": "18ba68b7065afdceff51b92a42605696b06662dae5a61e1e7d1320e2c62f29ca",
+    "r98_probe_gltf_tr.gd": "4736126f3c148fb29d9b234400adf27a1d9d1dac63815fc074612977b29f3d5e",
+    "r98_probe_r98b_inv.gd": "31cd69c1988b8cbe4c7d70b3e8ed2aaf2879cfcf9dc53d8b1fa5791bd4b83454",
+    "r98_probe_r98b_mode.gd": "fadcf86c0c9dbd71b23d2e2087c3166e117a9f37f4bad865da97e928102cda60",
+    "r98assets/badjson.gltf": "a06195cbbc7cc1fe999acefb0721157f6a54db21522c312e7820da5f478908f4",
+    "r98assets/badmagic.glb": "8870f37ff2e34c6051495eed7c8fb9990ade3f1a14c42229f62233cef796f943",
+    "r98assets/badmagic_badjson.glb": "6e813b4c3cc0afad2a2146ad8c54635ab21f5aa902e9c3e95dc40221e23a1747",
+    "r98assets/empty.glb": "91fe8daafe862cbe1d3c562ca01eba1403dac59a7b6be880946be6b691316102",
+    "r98assets/ext.bin": "8dd47db8f27c21d7b67e478e07f022c5c7087b63b3bde704252de6bfa077200f",
+    "r98assets/ext_bin.gltf": "479676d9ed5a923ec68dd4ef1012ff78a2b121afc3d87ae55322c82b94240753",
+    "r98assets/ext_resuri.gltf": "20d04909634121180b4547f9776834f0529f5899dc607bd2215c581d84286130",
+    "r98assets/glb_as_gltf.gltf": "1116006c57a3c4e2a8e0d586531281d793dfa853557f3610088e7a8fbab91611",
+    "r98assets/glb_version3.glb": "cc0239dbe6106ff823c3cdd9f113d9aa873af0407617ce1eb78a3de68c32c9e9",
+    "r98assets/json_as_glb.glb": "999e2c0883437dfcdb2e57de745c943b190f74dbb23b6e82f374c86f15f9e393",
+    "r98assets/magic_badjson.glb": "35631cf9a6abbcb4f6f925b7850f8daf4b086653fece6ba1a43e338dc954f1f2",
+    "r98assets/magic_only.glb": "54267b825b3110a5cdaba82e19d4a7a89a2fa1fc73f37efa0b56e496120e22f6",
+    "r98assets/magic_truncated.glb": "05f153fe23c2c0d13c91aec47ac3e4785a007364e6bff815f89a49b57f70ab64",
+    "r98assets/nodes_only.glb": "e28f6f147382b80942c6fffb6e48dc7300aea55174ac8e488aeb28507fd0388c",
+    "r98assets/tri.glb": "1116006c57a3c4e2a8e0d586531281d793dfa853557f3610088e7a8fbab91611",
+    "r98assets/tri.gltf": "999e2c0883437dfcdb2e57de745c943b190f74dbb23b6e82f374c86f15f9e393",
+    "r98assets/tri_upper.GLB": "1116006c57a3c4e2a8e0d586531281d793dfa853557f3610088e7a8fbab91611",
+    "r99_animtree.gd": "75d63cbed8ac76efeafc460deb8c081f62f300f03d1634d9dbcac111877c8bc2",
+    "r99_probe_r99b_core.gd": "6683aba10439885d08488fd36275fabbb938895f04a853cb2650e4e10db0ff51",
+    "r99_probe_r99b_life.gd": "2eb2e2428a317934aa88682e1f3477352771243413fc5201df001b37e4724df8",
+    "r99_probe_r99b_modes.gd": "f6d23bb1f69e2c4f27d5904d846d3394edb83e73ae1386c25624f00ea6195ff5",
+    "r99_probe_r99b_silent.gd": "de0fd54e2ed5dbed8912f0848cb99d7775314510638a4802dc85571d54b645ee",
+    "r99_probe_r99b_sm.gd": "a8d41a1b1fd5c624d2f5501bbc4a1ba19cba15679ee5f01284120bcc8b229081",
+    "r99_probe_r99b_untracked.gd": "5981275d176f1fc06c5d644165ab3293cd079a54d9a700c7c2bca7eefb745afd",
+    "raycast3d.gd": "0e33c8a6d9158c4d56f5e9d87024ce00f6f3deaa33e53b1964ba4322bc20ff2f",
+    "remote3d_transform.gd": "65422bef734af4f8f50dc269c09853f3e7c9c8aa74225ecf4d3fe853f4b9fed4",
+    "run_battery.py": "f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f",
+    "runner3d.gd": "dbc87856d00d6af8abc10e59bd9ae0f8a0a7bc7b0d30c1acea9a18cc49a40770",
+    "scene3d_disk.gd": "95f53495cbcf2aab082af23b75fa0d9ba5db344f3f858352c3364a115c41c207",
+    "scene3d_instance.gd": "bf47af512df4e9e7750ebed024c65ccdede38c65e6cdc4c49aacfd1b655385cb",
+    "scene3d_resource.gd": "7bbd986c1bc22921a7a2b85c43f0a06530efdafb35eb411494a1eecbb718181c",
+    "scene3d_resource_disk.gd": "996514bf30214bb2f7363bcb033bfe73a658c49fed1d3ba336871e89d452070f",
+    "shapecast3d_graze.gd": "e26a0304aced8c9cab7b2ec54edc1497cc3a2c8a8b608c11b63d4bd13298e8f2",
+    "shapecast3d_sphere.gd": "7a9f5f3efeb606501dbc228b43e76b65faa65ed97c0ba171886833c5e0de5ce9",
+    "skeleton3d_attachment.gd": "25851f8ccd4711c0e5be848716211c7c52ed19f0d00ba888ef5d96fcc5125cb5",
+    "skeleton3d_pose.gd": "dd6a3b3b2bb72d68debc66429cc211a327a2dde8cf3892aefab5ab44809ad9cc",
+    "skeleton3d_rotation.gd": "5eee57aa24f71118d9e1a613013eab524b7eba3722013fc59d6a2318eb404153",
+    "slope3d_angle.gd": "0833050b4581738aaf7c784db3b473455ee3bb429eb11a0ed9b4f13f2bce4ccc",
+    "slope3d_travel.gd": "c18a285ec1b30edddc2fa524c8d560c76c1282241a21bdf42942467aef47ef44",
+    "stream_attribution3d.gd": "ab923ceeac3797f1d0fabfd6695238f88529ef69fb9f452c45ec61b76eefa796",
+    "timeout_descendant.py": "c3a52834c19bf6c6ed8bf177b59bbfd541f08192141786d35c8303bed181e460",
+    "timeout_tree3d.gd": "403a2e3e5f4a49fda283a147fd51577eda18a10a2d791cebb60be8d9d0712210",
+    "transform3d_compose.gd": "a6385ac2ab80abb3bad9704b3c2ed7782a3091bc4d9017763b6d581ad3760ba6"
+  },
+  "results": [
+    {
+      "case": "r95_bullet_det",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=det"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=det"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet det py=3.14.7 det_base{rc=0,m=M0 case=det_base engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_base base h=02309c52da41ef33 z@1=4.99982951 z@30=4.92092951 z@60=4.69026842 z@120=3.78969868 z@240=1.4999778 z@480=1.49997782 contacts=13 nan=False|M DONE case=det_base,o=0,d=1} det_rebuild{rc=0,m=M0 case=det_rebuild engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_rebuild rebuild h1=02309c52da41ef33 h2=02309c52da41ef33 eq=True ids1=0,1,2,3,4 ids2=0,1,2,3,4|M DONE case=det_rebuild,o=0,d=1} det_interleave{rc=0,m=M0 case=det_interleave engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_interleave interleave A=02309c52da41ef33 base=02309c52da41ef33 eqA=True B=b5b5814549b9d518 C=b5b5814549b9d518 eqBC=True|M DONE case=det_interleave,o=0,d=1} det_order{rc=0,m=M0 case=det_order engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_order order-probe h_forward=02309c52da41ef33 h_reverse=76988acc55682c1a eq=False|M DONE case=det_order,o=0,d=1} det_iters{rc=0,m=M0 case=det_iters engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_iters iters 1:h=3cb4032b0b034959,z=1.49782812 50:h=02309c52da41ef33,z=1.49997782 150:h=02309c52da41ef33,z=1.49997782|M DONE case=det_iters,o=0,d=1} det_iters0{rc=0,m=M0 case=det_iters0 engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_iters0 iters0 h=5c1f78b5e4aaabb1 z=-10.6855237 contacts=0 nan=False inf=False where=none|M DONE case=det_iters0,o=0,d=1} det_substeps{rc=0,m=M0 case=det_substeps engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_substeps substeps n0:h=02309c52da41ef33,z=1.49997782 n4:h=52204c986d237b60,z=1.49997935 n8:h=b186caf608002635,z=1.49997955|M DONE case=det_substeps,o=0,d=1} det_detpairs{rc=0,m=M0 case=det_detpairs engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_detpairs detpairs scene=5body d0:h=02309c52da41ef33 d1:h=02309c52da41ef33 eq=True|M DONE case=det_detpairs,o=0,d=1} det_reset{rc=0,m=M0 case=det_reset engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_reset reset h=02309c52da41ef33 h2=02309c52da41ef33 eq=True|M DONE case=det_reset,o=0,d=1} det_restore{rc=0,m=M0 case=det_restore engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_restore restore-state hRestored=d724b9280dbb31a2 h120=d724b9280dbb31a2 eqRestore=True hPost=8627a9d5062f1396 h240=8627a9d5062f1396 eqPost=True|M DONE case=det_restore,o=0,d=1} det_perturb{rc=0,m=M0 case=det_perturb engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_perturb perturb-track mag=1e-9 20:1.000e-09 60:1.000e-09 120:1.000e-09 240:4.466e-14 360:3.479e-13 480:6.804e-13 heq=False|M DONE case=det_perturb,o=0,d=1} det_saturated{rc=0,m=M0 case=det_saturated engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_saturated steps-saturated h960=f4610a1b8135297a h961=88423c4a585c192e eq=False nan=False|M DONE case=det_saturated,o=0,d=1} det_neutral{rc=0,m=M0 case=det_neutral engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_neutral erp def:h=02309c52da41ef33,z=1.49997782 0.9:h=02309c52da41ef33,z=1.49997782|M det_neutral warmstart def:h=02309c52da41ef33,z=1.49997782 0.0:h=02309c52da41ef33,z=1.49997782|M DONE case=det_neutral,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 2.002,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet det py=3.14.7 det_base{rc=0,m=M0 case=det_base engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_base base h=02309c52da41ef33 z@1=4.99982951 z@30=4.92092951 z@60=4.69026842 z@120=3.78969868 z@240=1.4999778 z@480=1.49997782 contacts=13 nan=False|M DONE case=det_base,o=0,d=1} det_rebuild{rc=0,m=M0 case=det_rebuild engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_rebuild rebuild h1=02309c52da41ef33 h2=02309c52da41ef33 eq=True ids1=0,1,2,3,4 ids2=0,1,2,3,4|M DONE case=det_rebuild,o=0,d=1} det_interleave{rc=0,m=M0 case=det_interleave engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_interleave interleave A=02309c52da41ef33 base=02309c52da41ef33 eqA=True B=b5b5814549b9d518 C=b5b5814549b9d518 eqBC=True|M DONE case=det_interleave,o=0,d=1} det_order{rc=0,m=M0 case=det_order engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_order order-probe h_forward=02309c52da41ef33 h_reverse=76988acc55682c1a eq=False|M DONE case=det_order,o=0,d=1} det_iters{rc=0,m=M0 case=det_iters engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_iters iters 1:h=3cb4032b0b034959,z=1.49782812 50:h=02309c52da41ef33,z=1.49997782 150:h=02309c52da41ef33,z=1.49997782|M DONE case=det_iters,o=0,d=1} det_iters0{rc=0,m=M0 case=det_iters0 engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_iters0 iters0 h=5c1f78b5e4aaabb1 z=-10.6855237 contacts=0 nan=False inf=False where=none|M DONE case=det_iters0,o=0,d=1} det_substeps{rc=0,m=M0 case=det_substeps engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_substeps substeps n0:h=02309c52da41ef33,z=1.49997782 n4:h=52204c986d237b60,z=1.49997935 n8:h=b186caf608002635,z=1.49997955|M DONE case=det_substeps,o=0,d=1} det_detpairs{rc=0,m=M0 case=det_detpairs engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_detpairs detpairs scene=5body d0:h=02309c52da41ef33 d1:h=02309c52da41ef33 eq=True|M DONE case=det_detpairs,o=0,d=1} det_reset{rc=0,m=M0 case=det_reset engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_reset reset h=02309c52da41ef33 h2=02309c52da41ef33 eq=True|M DONE case=det_reset,o=0,d=1} det_restore{rc=0,m=M0 case=det_restore engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_restore restore-state hRestored=d724b9280dbb31a2 h120=d724b9280dbb31a2 eqRestore=True hPost=8627a9d5062f1396 h240=8627a9d5062f1396 eqPost=True|M DONE case=det_restore,o=0,d=1} det_perturb{rc=0,m=M0 case=det_perturb engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_perturb perturb-track mag=1e-9 20:1.000e-09 60:1.000e-09 120:1.000e-09 240:4.466e-14 360:3.479e-13 480:6.804e-13 heq=False|M DONE case=det_perturb,o=0,d=1} det_saturated{rc=0,m=M0 case=det_saturated engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_saturated steps-saturated h960=f4610a1b8135297a h961=88423c4a585c192e eq=False nan=False|M DONE case=det_saturated,o=0,d=1} det_neutral{rc=0,m=M0 case=det_neutral engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M det_neutral erp def:h=02309c52da41ef33,z=1.49997782 0.9:h=02309c52da41ef33,z=1.49997782|M det_neutral warmstart def:h=02309c52da41ef33,z=1.49997782 0.0:h=02309c52da41ef33,z=1.49997782|M DONE case=det_neutral,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_freeze",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=freeze"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=freeze"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet freeze py=3.14.7 freeze_scene{rc=0,m=M0 case=freeze_scene engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M freeze_scene freeze-scene steps=3000 changes=3000 freezeStep=-1 hFinal=7e1278628a4d5a12|M DONE case=freeze_scene,o=0,d=1} freeze_ball{rc=0,m=M0 case=freeze_ball engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M freeze_ball freeze-ball steps=1400 changes=79 freezeStep=80|M DONE case=freeze_ball,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.898,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet freeze py=3.14.7 freeze_scene{rc=0,m=M0 case=freeze_scene engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M freeze_scene freeze-scene steps=3000 changes=3000 freezeStep=-1 hFinal=7e1278628a4d5a12|M DONE case=freeze_scene,o=0,d=1} freeze_ball{rc=0,m=M0 case=freeze_ball engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M freeze_ball freeze-ball steps=1400 changes=79 freezeStep=80|M DONE case=freeze_ball,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_rt",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=rt"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=rt"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet rt py=3.14.7 rt_inert{rc=0,m=M0 case=rt_inert engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rt_inert rt-inert rt0:h=02309c52da41ef33,flag=0 rt1:h=02309c52da41ef33,flag=1 eq=True|M DONE case=rt_inert,o=0,d=1} rt_idle{rc=0,m=M0 case=rt_idle engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rt_idle rt-idle flag=1 z0=5 z_after_0.6s_idle=5 z_after_120_api_calls=5|M DONE case=rt_idle,o=0,d=1} rt_paced{rc=0,m=M0 case=rt_paced engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rt_paced rt-paced flag=1 h=02309c52da41ef33 eq=True|M DONE case=rt_paced,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 4.135,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet rt py=3.14.7 rt_inert{rc=0,m=M0 case=rt_inert engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rt_inert rt-inert rt0:h=02309c52da41ef33,flag=0 rt1:h=02309c52da41ef33,flag=1 eq=True|M DONE case=rt_inert,o=0,d=1} rt_idle{rc=0,m=M0 case=rt_idle engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rt_idle rt-idle flag=1 z0=5 z_after_0.6s_idle=5 z_after_120_api_calls=5|M DONE case=rt_idle,o=0,d=1} rt_paced{rc=0,m=M0 case=rt_paced engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rt_paced rt-paced flag=1 h=02309c52da41ef33 eq=True|M DONE case=rt_paced,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_shm",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=shm"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=shm"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet shm py=3.14.7 shm_step{rc=0,m=M0 case=shm_step engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M shm_step shm-step cid=0 rt=0 h=02309c52da41ef33 eqPin=True|M DONE case=shm_step,o=0,d=8} shm_rtclass{rc=0,m=M0 case=shm_rtclass engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M shm_rtclass shm-rt rtflag=1 idle2.0s fell=True|M DONE case=shm_rtclass,o=0,d=44}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 3.154,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet shm py=3.14.7 shm_step{rc=0,m=M0 case=shm_step engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M shm_step shm-step cid=0 rt=0 h=02309c52da41ef33 eqPin=True|M DONE case=shm_step,o=0,d=8} shm_rtclass{rc=0,m=M0 case=shm_rtclass engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M shm_rtclass shm-rt rtflag=1 idle2.0s fell=True|M DONE case=shm_rtclass,o=0,d=44}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_sleep",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=sleep"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=sleep"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet sleep py=3.14.7 sl_iters{rc=0,m=M0 case=sl_iters engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_iters sleep-default 1:iters=1,v=-0.0409166667,z=0.999829514 60:iters=1,v=-2.42374526,z=0.690268416 80:iters=2,v=1.94289029e-16,z=0.49999 120:iters=2,v=1.94289029e-16,z=0.49999 240:iters=2,v=1.94289029e-16,z=0.49999 480:iters=2,v=1.94289029e-16,z=0.49999 560:iters=2,v=1.94289029e-16,z=0.49999 600:iters=2,v=1.94289029e-16,z=0.49999 720:iters=2,v=1.94289029e-16,z=0.49999 960:iters=2,v=1.94289029e-16,z=0.49999 1200:iters=2,v=1.94289029e-16,z=0.49999 1300:iters=2,v=1.94289029e-16,z=0.49999|M DONE case=sl_iters,o=0,d=1} sl_velwrite{rc=0,m=M0 case=sl_velwrite engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_velwrite sleep-velwrite zB=0.49999 vB=1.94289029e-16 vRead=5 z+1=0.520632014 z+31=1.05253767 v=3.61188341|M DONE case=sl_velwrite,o=0,d=1} sl_teleport{rc=0,m=M0 case=sl_teleport engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_teleport sleep-teleport zBefore=0.49999 postTeleport 1:2.99982951 2:2.99948857 10:2.99062891 30:2.92092951 60:2.69026842 120:1.78969868|M DONE case=sl_teleport,o=0,d=1} sl_force_mb{rc=0,m=M0 case=sl_force_mb engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_force_mb sleep-force-mb 1:an=i-1/n1/it1,z=4.91566855,v=-1.26263146 2:an=i-1/n1/it1,z=4.91023908,v=-1.30307198 5:an=i-1/n1/it1,z=4.89294068,v=-1.42424722 30:an=i-1/n1/it1,z=4.69026842,v=-2.42374526 60:an=i-1/n1/it1,z=4.31149208,v=-3.59098136 120:an=i-1/n1/it1,z=3.13138128,v=-5.77575112|M sl_force_mb sleep-force forcedRest z=0.49998583 velwrite z+1=0.510221593 z+31=0.735970268|M DONE case=sl_force_mb,o=0,d=1} sl_force_max{rc=0,m=M0 case=sl_force_max engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_force_max sleep-force-max 1:an=EMPTY,z=4.92072396,v=0 2:an=EMPTY,z=4.92072396,v=0 5:an=EMPTY,z=4.92072396,v=0 30:an=EMPTY,z=4.92072396,v=0 60:an=EMPTY,z=4.92072396,v=0 120:an=EMPTY,z=4.92072396,v=0|M DONE case=sl_force_max,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.037,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet sleep py=3.14.7 sl_iters{rc=0,m=M0 case=sl_iters engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_iters sleep-default 1:iters=1,v=-0.0409166667,z=0.999829514 60:iters=1,v=-2.42374526,z=0.690268416 80:iters=2,v=1.94289029e-16,z=0.49999 120:iters=2,v=1.94289029e-16,z=0.49999 240:iters=2,v=1.94289029e-16,z=0.49999 480:iters=2,v=1.94289029e-16,z=0.49999 560:iters=2,v=1.94289029e-16,z=0.49999 600:iters=2,v=1.94289029e-16,z=0.49999 720:iters=2,v=1.94289029e-16,z=0.49999 960:iters=2,v=1.94289029e-16,z=0.49999 1200:iters=2,v=1.94289029e-16,z=0.49999 1300:iters=2,v=1.94289029e-16,z=0.49999|M DONE case=sl_iters,o=0,d=1} sl_velwrite{rc=0,m=M0 case=sl_velwrite engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_velwrite sleep-velwrite zB=0.49999 vB=1.94289029e-16 vRead=5 z+1=0.520632014 z+31=1.05253767 v=3.61188341|M DONE case=sl_velwrite,o=0,d=1} sl_teleport{rc=0,m=M0 case=sl_teleport engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_teleport sleep-teleport zBefore=0.49999 postTeleport 1:2.99982951 2:2.99948857 10:2.99062891 30:2.92092951 60:2.69026842 120:1.78969868|M DONE case=sl_teleport,o=0,d=1} sl_force_mb{rc=0,m=M0 case=sl_force_mb engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_force_mb sleep-force-mb 1:an=i-1/n1/it1,z=4.91566855,v=-1.26263146 2:an=i-1/n1/it1,z=4.91023908,v=-1.30307198 5:an=i-1/n1/it1,z=4.89294068,v=-1.42424722 30:an=i-1/n1/it1,z=4.69026842,v=-2.42374526 60:an=i-1/n1/it1,z=4.31149208,v=-3.59098136 120:an=i-1/n1/it1,z=3.13138128,v=-5.77575112|M sl_force_mb sleep-force forcedRest z=0.49998583 velwrite z+1=0.510221593 z+31=0.735970268|M DONE case=sl_force_mb,o=0,d=1} sl_force_max{rc=0,m=M0 case=sl_force_max engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_force_max sleep-force-max 1:an=EMPTY,z=4.92072396,v=0 2:an=EMPTY,z=4.92072396,v=0 5:an=EMPTY,z=4.92072396,v=0 30:an=EMPTY,z=4.92072396,v=0 60:an=EMPTY,z=4.92072396,v=0 120:an=EMPTY,z=4.92072396,v=0|M DONE case=sl_force_max,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_sleep2",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=sleep2"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=sleep2"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet sleep2 py=3.14.7 sl_rest_max{rc=0,m=M0 case=sl_rest_max engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_rest_max sleep-rest-max 1:an=i-1/n1/it1,z=0.999829514,v=-0.0409166667,cc=0 80:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 240:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 480:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 481:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 600:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 960:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 1400:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1|M DONE case=sl_rest_max,o=0,d=1} sl_disable_pair{rc=0,m=M0 case=sl_disable_pair engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_disable_pair sleep-freeze freezeStep=80 finalV=1.94289029e-16,0 z=0.49999|M sl_disable_pair sleep-disable freezeStep=80 finalV=1.94289029e-16 z=0.49999 eq=True|M DONE case=sl_disable_pair,o=0,d=1} sl_persist{rc=0,m=M0 case=sl_persist engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_persist sleep-contact-persist froze~101 s10:cc=0/d=/nf= s120:cc=1/d=-1e-05/nf=9.82 s480:cc=1/d=-1e-05/nf=9.82 s720:cc=1/d=-1e-05/nf=9.82 s960:cc=1/d=-1e-05/nf=9.82 s1200:cc=1/d=-1e-05/nf=9.82 s1400:cc=1/d=-1e-05/nf=9.82|M DONE case=sl_persist,o=0,d=1} sl_stale{rc=0,m=M0 case=sl_stale engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_stale stale-manifold pre{n=1 d=-1e-05} postMove{n=1 d=-1e-05} closest{n=1 d=4.99999} postStep{n=0 d=} zNow=0.499819514 z+60=0.179994754|M DONE case=sl_stale,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.075,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet sleep2 py=3.14.7 sl_rest_max{rc=0,m=M0 case=sl_rest_max engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_rest_max sleep-rest-max 1:an=i-1/n1/it1,z=0.999829514,v=-0.0409166667,cc=0 80:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 240:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 480:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 481:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 600:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 960:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1 1400:an=i0/n1/it2,z=0.49999,v=1.94289029e-16,cc=1|M DONE case=sl_rest_max,o=0,d=1} sl_disable_pair{rc=0,m=M0 case=sl_disable_pair engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_disable_pair sleep-freeze freezeStep=80 finalV=1.94289029e-16,0 z=0.49999|M sl_disable_pair sleep-disable freezeStep=80 finalV=1.94289029e-16 z=0.49999 eq=True|M DONE case=sl_disable_pair,o=0,d=1} sl_persist{rc=0,m=M0 case=sl_persist engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_persist sleep-contact-persist froze~101 s10:cc=0/d=/nf= s120:cc=1/d=-1e-05/nf=9.82 s480:cc=1/d=-1e-05/nf=9.82 s720:cc=1/d=-1e-05/nf=9.82 s960:cc=1/d=-1e-05/nf=9.82 s1200:cc=1/d=-1e-05/nf=9.82 s1400:cc=1/d=-1e-05/nf=9.82|M DONE case=sl_persist,o=0,d=1} sl_stale{rc=0,m=M0 case=sl_stale engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sl_stale stale-manifold pre{n=1 d=-1e-05} postMove{n=1 d=-1e-05} closest{n=1 d=4.99999} postStep{n=0 d=} zNow=0.499819514 z+60=0.179994754|M DONE case=sl_stale,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_nan",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=nan"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=nan"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet nan py=3.14.7 nan_dt{rc=0,m=M0 case=nan_dt engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_dt neg-dt set=ok z=5 v=0 nan=False inf=False where=none|M nan_dt zero-dt set=ok z=5 v=0 nan=False inf=False where=none|M nan_dt nan-dt set=ok z=nan nan=True inf=False where=0.p+0.q+1.p+1.q|M nan_dt inf-dt set=ok z=nan nan=True inf=False where=0.p+0.q+0.v+0.w+1.p+1.q+1.v+1.w|M nan_dt numsubsteps-neg set=ok z=4.69026842 h=ae21935ec081b2e4|M DONE case=nan_dt,o=0,d=1} nan_fields{rc=0,m=M0 case=nan_fields engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_fields nan-gravity z=nan nan=True inf=False where=1.p+1.v|M nan_fields inf-gravity z=nan nan=True inf=False where=1.p+1.v|M nan_fields nan-pos nan=True inf=False where=1.p|M nan_fields inf-pos created=0 nan=False inf=True where=0.p|M nan_fields nan-vel x=nan nan=True inf=False where=1.p+1.v|M nan_fields inf-vel x=nan nan=True inf=False where=1.p+1.v|M nan_fields zero-quat orn=nan,nan,nan,nan rawQ=fff8000000000000 nan=True inf=False where=1.p+1.q+1.v+1.w|M nan_fields nan-quat ornW=nan z=nan nan=True inf=False where=1.p+1.q+1.v+1.w|M DONE case=nan_fields,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.046,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet nan py=3.14.7 nan_dt{rc=0,m=M0 case=nan_dt engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_dt neg-dt set=ok z=5 v=0 nan=False inf=False where=none|M nan_dt zero-dt set=ok z=5 v=0 nan=False inf=False where=none|M nan_dt nan-dt set=ok z=nan nan=True inf=False where=0.p+0.q+1.p+1.q|M nan_dt inf-dt set=ok z=nan nan=True inf=False where=0.p+0.q+0.v+0.w+1.p+1.q+1.v+1.w|M nan_dt numsubsteps-neg set=ok z=4.69026842 h=ae21935ec081b2e4|M DONE case=nan_dt,o=0,d=1} nan_fields{rc=0,m=M0 case=nan_fields engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_fields nan-gravity z=nan nan=True inf=False where=1.p+1.v|M nan_fields inf-gravity z=nan nan=True inf=False where=1.p+1.v|M nan_fields nan-pos nan=True inf=False where=1.p|M nan_fields inf-pos created=0 nan=False inf=True where=0.p|M nan_fields nan-vel x=nan nan=True inf=False where=1.p+1.v|M nan_fields inf-vel x=nan nan=True inf=False where=1.p+1.v|M nan_fields zero-quat orn=nan,nan,nan,nan rawQ=fff8000000000000 nan=True inf=False where=1.p+1.q+1.v+1.w|M nan_fields nan-quat ornW=nan z=nan nan=True inf=False where=1.p+1.q+1.v+1.w|M DONE case=nan_fields,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_nan2",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=nan2"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=nan2"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet nan2 py=3.14.7 nan_mass{rc=0,m=M0 case=nan_mass engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_mass mass0 z=5 nan=False|M nan_mass neg-mass-create id=0 dynMass=-1 z=5 nan=False inf=False where=none|M nan_mass nan-mass-create id=0 dynMass=nan z=5 nan=False inf=False where=none|M nan_mass inf-mass-create id=0 dynMass=inf z=nan nan=True inf=False where=0.p+0.q+0.v+0.w|M nan_mass neg-mass set=ok dynMass=1 z=3.78969868 nan=False inf=False where=none|M nan_mass mass-change v0=-2.42374526 newMass=0 1:z=4.68016948,v=-2.42374526 10:z=4.58927903,v=-2.42374526 30:z=4.38730026,v=-2.42374526|M DONE case=nan_mass,o=0,d=1} nan_damp{rc=0,m=M0 case=nan_damp engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_damp damping 0:set=ok,z=3.76227083,nan=False,inf=False | 1:set=ok,z=4.17228129,nan=False,inf=False | 1.5:set=ok,z=4.27577737,nan=False,inf=False | -0.5:set=ok,z=3.78969868,nan=False,inf=False | nan:set=ok,z=3.78969868,nan=False,inf=False|M DONE case=nan_damp,o=0,d=1} nan_shape{rc=0,m=M0 case=nan_shape engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_shape zero-box z=-1.58273451 nan=False inf=False where=none contacts=0|M nan_shape neg-box z=-1.58273451 nan=False inf=False where=none contacts=0|M nan_shape inf-radius accepted=True|M nan_shape nan-halfextents accepted=True|M nan_shape coincident i0 cc=1 n=[1,0,0/d=-1] sep=0.0799992 aX=0.0399996 bX=-0.0399996|M nan_shape coincident i1 cc=1 n=[1,0,0/d=-0.9200008] sep=0.159857069 aX=0.0799285347 bX=-0.0799285347|M nan_shape coincident i5 cc=1 n=[1,0,0/d=-0.601412564] sep=0.477884713 aX=0.238942356 bX=-0.238942356|M nan_shape coincident i30 cc=0 n=[] sep=2.41632072 aX=1.20816036 bX=-1.20816036|M nan_shape coincident i120 cc=0 n=[] sep=8.77316007 aX=4.38658004 bX=-4.38658004|M nan_shape coincG i0 sep=0.0799992 a=(0.0399996,0,2.99982951) b=(-0.0399996,0,2.99982951)|M nan_shape coincG i1 sep=0.159857068 a=(0.0799285341,0,2.99948884) b=(-0.0799285341,0,2.99948884)|M nan_shape coincG i10 sep=0.87229429 a=(0.436147145,0,2.98881347) b=(-0.436147145,0,2.98881347)|M nan_shape coincG i60 sep=4.63605714 a=(2.31802857,0,2.68832481) b=(-2.31802857,0,2.68832481)|M nan_shape coincG i240 sep=14.9745787 a=(7.48728934,-1.64613705e-15,0.49999) b=(-7.48728934,-2.85634668e-15,0.49999)|M nan_shape teleport-into-ground zBefore=0.49999 1:z=0.2239992,v=5.759808 2:z=0.247800876,v=5.71240213 3:z=0.271405437,v=5.66509481 5:z=0.318024842,v=5.57077199 10:z=0.431151846,v=5.33662363 20:z=0.642903637,v=4.87504988 60:z=1.30258519,v=3.10316239|M nan_shape ccd-off z=0.110300828|M nan_shape ccd-on z=0.110300828|M DONE case=nan_shape,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.94,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet nan2 py=3.14.7 nan_mass{rc=0,m=M0 case=nan_mass engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_mass mass0 z=5 nan=False|M nan_mass neg-mass-create id=0 dynMass=-1 z=5 nan=False inf=False where=none|M nan_mass nan-mass-create id=0 dynMass=nan z=5 nan=False inf=False where=none|M nan_mass inf-mass-create id=0 dynMass=inf z=nan nan=True inf=False where=0.p+0.q+0.v+0.w|M nan_mass neg-mass set=ok dynMass=1 z=3.78969868 nan=False inf=False where=none|M nan_mass mass-change v0=-2.42374526 newMass=0 1:z=4.68016948,v=-2.42374526 10:z=4.58927903,v=-2.42374526 30:z=4.38730026,v=-2.42374526|M DONE case=nan_mass,o=0,d=1} nan_damp{rc=0,m=M0 case=nan_damp engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_damp damping 0:set=ok,z=3.76227083,nan=False,inf=False | 1:set=ok,z=4.17228129,nan=False,inf=False | 1.5:set=ok,z=4.27577737,nan=False,inf=False | -0.5:set=ok,z=3.78969868,nan=False,inf=False | nan:set=ok,z=3.78969868,nan=False,inf=False|M DONE case=nan_damp,o=0,d=1} nan_shape{rc=0,m=M0 case=nan_shape engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M nan_shape zero-box z=-1.58273451 nan=False inf=False where=none contacts=0|M nan_shape neg-box z=-1.58273451 nan=False inf=False where=none contacts=0|M nan_shape inf-radius accepted=True|M nan_shape nan-halfextents accepted=True|M nan_shape coincident i0 cc=1 n=[1,0,0/d=-1] sep=0.0799992 aX=0.0399996 bX=-0.0399996|M nan_shape coincident i1 cc=1 n=[1,0,0/d=-0.9200008] sep=0.159857069 aX=0.0799285347 bX=-0.0799285347|M nan_shape coincident i5 cc=1 n=[1,0,0/d=-0.601412564] sep=0.477884713 aX=0.238942356 bX=-0.238942356|M nan_shape coincident i30 cc=0 n=[] sep=2.41632072 aX=1.20816036 bX=-1.20816036|M nan_shape coincident i120 cc=0 n=[] sep=8.77316007 aX=4.38658004 bX=-4.38658004|M nan_shape coincG i0 sep=0.0799992 a=(0.0399996,0,2.99982951) b=(-0.0399996,0,2.99982951)|M nan_shape coincG i1 sep=0.159857068 a=(0.0799285341,0,2.99948884) b=(-0.0799285341,0,2.99948884)|M nan_shape coincG i10 sep=0.87229429 a=(0.436147145,0,2.98881347) b=(-0.436147145,0,2.98881347)|M nan_shape coincG i60 sep=4.63605714 a=(2.31802857,0,2.68832481) b=(-2.31802857,0,2.68832481)|M nan_shape coincG i240 sep=14.9745787 a=(7.48728934,-1.64613705e-15,0.49999) b=(-7.48728934,-2.85634668e-15,0.49999)|M nan_shape teleport-into-ground zBefore=0.49999 1:z=0.2239992,v=5.759808 2:z=0.247800876,v=5.71240213 3:z=0.271405437,v=5.66509481 5:z=0.318024842,v=5.57077199 10:z=0.431151846,v=5.33662363 20:z=0.642903637,v=4.87504988 60:z=1.30258519,v=3.10316239|M nan_shape ccd-off z=0.110300828|M nan_shape ccd-on z=0.110300828|M DONE case=nan_shape,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_fric",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=fric"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=fric"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet fric py=3.14.7 fr_combine{rc=0,m=M0 case=fr_combine engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M fr_combine fric-combine g0.5/b0.5:x=4.08354903 g0.8/b0.8:x=1.79939656 g0.64/b1.0:x=1.79939656 g1.0/b0.64:x=1.79939656 g0.8/b1.0:x=1.46324194 g0.05/b0.05:x=9.66585442|M DONE case=fr_combine,o=0,d=1} fr_bitexact{rc=0,m=M0 case=fr_bitexact engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M fr_bitexact fric-bitexact prod0808=3fe47ae147ae147c prod064=3fe47ae147ae147b ulpEq=False|M fr_bitexact fric-bitexact g0.8/b0.8:x=1.79939656:h=54d2f436058159a8 g0.64/b1.0:x=1.79939656:h=3e79f2f12524bf7e g1.0/b0.64:x=1.79939656:h=3e79f2f12524bf7e g0.8/b1.0:x=1.46324194:h=3b4808c4413875df g0.5/b0.5:x=4.08354903:h=2ea76414ff6cc3ac g0.05/b0.05:x=9.66585442:h=06bb82504e79678d|M DONE case=fr_bitexact,o=0,d=1} fr_gate{rc=0,m=M0 case=fr_gate engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M fr_gate fric-neg g-0.5/b0.5:stored=0.5,0.5,x=4.08354903 g0.5/b-0.5:stored=0.5,0.5,x=4.08354903 g-0.5/b-0.5:stored=0.5,0.5,x=4.08354903 g11/b1:stored=11,1,x=0.993892628 g-0.3/b0.9:stored=0.5,0.9,x=2.47307853|M fr_gate fric-zero x=9.72455029|M fr_gate fric-zero-mech mu0:x=9.72455029[60:vx=4.71540065|300:vx=3.82297219|600:vx=3.06464232] mu0+damp0:x=12.5[60:vx=5|300:vx=5|600:vx=5] mu0+g0:x=9.72455241[60:vx=4.71540119|300:vx=3.82297325|600:vx=3.06464304] mu0+g0+damp0:x=12.5[60:vx=5|300:vx=5|600:vx=5]|M DONE case=fr_gate,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.145,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet fric py=3.14.7 fr_combine{rc=0,m=M0 case=fr_combine engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M fr_combine fric-combine g0.5/b0.5:x=4.08354903 g0.8/b0.8:x=1.79939656 g0.64/b1.0:x=1.79939656 g1.0/b0.64:x=1.79939656 g0.8/b1.0:x=1.46324194 g0.05/b0.05:x=9.66585442|M DONE case=fr_combine,o=0,d=1} fr_bitexact{rc=0,m=M0 case=fr_bitexact engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M fr_bitexact fric-bitexact prod0808=3fe47ae147ae147c prod064=3fe47ae147ae147b ulpEq=False|M fr_bitexact fric-bitexact g0.8/b0.8:x=1.79939656:h=54d2f436058159a8 g0.64/b1.0:x=1.79939656:h=3e79f2f12524bf7e g1.0/b0.64:x=1.79939656:h=3e79f2f12524bf7e g0.8/b1.0:x=1.46324194:h=3b4808c4413875df g0.5/b0.5:x=4.08354903:h=2ea76414ff6cc3ac g0.05/b0.05:x=9.66585442:h=06bb82504e79678d|M DONE case=fr_bitexact,o=0,d=1} fr_gate{rc=0,m=M0 case=fr_gate engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M fr_gate fric-neg g-0.5/b0.5:stored=0.5,0.5,x=4.08354903 g0.5/b-0.5:stored=0.5,0.5,x=4.08354903 g-0.5/b-0.5:stored=0.5,0.5,x=4.08354903 g11/b1:stored=11,1,x=0.993892628 g-0.3/b0.9:stored=0.5,0.9,x=2.47307853|M fr_gate fric-zero x=9.72455029|M fr_gate fric-zero-mech mu0:x=9.72455029[60:vx=4.71540065|300:vx=3.82297219|600:vx=3.06464232] mu0+damp0:x=12.5[60:vx=5|300:vx=5|600:vx=5] mu0+g0:x=9.72455241[60:vx=4.71540119|300:vx=3.82297325|600:vx=3.06464304] mu0+g0+damp0:x=12.5[60:vx=5|300:vx=5|600:vx=5]|M DONE case=fr_gate,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_rest",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=rest"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=rest"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet rest py=3.14.7 rest_all{rc=0,m=M0 case=rest_all engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rest_all rest-combine g0/b0:apex=0,bounced=False g0.9/b0.9:apex=0.851578572,bounced=True g0.81/b1:apex=0.851578572,bounced=True g0.9/b1:apex=1.02005302,bounced=True g0.5/b0.5:apex=0.500280505,bounced=True|M rest_all rest-bitexact g0.9/b0.9:z=0.514804005:h=0f0edc29d1a48f22 g0.81/b1.0:z=0.514804005:h=0f0edc29d1a48f22 g0.9/b1.0:z=0.814814593:h=b29bcd4686ea096a g0.5/b0.5:z=0.49999:h=3212060bf6dabef8 g0.0/b0.0:z=0.49999:h=3212060bf6dabef8|M DONE case=rest_all,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.725,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet rest py=3.14.7 rest_all{rc=0,m=M0 case=rest_all engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M rest_all rest-combine g0/b0:apex=0,bounced=False g0.9/b0.9:apex=0.851578572,bounced=True g0.81/b1:apex=0.851578572,bounced=True g0.9/b1:apex=1.02005302,bounced=True g0.5/b0.5:apex=0.500280505,bounced=True|M rest_all rest-bitexact g0.9/b0.9:z=0.514804005:h=0f0edc29d1a48f22 g0.81/b1.0:z=0.514804005:h=0f0edc29d1a48f22 g0.9/b1.0:z=0.814814593:h=b29bcd4686ea096a g0.5/b0.5:z=0.49999:h=3212060bf6dabef8 g0.0/b0.0:z=0.49999:h=3212060bf6dabef8|M DONE case=rest_all,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_knobs",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=knobs"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=knobs"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet knobs py=3.14.7 kn_neutral{rc=0,m=M0 case=kn_neutral engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M kn_neutral knobs-neutral cone_fric_1:h=02309c52da41ef33 erp_0.2:h=02309c52da41ef33 erp_0.8:h=02309c52da41ef33 frictionERP_0.2:h=02309c52da41ef33 minIsland_0:h=02309c52da41ef33 innerIter_4:h=02309c52da41ef33 ccdPen_0.02:h=02309c52da41ef33 detpairs_1:h=02309c52da41ef33 warmstart_0:h=02309c52da41ef33 eqBase=9/9|M DONE case=kn_neutral,o=0,d=1} kn_loud{rc=0,m=M0 case=kn_loud engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M kn_loud knobs-loud contactERP_0.2:h=e08d5633b3cfd5cb contactSlop_0.01:h=dea262fe1f8c2307 resid_1e-6:h=f23fadf887f1b5a7 globalCFM_1e-5:h=b4a0542ad1487ca5 minIsland_2:h=cdb837583b118907 iters_10:h=210161bcc8879e15 substeps_2:h=0282277d82fd76ff ts_1/120:h=00640cdd62ab6c5d|M DONE case=kn_loud,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.93,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet knobs py=3.14.7 kn_neutral{rc=0,m=M0 case=kn_neutral engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M kn_neutral knobs-neutral cone_fric_1:h=02309c52da41ef33 erp_0.2:h=02309c52da41ef33 erp_0.8:h=02309c52da41ef33 frictionERP_0.2:h=02309c52da41ef33 minIsland_0:h=02309c52da41ef33 innerIter_4:h=02309c52da41ef33 ccdPen_0.02:h=02309c52da41ef33 detpairs_1:h=02309c52da41ef33 warmstart_0:h=02309c52da41ef33 eqBase=9/9|M DONE case=kn_neutral,o=0,d=1} kn_loud{rc=0,m=M0 case=kn_loud engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M kn_loud knobs-loud contactERP_0.2:h=e08d5633b3cfd5cb contactSlop_0.01:h=dea262fe1f8c2307 resid_1e-6:h=f23fadf887f1b5a7 globalCFM_1e-5:h=b4a0542ad1487ca5 minIsland_2:h=cdb837583b118907 iters_10:h=210161bcc8879e15 substeps_2:h=0282277d82fd76ff ts_1/120:h=00640cdd62ab6c5d|M DONE case=kn_loud,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_solver",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=solver"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=solver"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet solver py=3.14.7 sv_backends{rc=0,m=M0 case=sv_backends engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sv_backends solvertype unset:h=02309c52da41ef33,z=1.49997782,cc=13 SI:h=02309c52da41ef33,z=1.49997782,cc=13 PGS:h=8606ea0c3c45c5ad,z=1.49998,cc=13 DANTZIG:h=71248c7a8455c70a,z=1.49997818,cc=13|M DONE case=sv_backends,o=0,d=4} sv_tps{rc=0,m=M0 case=sv_tps engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sv_tps tps 1/60:h=b7fd8f6b58763ddb 1/120:h=d3a2bd84a2a6d25f 1/240:h=02309c52da41ef33 1/480:h=0282277d82fd76ff 1/1000:h=4a1d38fd622019aa|M sv_tps substep-equiv dt480x960:h=0282277d82fd76ff nsub2x480:h=0282277d82fd76ff eq=True|M DONE case=sv_tps,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.918,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet solver py=3.14.7 sv_backends{rc=0,m=M0 case=sv_backends engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sv_backends solvertype unset:h=02309c52da41ef33,z=1.49997782,cc=13 SI:h=02309c52da41ef33,z=1.49997782,cc=13 PGS:h=8606ea0c3c45c5ad,z=1.49998,cc=13 DANTZIG:h=71248c7a8455c70a,z=1.49997818,cc=13|M DONE case=sv_backends,o=0,d=4} sv_tps{rc=0,m=M0 case=sv_tps engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M sv_tps tps 1/60:h=b7fd8f6b58763ddb 1/120:h=d3a2bd84a2a6d25f 1/240:h=02309c52da41ef33 1/480:h=0282277d82fd76ff 1/1000:h=4a1d38fd622019aa|M sv_tps substep-equiv dt480x960:h=0282277d82fd76ff nsub2x480:h=0282277d82fd76ff eq=True|M DONE case=sv_tps,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_pile",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=pile"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=pile"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet pile py=3.14.7 pile_lattice{rc=0,m=M0 case=pile_lattice engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M pile_lattice pile default:h=daf67ba7bdfb7f80,cc=128 det0:h=daf67ba7bdfb7f80,cc=128 det1:h=a272ef21dd510162,cc=128 rev:h=38cb12317d6644da,cc=128 mb:h=99d3fdf650620da5,cc=128|M DONE case=pile_lattice,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 1.299,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet pile py=3.14.7 pile_lattice{rc=0,m=M0 case=pile_lattice engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M pile_lattice pile default:h=daf67ba7bdfb7f80,cc=128 det0:h=daf67ba7bdfb7f80,cc=128 det1:h=a272ef21dd510162,cc=128 rev:h=38cb12317d6644da,cc=128 mb:h=99d3fdf650620da5,cc=128|M DONE case=pile_lattice,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_misc",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=misc"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=misc"
+      ],
+      "expected_exit": 0,
+      "actual_exit": 0,
+      "error": null,
+      "kind": "ordinary",
+      "marker": "PASS r95_bullet misc py=3.14.7 ms_contacts{rc=0,m=M0 case=ms_contacts engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M ms_contacts contact-rest s10:cc=0,z=0.990628909 s60:cc=0,z=0.690268416 s120:cc=1,z=0.49999 s300:cc=1,z=0.49999 s480:cc=1,z=0.49999 s720:cc=1,z=0.49999 s1000:cc=1,z=0.49999 s1400:cc=1,z=0.49999|M ms_contacts contact-order pairs=0-1,0-1,0-1,0-1,0-2,0-2,0-2,0-2,0-3,0-3,0-3,0-3 cc=12|M DONE case=ms_contacts,o=0,d=1} ms_mutate{rc=0,m=M0 case=ms_mutate engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M ms_mutate margin-change margin 0.001->0.45 zBefore=0.499988605 zSameTick=0.499988605 1:z=0.499988605 2:z=0.499988605 5:z=0.499988605 30:z=0.499988605|M ms_mutate gravity-change v0=-2.42374526 vAfter1Step=-2.42236221 vAfter2=-2.42098051|M DONE case=ms_mutate,o=0,d=1} ms_defaults{rc=0,m=M0 case=ms_defaults engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M ms_defaults world-defaults params=fixedTimeStep=0.004166666666666667 gravityAccelerationX=0.0 gravityAccelerationY=0.0 gravityAccelerationZ=-9.82 numNonContactInnerIterations=1 numSolverIterations=50 numSubSteps=0 useRealTimeSimulation=0|M ms_defaults world-defaults dynInfo mass=1 latFric=0.5 restit=0 rollF=0 spinF=0 cDamp=-1 cStiff=-1 bodyType=2 margin=0.5 nfields=12|M DONE case=ms_defaults,o=0,d=1}",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.919,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "PASS r95_bullet misc py=3.14.7 ms_contacts{rc=0,m=M0 case=ms_contacts engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M ms_contacts contact-rest s10:cc=0,z=0.990628909 s60:cc=0,z=0.690268416 s120:cc=1,z=0.49999 s300:cc=1,z=0.49999 s480:cc=1,z=0.49999 s720:cc=1,z=0.49999 s1000:cc=1,z=0.49999 s1400:cc=1,z=0.49999|M ms_contacts contact-order pairs=0-1,0-1,0-1,0-1,0-2,0-2,0-2,0-2,0-3,0-3,0-3,0-3 cc=12|M DONE case=ms_contacts,o=0,d=1} ms_mutate{rc=0,m=M0 case=ms_mutate engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M ms_mutate margin-change margin 0.001->0.45 zBefore=0.499988605 zSameTick=0.499988605 1:z=0.499988605 2:z=0.499988605 5:z=0.499988605 30:z=0.499988605|M ms_mutate gravity-change v0=-2.42374526 vAfter1Step=-2.42236221 vAfter2=-2.42098051|M DONE case=ms_mutate,o=0,d=1} ms_defaults{rc=0,m=M0 case=ms_defaults engine=pybullet-3.2.7 api=202010061 py=3.14.7 dtBits=3f71111111111111 build=\"Oct 15 2026 03:47:36\"|M ms_defaults world-defaults params=fixedTimeStep=0.004166666666666667 gravityAccelerationX=0.0 gravityAccelerationY=0.0 gravityAccelerationZ=-9.82 numNonContactInnerIterations=1 numSolverIterations=50 numSubSteps=0 useRealTimeSimulation=0|M ms_defaults world-defaults dynInfo mass=1 latFric=0.5 restit=0 rollF=0 spinF=0 cDamp=-1 cStiff=-1 bodyType=2 margin=0.5 nfields=12|M DONE case=ms_defaults,o=0,d=1}"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_neg_dt",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=neg_dt"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=neg_dt"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: r95_bullet neg_dt neg-dt fixedTimeStep=1/119 moves the hash 02309c52da41ef33->3e5afa1e3405090d",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.94,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: r95_bullet neg_dt neg-dt fixedTimeStep=1/119 moves the hash 02309c52da41ef33->3e5afa1e3405090d"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_neg_order",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=neg_order"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=neg_order"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: r95_bullet neg_order neg-order creation order is not bit-neutral 02309c52da41ef33->76988acc55682c1a",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.695,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: r95_bullet neg_order neg-order creation order is not bit-neutral 02309c52da41ef33->76988acc55682c1a"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_neg_radius",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=neg_radius"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=neg_radius"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: r95_bullet neg_radius neg-radius radius<={-0.5,0,nan} refused (pybullet.error) while radius=+inf accepted id=1",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.737,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: r95_bullet neg_radius neg-radius radius<={-0.5,0,nan} refused (pybullet.error) while radius=+inf accepted id=1"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_neg_simtime",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=neg_simtime"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=neg_simtime"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: r95_bullet neg_simtime neg-simtime simTimeScalingFactor kwarg refused TypeError x2 ('this function got an unexpected keyword argument 'simTimeSca')",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.518,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: r95_bullet neg_simtime neg-simtime simTimeScalingFactor kwarg refused TypeError x2 ('this function got an unexpected keyword argument 'simTimeSca')"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_neg_badid",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=neg_badid"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=neg_badid"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: r95_bullet neg_badid neg-badid 3 invalid-id calls refused (pybullet.error)",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 0.61,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: r95_bullet neg_badid neg-badid 3 invalid-id calls refused (pybullet.error)"
+      ],
+      "stderr": []
+    },
+    {
+      "case": "r95_bullet_neg_shm_rt",
+      "script": "r95_bullet.gd",
+      "flags": [
+        "--arm=neg_shm_rt"
+      ],
+      "command": [
+        "/usr/bin/godot",
+        "--headless",
+        "--path",
+        "/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/scratch/seat29/20261018T212655497155Z/scratch",
+        "--script",
+        "res://r95_bullet.gd",
+        "--",
+        "--arm=neg_shm_rt"
+      ],
+      "expected_exit": 2,
+      "actual_exit": 2,
+      "error": null,
+      "kind": "negative_control",
+      "marker": "NEGATIVE REJECTED: r95_bullet neg_shm_rt neg-shm-rt SHM transport is not physics-neutral under rt=1: DIRECT froze idle (froze=True), SHM pump advanced the world during a bare sleep (fell=True)",
+      "verdict": "PASS",
+      "reasons": [],
+      "elapsed_seconds": 3.846,
+      "stdout": [
+        "Godot Engine v4.7.2.stable.arch_linux.ed1daf0bf (2026-08-17 01:18:38 UTC) - https://godotengine.org",
+        "",
+        "NEGATIVE REJECTED: r95_bullet neg_shm_rt neg-shm-rt SHM transport is not physics-neutral under rt=1: DIRECT froze idle (froze=True), SHM pump advanced the world during a bare sleep (fell=True)"
+      ],
+      "stderr": []
+    }
+  ],
+  "probe": null,
+  "totals": {
+    "cases": 20,
+    "pass": 20,
+    "fail": 0,
+    "ordinary": 14,
+    "negative_controls": 6
+  },
+  "verdict": "PASS"
+}

@@ -17,3 +17,10 @@ Reviewer: `game-dev-3d-r11-import-review` (non-author). Declared gate: valid God
 - **Depth: unchanged. Calibration: unchanged.** No new discriminating importer control; existing Godot/Node batteries remain intact. Zero axes proven improved under the full declared criterion, hence **failed round / no admission / no SHONEN check**. A future round may declare a different corruption and independently test its Godot rejection before claiming importer discrimination.
 
 Assumptions: “same geometry” here is the script-observed node hierarchy, local translation, mesh surface count and packed vertex coordinates; not a rendered scene or a bytewise-equal cached scene. Scratch-project `.scn` hashes are reported rather than interpreted as semantic differences.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/r11-import-review-20261013T035142311178Z`
+> - `corpus/live/runs/20261013T035203433427Z/verdicts.json`

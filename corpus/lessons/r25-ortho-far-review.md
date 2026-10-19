@@ -7,9 +7,9 @@
 From repository root:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
 # exit 0; 33/33 (15 ordinary, 18 negatives), four optional uncounted probes PASS; seeds_unchanged=true
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near,camera3d_ortho_far
+python3 corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near,camera3d_ortho_far
 # exit 0; 4/4 (one ordinary, three negatives); seeds_unchanged=true
 ```
 
@@ -24,7 +24,7 @@ Compared against r24 full `corpus/live/runs/20261013T054452120374Z/verdicts.json
 Private copied check changed only `const FAR_POINT := Vector3(2, 1, -12)` → `const FAR_POINT := Vector3(2, 1, -13)` under ignored `corpus/live/r25-private-far-review/scratch`; mutant source SHA-256 `0244344eb9c0a480aa931ba9f7e428281f6ff969a4f9aad92e0d381ad4af8f59`. Exact run:
 
 ```sh
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/r25-private-far-review/scratch --script res://camera3d_ortho.gd -- --far-point
+/usr/bin/godot --headless --path corpus/live/r25-private-far-review/scratch --script res://camera3d_ortho.gd -- --far-point
 # exit 1; no NEGATIVE REJECTED marker; stderr:
 # ERROR: camera3d_ortho: far gate failed depth=13.000 screen=(550.0, 225.0) frustum=false api_behind=false
 ```
@@ -32,3 +32,11 @@ Private copied check changed only `const FAR_POINT := Vector3(2, 1, -12)` → `c
 Captured separate stdout/stderr/exit in `corpus/live/r25-private-far-review/far-mutant-verdict.json` SHA-256 `6f72f6b2b00a209186b1cbc7f6251be74a6d80602dae57599e456b8d9d53926d`. No Parse Error, SCRIPT ERROR, or ObjectDB leak in its raw streams. Authored seed hash remained `6487234e4156f54cd91d3f422c543c16d99d6c901847a77532fc42ae6af1141f` before/after private test. The mutation is caught by literal world/depth mismatch, **not** by altered frustum or API-behind classification: both far points project to the same pixel and remain outside.
 
 Adverse limits: one Godot version, one camera orientation, one sampled depth beyond far, no exact far=10 boundary sweep, rendered pixels, GPU culling, or general camera API theorem. Assumptions/constants unchanged in authored source: viewport 800×600; orthographic vertical size 8; near/far 1/10; controls Z=-4/-8 and far sample Z=-12; screen tolerance 0.0001, location/depth tolerance 0.000001. Only private ignored copy changes Z=-12 to -13. No implementation edits, push, or merge by this reviewer.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T054855628286Z/verdicts.json`
+> - `corpus/live/runs/20261013T054901267616Z/verdicts.json`
+> - `corpus/live/runs/20261013T054452120374Z/verdicts.json`

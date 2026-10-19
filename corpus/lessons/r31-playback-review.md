@@ -29,3 +29,17 @@ A private ignored fixture project `corpus/live/runs/r31-private-playback-review/
 Mutant stdout SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e` contains Godot banner and blank line only. Stderr SHA-256 `b137e19ea36995aa3b1ed9ae4a8de8c23232d7b5a65b9fd4e3f1572f6f1344cb` reports the measured position mismatch/backtrace, with no `SCRIPT ERROR`, `Parse Error`, leak warning, or PASS marker. The frame progression/setup guards passed and the changed endpoint failed the measured-position predicate. That compound predicate does not isolate its mid and later terms independently.
 
 **Limits:** The exact 29/59 advancement order is tested only on this Linux headless Godot 4.7.2 build and explicit 60-Hz project setting; scheduling or different physics FPS can alter the literal frame/time results, so this is no universal frame-order promise or flakiness survey. These are live position samples, not rendered pixels. No blending, other track shapes, different frame rates, or other engine versions tested.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `run_battery.py` digests match historical git blobs, not live `sha256sum` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `animation3d_playback.gd` digest `1f6027cf153f…` still matches the live fixture. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T061926092432Z/verdicts.json`
+> - `corpus/live/runs/20261013T061926093148Z/verdicts.json`
+> - `corpus/live/runs/20261013T061437321157Z/verdicts.json`
+> - `corpus/live/runs/r31-private-playback-review/`
+> - `corpus/live/runs/r31-private-playback-review`
+> - `corpus/live/runs/r31-private-playback-review/mutant.stdout`
+> - `corpus/live/runs/r31-private-playback-review/mutant.stderr`

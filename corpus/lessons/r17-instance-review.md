@@ -23,3 +23,15 @@ Author reordered the first-clone literal ahead of source check and tracks the so
 - Full rerun: `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing` → `corpus/live/runs/20261013T051126079226Z/verdicts.json`: PASS **23/23**, 11 ordinary/12 negative; four opt-in probe JSON receipts all PASS; seeds unchanged. Both new cases have exact exits 0/2, expected marker and empty stderr. All prior 21 r16 raw streams/exits/markers/reasons and verdicts match `20261013T050610908903Z`; only README/runner seed digests changed and new instance script was added. Normal probes verify direct-child signal, unexpected stderr rejection, identified Linux timeout witness cleanup, and body-contact depth mutation, not a general guarantee outside these bounded checks.
 
 **Independent verdict:** r17 acceptance blocker resolved. **Coverage improves** narrowly for in-memory Godot 4.7.2 headless `PackedScene.pack` and two instance-local Node3D/MeshInstance3D transforms with preserved source and a deliberate second-only local deviation. Depth and calibration unchanged; no regression in 21 prior cases or four optional probes. Do not claim serialized scene file, rendering, mesh-resource identity/isolation, other engines, or general leak-free failure paths beyond tested mutation.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T051012374948Z/verdicts.json`
+> - `corpus/live/runs/20261013T051022145889Z/verdicts.json`
+> - `corpus/live/runs/20261013T050610908903Z/verdicts.json`
+> - `corpus/live/runs/review-r17-mutant-20261013T051037865663Z/scratch`
+> - `corpus/live/runs/20261013T051126079512Z/verdicts.json`
+> - `corpus/live/runs/review-r17-mutant-20261013T051131418475Z/scratch`
+> - `corpus/live/runs/20261013T051126079226Z/verdicts.json`

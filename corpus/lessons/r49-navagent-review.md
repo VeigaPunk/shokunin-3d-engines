@@ -7,8 +7,8 @@ Reviewer: named LEAF non-author `game-dev-3d-r49-navagent-review`. Read `LOG.md`
 Run from repository root; both commands exited **0**:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_next,navagent3d_next_alternate
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --only navagent3d_next,navagent3d_next_alternate
 ```
 
 Full `corpus/live/runs/20261013T081147076161Z/verdicts.json` SHA-256 `443b353c12e75ea19dd5701c978f6a8e875c6a11c9e2374e2ded1aff689e2bb4`: **73/73 PASS**, 35 ordinary/38 negative, and all four probes PASS; `seeds_unchanged=true`. Tree/crash/stream/failing receipts SHA-256, respectively: `93ede035e34d0be0edb15c352a3103f2723d513092f1374d4e2290a2903ce3c6`, `1cb1bca09392f274c720b749447fffd600f4e8a8eb4d37dcb27d4753bc7a536e`, `2de802d5a7933ca048985d8f50dcc2f4846ce6547b1c10ce94b968b71d197ab6`, `7faa6e07c20278ed5b92695d0f7b7cf03bf9936247dc52aee47717ce45c31bfb`. The registered failing probe changes body-contact geometry, not this navigation fixture.
@@ -22,9 +22,34 @@ Pair `corpus/live/runs/20261013T081147076446Z/verdicts.json` SHA-256 `1e6a65e7e3
 Private copy **only** normal expression `Vector3(3, 0, 1 if alternate else 3)` → `Vector3(3, 0, 1 if alternate else 2)` in `corpus/live/runs/r49-navagent-review-private/navagent3d_next.gd`, SHA-256 `f0b698d818a85d5dc8d575cdc73e72d014d56bb5f42a68a45926cff591fce7d7`. Reproduce from repo root:
 
 ```sh
-/usr/bin/godot --headless --path /home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/r49-navagent-review-private --script res://navagent3d_next.gd
+/usr/bin/godot --headless --path corpus/live/runs/r49-navagent-review-private --script res://navagent3d_next.gd
 ```
 
 Ordinary-arm **exit 1** after setup, no PASS and stdout only the Godot banner (SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e`). Stderr SHA-256 `5dc25f99c4ecbc060598662a4c0cee426ef18e6cb3d27dd54b729ee7a59a9c26`: `ERROR: navagent3d_next: agent next position mismatch path=[(1.0, 0.0, 1.0), (3.0, 0.0, 2.0)] next=(3.0, 0.0, 2.0)` at `_run` line38. No parse/SCRIPT ERROR or ObjectDB leak warning. The measured agent route/next changed while setup and path-start guards passed, not a target-source guard. Both route endpoint and next differed but compound predicate does not isolate their individual sensitivity; an existing server map/path alone could not supply the observed agent readback.
 
 **Bounded judgment:** coverage improved for one live headless NavigationAgent3D next-path query over r13's direct server path; depth and calibration unchanged. No autonomous actor movement, avoidance, NavigationMesh baking, pixels, GPU, or general eager current-path availability. Assumptions/constants: pinned Godot build, 30 sync frames, fixed `(1,0,1)` actor and authored 4×4 polygon; only private copy changes normal target Z from 3 to 2, never the seed.
+
+## Correction note — 2026-10-18 (r106)
+
+Dated correction note, not a rewrite of the findings above. Runnable command lines cited `.shokunin/game-dev-3d/` or `/home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/`. Those lines only were rewritten to repo-relative paths. Prose receipt paths, exits, markers, and SHA-256 values are unchanged.
+
+Original commands at HEAD `0cc3f4162f8c319f8d01a69a174fe939f36701bd`:
+
+```
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only navagent3d_next,navagent3d_next_alternate
+/usr/bin/godot --headless --path /home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/r49-navagent-review-private --script res://navagent3d_next.gd
+```
+
+Measured from this root the same day: dead-root python → rc 2. Absolute-root godot → rc 1, `Invalid project path specified: "/home/vgpnk/Projects/prymeagnt/…/r49-navagent-review-private"`. Repo-relative `--only navagent3d_next,navagent3d_next_alternate` → rc 0, `PASS battery`, `seeds_unchanged=true` (durable copy `reports/round-106/scratch/seat07/only/nav-next.verdicts.json`, sha256 `831d51d2d141a741fad9a91346e18a0190d9a92bc53a588e46329de38ccaf92a`). Full probe battery not re-run. Cited `20261013T081147076161Z`, `20261013T081147076446Z`, and `20261013T080440209599Z` receipts, and `corpus/live/runs/r49-navagent-review-private/`, are absent. Rewritten godot command exits 1: `Invalid project path specified: "corpus/live/runs/r49-navagent-review-private"`. Godot pin re-checked: `4.7.2.stable.arch_linux.ed1daf0bf`. Live `corpus/fixtures/navagent3d_next.gd` sha256 `f0ea0fbb0c8400b7b6fd4b5e5139ae02d0487a1ddedfe483e1fd3c3f6ac5e94f` matches the added-seed hash quoted above. Quoted runner `2cebcaa4…` and README `c7d186bb…` are review-day rows; live runner is `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f` and live `corpus/fixtures/README.md` is `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1`. Not rewritten. Ledger: `reports/round-106/sweep/chunk-07.md`.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T081147076161Z/verdicts.json`
+> - `corpus/live/runs/20261013T081147076446Z/verdicts.json`
+> - `corpus/live/runs/20261013T080440209599Z/verdicts.json`
+> - `corpus/live/runs/r49-navagent-review-private/navagent3d_next.gd`
+> - `corpus/live/runs/r49-navagent-review-private`
+> - `corpus/live/runs/r49-navagent-review-private/`

@@ -38,3 +38,23 @@ Revised `verify_scene.py` SHA-256 `add73ffa6091e3dd713e9d31389b26a149ac5a859ef51
 - `uv run --no-project --with pyyaml python .shokunin/game-dev-3d/corpus/artifacts/unity-r19/verify_scene.py /tmp/game-dev-3d-r19-review/leading-garbage.unity --expect-reject` → `PASS local-static actual=reject expected=reject path=/tmp/game-dev-3d-r19-review/leading-garbage.unity reason=unexpected text before first document`.
 
 The original independent default Godot run remains 25/25 PASS (Godot `4.7.2.stable.arch_linux.ed1daf0bf`; receipt path above), and Node three.js remains 3/3 PASS; no opt-in Godot probes. These were **not rerun** after the checker-only revision. Final finding: **accept the narrow static evidence** (one self-authored Unity-style hierarchy, exact reference-graph and local-position checks, two reference mutants and two malformed-input controls discriminated). The earlier malformed-input false accepts are corrected. Do not claim full strict UnityYAML grammar, all file references/fields, arbitrary scene compatibility, Unity Editor import, transform runtime, physics or rendering: the parser still checks a selected fixed structure using Python/PyYAML and source-derived literal assumptions rather than Unity itself.
+
+> **Digest correction (r106, 2026-10-18).** The sentences above are unchanged. `Hierarchy.unity` `0c088c23…` and `Hierarchy.broken-reference.unity` `890f0929…` still match the tree. The artifact README hash `c4463ab5…` does not: it is the blob at `6b24261c` (1579 bytes). Live `corpus/artifacts/unity-r19/README.md` is 1513 bytes, `12c4abd106b3e5a341fbede8c54563b9332a16ec6b805258788704934d608b4c`. Provisional checker `7ff63701…` and revised checker `add73ffa…` are labeled as earlier blobs in the text above; neither is a commit of `verify_scene.py` (`git rev-list --all -- corpus/artifacts/unity-r19/verify_scene.py` has one commit, content hash `decad886f…`, which is the final checker named in `r19-unity-final-review.md`).
+>
+> ```
+> $ sha256sum corpus/artifacts/unity-r19/README.md corpus/artifacts/unity-r19/verify_scene.py
+> 12c4abd106b3e5a341fbede8c54563b9332a16ec6b805258788704934d608b4c  corpus/artifacts/unity-r19/README.md
+> decad886f4018aba13588934058b3be91a1ad71c59839edcc25d92d13015270b  corpus/artifacts/unity-r19/verify_scene.py
+> $ git show 6b24261c677e:corpus/artifacts/unity-r19/README.md | sha256sum
+> c4463ab5ef137acc54fb0c56023f8f37f23afbce21dda992fdd5a268a10a8660  -
+> $ git show 6b24261c677e:corpus/artifacts/unity-r19/README.md | wc -c
+> 1579
+> $ wc -c corpus/artifacts/unity-r19/README.md
+> 1513 corpus/artifacts/unity-r19/README.md
+> ```
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T051940219807Z/verdicts.json`

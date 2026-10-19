@@ -33,3 +33,17 @@ A private ignored copy `corpus/live/runs/r32-private-blend-review/` changes **on
 Mutant stdout SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e` contains only the Godot banner and blank line. Stderr SHA-256 `b4987fba7dfd9881ecdc4ad81ff0a767b422df2aba161cc088f2dfbbb606267e` contains that measured position mismatch, `push_error` location and GDScript backtrace. No `SCRIPT ERROR`, `Parse Error`, ObjectDB leak warning or PASS marker. Thus setup passed and the live fade arm rejected the changed endpoint at its measured position predicate; the cut mutant arm was not separately run.
 
 **Limits:** One pair of constant-key positions, one 0.5-second transition, one zero-duration control and this pinned engine/build/frame schedule. The sample does not establish a universal blend curve, arbitrary animated poses or rendered pixels. It does not measure transition weights directly, and the cut arm's X4 does not imply a general sudden-cut guarantee beyond this setup.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `run_battery.py` digests match historical git blobs, not live `sha256sum` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `animation3d_blend.gd` digest `4638ecc8c648…` still matches the live fixture. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T062352175533Z/verdicts.json`
+> - `corpus/live/runs/20261013T062352176861Z/verdicts.json`
+> - `corpus/live/runs/20261013T061926092432Z/verdicts.json`
+> - `corpus/live/runs/r32-private-blend-review/`
+> - `corpus/live/runs/r32-private-blend-review`
+> - `corpus/live/runs/r32-private-blend-review/mutant.stdout`
+> - `corpus/live/runs/r32-private-blend-review/mutant.stderr`

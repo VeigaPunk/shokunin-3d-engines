@@ -33,3 +33,16 @@ Actual exit **1**, stdout version banner only, stderr `ERROR: slope3d_angle: nor
 **Temporal caveat:** `physics_frame` fires *before* the physics step. `first_contact_tick` and `first_contact_normal` were stored during a completed `_physics_process`, then `_run` resumes at the following `physics_frame` and immediately checks `is_on_floor/is_on_wall` before the next `_physics_process`; the first collision and queried flags thus refer to the preceding solver step under the current loop structure, not an as-yet-unprocessed future frame. However, the fixture does **not** assert `get_slide_collision_count()` or the contact normal afresh at the classification snapshot; first-contact counters/normals are cumulative historical fields. If the loop's timing changed or contact were transient, a historic contact and flags could be attributed to different steps. Current source and runs support the narrower first-contact classification, not persistent grounded contact or a tick-exact dwell claim.
 
 **Fixed-marker caveat:** `normal_y=0.866/0.500`, `floor_limit=45.000`, booleans and `live_contact=true` are hardcoded strings, **not telemetry formatted from queried values**. The normal tolerance and floor/wall predicates are independently checked beforehand, and the private angle and floor-limit mutations reject, but no runtime readback asserts `actor.floor_max_angle == 45°`, `slab.rotation.z`, collision normal at print time, or an exact contact count. A mutated floor limit still allowing both classifications could silently print 45°. Claim observed bounded classification with source-pinned settings and tolerant normals; not an exact printed-measurement audit, general boundary proof, downhill sliding, gravity, friction, rendered geometry, or other engines.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T050139735344Z/verdicts.json`
+> - `corpus/live/runs/20261013T050139735433Z/verdicts.json`
+> - `corpus/live/runs/20261013T042316520026Z/verdicts.json`
+> - `corpus/live/runs/review-r15-ba25b29d96/private-slope-mutant/`
+> - `corpus/live/runs/review-r15-ba25b29d96/private-slope-mutant`
+> - `corpus/live/runs/review-r15-ba25b29d96/private-slope-mutant.json`
+> - `corpus/live/runs/review-r15-ba25b29d96/private-floor-limit/`
+> - `corpus/live/runs/review-r15-ba25b29d96/private-floor-limit.json`

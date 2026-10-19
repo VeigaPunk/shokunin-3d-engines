@@ -43,3 +43,17 @@ To isolate downstream signed-cross behavior, the second private copy includes th
 Exit **1**, stderr `ERROR: mesh3d_indexed: triangle cross mismatch first=(0.0, 0.0, 6.0) second=(0.0, 0.0, -6.0)` at `_run` line 34. It passes index-exact readback and fails on independently computed second triangle signed cross while first remains +6. The battery sets `CASE_TIMEOUT_SECONDS=20` for its own case subprocesses; these direct private commands had no enforced timeout and each completed in <1 second locally. Redirection replays in each private directory yield identical stdout SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e`; respective stderr SHA-256 `528dade3af068139e6a6db6f228746833ed9c485ca5ca8378de6b4923797fc1c` and `93502436d245f51eb9a90d8e192ac6a60f845e4213352331f8f2294b018c5f14`. Neither mutant has a PASS marker, parse error, `SCRIPT ERROR`, or ObjectDB leak. The bounds check remains downstream and is not mutation-isolated.
 
 **Axis judgment:** depth improved over r33's unindexed one-triangle readback because two triangles reuse four vertices and an intact reverse-order control changes computed signed cross while preserving bounds. Coverage unchanged (same procedural ArrayMesh API family); calibration unchanged (same exit/marker classifier and four probes). This is a CPU-side topology/sample guarantee on Godot 4.7.2 only, not GPU face orientation or rendered appearance.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `run_battery.py` digests match historical git blobs, not live `sha256sum` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `mesh3d_indexed.gd` digest `14ce1bae6d7b…` still matches the live fixture. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T063353862680Z/verdicts.json`
+> - `corpus/live/runs/20261013T063353862202Z/verdicts.json`
+> - `corpus/live/runs/20261013T062810849525Z/verdicts.json`
+> - `corpus/live/runs/r34-private-index-review/`
+> - `corpus/live/runs/r34-private-index-cross-review/`
+> - `corpus/live/runs/r34-private-index-review`
+> - `corpus/live/runs/r34-private-index-cross-review`

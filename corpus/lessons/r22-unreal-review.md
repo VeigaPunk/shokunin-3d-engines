@@ -81,3 +81,9 @@ $ for c in 490e710d 8b21cae 7804a69; do git show "$c:corpus/fixtures/run_battery
 The r22-era blob is 34239 bytes against the current 346248, and all 78 commits touching the fixture rewrote it, so no tree path will ever hash to the r22 value again; the re-derivation command, not the number, is the durable citation.
 
 No Unreal runtime claim is added or implied here. The Unreal Editor and UnrealBuildTool are not installed on this host; every value above is a file-level hash, byte count, path, or count fact.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T053632289732Z/verdicts.json`

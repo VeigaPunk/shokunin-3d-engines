@@ -5,10 +5,10 @@
 ## Reproduction and raw evidence
 
 ```sh
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r58-review-old.json
-node .shokunin/game-dev-3d/corpus/fixtures/three/run_camera_cases.mjs --receipt .shokunin/game-dev-3d/corpus/live/three-r58-review.json
-node .shokunin/game-dev-3d/corpus/fixtures/three/camera_frustum.mjs --mutate-far
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+node corpus/fixtures/three/run_cases.mjs --receipt corpus/live/three-r58-review-old.json
+node corpus/fixtures/three/run_camera_cases.mjs --receipt corpus/live/three-r58-review.json
+node corpus/fixtures/three/camera_frustum.mjs --mutate-far
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
 ```
 
 - Old Node runner: process exit **0**, 3/3 PASS, `seedsUnchanged=true`. Receipt `corpus/live/three-r58-review-old.json`, SHA-256 `c7df029b35086914303a879a6e148edde6cb5ed8fa7dfe7e7ecf40598b84f207`. Raw case tuples `(name, exit, stdout, stderr)` are positive `(0, "PASS three3d scene_graph world=-1.000,0.000,0.000 parent_intact=true reverse_rejected=true\n", empty)`, negative_wrong_order `(2, "NEGATIVE REJECTED: three3d wrong_order expected=-1,0,0 reversed=2.000,0.000,-3.000 parent_intact=true\n", empty)`, mutation `(1, empty, "ERROR: three3d world origin mismatch observed=-2.000,0.000,-0.000 expected=-1,0,0\n")`. Each has null signal/error and PASS verdict. The four SHA-256 seed hashes in the receipt match current seed files.
@@ -21,3 +21,16 @@ python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeou
 Camera at world origin looking toward -Z, vertical FOV 90°, aspect 4/3, near 1, far 10. At depth `d=-z`, the perspective NDC coordinates are `x/(d*4/3)` and `y/d`. For (2,1,-4) they are (0.375,0.25); for (6,3,-12) likewise (0.375,0.25). An 800×600 viewport maps these mathematically to `(550,225)` with downward-positive screen Y. With near=1 and far=10, NDC Z is `11/9 - 20/(9d)`: at d=4, `2/3`; at d=12, `28/27 > 1` (finite projection, but beyond far). The source constructs real `PerspectiveCamera`, updates its matrices, forms `Frustum` from projection × inverse world matrix, and projects both `Vector3` points. It checks lateral NDC and depths against these hand values and independently checks live frustum inclusion, with a live inside control on the negative arm. These NDC values are asserted in source, not emitted individually in the receipt. Camera is at identity and no renderer/GL context is created.
 
 **Axes:** coverage improved for one bounded three.js perspective camera/frustum API surface under Node; depth unchanged; calibration unchanged (existing exact exit/stream and seed style plus measured mutation, not a generalized classifier). No rendered pixels, GPU culling, browser behavior, precision boundary or cross-engine result is established. No commits, pushes, merges or implementation edits in this review.
+
+## r106 path-root conformance (2026-10-18)
+
+Mechanical re-root only (SEAT-08). Every `.shokunin/game-dev-3d/` prefix above was removed so citations are repo-relative from this lane root. Historical totals, markers, SHA-256 digests, and the cited Node `v26.11.1` string were not rewritten. This note is not a re-run of the 2026-10-13 review.
+
+Still non-resolvable (queued, not rewritten): cited `corpus/live/three-r58-review.json`, `corpus/live/three-r58-review-old.json`, and `corpus/live/runs/20261013T…` receipts are gitignored (`corpus/.gitignore` `live/`) and absent. Commit `9796dc9` resolves in `/home/vgpnk/Projects/prymeagnt/game-dev-3d`, not in this lane repo. Sweep evidence: `reports/round-106/sweep/chunk-08.md`.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T123903480026Z/verdicts.json`
+> - `corpus/live/runs/20261013T123250681582Z/verdicts.json`

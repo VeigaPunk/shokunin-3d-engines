@@ -30,3 +30,25 @@ Regression commands on this working tree: `python .shokunin/game-dev-3d/corpus/f
 ## Boundary and remaining unknowns
 
 Provisional two false accepts and intermediate extra-component false accept were real and are preserved above, not treated as passing tests retroactively. The final static check validates **selected authored graph and literals**, not arbitrary scene files. Unchecked extra mapping fields or fileID-like references outside inspected fields may still be accepted; no general all-reference census, UnityYAML conformance, editor import, scene execution, serialization round trip, or rendering is established. A Unity importer may reject this self-authored minimal sample even though the local checker passes. On bounded source/controls and unchanged regressions, coverage improves only as local static Unity-style structure evidence; depth/calibration not shown to improve.
+
+> **Digest correction (r106, 2026-10-18).** The sentences above are unchanged. `Hierarchy.unity` `0c088c23…`, `Hierarchy.broken-reference.unity` `890f0929…`, and final `verify_scene.py` `decad886f…` still match the tree. The artifact README hash `c4463ab5…` does not: it is the blob at `6b24261c` (1579 bytes). Live `corpus/artifacts/unity-r19/README.md` is 1513 bytes, `12c4abd106b3e5a341fbede8c54563b9332a16ec6b805258788704934d608b4c`.
+>
+> ```
+> $ sha256sum corpus/artifacts/unity-r19/README.md corpus/artifacts/unity-r19/verify_scene.py corpus/artifacts/unity-r19/Hierarchy.unity corpus/artifacts/unity-r19/Hierarchy.broken-reference.unity
+> 12c4abd106b3e5a341fbede8c54563b9332a16ec6b805258788704934d608b4c  corpus/artifacts/unity-r19/README.md
+> decad886f4018aba13588934058b3be91a1ad71c59839edcc25d92d13015270b  corpus/artifacts/unity-r19/verify_scene.py
+> 0c088c2352d5808150feaae87213a63f1d0fc5820eff1237246107b1143635f7  corpus/artifacts/unity-r19/Hierarchy.unity
+> 890f09293fe97f3bf78f2cee173567fb40d23e1e9be64614e1aee9e205c701a7  corpus/artifacts/unity-r19/Hierarchy.broken-reference.unity
+> $ git show 6b24261c677e:corpus/artifacts/unity-r19/README.md | sha256sum
+> c4463ab5ef137acc54fb0c56023f8f37f23afbce21dda992fdd5a268a10a8660  -
+> $ git show 6b24261c677e:corpus/artifacts/unity-r19/README.md | wc -c
+> 1579
+> $ wc -c corpus/artifacts/unity-r19/README.md
+> 1513 corpus/artifacts/unity-r19/README.md
+> ```
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T052155276140Z/verdicts.json`

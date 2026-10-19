@@ -1,0 +1,202 @@
+PASS navagent3d_retarget: exit=0 expected=0
+PASS navagent3d_retarget_fixed: exit=2 expected=2
+PASS navagent3d_follow: exit=0 expected=0
+PASS navagent3d_follow_stationary: exit=2 expected=2
+PASS navagent3d_next: exit=0 expected=0
+PASS navagent3d_next_alternate: exit=2 expected=2
+PASS navagent3d_distance: exit=0 expected=0
+PASS navagent3d_distance_wide_reach: exit=2 expected=2
+PASS navagent3d_detour: exit=0 expected=0
+PASS navagent3d_detour_straight: exit=2 expected=2
+PASS navagent3d_detour_assert_pathsum: exit=2 expected=2
+PASS navagent3d_detour_post_edgecentered: exit=0 expected=0
+PASS navagent3d_detour_post_none: exit=0 expected=0
+PASS navagent3d_detour_pop_lo: exit=0 expected=0
+PASS navagent3d_detour_pop_hi: exit=0 expected=0
+PASS navagent3d_detour_pop_sat: exit=0 expected=0
+PASS navagent3d_detour_mid_lo: exit=0 expected=0
+PASS navagent3d_detour_mid_hi: exit=0 expected=0
+PASS navagent3d_detour_vert_pop_eq: exit=0 expected=0
+PASS navagent3d_detour_vert_pop_above: exit=0 expected=0
+PASS navagent3d_detour_tp_mid: exit=0 expected=0
+PASS navagent3d_detour_tp_eq: exit=0 expected=0
+PASS navagent3d_detour_gap2_pop_basis: exit=0 expected=0
+PASS navagent3d_detour_fin_unr_lo: exit=0 expected=0
+PASS navagent3d_detour_fin_unr_hi: exit=0 expected=0
+PASS navagent3d_detour_vert_fin_eq: exit=0 expected=0
+PASS navagent3d_detour_vert_fin_above: exit=0 expected=0
+PASS navagent3d_detour_fin_reach_eq: exit=0 expected=0
+PASS navagent3d_detour_fin_reach_above: exit=0 expected=0
+PASS navagent3d_detour_edge_unr: exit=0 expected=0
+PASS navagent3d_detour_edge_eq: exit=0 expected=0
+PASS navagent3d_detour_edge_above: exit=0 expected=0
+PASS navagent3d_detour_fin_idx_gate: exit=0 expected=0
+PASS navagent3d_detour_fin_wall: exit=0 expected=0
+PASS navagent3d_detour_fin_latch: exit=0 expected=0
+PASS navagent3d_detour_link_shortcut: exit=0 expected=0
+PASS navagent3d_detour_link_meta_types: exit=0 expected=0
+PASS navagent3d_detour_link_meta_rids: exit=0 expected=0
+PASS navagent3d_detour_link_meta_owners: exit=0 expected=0
+PASS navagent3d_detour_link_meta: exit=0 expected=0
+PASS navagent3d_detour_link_layers_off: exit=0 expected=0
+PASS navagent3d_detour_link_layers_on: exit=0 expected=0
+PASS navagent3d_detour_link_oneway_fwd: exit=0 expected=0
+PASS navagent3d_detour_link_oneway_rev: exit=0 expected=0
+PASS navagent3d_detour_link_disabled: exit=0 expected=0
+PASS navagent3d_detour_link_travelcost: exit=0 expected=0
+PASS navagent3d_detour_link_entercost: exit=0 expected=0
+PASS navagent3d_detour_link_gap: exit=0 expected=0
+PASS navagent3d_detour_link_pop_bank: exit=0 expected=0
+PASS navagent3d_detour_link_pop_void: exit=0 expected=0
+PASS navagent3d_detour_mv_walk: exit=0 expected=0
+PASS navagent3d_detour_mv_live: exit=0 expected=0
+PASS navagent3d_detour_mv_popback: exit=0 expected=0
+PASS navagent3d_detour_mv_popstrict: exit=0 expected=0
+PASS navagent3d_detour_mv_void: exit=0 expected=0
+PASS navagent3d_detour_mv_pmd_edge: exit=0 expected=0
+PASS navagent3d_detour_mv_pmd_offmesh: exit=0 expected=0
+PASS navagent3d_detour_mv_pmd2: exit=0 expected=0
+PASS navagent3d_detour_mv_latch: exit=0 expected=0
+PASS navagent3d_detour_mv_unlatch: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_same: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_bank: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_void: exit=0 expected=0
+PASS navagent3d_detour_mv_popskip: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_lazy: exit=0 expected=0
+PASS navagent3d_detour_mv_reanchor_force: exit=0 expected=0
+PASS navagent3d_detour_mv_bridge_walk: exit=0 expected=0
+PASS navagent3d_detour_mut_link_kill: exit=0 expected=0
+PASS navagent3d_detour_mut_link_drop: exit=0 expected=0
+PASS navagent3d_detour_mut_link_layers: exit=0 expected=0
+PASS navagent3d_detour_mut_layers_agent: exit=0 expected=0
+PASS navagent3d_detour_mut_layers_region: exit=0 expected=0
+PASS navagent3d_detour_mut_region_move: exit=0 expected=0
+PASS navagent3d_detour_mut_region_off: exit=0 expected=0
+PASS navagent3d_detour_mut_region_renew: exit=0 expected=0
+PASS navagent3d_detour_mut_link_revive: exit=0 expected=0
+PASS navagent3d_detour_mut_lazy: exit=0 expected=0
+PASS navagent3d_detour_mut_latch_zombie: exit=0 expected=0
+PASS navagent3d_detour_mut_win_link: exit=0 expected=0
+PASS navagent3d_detour_mut_win_region: exit=0 expected=0
+PASS navagent3d_detour_mut_map_off: exit=0 expected=0
+PASS navagent3d_detour_mut_map_cycle: exit=0 expected=0
+PASS navagent3d_detour_mut_same_link: exit=0 expected=0
+PASS navagent3d_detour_mut_same_region: exit=0 expected=0
+PASS navagent3d_detour_mut_same_agent: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_renew_xform: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_xform_renew: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_link_offmv: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_link_mvoff: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_kill_mapoff: exit=0 expected=0
+PASS navagent3d_detour_mut_ord_mapoff_kill: exit=0 expected=0
+PASS navagent3d_detour_mut_force_link: exit=0 expected=0
+PASS navagent3d_detour_mut_force_ctl: exit=0 expected=0
+PASS navagent3d_detour_mut_ladder_link: exit=0 expected=0
+PASS navagent3d_detour_mut_ladder_region: exit=0 expected=0
+PASS navagent3d_detour_mut_mapoff_ladder: exit=0 expected=0
+PASS navagent3d_detour_mut_ctx_resume: exit=0 expected=0
+PASS navagent3d_detour_mut_ctx_phys: exit=0 expected=0
+
+VERDICT  CASE                               SCRIPT                     FLAGS              EXIT      KIND
+PASS     navagent3d_retarget                navagent3d_retarget.gd     -                  0/0       ordinary
+PASS     navagent3d_retarget_fixed          navagent3d_retarget.gd     --fixed            2/2       negative
+PASS     navagent3d_follow                  navagent3d_follow.gd       -                  0/0       ordinary
+PASS     navagent3d_follow_stationary       navagent3d_follow.gd       --stationary       2/2       negative
+PASS     navagent3d_next                    navagent3d_next.gd         -                  0/0       ordinary
+PASS     navagent3d_next_alternate          navagent3d_next.gd         --alternate        2/2       negative
+PASS     navagent3d_distance                navagent3d_distance.gd     -                  0/0       ordinary
+PASS     navagent3d_distance_wide_reach     navagent3d_distance.gd     --wide-reach       2/2       negative
+PASS     navagent3d_detour                  navagent3d_detour.gd       -                  0/0       ordinary
+PASS     navagent3d_detour_straight         navagent3d_detour.gd       --straight         2/2       negative
+PASS     navagent3d_detour_assert_pathsum   navagent3d_detour.gd       --assert-pathsum   2/2       negative
+PASS     navagent3d_detour_post_edgecentered navagent3d_detour.gd       --post-edgecentered 0/0       ordinary
+PASS     navagent3d_detour_post_none        navagent3d_detour.gd       --post-none        0/0       ordinary
+PASS     navagent3d_detour_pop_lo           navagent3d_detour.gd       --arm=pop_lo       0/0       ordinary
+PASS     navagent3d_detour_pop_hi           navagent3d_detour.gd       --arm=pop_hi       0/0       ordinary
+PASS     navagent3d_detour_pop_sat          navagent3d_detour.gd       --arm=pop_sat      0/0       ordinary
+PASS     navagent3d_detour_mid_lo           navagent3d_detour.gd       --arm=mid_lo       0/0       ordinary
+PASS     navagent3d_detour_mid_hi           navagent3d_detour.gd       --arm=mid_hi       0/0       ordinary
+PASS     navagent3d_detour_vert_pop_eq      navagent3d_detour.gd       --arm=vert_pop_eq  0/0       ordinary
+PASS     navagent3d_detour_vert_pop_above   navagent3d_detour.gd       --arm=vert_pop_above 0/0       ordinary
+PASS     navagent3d_detour_tp_mid           navagent3d_detour.gd       --arm=tp_mid       0/0       ordinary
+PASS     navagent3d_detour_tp_eq            navagent3d_detour.gd       --arm=tp_eq        0/0       ordinary
+PASS     navagent3d_detour_gap2_pop_basis   navagent3d_detour.gd       --arm=gap2_pop_basis 0/0       ordinary
+PASS     navagent3d_detour_fin_unr_lo       navagent3d_detour.gd       --arm=fin_unr_lo   0/0       ordinary
+PASS     navagent3d_detour_fin_unr_hi       navagent3d_detour.gd       --arm=fin_unr_hi   0/0       ordinary
+PASS     navagent3d_detour_vert_fin_eq      navagent3d_detour.gd       --arm=vert_fin_eq  0/0       ordinary
+PASS     navagent3d_detour_vert_fin_above   navagent3d_detour.gd       --arm=vert_fin_above 0/0       ordinary
+PASS     navagent3d_detour_fin_reach_eq     navagent3d_detour.gd       --arm=fin_reach_eq 0/0       ordinary
+PASS     navagent3d_detour_fin_reach_above  navagent3d_detour.gd       --arm=fin_reach_above 0/0       ordinary
+PASS     navagent3d_detour_edge_unr         navagent3d_detour.gd       --arm=edge_unr     0/0       ordinary
+PASS     navagent3d_detour_edge_eq          navagent3d_detour.gd       --arm=edge_eq      0/0       ordinary
+PASS     navagent3d_detour_edge_above       navagent3d_detour.gd       --arm=edge_above   0/0       ordinary
+PASS     navagent3d_detour_fin_idx_gate     navagent3d_detour.gd       --arm=fin_idx_gate 0/0       ordinary
+PASS     navagent3d_detour_fin_wall         navagent3d_detour.gd       --arm=fin_wall     0/0       ordinary
+PASS     navagent3d_detour_fin_latch        navagent3d_detour.gd       --arm=fin_latch    0/0       ordinary
+PASS     navagent3d_detour_link_shortcut    navagent3d_detour.gd       --arm=link_shortcut 0/0       ordinary
+PASS     navagent3d_detour_link_meta_types  navagent3d_detour.gd       --arm=link_meta_types 0/0       ordinary
+PASS     navagent3d_detour_link_meta_rids   navagent3d_detour.gd       --arm=link_meta_rids 0/0       ordinary
+PASS     navagent3d_detour_link_meta_owners navagent3d_detour.gd       --arm=link_meta_owners 0/0       ordinary
+PASS     navagent3d_detour_link_meta        navagent3d_detour.gd       --arm=link_meta    0/0       ordinary
+PASS     navagent3d_detour_link_layers_off  navagent3d_detour.gd       --arm=link_layers_off 0/0       ordinary
+PASS     navagent3d_detour_link_layers_on   navagent3d_detour.gd       --arm=link_layers_on 0/0       ordinary
+PASS     navagent3d_detour_link_oneway_fwd  navagent3d_detour.gd       --arm=link_oneway_fwd 0/0       ordinary
+PASS     navagent3d_detour_link_oneway_rev  navagent3d_detour.gd       --arm=link_oneway_rev 0/0       ordinary
+PASS     navagent3d_detour_link_disabled    navagent3d_detour.gd       --arm=link_disabled 0/0       ordinary
+PASS     navagent3d_detour_link_travelcost  navagent3d_detour.gd       --arm=link_travelcost 0/0       ordinary
+PASS     navagent3d_detour_link_entercost   navagent3d_detour.gd       --arm=link_entercost 0/0       ordinary
+PASS     navagent3d_detour_link_gap         navagent3d_detour.gd       --arm=link_gap     0/0       ordinary
+PASS     navagent3d_detour_link_pop_bank    navagent3d_detour.gd       --arm=link_pop_bank 0/0       ordinary
+PASS     navagent3d_detour_link_pop_void    navagent3d_detour.gd       --arm=link_pop_void 0/0       ordinary
+PASS     navagent3d_detour_mv_walk          navagent3d_detour.gd       --arm=mv_walk      0/0       ordinary
+PASS     navagent3d_detour_mv_live          navagent3d_detour.gd       --arm=mv_live      0/0       ordinary
+PASS     navagent3d_detour_mv_popback       navagent3d_detour.gd       --arm=mv_popback   0/0       ordinary
+PASS     navagent3d_detour_mv_popstrict     navagent3d_detour.gd       --arm=mv_popstrict 0/0       ordinary
+PASS     navagent3d_detour_mv_void          navagent3d_detour.gd       --arm=mv_void      0/0       ordinary
+PASS     navagent3d_detour_mv_pmd_edge      navagent3d_detour.gd       --arm=mv_pmd_edge  0/0       ordinary
+PASS     navagent3d_detour_mv_pmd_offmesh   navagent3d_detour.gd       --arm=mv_pmd_offmesh 0/0       ordinary
+PASS     navagent3d_detour_mv_pmd2          navagent3d_detour.gd       --arm=mv_pmd2      0/0       ordinary
+PASS     navagent3d_detour_mv_latch         navagent3d_detour.gd       --arm=mv_latch     0/0       ordinary
+PASS     navagent3d_detour_mv_unlatch       navagent3d_detour.gd       --arm=mv_unlatch   0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor      navagent3d_detour.gd       --arm=mv_reanchor  0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_same navagent3d_detour.gd       --arm=mv_reanchor_same 0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_bank navagent3d_detour.gd       --arm=mv_reanchor_bank 0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_void navagent3d_detour.gd       --arm=mv_reanchor_void 0/0       ordinary
+PASS     navagent3d_detour_mv_popskip       navagent3d_detour.gd       --arm=mv_popskip   0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_lazy navagent3d_detour.gd       --arm=mv_reanchor_lazy 0/0       ordinary
+PASS     navagent3d_detour_mv_reanchor_force navagent3d_detour.gd       --arm=mv_reanchor_force 0/0       ordinary
+PASS     navagent3d_detour_mv_bridge_walk   navagent3d_detour.gd       --arm=mv_bridge_walk 0/0       ordinary
+PASS     navagent3d_detour_mut_link_kill    navagent3d_detour.gd       --arm=mut_link_kill 0/0       ordinary
+PASS     navagent3d_detour_mut_link_drop    navagent3d_detour.gd       --arm=mut_link_drop 0/0       ordinary
+PASS     navagent3d_detour_mut_link_layers  navagent3d_detour.gd       --arm=mut_link_layers 0/0       ordinary
+PASS     navagent3d_detour_mut_layers_agent navagent3d_detour.gd       --arm=mut_layers_agent 0/0       ordinary
+PASS     navagent3d_detour_mut_layers_region navagent3d_detour.gd       --arm=mut_layers_region 0/0       ordinary
+PASS     navagent3d_detour_mut_region_move  navagent3d_detour.gd       --arm=mut_region_move 0/0       ordinary
+PASS     navagent3d_detour_mut_region_off   navagent3d_detour.gd       --arm=mut_region_off 0/0       ordinary
+PASS     navagent3d_detour_mut_region_renew navagent3d_detour.gd       --arm=mut_region_renew 0/0       ordinary
+PASS     navagent3d_detour_mut_link_revive  navagent3d_detour.gd       --arm=mut_link_revive 0/0       ordinary
+PASS     navagent3d_detour_mut_lazy         navagent3d_detour.gd       --arm=mut_lazy     0/0       ordinary
+PASS     navagent3d_detour_mut_latch_zombie navagent3d_detour.gd       --arm=mut_latch_zombie 0/0       ordinary
+PASS     navagent3d_detour_mut_win_link     navagent3d_detour.gd       --arm=mut_win_link 0/0       ordinary
+PASS     navagent3d_detour_mut_win_region   navagent3d_detour.gd       --arm=mut_win_region 0/0       ordinary
+PASS     navagent3d_detour_mut_map_off      navagent3d_detour.gd       --arm=mut_map_off  0/0       ordinary
+PASS     navagent3d_detour_mut_map_cycle    navagent3d_detour.gd       --arm=mut_map_cycle 0/0       ordinary
+PASS     navagent3d_detour_mut_same_link    navagent3d_detour.gd       --arm=mut_same_link 0/0       ordinary
+PASS     navagent3d_detour_mut_same_region  navagent3d_detour.gd       --arm=mut_same_region 0/0       ordinary
+PASS     navagent3d_detour_mut_same_agent   navagent3d_detour.gd       --arm=mut_same_agent 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_renew_xform navagent3d_detour.gd       --arm=mut_ord_renew_xform 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_xform_renew navagent3d_detour.gd       --arm=mut_ord_xform_renew 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_link_offmv navagent3d_detour.gd       --arm=mut_ord_link_offmv 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_link_mvoff navagent3d_detour.gd       --arm=mut_ord_link_mvoff 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_kill_mapoff navagent3d_detour.gd       --arm=mut_ord_kill_mapoff 0/0       ordinary
+PASS     navagent3d_detour_mut_ord_mapoff_kill navagent3d_detour.gd       --arm=mut_ord_mapoff_kill 0/0       ordinary
+PASS     navagent3d_detour_mut_force_link   navagent3d_detour.gd       --arm=mut_force_link 0/0       ordinary
+PASS     navagent3d_detour_mut_force_ctl    navagent3d_detour.gd       --arm=mut_force_ctl 0/0       ordinary
+PASS     navagent3d_detour_mut_ladder_link  navagent3d_detour.gd       --arm=mut_ladder_link 0/0       ordinary
+PASS     navagent3d_detour_mut_ladder_region navagent3d_detour.gd       --arm=mut_ladder_region 0/0       ordinary
+PASS     navagent3d_detour_mut_mapoff_ladder navagent3d_detour.gd       --arm=mut_mapoff_ladder 0/0       ordinary
+PASS     navagent3d_detour_mut_ctx_resume   navagent3d_detour.gd       --arm=mut_ctx_resume 0/0       ordinary
+PASS     navagent3d_detour_mut_ctx_phys     navagent3d_detour.gd       --arm=mut_ctx_phys 0/0       ordinary
+totals: cases=99 pass=99 fail=0 ordinary=93 negative_controls=6 probes=0
+PASS battery: /home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/census/navagent/runs/20261018T212139347975Z/verdicts.json

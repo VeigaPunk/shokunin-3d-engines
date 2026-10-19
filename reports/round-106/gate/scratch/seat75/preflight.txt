@@ -1,0 +1,10 @@
+SEAT75_START=2026-10-18T21:21:18Z
+HEAD=0cc3f4162f8c319f8d01a69a174fe939f36701bd
+GATE_SHA=390a25ae4e389a00c4c5147efd451e21303ae501abe2523ad713b6d88e57b2cf
+HARNESS_SHA=1aeec7000878b4ebcb1f61069202405766dff6b201194267360e68b78dd25bb2
+TMP_PROBE=WRITABLE
+GW=/home/vgpnk/tmp/r106seat75/gw
+OUT=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin/reports/round-106/gate/scratch/seat75
+/dev/mapper/root  930G  160G  756G  18% /home
+ARM1_RC=0
+ARM1_END=2026-10-18T21:21:23Z

@@ -1,0 +1,8 @@
+started=2026-10-18T18:20:30-03:00
+pwd=/home/vgpnk/Projects/shokunin/game-dev-3d-shokunin
+HEAD=0cc3f4162f8c319f8d01a69a174fe939f36701bd
+node_path=/home/vgpnk/.local/share/mise/installs/node/latest/bin/node
+node_ver=v26.12.0
+godot=4.7.2.stable.arch_linux.ed1daf0bf
+f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f  corpus/fixtures/run_battery.py
+battery_exit=0

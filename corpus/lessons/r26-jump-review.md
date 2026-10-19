@@ -7,9 +7,9 @@
 From the repository root:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
 # exit 0; 35/35 (16 ordinary, 19 negative); four additional probes PASS; seeds_unchanged=true
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor
+python3 corpus/fixtures/run_battery.py --only jump3d_land,jump3d_no_floor
 # exit 0; 2/2 (one ordinary, one negative); seeds_unchanged=true
 ```
 
@@ -26,9 +26,9 @@ The constants and geometry are verified partly by literal checks: apex_tick=29, 
 Private ignored scratch source copy changed only `const IMPULSE := 6.0` → `const IMPULSE := 7.0`, under `corpus/live/r26-private-jump-review/scratch/jump3d_gravity.gd` SHA-256 `208fbf723b4e6eb6e842b82d9b3587066bbd5e04bfcf13eb475683f7757fe8af`; original seed remains `a2dbe8ddfa0a7af3f38d1cd61b2de55b23c9402f7d8ba4d85908f27b5a3cca00`. Exact independent direct commands (raw streams/exit captured in `corpus/live/r26-private-jump-review/jump-mutant-verdict.json`, SHA-256 `c20e831ad32e59054fa409b9507e38712ec63442947c2f80ee68d588517048d5`):
 
 ```sh
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/r26-private-jump-review/scratch --script res://jump3d_gravity.gd
+/usr/bin/godot --headless --path corpus/live/r26-private-jump-review/scratch --script res://jump3d_gravity.gd
 # exit 1; stderr ERROR: jump3d_gravity: apex/planar mismatch tick=34 y=2.9843 position=(0.0, 1.900941, 0.0)
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/r26-private-jump-review/scratch --script res://jump3d_gravity.gd -- --lower-floor
+/usr/bin/godot --headless --path corpus/live/r26-private-jump-review/scratch --script res://jump3d_gravity.gd -- --lower-floor
 # exit 1; stderr ERROR: jump3d_gravity: apex/planar mismatch tick=34 y=2.9833 position=(0.0, 1.9, 0.0)
 ```
 
@@ -37,3 +37,14 @@ Both have only Godot banner/blank stdout, no PASS/NEGATIVE REJECTED marker, Pars
 ## Adverse author receipts and scope
 
 LOG r26 records first author pair `20261013T055145378168Z/verdicts.json` FAIL at classifier because authored expected output guessed landing59/y1.000 despite engine marker landing60/y1.001 (real engine exits0/2); `20261013T055229469904Z/verdicts.json` FAIL with negative exit1 `SCRIPT ERROR: Invalid access ... 'previously freed'` after cleanup before formatting; final author pair `20261013T055244064506Z/verdicts.json` PASS 2/2 after saving final y first. These failed rehearsals are not success evidence. Calibration remains bounded to one version, one floor/box, +6 and -12/60, a one-second call budget, and tolerances; no initial grounded state, general jump controller, rendered result, exact collision-boundary theorem or variable-step integration is proven. Assumptions/constants changed by this reviewer: only the private ignored IMPULSE +6→+7 copy; no authored constants or tracked implementation changed. This independent result supports depth improvement for one observed gravity/apex/grounded-vs-displaced-floor regime, not broader coverage or calibration.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T055425026403Z/verdicts.json`
+> - `corpus/live/runs/20261013T055428088439Z/verdicts.json`
+> - `corpus/live/runs/20261013T054855628286Z/verdicts.json`
+> - `corpus/live/runs/20261013T055145378168Z/verdicts.json`
+> - `corpus/live/runs/20261013T055229469904Z/verdicts.json`
+> - `corpus/live/runs/20261013T055244064506Z/verdicts.json`

@@ -31,3 +31,14 @@ Inspection of `scene3d_resource.gd`: source Node3D owns its MeshInstance3D child
 To disambiguate the missing source postcondition, I copied the unmodified seed into ignored `corpus/live/runs/review-r20-private-mutant/identity-scratch`, adding **only diagnostic prints after the size mutation** (not a source change), then invoked `/usr/bin/godot --headless --path "$PWD/.shokunin/game-dev-3d/corpus/live/runs/review-r20-private-mutant/identity-scratch" --script res://scene3d_resource.gd -- --shared` and the same command without `--shared`. Shared exit 2 prints `OBSERVED_SHARED source_is_first=true source_is_second=true source_size=(2.0, 1.0, 1.0)`; local exit 0 prints `OBSERVED_LOCAL source_is_first=false source_is_second=false source_size=(1.0, 1.0, 1.0)`. Thus the shared branch's source BoxMesh is the same object and is mutated; this is consistent with shared-resource semantics, not a regression. The unmodified shared fixture does **not** independently assert source identity or source's post-size, and the negative label's `same_resource=true` derives from the clone equality check, not a three-way equality check.
 
 **Limits:** This is in-memory resource identity/size propagation for one BoxMesh under Godot headless. The r17 caveat about unchecked mutable mesh identity is closed for these two arms, not for other resources, saved `.tscn` reloads, GPU pixels, general clone ownership, or other engines. The static marker strings depend on earlier literal assertions rather than raw metric formatting. Do not claim the original source remains unchanged in the shared control; it does not.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T052611647976Z/verdicts.json`
+> - `corpus/live/runs/20261013T052616358456Z/verdicts.json`
+> - `corpus/live/runs/20261013T051450833462Z/verdicts.json`
+> - `corpus/live/runs/review-r20-private-mutant/scratch/scene3d_resource.gd`
+> - `corpus/live/runs/review-r20-private-mutant/scratch`
+> - `corpus/live/runs/review-r20-private-mutant/identity-scratch`

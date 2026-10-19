@@ -1,0 +1,45 @@
+=== utc ===
+2026-10-18T21:31:39Z
+=== local ===
+2026-10-18T18:31:39-0300
+=== HEAD ===
+0cc3f4162f8c319f8d01a69a174fe939f36701bd
+=== which blender both states ===
+/usr/bin/blender
+default_which_rc=0
+/usr/bin/blender
+pinned_which_rc=0
+=== realpath ===
+/usr/bin/blender
+=== stat ===
+path=/usr/bin/blender size=116071952 mtime=2026-08-31 21:24:57.000000000 -0300 mode=755
+=== sha256 blender ===
+fd7c5e44f50de3012e9cd8c919ce7cfaca716ff7bc3b9d9e53d300401b892e7c  /usr/bin/blender
+=== blender --version ===
+Blender 5.2.1 LTS
+	build date: 2026-09-01
+	build time: 00:24:57
+	build commit date: 2026-08-24
+	build commit time: 16:50
+	build hash: 9e2066aef7ef
+	build branch: makepkg (modified)
+	build platform: Linux
+	build type: Release
+	build c flags:  -Wall -Werror=implicit-function-declaration -Wstrict-prototypes -Werror=return-type -Werror=vla -Wmissing-prototypes -Wno-char-subscripts -Wno-unknown-pragmas -Wpointer-arith -Wunused-parameter -Wwrite-strings -Wlogical-op -Wundef -Winit-self -Wmissing-include-dirs -Wno-div-by-zero -Wtype-limits -Wformat-signedness -Wrestrict -Wno-stringop-overread -Wno-stringop-overflow -Wnonnull -Wabsolute-value -Wuninitialized -Wredundant-decls -Wshadow -Wimplicit-fallthrough=5 -Wno-error=unused-but-set-variable -march=x86-64 -mtune=generic -O2 -pipe -fno-plt -fexceptions         -Wp,-D_FORTIFY_SOURCE=3 -Wformat -Werror=format-security         -fstack-clash-protection -fcf-protection         -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -g -ffile-prefix-map=/build/blender/src=/usr/src/debug/blender -march=x86-64-v2 -std=gnu11 -pipe -fPIC -funsigned-char -fno-strict-aliasing -ffp-contract=off  
+	build c++ flags:  -Wuninitialized -Wredundant-decls -Wall -Wno-invalid-offsetof -Wno-sign-compare -Wlogical-op -Winit-self -Wmissing-include-dirs -Wno-div-by-zero -Wtype-limits -Werror=return-type -Wno-char-subscripts -Wno-unknown-pragmas -Wpointer-arith -Wunused-parameter -Wwrite-strings -Wundef -Wcomma-subscript -Wformat-signedness -Wrestrict -Wno-suggest-override -Wuninitialized -Wno-stringop-overread -Wno-stringop-overflow -Wimplicit-fallthrough=5 -Wundef -Wmissing-declarations -march=x86-64 -mtune=generic -O2 -pipe -fno-plt -fexceptions         -Wp,-D_FORTIFY_SOURCE=3 -Wformat -Werror=format-security         -fstack-clash-protection -fcf-protection         -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer  -g -ffile-prefix-map=/build/blender/src=/usr/src/debug/blender --param=max-vartrack-size=640000000 -Wno-error=format-security -march=x86-64-v2 -pipe -fPIC -funsigned-char -fno-strict-aliasing -ffp-contract=off  
+	build link flags:  -latomic
+	build system: CMake
+version_rc=0
+=== pacman -Q blender ===
+blender 17:5.2.1-2
+pacman_rc=0
+=== node two-state ===
+/home/vgpnk/.local/share/mise/installs/node/latest/bin/node
+v26.12.0
+default_node_rc=0
+/home/vgpnk/.local/share/fnm/node-versions/v24.21.0/installation/bin/node
+v24.21.0
+pinned_node_rc=0
+=== unreal absence ===
+ue_rc=1
+uecmd_rc=1

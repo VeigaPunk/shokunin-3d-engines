@@ -31,3 +31,15 @@ godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/review-r16-202610
 Old 30→60 sensitivity remains: separate private copy changes only `const SHALLOW_ANGLE := 30.0` to `60.0` (SHA `571d79a09cd5ede6652a3eba079822c3efbb79f27e1155616494075229205b22`). Direct commands under `.shokunin/game-dev-3d/corpus/live/runs/review-r16-20261013T050627684826Z/shallow60` (with and without `-- --steep`) exit **1/2** respectively. Shallow stdout has no marker; stderr identifies `normal mismatch normal=(-0.866025, 0.5, 0.0) expected=(-0.5, 0.866025, 0.0)`. Steep unchanged passes its expected marker; mutation applies to shallow geometry only. All direct-run streams saved in `.shokunin/game-dev-3d/corpus/live/runs/review-r16-20261013T050627684826Z/*-{floor,steep}.stdout` / `.stderr` (and first-run combined transcript in `direct-mutants.json`).
 
 **Limits:** One pair of authored angles and one 35° counterfactual on this host, not generic floor-angle boundary precision. No fresh same-step contact normal/flags assertion, persistent contact, downhill slide, gravity, rendering, exported builds or other engines. Timeout, signal and stderr probes have their existing narrow bounded meanings; no arbitrary process-tree guarantee or spontaneous crash claim. No implementation edits, push, merge, or judgment of other axes.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T050610908903Z/verdicts.json`
+> - `corpus/live/runs/20261013T050610910459Z/verdicts.json`
+> - `corpus/live/runs/20261013T050139735344Z/verdicts.json`
+> - `corpus/live/runs/review-r16-20261013T050627684826Z`
+> - `corpus/live/runs/review-r16-20261013T050627684826Z/floor-limit35`
+> - `corpus/live/runs/review-r16-20261013T050627684826Z/floor-limit35-control`
+> - `corpus/live/runs/review-r16-20261013T050627684826Z/shallow60`

@@ -7,9 +7,9 @@
 From repository root, independently ran:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
+python3 corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing
 # exit 0: seeded 32/32 (15 ordinary, 17 negatives); four optional, uncounted probes PASS; seeds_unchanged=true
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near
+python3 corpus/fixtures/run_battery.py --only camera3d_ortho,camera3d_ortho_outside,camera3d_ortho_near
 # exit 0: 3/3 (one ordinary, two negatives); seeds_unchanged=true
 ```
 
@@ -26,10 +26,19 @@ For the actual near point, the fixture checks its **literal** world coordinate `
 Private adversarial check: copied project fixture sources into ignored `corpus/live/r24-private-near-20261013T054459799305Z`, changed its sole `const NEAR_POINT := Vector3(2, 1, -0.5)` to `const NEAR_POINT := Vector3(2, 1, -0.75)`; copied mutant SHA-256 `51fb0732d5b3c84fd2e0f0da2e1f939ecbede2e36e17d75230ce7a20f631800f`. Ran:
 
 ```sh
-/usr/bin/godot --headless --path .shokunin/game-dev-3d/corpus/live/r24-private-near-20261013T054459799305Z --script res://camera3d_ortho.gd -- --near-point
+/usr/bin/godot --headless --path corpus/live/r24-private-near-20261013T054459799305Z --script res://camera3d_ortho.gd -- --near-point
 # exit 1; no NEGATIVE REJECTED marker; stderr: ERROR: camera3d_ortho: near gate failed depth=0.750 screen=(550.0, 225.0) frustum=false api_behind=true
 ```
 
 The error comes from independent literal coordinate/depth assertions, not Parse Error, SCRIPT ERROR, or ObjectDB leak. Raw private receipt `corpus/live/r24-private-near-20261013T054459799305Z/near-mutant-verdict.json` SHA-256 `d689943886c38efb7856aef6d65ce24a04a44d4e9b1cab840d5d4428bbe90e69`. Seeded source hash stayed `9097841e…` before/after. The mutant still projects to the same pixel and has the same frustum/API classifications; this control demonstrates literal-location sensitivity, **not** a changed near-gate classification after bypassing the guard.
 
 The first author subset run `20261013T054315293961Z` in LOG.md failed all three arms due to a duplicate `near_screen` parse declaration; author renamed the new local `near_point_screen`, and this independent run confirms the corrected version. One version of one headless Godot engine and sampled depths are covered. No exact near=1 boundary precision, rendered pixels, GPU culling, arbitrary camera transforms, other engines, or general `is_position_behind` semantics are proved. Assumptions/constants: camera origin/forward -Z, viewport 800×600, vertical size 8, near/far 1/10, points listed above, projection tolerance 0.0001; only the ignored private copy changed near-point Z to -0.75.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T054452120374Z/verdicts.json`
+> - `corpus/live/runs/20261013T054452120814Z/verdicts.json`
+> - `corpus/live/runs/20261013T054038500246Z/verdicts.json`
+> - `corpus/live/runs/20261013T054459799305Z/near-mutant-verdict.json`

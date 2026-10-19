@@ -1,6 +1,6 @@
 # Round 4: real Godot stdout/stderr attribution
 
-Run `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-stream-attribution` from repo root. Source: `corpus/fixtures/stream_attribution3d.gd`, `run_battery.py:classify` and `:probe_stream_attribution`. Named independent replay and baseline contrast: `corpus/lessons/r4-stream-review.md`; rerun for ignored fresh raw receipts in `corpus/live/runs/<timestamp>/stream-attribution-verdicts.json`.
+Run `python3 corpus/fixtures/run_battery.py --probe-stream-attribution` from repo root. Source: `corpus/fixtures/stream_attribution3d.gd`, `run_battery.py:classify` and `:probe_stream_attribution`. Named independent replay and baseline contrast: `corpus/lessons/r4-stream-review.md`; rerun for ignored fresh raw receipts in `corpus/live/runs/<timestamp>/stream-attribution-verdicts.json`.
 
 | Same script, exact stdout marker, exit 0 | stderr | classifier |
 |---|---|---|

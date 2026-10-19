@@ -30,3 +30,15 @@ It exits **1** with `ERROR: mesh3d_trimesh_hit: interior ray missed generated me
 An additional scratch check removed only `generated.backface_collision = true`: the unchanged explicit setup guard rejects this with exit 1 as `generated collision setup absent`, so **that run alone is not behavioral default-policy evidence**. In the same private copy, removing *only* the corresponding `or not generated.backface_collision` setup conjunct as well lets the default-valued generated shape pass setup; the same interior query then misses, exits 1 on `interior ray missed generated mesh` (script SHA-256 `b192da6954afd31f7fa8adada9c3c72caf3c9564c407f0ca9144470fa9e733fe`). Both changes are private scratch only. This independently corroborates the LOG's adverse initial default-shape misses; never describe the default as working.
 
 **Limits:** One planar triangle, two rays and one static generated shape under explicit two-sided flags, on headless Godot 4.7.2. No default backface guarantee, arbitrary mesh/topology support, moving-body collision, continuous motion, GPU winding, rasterization or pixels. Coverage improves over r33/r34's CPU-visible mesh data and indexed cross products because physics space is now queried against a mesh-derived collider. Depth remains bounded to this single configuration; calibration remains the existing exit/marker classifier and opt-in probes.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `run_battery.py` digests match historical git blobs, not live `sha256sum` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `mesh3d_trimesh_hit.gd` digest `bae284fe0caf…` still matches the live fixture. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T064029016188Z/verdicts.json`
+> - `corpus/live/runs/20261013T064046858962Z/verdicts.json`
+> - `corpus/live/runs/20261013T063353862680Z/verdicts.json`
+> - `corpus/live/runs/r35-private-trimesh-review/`
+> - `corpus/live/runs/r35-private-trimesh-review`

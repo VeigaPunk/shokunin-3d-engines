@@ -30,3 +30,16 @@ Actual exit **1**, Godot banner only on stdout (no PASS); stderr `ERROR: scene3d
 Source specificity: `source.add_child(child); child.owner = source` precede `PackedScene.pack`, `ResourceSaver.save` writes scratch `.tscn`; text must contain the generated source-dependent transform exactly once and `BoxVisual`. Negative replaces exactly this transform using `% int(CHILD_LOCAL.x)` and `+1`, **not** an independently authored corrupt text fixture. `ResourceLoader.load(..., "PackedScene", ResourceLoader.CACHE_MODE_IGNORE)` deliberately bypasses any stale saved-scene cache; `instantiate`, loaded `BoxVisual` and non-null mesh are checked, along with source child identity and its unchanged literal local position. Positive/negative compare loaded local/world to separate literal expectations and negative additionally rejects proximity to original world. `_cleanup` frees source/instance on successful branches and `_fail`, consistent with clean stderr in the mutant. The `source_intact`, `mesh_present` and world values in success markers are **hardcoded labels**, not formatted observed telemetry; claims rest on preceding checks. Mesh identity, mesh geometry dimensions, source mesh preservation beyond the source-child identity/non-null initial assignment, visual rendering and general serialization invariants are not proven.
 
 **Finding:** no acceptance blocker on the declared narrow coverage move: authored text-scene disk save/load with one intact mesh-bearing child and a loadable one-translation negative, independently replayed without regression. Depth/calibration remain unchanged. REA/static reversing and GPU rendering are irrelevant to this Godot runtime serialization check.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T051450833462Z/verdicts.json`
+> - `corpus/live/runs/20261013T051450833253Z/verdicts.json`
+> - `corpus/live/runs/20261013T051450833253Z/scratch/generated-scene3d.tscn`
+> - `corpus/live/runs/review-r18-positive-text/scratch/generated-scene3d.tscn`
+> - `corpus/live/runs/review-r18-same-project/positive-scene-before-edit.tscn`
+> - `corpus/live/runs/review-r18-same-project/scratch/generated-scene3d.tscn`
+> - `corpus/live/runs/review-r18-private-mutant/scratch/scene3d_disk.gd`
+> - `corpus/live/runs/review-r18-private-mutant/scratch`

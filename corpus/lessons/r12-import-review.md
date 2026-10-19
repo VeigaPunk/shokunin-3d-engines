@@ -27,3 +27,11 @@ Independent `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py` exite
 ## Verdict
 
 **Coverage improved** narrowly for Godot 4.7.2 headless asset import/load discrimination: the self-authored valid triangle and r11 tolerated-length control load, while precisely four changed magic bytes trigger attributable importer/load errors, no PackedScene and no imported `.scn`. **Depth unchanged; calibration unchanged** in the declared axes; fixing the stdout/stderr classifier repaired a failed runner, not a new broad calibrated policy. One proved axis improved and none harmed in the measured scope; **admit r12**, with the limitations above. No REA GLB parsing, rendered pixels, Unity/Unreal import or generic GLB-invalidity claim follows.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/r12-import-20261013T035505061535Z/verdicts.json`
+> - `corpus/live/runs/r12-import-20261013T035411717883Z/verdicts.json`
+> - `corpus/live/runs/20261013T035508839241Z/verdicts.json`

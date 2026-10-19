@@ -30,3 +30,16 @@ godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r46-callback-revi
 Private stdout SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e` contains only Godot banner/blank line. Private stderr SHA-256 `8986d7cfd81ef837a7d08c4ba97459325b2711a6fd23296ae973f05ab781c19e` starts `ERROR: pathfollow3d_callback: callback follower mismatch progress=3.999999 first=(1.22925, 1.451285, 0.614625) second=(2.722302, 1.499848, 1.361151) marker=(2.722302, 1.499848, 2.361151)`. It passed live setup and 60-count/delta-sum guards, then rejected **measured** progress/positions after callbacks, not an authored SPEED setup readback; no PASS marker, Parse Error, SCRIPT ERROR, or ObjectDB leak warning. The one speed mutation changes progress and positions together, so it does not isolate each positive assertion separately.
 
 Bounded verdict: **depth improved** beyond r45's manually updated SceneTree loop: this one live Node3D `_physics_process(delta)` advances and samples a PathFollow3D transform over exactly 60 bounded callbacks versus an intact stationary arm. **Coverage unchanged** (same Curve3D/Path3D/PathFollow3D family); **calibration unchanged** (existing classifier). This proves neither autonomous navigation nor AnimationPlayer control; it also does not prove collision, rendering/pixels/GPU, arbitrary frame rates, or Godot-version portability.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `README.md` and `run_battery.py` digests match historical git blobs, not live `sha256sum` `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `pathfollow3d_callback.gd` `991fdb9a59fe…` and `pathfollow3d_driver.gd` `5fefa9c7fb58…` still match the live fixtures. Campaign HEAD `dcac6fbd4384b81339998ec011e079ae8b484184` is not an object in this repo and is left unrewritten. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T075151189704Z/verdicts.json`
+> - `corpus/live/runs/20261013T075151189970Z/verdicts.json`
+> - `corpus/live/runs/20261013T074518561144Z/verdicts.json`
+> - `corpus/live/runs/r46-callback-review-private/speed4`
+> - `corpus/live/runs/r46-callback-review-private/speed4/mutation.stdout`
+> - `corpus/live/runs/r46-callback-review-private/speed4/mutation.stderr`

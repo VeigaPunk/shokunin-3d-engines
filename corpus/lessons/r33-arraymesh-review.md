@@ -50,3 +50,17 @@ Its stdout is only the Godot banner/blank line (SHA-256 `1fb0f12cefe41f881cb436e
 ## Scope and axis judgment
 
 **Coverage improved** from r32's absence of explicit procedural mesh construction to this one headless Godot 4.7.2 surface, vertex readback, and live instance/mesh AABB pair; **depth unchanged** (single three-vertex surface and one shifted control); **calibration unchanged** (same exit/marker classifier and probes). Accept only that bounded readback/API claim. The r33 declaration's “noncoplanar-in-XY” wording is best read as a planar XY triangle with noncollinear XY vertices; it is not noncoplanar 3D geometry. AABB expansion is engine behavior, not proof of triangle volume or pixels.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. The previous/current table is the r32→r33 snapshot, not today's files; those quoted SHA-256 values are preserved and match historical git blobs. Live `sha256sum`: `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1`; `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `mesh3d_array.gd` `8dcbf29d6739d43787f47a221645e6226853b369ec38a47d721df06e66bae6cd` still matches live. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T062810849525Z/verdicts.json`
+> - `corpus/live/runs/20261013T062835815584Z/verdicts.json`
+> - `corpus/live/runs/20261013T062352175533Z/verdicts.json`
+> - `corpus/live/runs/r33-private-arraymesh-review/`
+> - `corpus/live/runs/r33-private-arraymesh-review`
+> - `corpus/live/runs/r33-private-arraymesh-review/mutant.stdout`
+> - `corpus/live/runs/r33-private-arraymesh-review/mutant.stderr`

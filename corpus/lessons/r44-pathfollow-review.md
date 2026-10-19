@@ -36,3 +36,19 @@ godot --headless --path .shokunin/game-dev-3d/corpus/live/runs/r44-pathfollow-re
 stdout SHA-256 `1fb0f12cefe41f881cb436e6731d981084b95f8db9b1d6f3e25ac930f360a32e` likewise contains only Godot banner/blank line; stderr SHA-256 `dfbe61e8f53b4efb0b6fc994cb546ab4580f092338bd601ca822ef13197c4be3` begins `ERROR: pathfollow3d_curve: child marker follow mismatch first=(0.917532, 1.11862, 2.458766) second=(3.082469, 1.118619, 3.541234)`. Both private controls have no Parse Error, SCRIPT ERROR, ObjectDB leak warning or PASS marker. This second control reaches and rejects the measured child-marker global-position predicate, rather than a setup literal; it does not independently isolate first versus second marker checks.
 
 Bounded verdict: **depth improved** beyond r43 direct baked-curve sampling for one live headless scene-tree follower and offset child at explicitly selected progress values, with intact straight-path control; coverage and calibration unchanged. Neither direct progress assignment nor a single-frame setup shows timed movement, navigation agents, collision, rendering, pixels, GPU behavior or portability across Godot versions.
+
+> **Correction note (r106, 2026-10-18, SEAT-42).** Live-tree digest check. Quoted SHA-256 values above are the 2026-10-13 review record and are not rewritten; quoted `README.md` and `run_battery.py` digests match historical git blobs, not live `sha256sum` `corpus/fixtures/README.md` `347e0d1e5e4efca9c6f8b93440370352278bb30f3c1f62cee19edd3704619cb1` and `corpus/fixtures/run_battery.py` `f456bd00a1f7cc6f68d0dd64ff0994d354a7568ef5f34d0cb044209dab1ef69f`. `pathfollow3d_curve.gd` digest `1a7259fbc3b8…` still matches the live fixture. Campaign HEAD `c8ca2f11e2f290df81da1c0922dca9dc4bc67fa8` is not an object in this repo and is left unrewritten. Absent `corpus/live/runs/` receipts and private mutant copies were not re-hashed.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T073855191130Z/verdicts.json`
+> - `corpus/live/runs/20261013T073855191088Z/verdicts.json`
+> - `corpus/live/runs/20261013T073219874871Z/verdicts.json`
+> - `corpus/live/runs/r44-pathfollow-review-private/bent-middle-y3`
+> - `corpus/live/runs/r44-pathfollow-review-private/bent-middle-y3/mutation.stdout`
+> - `corpus/live/runs/r44-pathfollow-review-private/bent-middle-y3/mutation.stderr`
+> - `corpus/live/runs/r44-pathfollow-review-private/marker-z2`
+> - `corpus/live/runs/r44-pathfollow-review-private/marker-z2/mutation.stdout`
+> - `corpus/live/runs/r44-pathfollow-review-private/marker-z2/mutation.stderr`

@@ -1,6 +1,6 @@
 # Round 8 — Camera3D near-plane classification under rotation
 
-Run `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --only camera3d_depth,camera3d_depth_far,camera3d_depth_near` from repository root. Source: `corpus/fixtures/camera3d_depth.gd`, exact signatures in `run_battery.py:CASES`, independent reproduction/scratch sensitivity `corpus/lessons/r8-near-review.md`. Ignored raw receipts regenerate via command.
+Run `python3 corpus/fixtures/run_battery.py --only camera3d_depth,camera3d_depth_far,camera3d_depth_near` from repository root. Source: `corpus/fixtures/camera3d_depth.gd`, exact signatures in `corpus/fixtures/run_battery.py:CASES`, independent reproduction/scratch sensitivity `corpus/lessons/r8-near-review.md`. Ignored raw receipts regenerate via command.
 
 | Local point, rotated Camera3D at (10,0,0), near1/far10 | World | Forward depth | Screen | Frustum | API `is_position_behind` | Exit |
 |---|---|---:|---|---|---|---:|

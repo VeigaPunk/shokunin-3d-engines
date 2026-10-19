@@ -23,3 +23,15 @@ One bounded alternative kept the *same headless dummy driver*: `probe_rid.gd` SH
 Exact command: `python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-tree-timeout --probe-crash-exit --probe-stream-attribution --probe-failing`. Exit 0, `PASS battery`, **51/51** (24 ordinary, 27 negative) plus **four PASS opt-in probes** (`tree-timeout`, `crash-exit`, `stream-attribution`, `failing` mutation). Receipt: `/home/vgpnk/Projects/prymeagnt/game-dev-3d/.shokunin/game-dev-3d/corpus/live/runs/20261013T065354780891Z/verdicts.json`; receipt SHA-256 `d9b6534f78821ba51e86fc6c7b1282e71ef851fdae14b4c1740e3b5b0e0fd8b5`; `seeds_unchanged=true`, Godot 4.7.2.stable.arch_linux.ed1daf0bf. Supplementary probe JSON files in that receipt directory: `tree-timeout-verdicts.json`, `crash-exit-verdicts.json`, `stream-attribution-verdicts.json`, `mutation-verdicts.json`. The registered case count remains 51 and there is no registered round-37 MultiMesh case. This establishes no committed baseline regression in this run, not new MultiMesh coverage.
 
 At review before writing this file, `git status --short` showed only ` M .shokunin/game-dev-3d/LOG.md` (author's round-37 declaration/adverse note); no tracked MultiMesh fixture and no unexpected tracked source. Reviewer changed no implementation, LOG, SCORECARD, or report and did not commit/push/merge. The expected sole new tracked reviewer path is this lesson. Since headless returns dummy data despite correct count, mesh, and attachment, a transform mutation cannot provide the required measured headless readback rejection. Next attempt would need a separate, explicitly declared driver-specific claim or a genuinely headless API with measured output, not relabel graphical results as headless.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/review-r37-independent/scratch`
+> - `corpus/live/runs/review-r37-independent`
+> - `corpus/live/runs/20261013T065354780891Z/verdicts.json`
+> - `corpus/live/runs/20261013T065354780891Z/tree-timeout-verdicts.json`
+> - `corpus/live/runs/20261013T065354780891Z/crash-exit-verdicts.json`
+> - `corpus/live/runs/20261013T065354780891Z/stream-attribution-verdicts.json`
+> - `corpus/live/runs/20261013T065354780891Z/mutation-verdicts.json`

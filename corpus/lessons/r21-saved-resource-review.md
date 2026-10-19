@@ -29,3 +29,11 @@ Source `corpus/fixtures/scene3d_resource_disk.gd` constructs owned Node3D/MeshIn
 Private copied-only source mutation changed exactly `const INITIAL_SIZE := Vector3.ONE` to `const INITIAL_SIZE := Vector3(1.5, 1, 1)` in both mutant scratch projects. Direct `godot --headless --path <scratch> --script res://scene3d_resource_disk.gd -- [--shared]` exits **1 in both arms**, with stderr `ERROR: scene3d_resource_disk: initial mesh size mismatch first=(1.5, 1.0, 1.0) second=(1.5, 1.0, 1.0) loaded=(1.5, 1.0, 1.0)` and no PASS/NEGATIVE marker, Parse Error, SCRIPT ERROR, ObjectDB or RID/geometry leak warning. Separated stdout/stderr files are in `review-r21-independent/`. Literal readback detects changed initial dimension rather than re-deriving its expected value.
 
 **Adverse limits:** The first author attempt (`LOG.md`, `20261013T053120219108Z`) mistakenly required literal false in `.tscn`; Godot actually omits the default and the corrected check is now independently confirmed. Marker dimensions and identity labels are hardcoded after assertions, not raw telemetry. Evidence concerns one saved BoxMesh scene in this headless Godot build, not original separately spawned-source mutation, arbitrary scene/resource formats, rendering/GPU output, other engine versions or general crash/process-tree coverage. Depth improves relative to in-memory r20 and the untested-resource-identity disk r18; coverage and calibration have no demonstrated new improvement or harm.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T053240636367Z/verdicts.json`
+> - `corpus/live/runs/20261013T053240636908Z/verdicts.json`
+> - `corpus/live/runs/review-r21-independent/{local`

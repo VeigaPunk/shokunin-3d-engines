@@ -3,14 +3,14 @@
 Reviewer: `game-dev-3d-r4-stream-review` (did not implement r4). Independently read the standing mission, LOG r4 before-state, fixture README, `stream_attribution3d.gd`, and `run_battery.py`, then executed from the repository root:
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-stream-attribution --probe-crash-exit --probe-failing
+python3 corpus/fixtures/run_battery.py
+python3 corpus/fixtures/run_battery.py --probe-stream-attribution --probe-crash-exit --probe-failing
 ```
 
 Both commands returned 0 using `/usr/bin/godot` 4.7.2.stable.arch_linux.ed1daf0bf. Raw ignored receipts (rerun commands to reproduce):
 
-- Default: `.shokunin/game-dev-3d/corpus/live/runs/20261013T031350433906Z/verdicts.json`
-- Opt-in: `.shokunin/game-dev-3d/corpus/live/runs/20261013T031350434030Z/verdicts.json`, `stream-attribution-verdicts.json`, `crash-exit-verdicts.json`, `mutation-verdicts.json` in that same directory.
+- Default: `corpus/live/runs/20261013T031350433906Z/verdicts.json`
+- Opt-in: `corpus/live/runs/20261013T031350434030Z/verdicts.json`, `stream-attribution-verdicts.json`, `crash-exit-verdicts.json`, `mutation-verdicts.json` in that same directory.
 
 ## Direct receipt checks
 
@@ -22,3 +22,13 @@ Both commands returned 0 using `/usr/bin/godot` 4.7.2.stable.arch_linux.ed1daf0b
 - `seeds_unchanged=true` on both battery receipts and the mutation receipt. Their before/after maps agree across both runs: all 14 seed file SHA-256 digests identical.
 
 **Verdict:** no observed default or retained-probe regression; the declared stdout/stderr attribution contrast is independently reproduced. Calibration improves for this one Node3D fixture on this host. Depth and coverage of the seeded 12-case battery remain unchanged. No inference about rendering, other engines, general logging policy, process-tree cleanup, or spontaneous crashes is supported. The new rule rejects *all* nonempty stderr lines, including benign engine output if encountered in future fixtures; that is a policy choice, not evidence that all stderr is an error.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T031350433906Z/verdicts.json`
+> - `corpus/live/runs/20261013T031350434030Z/verdicts.json`
+> - `corpus/live/runs/20261013T031350434030Z/stream-attribution-verdicts.json`
+> - `corpus/live/runs/20261013T031350434030Z/crash-exit-verdicts.json`
+> - `corpus/live/runs/20261013T031350434030Z/mutation-verdicts.json`

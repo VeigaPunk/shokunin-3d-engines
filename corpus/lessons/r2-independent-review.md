@@ -7,11 +7,11 @@ Reviewer: `game-dev-3d-r2-review-retry` (not the r1 author). Timestamp: 2026-10-
 From repo root, with installed Godot `/usr/bin/godot` (`4.7.2.stable.arch_linux.ed1daf0bf`):
 
 ```sh
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py
-python3 .shokunin/game-dev-3d/corpus/fixtures/run_battery.py --probe-failing
+python3 corpus/fixtures/run_battery.py
+python3 corpus/fixtures/run_battery.py --probe-failing
 ```
 
-First invocation started 2026-10-13T03:05:46.431758+00:00 and returned exit **0**, duration 9.720 s; receipt `.shokunin/game-dev-3d/corpus/live/runs/20261013T030546459582Z/verdicts.json` (`started_utc=20261013T030546459582Z`). Second started 2026-10-13T03:06:02.839920+00:00, returned exit **0**, duration 10.935 s; receipts `.shokunin/game-dev-3d/corpus/live/runs/20261013T030602866163Z/verdicts.json` and `.shokunin/game-dev-3d/corpus/live/runs/20261013T030602866163Z/mutation-verdicts.json` (`started_utc=20261013T030602866163Z`). The receipts include the full command, separate `stdout` and `stderr` lists, actual/expected exit, exact marker and verdict for each case. Both battery payloads report PASS, 12/12 passed, **6 ordinary exit-0 and 6 intended negative exit-2**; all `error` fields null and reasons empty.
+First invocation started 2026-10-13T03:05:46.431758+00:00 and returned exit **0**, duration 9.720 s; receipt `corpus/live/runs/20261013T030546459582Z/verdicts.json` (`started_utc=20261013T030546459582Z`). Second started 2026-10-13T03:06:02.839920+00:00, returned exit **0**, duration 10.935 s; receipts `corpus/live/runs/20261013T030602866163Z/verdicts.json` and `corpus/live/runs/20261013T030602866163Z/mutation-verdicts.json` (`started_utc=20261013T030602866163Z`). The receipts include the full command, separate `stdout` and `stderr` lists, actual/expected exit, exact marker and verdict for each case. Both battery payloads report PASS, 12/12 passed, **6 ordinary exit-0 and 6 intended negative exit-2**; all `error` fields null and reasons empty.
 
 ## Independent receipt inspection
 
@@ -41,3 +41,11 @@ Fresh source SHA-256 digest map has **12 files**, exactly matches both replay `s
 The r1 claim of hand-derived contact plane and first-contact tick checks is consistent with `corpus/fixtures/body3d_slide.gd`: `BOX_SIZE=(4,4,4)` and `RUNNER_SIZE=(1,1,1)` yield Z plane 4/2+1/2=2.5; start Z 6, speed 10 and 60 Hz yield (6−2.5)/(10/60)=21 ticks. Source independently stores `EXPECTED_PLANE_Z=2.5`, `EXPECTED_CONTACT_TICK=21`, checks measured `runner.position.z` against plane with epsilon 0.001, checks recorded first contact tick, then prints marker. The scratch depth 6 instead predicts plane 3.5 and emitted diagnostic confirms the assertion rejects it. No contradicted r1 claim found in this cross-check.
 
 Limits: reviewed receipt streams and code, not external GPU rendering, export, Unity/Unreal/three.js, process-tree timeout/crash injection, or all possible mutations. Runner's classifier requires exact marker as a line but does **not** prohibit unrelated non-error stdout; this review verifies presence once, not an exclusive-stdout promise. The prior r1 `adversarial-controls.json` is not itself independently rerun here. The Godot run is host/version-specific; physics results could differ on another version or platform.
+
+<!-- r106-seat45-receipt-note -->
+
+> **Non-resolvable receipt note (r106, 2026-10-18, SEAT-45).** Re-checked 2026-10-18: each path below is a concrete `corpus/live/runs` receipt cited in this lesson. The cited path is absent (`test -e` failed) and no durable copy exists under `reports/` (no receipt artifact whose path or `started_utc` is that run id; a prose mention is not a copy). Quoted receipt SHA-256 values on these lines do not match any tracked file or any `reports/` receipt artifact. `corpus/.gitignore` ignores `live/`, so these paths were never tracked. Historical sentences above are unchanged. Register: `reports/round-106/consistency/receipts.md`.
+>
+> - `corpus/live/runs/20261013T030546459582Z/verdicts.json`
+> - `corpus/live/runs/20261013T030602866163Z/verdicts.json`
+> - `corpus/live/runs/20261013T030602866163Z/mutation-verdicts.json`
