@@ -277,12 +277,17 @@ Bounded: Godot 4.7.2.stable.arch_linux.ed1daf0bf headless, GodotPhysics/Jolt/Dum
 | Capability | What it can now do | Evidence pointer | First-working round |
 |---|---|---|---|
 | — none yet — | | | |
+| fixture-battery-targeted | run named Godot 4.7.2 headless battery rows (pinned Node v24.21.0) with exact-marker, exit-code and seed-integrity verdicts | `PATH="/home/vgpnk/.local/share/fnm/node-versions/v24.21.0/installation/bin:$PATH" python3 corpus/fixtures/run_battery.py --only slope3d_floor,slope3d_steep,slope3d_bound_naive,slope3d_bound_in,slope3d_bound_edge_in,slope3d_bound_edge_out,slope3d_bound_out` → `totals: cases=7 pass=7 fail=0`; `reports/round-108/battery/slope-only.verdicts.json` (the full run is 353/355, two pre-existing host-drift rows, `reports/round-108/battery/README.md`) | r108 |
+| unreal-mcp-gate | re-verify the vendored unreal-mcp subtree: manifest identity, fresh-clone set-equality, 13-card label census, pointer sweep; fail-closed | `GATE_WORKDIR=$XDG_RUNTIME_DIR/r108gate bash corpus/knowledge/unreal-mcp/gate/run_gate.sh` → `GATE RESULT: PASS (checks failed: 0)` rc 0; `reports/round-108/battery/gate-run.txt` (first passing r102; first recorded in this table r108) | r108 |
+| source-registry | keep a contract-v1 tiered source registry whose every census command runs clean | `bash reports/round-108/census.sh` (the frozen contract v1 census, verbatim) → 35 rows, 0 malformed, A=32 B=2 C=1, mined=5 queued=28 rejected=2, no duplicate/enum/inflation/missing-path output; `corpus/SOURCES.md` | r108 |
 
 Rows enter only through a round that demonstrates the capability running (`AXES.md` §Capabilities); none enter through this rollout.
 
 ## Saturation
 
 The lane's saturation line and stagnation window N are to be declared by the lane on its next round per `AXES.md` §The stagnation nudge; not asserted by this conformance change.
+
+Saturation line: 8/10 on every owned axis (the rubric's "8" anchors in `## Axes — scored (r108)` below; 10 needs executable evidence on surfaces this host cannot run). Stagnation window N = 3 rounds without a capability entering the table above. Declared r108 (2026-10-19).
 
 ## Round 101 verdict — 2026-10-18
 
@@ -343,3 +348,55 @@ Non-author: three independent P/C reviews + lesson verify/critic + row F review/
 | calibration | **improved** (bounded) | Receipt-discipline notes landed: non-resolvable `corpus/live/runs` receipts marked with dated notes (SEAT-45 pattern, `consistency/receipts.md`), battery totals paired with their environment state (`consistency/two-state.md`); jolt curiosity investigated (`jolt/investigate.md`). Bound: consistency chunk audits and the jolt ruling did not land (rate limit). |
 
 Round admits as ADMIT-with-findings: no axis harmed, invariants green at close (gate PASS, manifest 12/12 rc=0, fixtures 0 diff, `run_battery.py` `f456bd00…` stable, protected ledgers untouched). Provider substitutions named per the stop rule: xai credits exhausted at 47/128 → cursor/grok-4.7-xhigh-fast refire → Cursor Pro rate limit (operator-owned recovery). Work `<WORK>`; report-last follows.
+
+## Axes — scored (r108, 2026-10-19)
+
+Appended; the mint table above (`unscored`) is kept as history. Rubric (anchors only — use the highest anchor fully met, never interpolate; a row count alone is never a score). **Provisional retrospective baseline:** the rubric was written in the round that first applies it, so these scores are self-assessment, not an independently calibrated scale; the rubric is frozen from r108 and any later change is a new dated block, never an edit here.
+
+- **depth** — 0: no independently replayed mechanism. 5: one source-backed measured behavior with a falsifier and non-author replay. 8: multiple measured mechanisms with falsifiers, re-derivation and explicit limits. 10: every core and frontier behavior in the coverage map measured across every declared environment.
+- **coverage** — 0: no inventory. 5: ≥5 engine/artifact families evidenced, runtime vs static status distinguished (`corpus/knowledge/engines.md`). 8: every PROVINCE surface placed as Core/Frontier/Adjacent with evidence or an explicit gap (`corpus/README.md` `## Coverage map`, `PROVINCE.md`). 10: every PROVINCE surface has executable evidence on this host (no surface left frontier).
+- **calibration** — 0: no scored rubric or admission bar. 5: evidence-backed scores and named misses. 8: lesson-linked admission criteria with rechecks, saturation line and window declared, and a capability demonstrated in-round. 10: every historical reject and unknown is ledgered accurately and every admission is independently adjudicated.
+
+| axis | score | evidence / counting command | last change |
+|---|---|---|---|
+| depth | 8/10 | base 8 (r99/r100 verified mechanisms: `reports/round-99/r99-verifier.md`, `reports/round-100/r100-adjudicator.md`); r108 keeps 8 — the floor-angle boundary adds a mechanism, the 10 anchor is not reachable on this host. `bash reports/round-108/measure.sh <commit>` § C3 | r108 (scored) |
+| coverage | 8/10 | base 5 (`git show 7c4e589:corpus/knowledge/engines.md \| grep -cE '^\| (Godot\|Unity\|Unreal Engine\|three\.js\|Blender)'` → 5); r108 → 8: 27 surfaces placed Core/Frontier/Adjacent with pointers, incl. the vendored cannon-es and pybullet runtimes (`corpus/README.md` `## Coverage map`, `PROVINCE.md` `## Core/Frontier/Adjacent`). `bash reports/round-108/measure.sh <commit>` § C2 | r108 |
+| calibration | 8/10 | base 0 (no rubric, no `corpus/QUALITY.md`, no saturation line, capabilities `— none yet —`); r108 → 8: `corpus/QUALITY.md` Q1–Q18 each citing a mined lesson, 22 mistake classes in `corpus/lessons/round-108.md`, saturation line + N declared, and C1's own in-round capability demonstration `unreal-mcp-gate` (the other two capability rows are C2's and C3's outputs and are shared evidence, not C1's). `bash reports/round-108/measure.sh <commit>` § C1 | r108 |
+
+## Round 90 verdict — retroactive record written r108 (not a pass)
+
+Overall: **REJECT** (`reports/round-90/r90-verifier.md:101-107`, on `191f131`); repair `6420dc7` was held for adjudication (`reports/round-90/r90-repair.md:77-82`) and no r90 adjudicator exists. Per-axis attribution is not in the record and is not inferred: depth / coverage / calibration **unassigned**. Lesson: `corpus/lessons/round-108.md` M1.
+
+## Round 91 verdict — retroactive record written r108 (not a pass)
+
+Overall: **unverified** — dead-seat salvage, author-only 235/235 (`reports/round-91/r91-author.md:68-80`; commit `b6ba234`); no verifier or adjudicator in the tree. depth / coverage / calibration **unverified**. Lesson: M2.
+
+## Round 92 verdict — retroactive block written r108 (replaces nothing)
+
+The r92 record above is an inline row in the wrong column shape (`| r92 | improved | improved | improved | … |`, line 213). Its adjudicator records **ADMIT-corr** (`reports/round-92/r92-adjudicator.md:3`): 23 rows (235→258), verifier FAILED pre-fold, fold re-anchored timing to the iteration boundary + settled ticks, VERIFIED on folded bytes. Per-axis verdicts as the inline row states them: depth / coverage / calibration **improved**. Lesson: M3.
+
+## Round 99 verdict — retroactive record written r108 (not a fresh pass)
+
+Overall: **ADMIT-with-findings** on `f1ff626` (`reports/round-99/r99-adjudicator.md:3-8,26-28`; adjudication commit `c28783a`); per-axis attribution not recorded — **unassigned**. Lesson: M6.
+
+## Round 100 verdict — retroactive record written r108 (not a fresh pass)
+
+Overall: **ADMIT-with-findings on successor `523c943`**, not on `8183191` alone (`reports/round-100/r100-adjudicator.md:3-18,34-36`; adjudication commit `78fa0f6`); per-axis attribution not recorded — **unassigned**.
+
+## Correction notes (r108, 2026-10-19)
+
+- r104 and r106 blocks above end `Work <WORK>` (lines 330 and 350 after this round's capability rows). The landed work commits are `77811e1` (r104) and `4755b0e` (r106). Their report-last commits name `work 2ca87e8` (`546970e`) and `work 26cd9f2` (`3ea02ff`), which exist but are not ancestors of HEAD (`git merge-base --is-ancestor 2ca87e8 HEAD; echo $?` → 1). Lesson M20/M21; criterion Q16.
+- r81 and r82 blocks are dated 2026-11-01, after the round they record (lines 109, 119). The dates are kept; read them as recording errors. Lesson M17.
+- The mint-table depth row (line 8) carries more cells than its header: an `r71` cell mid-row and `r70` as the final `last change` cell. Kept as written; the scored table above supersedes it.
+
+## Round 108 verdict — 2026-10-19 (kaika W2a)
+
+Claims (each measured with `bash reports/round-108/measure.sh 7c4e589` → `… <r108 commit>`; the commit hash is recorded in the fleet report `.ufo/reports/round-108/game-dev-3d.md`, since a file cannot carry its own commit hash):
+
+| axis | claim | before → after | verdict (self, pending non-author) |
+|---|---|---|---|
+| calibration | C1: admission bar + mined mistakes + scored self-assessment | QUALITY criteria 0→18; mistake rows 0→22 (22 captured by a Q); scored axis rows 0→3; Saturation line 0→1; verdict blocks 30→35; capabilities 0→3 (C1-local: `unreal-mcp-gate`; `source-registry` is C2's and `fixture-battery-targeted` C3's — shared evidence); score 0→8 (provisional) | **improved** |
+| coverage | C2 (capability `source-registry`): tiered registry + coverage map + Core/Frontier/Adjacent | SOURCES rows 0→35 (A=32 B=2 C=1; queued 28, mined 5, rejected 2), census clean; README map/Frontier headings 0→2, map surfaces 0→27; PROVINCE headings 0→3; score 5→8 (provisional) | **improved** |
+| depth | C3: floor/wall boundary at `floor_max_angle=45°` measured adjacently | CASES 350→355; slope3d rows 4→9; boundary bracket 30°/60° → 45.57°/45.58° (effective 45.573°, GodotPhysics3D battery + Jolt scan); SKILL error row 0→1; score 8→8 | **improved** (within anchor) |
+
+Expansion (not a claim): 2 knowledge entries admitted through Q1–Q18 citing mined rows (`corpus/knowledge/godot-floor-angle-threshold.md`, `godot-headless-not-render.md`). Harm check: fixtures — only `slope3d_boundary.gd` added and `run_battery.py` +10 lines; the 350 prior CASES unchanged; the full pinned run is 353/355 with `r95_bullet_shm`/`r95_bullet_solver` failing identically on the base commit's own runner (host drift, lesson M5; `reports/round-108/battery/README.md`). Gate PASS. Provider exhaustion named: in the first batch 4 of 5 executor seats died on a provider rate limit and the fifth (fixture) stalled and was stopped; all 5 fresh re-dispatches died at provider capacity within a minute; a third dispatch of the four non-fixture seats landed. The L1 wrote and ran the fixture seat itself.

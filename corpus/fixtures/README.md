@@ -1072,3 +1072,13 @@ math, transform composition, scene-graph signals and synthetic input. It proves
 nothing about rendering or GPU behaviour, exported builds, other engines, editor
 tooling, multiplayer, or navigation baking. See
 `corpus/lessons/r1-headless-verification.md`.
+
+## Count note (r108, 2026-10-19)
+
+The "235 registered cases (189 ordinary and 46 negative controls)" sentence
+near the top is a historical count, kept as written. Measured at r108:
+`grep -cE '^\s+\("' corpus/fixtures/run_battery.py` → 355; the r108 full pinned
+run reports `ordinary=294 negative_controls=61`
+(`reports/round-108/battery/full-run.stdout.txt`). r108 added the five
+`slope3d_bound_*` rows (`slope3d_boundary.gd`, floor/wall boundary at a 45°
+limit). Re-run the count; never copy it (`corpus/QUALITY.md` Q17).

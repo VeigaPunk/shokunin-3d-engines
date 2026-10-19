@@ -1498,3 +1498,47 @@ corpus/knowledge/seed.md).
   or wait); hyper-lane directive from the operator (use hyper/deepseek-v4.1
   for one of the remaining deepseek rounds) recorded for r110 or iteration 2.
 - L0: Epic link / docker image / lutris / P-C ruling — unchanged.
+
+- ROUND 108 (2026-10-19, kaika W2a; steered — r107 aborted at 7c4e589): three
+  claims, one per owned axis. C1 calibration: corpus/QUALITY.md lands (Q1-Q18,
+  each citing a mined lesson, each with a check) from 22 mistake classes in
+  corpus/lessons/round-108.md (M1-M22, all captured by a Q); SCORECARD gains a
+  0/5/8/10 anchor rubric and scores (depth 8, coverage 5->8, calibration 0->8),
+  saturation line 8 + N=3, three in-round capability rows, retroactive r90 REJECT
+  / r91 unverified / r92 ADMIT-corr / r99 / r100 blocks and <WORK>/future-date
+  correction notes. C2 coverage (capability source-registry): corpus/SOURCES.md,
+  35 rows opened this round (A=32 B=2 C=1; 2 rejected with flips; 5 mined), census
+  clean; corpus/README.md coverage map (27 surfaces) + Frontier; PROVINCE.md
+  Core/Frontier/Adjacent + dead-root correction note. C3 depth: new seed
+  slope3d_boundary.gd + 5 CASES rows; Godot 4.7.2 floor/wall flip at a 45 deg
+  limit sits between 45.57 and 45.58 deg (source FLOOR_ANGLE_THRESHOLD 0.01 rad ->
+  45.573), same under GodotPhysics3D and Jolt (scratch scan). Two knowledge
+  entries admitted through the new bar (floor threshold; headless is not render).
+  Evidence: reports/round-108/ (before.md, measure.sh, census.sh, battery/,
+  sources/).
+- RE-VERIFICATION: full pinned battery 355 cases, 353 PASS, seeds_unchanged=true;
+  r95_bullet_shm and r95_bullet_solver FAIL on the child '#'-line count d (16 vs
+  8, 52 vs 44, 5 vs 4) and fail identically on the base commit's own runner and
+  seeds -> host drift of the M5 class, not this round. unreal-mcp gate PASS
+  (POINTERS=103 UNRESOLVED=0). Prior 350 CASES definitions unchanged vs r105.
+- LAWS: an engine setting is not its boundary — read the source for epsilons
+  before authoring a boundary pair (SKILL nominal-threshold read). A pinned
+  diagnostic count can drift with host state while the bytes stay identical:
+  replay the base commit's own runner before blaming the round. A report-last
+  'work' hash must be an ancestor of the report-last commit.
+- PROCESS: provider exhaustion — executor seats died on rate limit (4/5, fifth
+  stalled), then 5/5 at capacity on re-dispatch, then 4/4 landed; the L1 wrote the
+  fixture seat. cd is broken in this harness (orchestrator notice): every command
+  used the tool cwd or absolute paths; nothing written outside the worktree.
+- REVIEW (lane L2, non-author of the artifacts): reviewer replayed the five
+  slope3d_bound rows + two slope3d_angle rows 7/7 seeds_unchanged=true (receipt
+  reports/round-108/battery/replay-nonauthor-*.verdicts.json), re-opened S004,
+  S005, S011, S012, S027 (quotes verbatim), census clean; mutation tester killed
+  5/5 mutants of slope3d_boundary.gd in scratch; critic folds landed (cannon-es
+  and pybullet added to the coverage map, two teaches cells narrowed to their
+  quotes, scores labelled provisional, C1-local capability named, fixtures
+  README count note appended). Seat outputs: reports/round-108/seats/.
+- ROUTED (r109+): r95 SHM d-count marker needs an envelope or removal (operator
+  or lane ruling; fixture code is pinned); Jolt boundary rows need a
+  per-backend project to enter the battery; freeze-and-test the r108 rubric on
+  the next round's decisions before treating scores as calibrated.

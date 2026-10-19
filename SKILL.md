@@ -9,6 +9,8 @@ Craft for one province: **3D game production verified by executable headless
 fixtures**, across Godot / three.js / Unity / Unreal. The domain boundary,
 the engine census and the standing refusals live in `PROVINCE.md` and
 `corpus/knowledge/engines.md`; this file carries the decision procedures.
+Where to learn more and how entries are admitted: `corpus/SOURCES.md` (tiered
+registry, study paths) and `corpus/QUALITY.md` (admission bar, criteria Q1–Q18).
 
 Every rule below cites an artifact that exists in this repo, and every command
 is one that was actually run — the round and the observed output are named in
@@ -75,6 +77,7 @@ the search key.
 | **green-gate-overread** | a passing gate read as closing a defect it cannot see by construction — CHECK 3 enforces one *allowed* token per card and a name-set comparison; it cannot judge whether a `static-only` card rests on a static check that ran | state what the gate does not cover in the same breath as the PASS | `reports/round-103/skill-table-review.md` §2 row C; §3 below |
 | **binary-strings-citation** | a claim resting on "line N of the binary" | re-derive with the search command; a CLI upgrade invalidates every such line number | `corpus/knowledge/unreal-mcp/adaptation-kimi.md` §5; row D above |
 | **command-does-not-reproduce-its-printed-rc** | a cell whose command, copy-pasted, returns a different code than the cell prints — the dot-less `jq` form exits 3 where the cell said 0 | run the cell's own command from the stated cwd before landing the row | `reports/round-103/skill-table-review.md` §2 row B |
+| **nominal-threshold read** | reading an engine setting as the exact boundary it governs — the W1 plan predicted a 45.1° slope is a wall at `floor_max_angle=45°`; Godot adds `FLOOR_ANGLE_THRESHOLD` 0.01 rad, so the flip is at 45.573° (floor at 45.57°, wall at 45.58°, GodotPhysics3D and Jolt) | read the engine source for epsilons before authoring a boundary pair; bracket the *effective* boundary within the measured resolution | `corpus/knowledge/godot-floor-angle-threshold.md`; `reports/round-108/battery/boundary-scan.txt` |
 
 ---
 
@@ -191,6 +194,12 @@ worktree at lane HEAD `1eaa568`; the exact `sha256sum` command and output are in
 | `corpus/fixtures/phys3d_joints.gd` | row F's fixture seed; read-only | `80bf44c53255a0a33b2282ca4e6278d42d82be4f616252925e128c928eca81e6` |
 | `reports/round-104/physics/author.md` | row F evidence, §§3.1 and 7 | `4b3cbbf04ec35960b5d4a4362d596eb4c3c3ab291a9e2ea6c32749a637f02b81` |
 | `reports/round-104/physics/author-runs-final/20261018T193509710404Z/verdicts.json` | row F bounded one-row receipt | `17b037d5154b7cf51a55df197a142f09ce3ea0fb9b4471f75a74a028f508397c` |
+
+**r108 stamp note (2026-10-19).** `corpus/fixtures/run_battery.py` now hashes
+`2a01b91fbd09e21cdbd46e313e88085fa5bbc6a25da0f163da1bbb72ada5ac27`: five CASES
+tuples (`slope3d_bound_*`) were inserted; the 350 prior tuples are unchanged
+(`reports/round-108/battery/README.md` §Runs 3). The row above records the r105
+stamp and is kept as history.
 
 **Scope of this file's authority.** Landing this table satisfies the *artifact*
 half of `SHONEN.md` box 1. It does **not** close box 1: the box is a promotion

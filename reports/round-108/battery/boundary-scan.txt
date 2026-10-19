@@ -1,0 +1,25 @@
+# r108 floor-angle boundary scan — godot 4.7.2.stable.arch_linux.ed1daf0bf, 2026-10-19T22:03:37Z
+# fixture sha256 6f5af99d8373055dab918bca54d7b769cfc5a9ff8cddd9a9dcd5ef9c76103e2d
+## project g3d-r108-scratch : engine=DEFAULT
+tilt=45.0 rc=0 :: PASS slope3d_boundary tilt=45.000 normal_deg=45.0000 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.1 rc=0 :: PASS slope3d_boundary tilt=45.100 normal_deg=45.1000 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.5 rc=0 :: PASS slope3d_boundary tilt=45.500 normal_deg=45.5000 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.55 rc=0 :: PASS slope3d_boundary tilt=45.550 normal_deg=45.5500 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.56 rc=0 :: PASS slope3d_boundary tilt=45.560 normal_deg=45.5600 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.57 rc=0 :: PASS slope3d_boundary tilt=45.570 normal_deg=45.5700 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.58 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=45.580 normal_deg=45.5800 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+tilt=45.6 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=45.600 normal_deg=45.6000 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+tilt=45.65 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=45.650 normal_deg=45.6500 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+tilt=46.0 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=46.000 normal_deg=46.0000 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+## project g3d-r108-jolt : engine=Jolt Physics
+tilt=45.0 rc=0 :: PASS slope3d_boundary tilt=45.000 normal_deg=45.0000 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.1 rc=0 :: PASS slope3d_boundary tilt=45.100 normal_deg=45.1000 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.5 rc=0 :: PASS slope3d_boundary tilt=45.500 normal_deg=45.5000 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.55 rc=0 :: PASS slope3d_boundary tilt=45.550 normal_deg=45.5500 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.56 rc=0 :: PASS slope3d_boundary tilt=45.560 normal_deg=45.5600 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.57 rc=0 :: PASS slope3d_boundary tilt=45.570 normal_deg=45.5700 limit=45.000 threshold_deg=45.5730 on_floor=true on_wall=false live_contact=true
+tilt=45.58 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=45.580 normal_deg=45.5800 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+tilt=45.6 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=45.600 normal_deg=45.6000 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+tilt=45.65 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=45.650 normal_deg=45.6500 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+tilt=46.0 rc=2 :: NEGATIVE REJECTED: slope3d_boundary above_threshold tilt=46.000 normal_deg=46.0000 limit=45.000 threshold_deg=45.5730 on_floor=false on_wall=true live_contact=true
+## command: godot --headless --path <scratch copy of project.godot+runner3d.gd+slope3d_boundary.gd> --script res://slope3d_boundary.gd -- --tilt <deg>; jolt scratch appends [physics] 3d/physics_engine="Jolt Physics" to the copied project.godot
