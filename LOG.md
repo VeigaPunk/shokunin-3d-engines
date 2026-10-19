@@ -1469,3 +1469,32 @@ corpus/knowledge/seed.md).
   templates should say "no checkout anywhere" to remove the ambiguity.
 - L0: Epic link / docker image / lutris + NEW: which side of the P/C
   precedence ruling binds?
+
+- ROUND 106 (2026-10-18): corpus citation sweep + census refresh + consistency
+  audit — INTERRUPTED round, closed as ADMIT-with-findings on the landed and
+  L1-verified subset. Provider history: scheduled xai-oauth/grok-4.7-fast died
+  at 47/128 (credits exhausted mid-round; substitution #1 named). Refire on
+  cursor/grok-4.7-xhigh-fast (probe-verified) landed substantial work, then the
+  Cursor Pro account hit its rate limit (substitution exhaustion #2; the
+  swarm's automatic retries inflated the agent count and must not be read as
+  seat completions). Landed + verified at close: 85 files repaired
+  (+1534/-163, sample-audited: path roots + dated correction/receipt notes,
+  historical text preserved); engines.md two-state census refresh (33 census
+  artifacts; NO state cell moved; engine-cmd-regression green); consistency
+  receipt notes (non-resolvable corpus/live receipts marked, two-state
+  pairing); jolt investigation landed. Invariants at close: gate PASS,
+  manifest 12/12 rc=0, fixtures 0 diff, run_battery.py f456bd00 stable.
+  Remainder (sweep chunk reports for chunks whose seats rate-limited,
+  consistency chunks, jolt ruling, queue distillation) ROUTED to r107.
+- LAWS: a provider lane that dies mid-round leaves PARTIAL artifacts — close
+  on what verifies, name the exhaustion, route the rest; never let the swarm
+  retry-inflation masquerade as completed seats. A census refresh may parse
+  receipts instead of re-running only when the receipt is named and its
+  verdict class is stated (engines.md does both). The lesson-edit discipline
+  held under fire: every sampled edit was a path fix or a dated note.
+- ROUTED (r107+): sweep completion for unreported chunks + queue distillation;
+  consistency chunk audits; jolt ruling (investigate.md landed, adversary/
+  ledger did not); cursor Pro rate-limit recovery is OPERATOR-owned (upgrade
+  or wait); hyper-lane directive from the operator (use hyper/deepseek-v4.1
+  for one of the remaining deepseek rounds) recorded for r110 or iteration 2.
+- L0: Epic link / docker image / lutris / P-C ruling — unchanged.
