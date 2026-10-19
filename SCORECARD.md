@@ -395,7 +395,7 @@ Claims (each measured with `bash reports/round-108/measure.sh 7c4e589` → `… 
 
 | axis | claim | before → after | verdict (self, pending non-author) |
 |---|---|---|---|
-| calibration | C1: admission bar + mined mistakes + scored self-assessment | QUALITY criteria 0→18; mistake rows 0→22 (22 captured by a Q); scored axis rows 0→3; Saturation line 0→1; verdict blocks 30→35; capabilities 0→3 (C1-local: `unreal-mcp-gate`; `source-registry` is C2's and `fixture-battery-targeted` C3's — shared evidence); score 0→8 (provisional) | **improved** |
+| calibration | C1: admission bar + mined mistakes + scored self-assessment | QUALITY criteria 0→18; mistake rows 0→22 (22 captured by a Q); scored axis rows 0→3; Saturation line 0→1; verdict blocks 30→36 (retroactive r90, r91, r92, r99, r100 + this r108 block); capabilities 0→3 (C1-local: `unreal-mcp-gate`; `source-registry` is C2's and `fixture-battery-targeted` C3's — shared evidence); score 0→8 (provisional) | **improved** |
 | coverage | C2 (capability `source-registry`): tiered registry + coverage map + Core/Frontier/Adjacent | SOURCES rows 0→35 (A=32 B=2 C=1; queued 28, mined 5, rejected 2), census clean; README map/Frontier headings 0→2, map surfaces 0→27; PROVINCE headings 0→3; score 5→8 (provisional) | **improved** |
 | depth | C3: floor/wall boundary at `floor_max_angle=45°` measured adjacently | CASES 350→355; slope3d rows 4→9; boundary bracket 30°/60° → 45.57°/45.58° (effective 45.573°, GodotPhysics3D battery + Jolt scan); SKILL error row 0→1; score 8→8 | **improved** (within anchor) |
 
