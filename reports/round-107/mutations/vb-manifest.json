@@ -1,0 +1,105 @@
+{
+  "manifest_version": 1,
+  "seat": "VENDOR-B",
+  "round": "r107",
+  "generated": "2026-10-19",
+  "repository": "https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin",
+  "pin": "a6aa73ada02a9fb1f5415bec491f9942c519b297",
+  "pin_ref": "refs/heads/main",
+  "transport": "codeload tarball (curl), not git clone",
+  "transport_url": "https://codeload.github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin/tar.gz/a6aa73ada02a9fb1f5415bec491f9942c519b297",
+  "transport_http_status": 200,
+  "transport_archive_bytes": 22990,
+  "transport_archive_sha256": "d091941cc80bff11e3190c20611e6740680fde13daee0d00e9c6e659bd3618cf",
+  "tree_sha": "b5b9624b00fc90217240e823406699d0ab78b959",
+  "tracked_file_count": 12,
+  "symlink_count": 0,
+  "submodule_count": 0,
+  "lfs": false,
+  "files": [
+    {
+      "path": ".claude-plugin/plugin.json",
+      "sha256": "5aa984848f0fd48c94394651c66f5b200ee1e2583d8df8caeecc22bb550b4d44",
+      "size": 487,
+      "mode": "100644",
+      "git_blob": "ba4e660a4b053674fb53dfa83f7e2e6825977796"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "0fad2f57a9fac18ab4a66ac23d44485544bdabb5057c99b684d485f27b81e538",
+      "size": 203,
+      "mode": "100644",
+      "git_blob": "aa5fae267620144b971c7ccf0e9801e26dd8fcd5"
+    },
+    {
+      "path": "CODEOWNERS",
+      "sha256": "653d372559bee26d75fcee330142276c7d9cbccba214ef008ff5392b99550f0f",
+      "size": 64,
+      "mode": "100644",
+      "git_blob": "7ccb8b76fd2c434fb61d4c8d065d0131ae74025e"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "5b337be051359edcdec510103aee15f5f870efb38b6d42eecd685dc3582314a6",
+      "size": 1073,
+      "mode": "100644",
+      "git_blob": "4a38912a3051e6b6fcf3aec79ac71ecdfbf81ff5"
+    },
+    {
+      "path": "README.md",
+      "sha256": "483693ad0e14d027525d25c3d3eb4883e774b2f8150013181f9625e2dd46b40e",
+      "size": 8398,
+      "mode": "100644",
+      "git_blob": "44c8dd3ef9ac15d11de88973ab558b4c2ff57044"
+    },
+    {
+      "path": "hooks/hooks.json",
+      "sha256": "259124f0631b7d4b92e9e744003e8798b910c00dac201656b97906b3b5ebdc0c",
+      "size": 357,
+      "mode": "100644",
+      "git_blob": "6be4b8b7b7e082372186702daf92bd03cc7e5b95"
+    },
+    {
+      "path": "hooks/unreal-context.sh",
+      "sha256": "d3f1c871cd4edd5210ee2f448c403e1a441e569a14a1405d1a3f199c65651fdd",
+      "size": 3101,
+      "mode": "100644",
+      "git_blob": "8c06ba2493a504067a875f5ec50e0095aee56ff6"
+    },
+    {
+      "path": "skills/create-toolset/SKILL.md",
+      "sha256": "e9d050087f36de51f7eeef49adb0ba9ebc603b65f74f475bc53a6debfc1f7b1c",
+      "size": 23258,
+      "mode": "100644",
+      "git_blob": "febf5d5a70739b8bb1d65215ef8272a67f0bbfdd"
+    },
+    {
+      "path": "skills/unreal-mcp/SKILL.md",
+      "sha256": "7ef8b991a82f591c5776bb5fa167c2bc2269fd00338ed3e8534eacc551d038fa",
+      "size": 7098,
+      "mode": "100644",
+      "git_blob": "9cd2cc2656d05a738f5814fb2945cc48daff66fc"
+    },
+    {
+      "path": "skills/unreal-mcp/references/operations.md",
+      "sha256": "dbed002b4a46ab104274a31eb6682c3d277ce669216d0378df709f51567c3113",
+      "size": 6497,
+      "mode": "100644",
+      "git_blob": "e02d8d0ef92063b11c5edb27956b2a25ce7edce3"
+    },
+    {
+      "path": "skills/unreal-mcp/references/setup.md",
+      "sha256": "bd16206ea142dc9cc1950b88af526a3137072ea152c5662e8549d21bc18a3b8a",
+      "size": 6065,
+      "mode": "100644",
+      "git_blob": "49a921a9ab818a8912e5d4781fa8d6869dd27dfa"
+    },
+    {
+      "path": "skills/unreal-skill/SKILL.md",
+      "sha256": "7a0af781c458c7d192d6b23c16b5737922dc482470e2e4ef617bcda80f435087",
+      "size": 6955,
+      "mode": "100644",
+      "git_blob": "a1513865cb7299fc4c76843f426352934bb7aa47"
+    }
+  ]
+}

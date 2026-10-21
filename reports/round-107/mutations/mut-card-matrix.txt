@@ -1,0 +1,187 @@
+MUT-CARD harness · lane copy=/var/tmp/r107-mut-card/stage/lane · reviewers: gate + cards-review
+
+### variant M0-clean — no mutation (control) — must be GREEN on both reviewers
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=0  GATE RESULT: PASS (checks failed: 0)
+  gate check3=STEP=PASS check4=STEP=PASS
+  review exit=0  CARDS-REVIEW RESULT: PASS
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| CARDS-REVIEW FAILS=0 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: PASS
+
+  landed M1: executability/blueprints.md -> blueprint.md
+### variant M1-filename — card filename typo (blueprints.md -> blueprint.md)
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=1  GATE RESULT: FAIL (checks failed: 2)
+  gate check3=STEP=FAIL check4=STEP=FAIL
+  review exit=1  CARDS-REVIEW RESULT: FAIL (5 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| FAIL card-name-missing blueprints.md
+    G| FAIL card-name-extra blueprint.md
+    G| NAME_SET=BAD NAME_BAD=2
+    G| MISSING-PATH-REL corpus/knowledge/unreal-mcp/executability/blueprints.md
+    G| MISSING-PATH-REL executability/blueprints.md
+    G| POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=2
+  review FAIL lines:
+    R| REVIEW-FAIL card-name-missing blueprints.md
+    R| REVIEW-FAIL card-name-extra blueprint.md
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL actors-scene.md UNRESOLVED-LOCAL-PATH `corpus/knowledge/unreal-mcp/executability/blueprints.md`
+    R| REVIEW-FAIL actors-scene.md UNRESOLVED-LOCAL-PATH `executability/blueprints.md`
+    R| REVIEW-FAIL meshes-textures.md UNRESOLVED-LOCAL-PATH `corpus/knowledge/unreal-mcp/executability/blueprints.md`
+    R| CARDS-REVIEW FAILS=5 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (5 finding(s))
+
+  landed M2: corpus/knowledge/unreal-mcp/executability/sequencer.md
+### variant M2-pointer-path — cited upstream path renamed (READMEE.md) in sequencer.md
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=1  GATE RESULT: FAIL (checks failed: 1)
+  gate check3=STEP=PASS check4=STEP=FAIL
+  review exit=1  CARDS-REVIEW RESULT: FAIL (2 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| MISSING-PATH /var/tmp/r107-mut-card/harness/M2-pointer-path/corpus/knowledge/unreal-mcp/executability/sequencer.md :: upstream/READMEE.md:106
+    G| MISSING-PATH-REL upstream/READMEE.md
+    G| POINTERS=104 POINTER_STRINGS=42 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=2
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL sequencer.md MISSING-PATH upstream/READMEE.md:106
+    R| REVIEW-FAIL sequencer.md UNRESOLVED-LOCAL-PATH `upstream/READMEE.md:106`
+    R| CARDS-REVIEW FAILS=2 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (2 finding(s))
+
+  landed M3: corpus/knowledge/unreal-mcp/executability/sequencer.md
+### variant M3-line-oor — cited line beyond EOF (README.md:4242) in sequencer.md
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=1  GATE RESULT: FAIL (checks failed: 1)
+  gate check3=STEP=PASS check4=STEP=FAIL
+  review exit=1  CARDS-REVIEW RESULT: FAIL (1 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| LINE-OOR /var/tmp/r107-mut-card/harness/M3-line-oor/corpus/knowledge/unreal-mcp/executability/sequencer.md :: upstream/README.md:4242 (max 112)
+    G| POINTERS=104 POINTER_STRINGS=42 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=1
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL sequencer.md LINE-OOR upstream/README.md:4242 (max 112)
+    R| CARDS-REVIEW FAILS=1 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (1 finding(s))
+
+  landed M4: corpus/knowledge/unreal-mcp/executability/blueprints.md
+### variant M4-vendored-at — Vendored-at header path corrupted in blueprints.md
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=0  GATE RESULT: PASS (checks failed: 0)
+  gate check3=STEP=PASS check4=STEP=PASS
+  review exit=1  CARDS-REVIEW RESULT: FAIL (2 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL blueprints.md UNRESOLVED-LOCAL-PATH `corpus/knowledge/unreal-mcp/upstreme/`
+    R| REVIEW-FAIL blueprints.md VENDORED-AT-NOT-A-DIR `corpus/knowledge/unreal-mcp/upstreme/`
+    R| CARDS-REVIEW FAILS=2 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (2 finding(s))
+
+  landed M5: corpus/knowledge/unreal-mcp/executability/materials.md
+### variant M5-label — label token flipped static-only -> verified-here in materials.md
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=1  GATE RESULT: FAIL (checks failed: 1)
+  gate check3=STEP=FAIL check4=STEP=PASS
+  review exit=1  CARDS-REVIEW RESULT: FAIL (1 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=11 unproven-runtime=1 verified-here=1 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL label-census static-only=11 unproven-runtime=1 verified-here=1 (expected 12/1/0)
+    R| CARDS-REVIEW FAILS=1 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (1 finding(s))
+
+  landed M6: corpus/knowledge/unreal-mcp/executability/meshes-textures.md
+### variant M6-relpath — backticked repo-relative path corrupted in meshes-textures.md
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=1  GATE RESULT: FAIL (checks failed: 1)
+  gate check3=STEP=PASS check4=STEP=FAIL
+  review exit=1  CARDS-REVIEW RESULT: FAIL (1 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| MISSING-PATH-REL corpus/knowledge/unreal-mcp/executability/blueprints-typo.md
+    G| POINTERS=104 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=1
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL meshes-textures.md UNRESOLVED-LOCAL-PATH `corpus/knowledge/unreal-mcp/executability/blueprints-typo.md`
+    R| CARDS-REVIEW FAILS=1 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (1 finding(s))
+
+  landed M7a: corpus/knowledge/unreal-mcp/executability/meshes-textures.md
+### variant M7a-relpath-line — backticked repo-relative path:line out of range (README.md:9999, max 278)
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=0  GATE RESULT: PASS (checks failed: 0)
+  gate check3=STEP=PASS check4=STEP=PASS
+  review exit=1  CARDS-REVIEW RESULT: FAIL (1 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL meshes-textures.md LINE-OOR `corpus/knowledge/unreal-mcp/README.md:9999` (max 278)
+    R| CARDS-REVIEW FAILS=1 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (1 finding(s))
+
+  landed M7b: corpus/knowledge/unreal-mcp/executability/meshes-textures.md
+### variant M7b-relpath-line — backticked repo-relative path:line out of range (blueprints.md:5000, max 155)
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=0  GATE RESULT: PASS (checks failed: 0)
+  gate check3=STEP=PASS check4=STEP=PASS
+  review exit=1  CARDS-REVIEW RESULT: FAIL (1 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| POINTERS=103 POINTER_STRINGS=41 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=0
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL meshes-textures.md LINE-OOR `corpus/knowledge/unreal-mcp/executability/blueprints.md:5000` (max 155)
+    R| CARDS-REVIEW FAILS=1 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (1 finding(s))
+
+  landed M8: corpus/knowledge/unreal-mcp/executability/sequencer.md
+### variant M8-bare-ptr — bare (un-backticked) upstream/<path>:<line> out of range in sequencer.md
+$ GATE_WORKDIR=/var/tmp/r107-mut-card/harness bash corpus/knowledge/unreal-mcp/gate/run_gate.sh
+  gate exit=1  GATE RESULT: FAIL (checks failed: 1)
+  gate check3=STEP=PASS check4=STEP=FAIL
+  review exit=1  CARDS-REVIEW RESULT: FAIL (1 finding(s))
+  gate FAIL lines:
+    G| CARDS=13 EXPECTED=13 BAD=0
+    G| CENSUS static-only=12 unproven-runtime=1 verified-here=0 EXPECTED=12/1/0
+    G| NAME_SET=OK NAME_BAD=0
+    G| LINE-OOR /var/tmp/r107-mut-card/harness/M8-bare-ptr/corpus/knowledge/unreal-mcp/executability/sequencer.md :: upstream/README.md:4242 (max 112)
+    G| POINTERS=104 POINTER_STRINGS=42 SKIPPED_CONTROL_SENTINELS=0 UNRESOLVED=1
+  review FAIL lines:
+    R| CARDS-REVIEW cards_labeled=13 expected=13
+    R| REVIEW-FAIL sequencer.md LINE-OOR upstream/README.md:4242 (max 112)
+    R| CARDS-REVIEW FAILS=1 ADVISORY_UNRESOLVED=248
+    R| CARDS-REVIEW RESULT: FAIL (1 finding(s))
+
+=== post-run source integrity (staged copy vs live lane) ===
+  STAGED_SOURCE_IDENTICAL=42 DIFFERENT=0

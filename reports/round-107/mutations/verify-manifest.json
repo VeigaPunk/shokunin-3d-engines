@@ -1,0 +1,260 @@
+{
+  "round": "r107",
+  "seat": "VERIFY-LEAD",
+  "generated_utc": "2026-10-19T03:09:05Z",
+  "pin": "a6aa73ada02a9fb1f5415bec491f9942c519b297",
+  "transports": {
+    "R": "git ls-remote https://github.com/EpicGames/unreal-engine-skills-for-claude-code-plugin",
+    "A": "git clone (https smart) -> /var/tmp/r107-verify/va",
+    "B": "curl codeload tarball tar.gz/<sha> -> /var/tmp/r107-verify/vb"
+  },
+  "remote_ref_main": "a6aa73ada02a9fb1f5415bec491f9942c519b297",
+  "cloneA_head": "a6aa73ada02a9fb1f5415bec491f9942c519b297",
+  "tarball_topdir": "unreal-engine-skills-for-claude-code-plugin-a6aa73ada02a9fb1f5415bec491f9942c519b297",
+  "tracked_file_count": 12,
+  "all_12_byte_identical": true,
+  "tarball_sha256": "d091941cc80bff11e3190c20611e6740680fde13daee0d00e9c6e659bd3618cf",
+  "files": [
+    {
+      "path": ".claude-plugin/plugin.json",
+      "bytes": 487,
+      "shaA": "5aa984848f0fd48c94394651c66f5b200ee1e2583d8df8caeecc22bb550b4d44",
+      "shaB": "5aa984848f0fd48c94394651c66f5b200ee1e2583d8df8caeecc22bb550b4d44",
+      "shaVendored": "5aa984848f0fd48c94394651c66f5b200ee1e2583d8df8caeecc22bb550b4d44",
+      "git_blob": "ba4e660a4b053674fb53dfa83f7e2e6825977796",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 203,
+      "shaA": "0fad2f57a9fac18ab4a66ac23d44485544bdabb5057c99b684d485f27b81e538",
+      "shaB": "0fad2f57a9fac18ab4a66ac23d44485544bdabb5057c99b684d485f27b81e538",
+      "shaVendored": "0fad2f57a9fac18ab4a66ac23d44485544bdabb5057c99b684d485f27b81e538",
+      "git_blob": "aa5fae267620144b971c7ccf0e9801e26dd8fcd5",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "CODEOWNERS",
+      "bytes": 64,
+      "shaA": "653d372559bee26d75fcee330142276c7d9cbccba214ef008ff5392b99550f0f",
+      "shaB": "653d372559bee26d75fcee330142276c7d9cbccba214ef008ff5392b99550f0f",
+      "shaVendored": "653d372559bee26d75fcee330142276c7d9cbccba214ef008ff5392b99550f0f",
+      "git_blob": "7ccb8b76fd2c434fb61d4c8d065d0131ae74025e",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1073,
+      "shaA": "5b337be051359edcdec510103aee15f5f870efb38b6d42eecd685dc3582314a6",
+      "shaB": "5b337be051359edcdec510103aee15f5f870efb38b6d42eecd685dc3582314a6",
+      "shaVendored": "5b337be051359edcdec510103aee15f5f870efb38b6d42eecd685dc3582314a6",
+      "git_blob": "4a38912a3051e6b6fcf3aec79ac71ecdfbf81ff5",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "README.md",
+      "bytes": 8398,
+      "shaA": "483693ad0e14d027525d25c3d3eb4883e774b2f8150013181f9625e2dd46b40e",
+      "shaB": "483693ad0e14d027525d25c3d3eb4883e774b2f8150013181f9625e2dd46b40e",
+      "shaVendored": "483693ad0e14d027525d25c3d3eb4883e774b2f8150013181f9625e2dd46b40e",
+      "git_blob": "44c8dd3ef9ac15d11de88973ab558b4c2ff57044",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "hooks/hooks.json",
+      "bytes": 357,
+      "shaA": "259124f0631b7d4b92e9e744003e8798b910c00dac201656b97906b3b5ebdc0c",
+      "shaB": "259124f0631b7d4b92e9e744003e8798b910c00dac201656b97906b3b5ebdc0c",
+      "shaVendored": "259124f0631b7d4b92e9e744003e8798b910c00dac201656b97906b3b5ebdc0c",
+      "git_blob": "6be4b8b7b7e082372186702daf92bd03cc7e5b95",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "hooks/unreal-context.sh",
+      "bytes": 3101,
+      "shaA": "d3f1c871cd4edd5210ee2f448c403e1a441e569a14a1405d1a3f199c65651fdd",
+      "shaB": "d3f1c871cd4edd5210ee2f448c403e1a441e569a14a1405d1a3f199c65651fdd",
+      "shaVendored": "d3f1c871cd4edd5210ee2f448c403e1a441e569a14a1405d1a3f199c65651fdd",
+      "git_blob": "8c06ba2493a504067a875f5ec50e0095aee56ff6",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "skills/create-toolset/SKILL.md",
+      "bytes": 23258,
+      "shaA": "e9d050087f36de51f7eeef49adb0ba9ebc603b65f74f475bc53a6debfc1f7b1c",
+      "shaB": "e9d050087f36de51f7eeef49adb0ba9ebc603b65f74f475bc53a6debfc1f7b1c",
+      "shaVendored": "e9d050087f36de51f7eeef49adb0ba9ebc603b65f74f475bc53a6debfc1f7b1c",
+      "git_blob": "febf5d5a70739b8bb1d65215ef8272a67f0bbfdd",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "skills/unreal-mcp/SKILL.md",
+      "bytes": 7098,
+      "shaA": "7ef8b991a82f591c5776bb5fa167c2bc2269fd00338ed3e8534eacc551d038fa",
+      "shaB": "7ef8b991a82f591c5776bb5fa167c2bc2269fd00338ed3e8534eacc551d038fa",
+      "shaVendored": "7ef8b991a82f591c5776bb5fa167c2bc2269fd00338ed3e8534eacc551d038fa",
+      "git_blob": "9cd2cc2656d05a738f5814fb2945cc48daff66fc",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "skills/unreal-mcp/references/operations.md",
+      "bytes": 6497,
+      "shaA": "dbed002b4a46ab104274a31eb6682c3d277ce669216d0378df709f51567c3113",
+      "shaB": "dbed002b4a46ab104274a31eb6682c3d277ce669216d0378df709f51567c3113",
+      "shaVendored": "dbed002b4a46ab104274a31eb6682c3d277ce669216d0378df709f51567c3113",
+      "git_blob": "e02d8d0ef92063b11c5edb27956b2a25ce7edce3",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "skills/unreal-mcp/references/setup.md",
+      "bytes": 6065,
+      "shaA": "bd16206ea142dc9cc1950b88af526a3137072ea152c5662e8549d21bc18a3b8a",
+      "shaB": "bd16206ea142dc9cc1950b88af526a3137072ea152c5662e8549d21bc18a3b8a",
+      "shaVendored": "bd16206ea142dc9cc1950b88af526a3137072ea152c5662e8549d21bc18a3b8a",
+      "git_blob": "49a921a9ab818a8912e5d4781fa8d6869dd27dfa",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    },
+    {
+      "path": "skills/unreal-skill/SKILL.md",
+      "bytes": 6955,
+      "shaA": "7a0af781c458c7d192d6b23c16b5737922dc482470e2e4ef617bcda80f435087",
+      "shaB": "7a0af781c458c7d192d6b23c16b5737922dc482470e2e4ef617bcda80f435087",
+      "shaVendored": "7a0af781c458c7d192d6b23c16b5737922dc482470e2e4ef617bcda80f435087",
+      "git_blob": "a1513865cb7299fc4c76843f426352934bb7aa47",
+      "shaA_eq_shaB": true,
+      "shaA_eq_vendored": true
+    }
+  ],
+  "out_of_pin_surface": {
+    "derived_from": "refs/pull/*/head via git ls-remote + per-PR codeload tarballs",
+    "open_prs": [
+      1,
+      2,
+      4,
+      5,
+      8,
+      9
+    ],
+    "distinct_paths": 15,
+    "paths": [
+      {
+        "pr": 1,
+        "path": ".claude-plugin/marketplace.json",
+        "bytes": 908,
+        "sha256": "390e7e9c9a4f21d7835541bb3b79ebb7afb5392d6ba0ce1e090b7a17ba6a77d8"
+      },
+      {
+        "pr": 4,
+        "path": ".github/workflows/ci.yml",
+        "bytes": 1116,
+        "sha256": "4bac0081914d78f80be04c1776fe2244b53c6c4334116309f4ba5b83c04cc38d"
+      },
+      {
+        "pr": 4,
+        "path": "hooks/unreal-context.ps1",
+        "bytes": 3322,
+        "sha256": "eaf782fecd4430f0d04a50179742841eb5922c08162758b5de7cf7fc343f1c7f"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/.gitignore",
+        "bytes": 82,
+        "sha256": "c418e00935c8785c78b15adb0a14a0d502b98200429924c05f44bade627c120a"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/README.md",
+        "bytes": 8466,
+        "sha256": "5f36bc34d24772de51c2ed5d6e564d38b65ff9c6506bf96828eb6c63162e6776"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/index.ts",
+        "bytes": 3640,
+        "sha256": "82341c50550781285a0fdd925f4c8f515d586511885d49ffc2171386f95f6e3f"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/package.json",
+        "bytes": 691,
+        "sha256": "7142423866e0f8805fcefbae5272167b6e9146cc33706f0fa1ba562fad41f912"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/project.ts",
+        "bytes": 3294,
+        "sha256": "579bdfd134254d1e8ac057bda3b8f4b596ae6c8ea5f78320f4b4d60f516a781e"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/scripts/sync-skills.mjs",
+        "bytes": 652,
+        "sha256": "eed3bc9ea80069325272d8069461163b08c9f0d703d6e429797672fd338c2191"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/skills.ts",
+        "bytes": 2820,
+        "sha256": "8c0762021c04a7e3cabf7109ce11cf38f5340c61ad0382cfdace9e33a90b255c"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/test/plugin.test.ts",
+        "bytes": 4729,
+        "sha256": "5ae1bcf8f26b9b45e1523363aed3635c886e37df67d39e75b3ad7e0d2284e626"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/test/project.test.ts",
+        "bytes": 3340,
+        "sha256": "b14d519a210125e6f619bf8a31b553707ac3909bbf75ba06958d695fb95e614f"
+      },
+      {
+        "pr": 8,
+        "path": "opencode/test/skills.test.ts",
+        "bytes": 2981,
+        "sha256": "1e9a4ac508fb13d6f99d41c5a32ea9e6c1c66a89dce7b30efe392c385791abf9"
+      },
+      {
+        "pr": 4,
+        "path": "tests/test_hooks.ps1",
+        "bytes": 3796,
+        "sha256": "755befe2e509ae3a3c384ded7fd7ace68b501611eb6d10dc1218b23d6f3c06a8"
+      },
+      {
+        "pr": 4,
+        "path": "tests/test_hooks.sh",
+        "bytes": 2778,
+        "sha256": "35215587a86fd593bb53c0c90ccbc7f7a13a5179744e9616ef9670be5e9caa65"
+      }
+    ],
+    "r101_section8_recorded_paths": 6,
+    "r101_section8_missing_prs": [
+      2,
+      5,
+      8,
+      9
+    ],
+    "note": "r101 PROVENANCE \u00a78 recorded 6 paths from PRs 1 and 4 only; PR 2 (duplicate marketplace.json), PR 5 (modifies hooks/hooks.json), PR 8 (opencode/ subtree, 10 files + 4 skill edits), PR 9 (plugin.json -> 3.1.2) were absent."
+  },
+  "cross_seat_agreement": {
+    "vendored_tree_recheck": "sha256sum -c .manifest.d/audit-reference.sha256 -> 12x OK exit 0",
+    "tree_sha": "b5b9624b00fc90217240e823406699d0ab78b959 (clone HEAD^{tree} == gh api commit.tree.sha)",
+    "verify2_agree": true,
+    "rev_pin_agree": true,
+    "vendor_a_sha256_agree": true,
+    "vendor_b_sha256_agree": true,
+    "vendor_a_markdown_size_column": "DISAGREE (confirmed by VERIFY-LEAD): VENDOR-A shard table lists LICENSE 11357 / README.md 7085 / plugin.json 178, but ground truth is 1073 / 8398 / 487; VENDOR-A's own va-manifest.json carries the CORRECT sizes, so the defect is confined to the markdown table."
+  }
+}
