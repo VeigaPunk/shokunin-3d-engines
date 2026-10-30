@@ -172,3 +172,28 @@ with the exact diagnostic. Numbers were re-derived analytically and confirmed
 by executing the fixture against pinned three 0.186.1 in a browser ES-module
 shim; the lane-host battery receipt under the pinned Node is still required
 before registration into `run_battery.py`. No renderer, GL context, pixels.
+## lookAt orientation: camera vs plain Object3D (browser-verified, pending lane-host round)
+
+From the repository root after the same lane-local `npm ci`:
+
+```sh
+node corpus/fixtures/three/run_lookat_cases.mjs
+node corpus/fixtures/three/run_lookat_cases.mjs --receipt corpus/live/three-lookat.json
+```
+
+This battery pins three.js `lookAt` facing conventions at the pinned 0.186.1. A
+`PerspectiveCamera` at the origin looking at `(1,1,2)` has forward
+`normalize(1,1,2) = (0.408,0.408,0.816)`, its world `+Z` basis is the negation
+`(-0.408,-0.408,-0.816)`, the target projects to the NDC origin and a probe half
+a unit above the target projects to NDC y `sqrt(5)/13 = 0.172` (fov 90,
+aspect 4/3). A plain `Object3D.lookAt` at the same spot uses the opposite facing
+axis: its `+Z` basis equals `(0.408,0.408,0.816)` (`toward_dot=1.000`), so its
+`-Z` faces away from the target. Three discriminating negatives: "camera `+Z`
+is the look direction" (a `+Z` probe sits behind, exit 2), "plain
+`Object3D.lookAt` follows the camera `-Z` convention" (exit 2), and "inverting
+`camera.up` leaves image-up unchanged" (the same probe projects to NDC y
+`-0.172`, exit 2). Closed forms (`x = (-2,0,1)/sqrt(5)`, `y = (-1,5,-2)/sqrt(30)`,
+up-probe NDC `sqrt(5)/13`) were hand-derived and confirmed by executing the
+fixture against pinned three 0.186.1 in a browser ES-module shim; the lane-host
+battery receipt under the pinned Node is still required before registration
+into `run_battery.py`. No renderer, GL context, pixels.
