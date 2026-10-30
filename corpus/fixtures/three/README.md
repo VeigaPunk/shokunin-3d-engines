@@ -151,3 +151,24 @@ keeps both objects live. Mutation moves only far mesh layer 1→0 while ray
 mask remains 1, so actual zero hits must fail. Layer masks select CPU
 raycast intersections here; they do not establish rendered visibility,
 culling, or arbitrary scene behavior.
+## World-space Box3 bounds and ray pretest (browser-verified, pending lane-host round)
+
+From the repository root after the same lane-local `npm ci`:
+
+```sh
+node corpus/fixtures/three/run_box3_cases.mjs
+node corpus/fixtures/three/run_box3_cases.mjs --receipt corpus/live/three-box3.json
+```
+
+This battery covers `Box3.setFromObject` world-space bounds for a 2x1x1 mesh
+rotated `Z=45 deg`, with hand-derived expectations: AABB half-extent
+`cos45 + 0.5*sin45 = 1.061`, bounding-sphere radius `sqrt(2.5) = 1.581`, and
+a `Ray.intersectsBox` pretest that must agree with the mesh raycast on a probe
+pair (hit at distance `5.043`, miss above the AABB). Two discriminating
+negatives: a box captured before the mesh transform update is stale
+(exit 2, stale vs fresh containment), and raw local coordinates are not world
+points (exit 2). `--mutate-expand` perturbs the box by `+0.5` and must exit 1
+with the exact diagnostic. Numbers were re-derived analytically and confirmed
+by executing the fixture against pinned three 0.186.1 in a browser ES-module
+shim; the lane-host battery receipt under the pinned Node is still required
+before registration into `run_battery.py`. No renderer, GL context, pixels.
